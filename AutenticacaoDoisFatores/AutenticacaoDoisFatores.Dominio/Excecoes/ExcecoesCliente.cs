@@ -3,7 +3,7 @@ using AutenticacaoDoisFatores.Dominio.Compartilhados.Mensagens;
 
 namespace AutenticacaoDoisFatores.Dominio.Excecoes
 {
-    internal class ExcecoesCliente(MensagensCliente mensagem) : ApplicationException(mensagem.Descricao())
+    public class ExcecoesCliente(MensagensCliente mensagem) : ApplicationException(mensagem.Descricao())
     {
         internal static void NomeNaoPreenchido()
         {

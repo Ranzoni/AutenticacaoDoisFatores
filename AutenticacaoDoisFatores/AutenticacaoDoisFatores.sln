@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.12.35527.113 d17.12
+VisualStudioVersion = 17.12.35527.113
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AutenticacaoDoisFatores", "AutenticacaoDoisFatores\AutenticacaoDoisFatores.csproj", "{D9DDE010-5AEC-4B39-9735-C0C2D9B27803}"
 EndProject
@@ -14,6 +14,10 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "3-Dominio", "3-Dominio", "{02DBFCAE-45F7-4D8D-B5C8-D0F7D0A87EED}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AutenticacaoDoisFatores.Dominio", "AutenticacaoDoisFatores.Dominio\AutenticacaoDoisFatores.Dominio.csproj", "{D55B5AB3-A928-4FD0-AB43-86736B07A9C1}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "5-Testes", "5-Testes", "{C3C7307D-2F5D-4189-A9D4-3958FEBE5CD7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AutenticacaoDoisFatores.Testes", "AutenticacaoDoisFatores.Testes\AutenticacaoDoisFatores.Testes.csproj", "{0BAE11A3-4464-4AB1-BAC9-D7EB7F320B45}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +37,10 @@ Global
 		{D55B5AB3-A928-4FD0-AB43-86736B07A9C1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D55B5AB3-A928-4FD0-AB43-86736B07A9C1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D55B5AB3-A928-4FD0-AB43-86736B07A9C1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0BAE11A3-4464-4AB1-BAC9-D7EB7F320B45}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0BAE11A3-4464-4AB1-BAC9-D7EB7F320B45}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0BAE11A3-4464-4AB1-BAC9-D7EB7F320B45}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0BAE11A3-4464-4AB1-BAC9-D7EB7F320B45}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -41,5 +49,6 @@ Global
 		{D9DDE010-5AEC-4B39-9735-C0C2D9B27803} = {90C9446D-776D-4717-9F99-2FCC5BD0B9A9}
 		{767C79B2-9F62-426F-A75E-479E70901996} = {8D404EAF-0537-40E7-AB61-D133814938FF}
 		{D55B5AB3-A928-4FD0-AB43-86736B07A9C1} = {02DBFCAE-45F7-4D8D-B5C8-D0F7D0A87EED}
+		{0BAE11A3-4464-4AB1-BAC9-D7EB7F320B45} = {C3C7307D-2F5D-4189-A9D4-3958FEBE5CD7}
 	EndGlobalSection
 EndGlobal
