@@ -49,5 +49,19 @@ namespace AutenticacaoDoisFatores.Testes.Dominio.Entidades
 
             Assert.Equal(MensagensCliente.NomeNaoPreenchido.Descricao(), excecao.Message);
         }
+
+        [Theory]
+        [InlineData("")]
+        [InlineData(" ")]
+        [InlineData("abcd")]
+        [InlineData("abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcde")]
+        internal void NaoDeveInstanciarNovoClienteComEmailInvalido(string emailInvalido)
+        {
+            var nomeCliente = _faker.Company.CompanyName();
+
+            var excecao = Assert.Throws<ExcecoesCliente>(() => new Cliente(nome: nomeCliente, email: emailInvalido));
+
+            Assert.Equal(MensagensCliente.EmailNaoPreenchido.Descricao(), excecao.Message);
+        }
     }
 }
