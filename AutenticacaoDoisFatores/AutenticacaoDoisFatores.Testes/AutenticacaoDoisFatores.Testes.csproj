@@ -18,6 +18,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\AutenticacaoDoisFatores.Dominio\AutenticacaoDoisFatores.Dominio.csproj" />
+    <ProjectReference Include="..\AutenticacaoDoisFatores.Servico\AutenticacaoDoisFatores.Servico.csproj" />
   </ItemGroup>
 
   <ItemGroup>

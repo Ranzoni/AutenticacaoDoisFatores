@@ -4,7 +4,7 @@ using AutoMapper;
 
 namespace AutenticacaoDoisFatores.Servico.Mapeadores
 {
-    internal class MapeadorDeCliente : Profile
+    public class MapeadorDeCliente : Profile
     {
         public MapeadorDeCliente()
         {

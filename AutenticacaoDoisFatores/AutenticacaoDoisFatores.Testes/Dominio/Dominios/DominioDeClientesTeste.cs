@@ -40,7 +40,5 @@ namespace AutenticacaoDoisFatores.Testes.Dominio.Dominios
 
             #endregion Verificação do teste
         }
-
-
     }
 }
