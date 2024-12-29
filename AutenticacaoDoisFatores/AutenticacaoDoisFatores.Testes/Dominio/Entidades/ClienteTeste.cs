@@ -16,21 +16,21 @@ namespace AutenticacaoDoisFatores.Testes.Dominio.Entidades
         {
             #region Preparação do teste
 
-            var nomeCliente = _faker.Company.CompanyName();
-            var emailCliente = _faker.Internet.Email();
+            var nomeParaTeste = _faker.Company.CompanyName();
+            var emailParaTeste = _faker.Internet.Email();
 
             #endregion Preparação do teste
 
-            var cliente = new Cliente(nome: nomeCliente, email: emailCliente);
+            var cliente = new Cliente(nome: nomeParaTeste, email: emailParaTeste);
 
             #region Verificação do teste
 
             Assert.NotNull(cliente);
 
-            Assert.Equal(nomeCliente, cliente.Nome);
+            Assert.Equal(nomeParaTeste, cliente.Nome);
             Assert.True(ValidadorDeCliente.NomeEhValido(cliente.Nome));
 
-            Assert.Equal(emailCliente, cliente.Email);
+            Assert.Equal(emailParaTeste, cliente.Email);
             Assert.True(ValidadorDeCliente.EmailEhValido(cliente.Email));
 
             #endregion Verificação do teste
@@ -43,9 +43,9 @@ namespace AutenticacaoDoisFatores.Testes.Dominio.Entidades
         [InlineData("abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmno")]
         internal void NaoDeveInstanciarNovoClienteComNomeInvalido(string nomeInvalido)
         {
-            var emailCliente = _faker.Internet.Email();
+            var emailParaTeste = _faker.Internet.Email();
 
-            var excecao = Assert.Throws<ExcecoesCliente>(() => new Cliente(nome: nomeInvalido, email: emailCliente));
+            var excecao = Assert.Throws<ExcecoesCliente>(() => new Cliente(nome: nomeInvalido, email: emailParaTeste));
 
             Assert.Equal(MensagensCliente.NomeNaoPreenchido.Descricao(), excecao.Message);
         }
@@ -57,9 +57,9 @@ namespace AutenticacaoDoisFatores.Testes.Dominio.Entidades
         [InlineData("abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcde")]
         internal void NaoDeveInstanciarNovoClienteComEmailInvalido(string emailInvalido)
         {
-            var nomeCliente = _faker.Company.CompanyName();
+            var nomeParaTeste = _faker.Company.CompanyName();
 
-            var excecao = Assert.Throws<ExcecoesCliente>(() => new Cliente(nome: nomeCliente, email: emailInvalido));
+            var excecao = Assert.Throws<ExcecoesCliente>(() => new Cliente(nome: nomeParaTeste, email: emailInvalido));
 
             Assert.Equal(MensagensCliente.EmailNaoPreenchido.Descricao(), excecao.Message);
         }
