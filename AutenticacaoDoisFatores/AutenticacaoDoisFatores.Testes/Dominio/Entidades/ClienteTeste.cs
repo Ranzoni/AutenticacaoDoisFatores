@@ -56,7 +56,7 @@ namespace AutenticacaoDoisFatores.Testes.Dominio.Entidades
                     .ConstruirNovoCliente()
             );
 
-            Assert.Equal(MensagensCliente.NomeNaoPreenchido.Descricao(), excecao.Message);
+            Assert.Equal(MensagensCliente.NomeInvalido.Descricao(), excecao.Message);
         }
 
         [Theory]
@@ -76,7 +76,7 @@ namespace AutenticacaoDoisFatores.Testes.Dominio.Entidades
                     .ConstruirNovoCliente()
             );
 
-            Assert.Equal(MensagensCliente.EmailNaoPreenchido.Descricao(), excecao.Message);
+            Assert.Equal(MensagensCliente.EmailInvalido.Descricao(), excecao.Message);
         }
     }
 }

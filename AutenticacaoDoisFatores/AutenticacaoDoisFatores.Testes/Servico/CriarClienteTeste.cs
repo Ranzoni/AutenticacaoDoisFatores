@@ -1,9 +1,12 @@
-﻿using AutenticacaoDoisFatores.Dominio.Dominios;
+﻿using AutenticacaoDoisFatores.Dominio.Compartilhados.Mensagens;
+using AutenticacaoDoisFatores.Dominio.Dominios;
 using AutenticacaoDoisFatores.Servico.CasosDeUso;
 using AutenticacaoDoisFatores.Servico.DTO;
 using AutenticacaoDoisFatores.Servico.Mapeadores;
 using AutoMapper;
 using Bogus;
+using Mensageiro;
+using Moq;
 using Moq.AutoMock;
 
 namespace AutenticacaoDoisFatores.Testes.Servico
@@ -46,6 +49,36 @@ namespace AutenticacaoDoisFatores.Testes.Servico
             Assert.NotNull(clienteCadastrado);
             Assert.Equal(nomeParaTeste, clienteCadastrado.Nome);
             Assert.Equal(emailParaTeste, clienteCadastrado.Email);
+            _mocker.Verify<INotificador>(n => n.AddMensagem(It.IsAny<MensagensCliente>()), Times.Never);
+
+            #endregion Preparação do teste
+        }
+
+        [Theory]
+        [InlineData("")]
+        [InlineData(" ")]
+        [InlineData("ab")]
+        [InlineData("abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmno")]
+        internal async Task DeveRetornarNuloQuandoNomeForInvalido(string nomeInvalido)
+        {
+            #region Preparação do teste
+
+            var emailParaTeste = _faker.Internet.Email();
+
+            var novoCliente = new NovoCliente(nome: nomeInvalido, email: emailParaTeste);
+
+            _mocker.CreateInstance<DominioDeClientes>();
+            _mocker.Use(_mapeador);
+            var servico = _mocker.CreateInstance<CriarCliente>();
+
+            #endregion Preparação do teste
+
+            var clienteCadastrado = await servico.ExecutarAsync(novoCliente);
+
+            #region Verificação do teste
+
+            Assert.Null(clienteCadastrado);
+            _mocker.Verify<INotificador>(n => n.AddMensagem(MensagensCliente.NomeInvalido), Times.Once);
 
             #endregion Preparação do teste
         }

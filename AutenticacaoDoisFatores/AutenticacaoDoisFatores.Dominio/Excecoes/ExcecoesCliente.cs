@@ -7,12 +7,12 @@ namespace AutenticacaoDoisFatores.Dominio.Excecoes
     {
         internal static void NomeNaoPreenchido()
         {
-            throw new ExcecoesCliente(MensagensCliente.NomeNaoPreenchido);
+            throw new ExcecoesCliente(MensagensCliente.NomeInvalido);
         }
 
         internal static void EmailNaoPreenchido()
         {
-            throw new ExcecoesCliente(MensagensCliente.EmailNaoPreenchido);
+            throw new ExcecoesCliente(MensagensCliente.EmailInvalido);
         }
     }
 }
