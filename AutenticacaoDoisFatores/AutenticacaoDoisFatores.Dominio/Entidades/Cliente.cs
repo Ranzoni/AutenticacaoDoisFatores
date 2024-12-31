@@ -16,7 +16,7 @@ namespace AutenticacaoDoisFatores.Dominio.Entidades
         {
             Nome = nome;
             Email = email;
-            NomeDominio = Nome.Split(" ").First().RemoverCaracteresEspeciais().ToLower();
+            NomeDominio = ConstruirNomeDominio(Nome);
 
             this.ValidarCriacao();
         }
@@ -31,6 +31,14 @@ namespace AutenticacaoDoisFatores.Dominio.Entidades
             Ativo = ativo;
             DataCadastro = dataCadastro;
             DataAlteracao = dataAlteracao;
+        }
+
+        public static string ConstruirNomeDominio(string nomeBase)
+        {
+            if (nomeBase.EstaVazio())
+                return nomeBase;
+
+            return nomeBase.Split(" ").First().RemoverCaracteresEspeciais().ToLower();
         }
     }
 }

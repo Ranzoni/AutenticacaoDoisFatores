@@ -7,7 +7,7 @@ namespace AutenticacaoDoisFatores.Dominio.Dominios
     {
         private readonly IRepositorioDeClientes _repositorio = repositorio;
 
-        public async Task<Cliente> CriarAsync(Cliente cliente)
+        public async Task<Cliente> CriarClienteAsync(Cliente cliente)
         {
             _repositorio.Adicionar(cliente);
             await _repositorio.SalvarAlteracoesAsync();

@@ -21,7 +21,8 @@ namespace AutenticacaoDoisFatores.Servico.CasosDeUso
 
             var cliente = _mapper.Map<Cliente>(novoCliente);
 
-            await _dominio.CriarAsync(cliente);
+            await _dominio.CriarClienteAsync(cliente);
+            await _dominio.CriarDominioDoClienteAsync(cliente.Id);
 
             var clienteCadastrado = _mapper.Map<ClienteCadastrado>(cliente);
             return clienteCadastrado;

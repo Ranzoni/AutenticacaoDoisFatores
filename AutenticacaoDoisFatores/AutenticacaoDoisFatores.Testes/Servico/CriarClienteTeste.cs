@@ -1,5 +1,8 @@
 ﻿using AutenticacaoDoisFatores.Dominio.Compartilhados.Mensagens;
+using AutenticacaoDoisFatores.Dominio.Construtores;
 using AutenticacaoDoisFatores.Dominio.Dominios;
+using AutenticacaoDoisFatores.Dominio.Entidades;
+using AutenticacaoDoisFatores.Dominio.Repositorios;
 using AutenticacaoDoisFatores.Servico.CasosDeUso;
 using AutenticacaoDoisFatores.Servico.DTO;
 using AutenticacaoDoisFatores.Servico.Mapeadores;
@@ -36,8 +39,18 @@ namespace AutenticacaoDoisFatores.Testes.Servico
 
             var novoCliente = new NovoCliente(nome: nomeParaTeste, email: emailParaTeste);
 
+            var cliente = new ConstrutorDeCliente()
+                .ComId(Guid.NewGuid())
+                .ComNome(nomeParaTeste)
+                .ComEmail(emailParaTeste)
+                .ComNomeDominio(Cliente.ConstruirNomeDominio(nomeParaTeste))
+                .ComDataCadastro(_faker.Date.Past())
+                .ConstruirNovoCliente();
+
             _mocker.CreateInstance<DominioDeClientes>();
             _mocker.Use(_mapeador);
+            _mocker.GetMock<IRepositorioDeClientes>().Setup(r => r.BuscarUnicoAsync(It.IsAny<Guid>())).ReturnsAsync(cliente);
+
             var servico = _mocker.CreateInstance<CriarCliente>();
 
             #endregion Preparação do teste
@@ -49,6 +62,7 @@ namespace AutenticacaoDoisFatores.Testes.Servico
             Assert.NotNull(clienteCadastrado);
             Assert.Equal(nomeParaTeste, clienteCadastrado.Nome);
             Assert.Equal(emailParaTeste, clienteCadastrado.Email);
+            _mocker.Verify<IRepositorioDeClientes>(r => r.CriarDominio(cliente.NomeDominio), Times.Once);
             _mocker.Verify<INotificador>(n => n.AddMensagem(It.IsAny<MensagensCliente>()), Times.Never);
 
             #endregion Preparação do teste

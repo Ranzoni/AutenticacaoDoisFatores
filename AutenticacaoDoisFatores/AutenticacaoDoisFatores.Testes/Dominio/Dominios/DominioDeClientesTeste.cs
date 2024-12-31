@@ -29,7 +29,7 @@ namespace AutenticacaoDoisFatores.Testes.Dominio.Dominios
 
             #endregion Preparação do teste
 
-            var retorno = await dominio.CriarAsync(cliente);
+            var retorno = await dominio.CriarClienteAsync(cliente);
 
             #region Verificação do teste
 
