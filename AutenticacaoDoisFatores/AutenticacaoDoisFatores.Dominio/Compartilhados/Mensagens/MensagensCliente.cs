@@ -7,6 +7,8 @@ namespace AutenticacaoDoisFatores.Dominio.Compartilhados.Mensagens
         [Description("O nome do cliente não foi preenchido.")]
         NomeInvalido,
         [Description("O e-mail do cliente não foi preenchido.")]
-        EmailInvalido
+        EmailInvalido,
+        [Description("O cliente não foi encontrado.")]
+        ClienteNaoEncontrado
     }
 }

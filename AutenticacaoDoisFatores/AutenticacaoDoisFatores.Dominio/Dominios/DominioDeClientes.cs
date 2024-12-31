@@ -1,4 +1,6 @@
-﻿using AutenticacaoDoisFatores.Dominio.Entidades;
+﻿using AutenticacaoDoisFatores.Dominio.Compartilhados.Mensagens;
+using AutenticacaoDoisFatores.Dominio.Entidades;
+using AutenticacaoDoisFatores.Dominio.Excecoes;
 using AutenticacaoDoisFatores.Dominio.Repositorios;
 
 namespace AutenticacaoDoisFatores.Dominio.Dominios
@@ -17,7 +19,9 @@ namespace AutenticacaoDoisFatores.Dominio.Dominios
 
         public async Task CriarDominioDoClienteAsync(Guid idCliente)
         {
-            var cliente = await _repositorio.BuscarUnicoAsync(idCliente);
+            var cliente = await _repositorio.BuscarUnicoAsync(idCliente)
+                ?? throw new ExcecoesCliente(MensagensCliente.ClienteNaoEncontrado);
+
             await _repositorio.CriarDominio(cliente.NomeDominio);
         }
     }

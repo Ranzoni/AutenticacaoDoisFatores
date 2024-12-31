@@ -1,5 +1,8 @@
-﻿using AutenticacaoDoisFatores.Dominio.Construtores;
+﻿using AutenticacaoDoisFatores.Dominio.Compartilhados;
+using AutenticacaoDoisFatores.Dominio.Compartilhados.Mensagens;
+using AutenticacaoDoisFatores.Dominio.Construtores;
 using AutenticacaoDoisFatores.Dominio.Dominios;
+using AutenticacaoDoisFatores.Dominio.Excecoes;
 using AutenticacaoDoisFatores.Dominio.Repositorios;
 using Bogus;
 using Moq;
@@ -66,6 +69,28 @@ namespace AutenticacaoDoisFatores.Testes.Dominio.Dominios
 
             _mocker.Verify<IRepositorioDeClientes>(r => r.BuscarUnicoAsync(cliente.Id), Times.Once);
             _mocker.Verify<IRepositorioDeClientes>(r => r.CriarDominio(cliente.NomeDominio), Times.Once);
+
+            #endregion Verificação do teste
+        }
+
+        [Fact]
+        internal async Task DeveRetornarExcecaoAoCriarDominioDeClienteInexistente()
+        {
+            #region Preparação do teste
+
+            var idParaTeste = Guid.NewGuid();
+
+            var dominio = _mocker.CreateInstance<DominioDeClientes>();
+
+            #endregion Preparação do teste
+
+            var excecao = await Assert.ThrowsAsync<ExcecoesCliente>(() => dominio.CriarDominioDoClienteAsync(idParaTeste));
+
+            #region Verificação do teste
+
+            Assert.Equal(MensagensCliente.ClienteNaoEncontrado.Descricao(), excecao.Message);
+            _mocker.Verify<IRepositorioDeClientes>(r => r.BuscarUnicoAsync(idParaTeste), Times.Once);
+            _mocker.Verify<IRepositorioDeClientes>(r => r.CriarDominio(It.IsAny<string>()), Times.Never);
 
             #endregion Verificação do teste
         }
