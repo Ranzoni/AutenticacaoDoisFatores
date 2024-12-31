@@ -16,12 +16,12 @@ namespace AutenticacaoDoisFatores.Infra.Configuracoes
                 .IsRequired(true);
 
             builder
-                .Property<string>("Nome_Schema")
+                .Property(p => p.NomeDominio)
                 .IsRequired()
                 .HasMaxLength(100);
 
             builder
-                .HasIndex("Nome_Schema")
+                .HasIndex(p => p.NomeDominio)
                 .IsUnique();
 
             builder

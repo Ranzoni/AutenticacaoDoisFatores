@@ -1,4 +1,7 @@
+using AutenticacaoDoisFatores;
 using AutenticacaoDoisFatores.Infra.Contexto;
+using AutenticacaoDoisFatores.Servico.Mapeadores;
+using Mensageiro;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -7,6 +10,15 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<CrudContexto>(opt =>
     opt.UseNpgsql(builder.Configuration.GetConnectionString("AutenticacaoDoisFatoresCrudConnection"))
 );
+
+AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
+
+builder.Services.AddAutoMapper(typeof(MapeadorDeCliente));
+builder.Services.AddSingleton<INotificador, Notificador>();
+
+builder.Services.AddRepositorios();
+builder.Services.AddDominios();
+builder.Services.AddCasosDeUso();
 
 builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi

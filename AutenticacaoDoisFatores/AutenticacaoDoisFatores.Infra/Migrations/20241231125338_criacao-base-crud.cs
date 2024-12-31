@@ -18,9 +18,9 @@ namespace AutenticacaoDoisFatores.Infra.Migrations
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
                     Nome = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
                     Email = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: false),
+                    NomeDominio = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
                     ChaveAcesso = table.Column<Guid>(type: "uuid", nullable: false),
                     Ativo = table.Column<bool>(type: "boolean", nullable: false, defaultValue: false),
-                    Nome_Schema = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
                     DataCadastro = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     DataAlteracao = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
                 },
@@ -36,9 +36,9 @@ namespace AutenticacaoDoisFatores.Infra.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_Clientes_Nome_Schema",
+                name: "IX_Clientes_NomeDominio",
                 table: "Clientes",
-                column: "Nome_Schema",
+                column: "NomeDominio",
                 unique: true);
         }
 

@@ -40,6 +40,24 @@ namespace AutenticacaoDoisFatores.Testes.Dominio.Entidades
         }
 
         [Theory]
+        [InlineData("Magazine Luíza", "magazine")]
+        [InlineData("Aurora_Teste 2034", "aurora_teste")]
+        [InlineData("Aurora_Teste2034", "aurora_teste2034")]
+        [InlineData("Caíçara", "caicara")]
+        [InlineData("Caíçara Teste", "caicara")]
+        internal void DeveMontarNomeDominioComPrimeiroNomeESemAcentoEMinusculo(string nomeCliente, string dominioEsperado)
+        {
+            var emailParaTeste = _faker.Internet.Email();
+
+            var cliente = new ConstrutorDeCliente()
+                .ComNome(nomeCliente)
+                .ComEmail(emailParaTeste)
+                .ConstruirNovoCliente();
+
+            Assert.Equal(dominioEsperado, cliente.NomeDominio);
+        }
+
+        [Theory]
         [InlineData("")]
         [InlineData(" ")]
         [InlineData("ab")]

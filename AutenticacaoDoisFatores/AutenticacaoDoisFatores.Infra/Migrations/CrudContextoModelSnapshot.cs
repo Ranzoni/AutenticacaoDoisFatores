@@ -52,7 +52,7 @@ namespace AutenticacaoDoisFatores.Infra.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("character varying(50)");
 
-                    b.Property<string>("Nome_Schema")
+                    b.Property<string>("NomeDominio")
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("character varying(100)");
@@ -62,7 +62,7 @@ namespace AutenticacaoDoisFatores.Infra.Migrations
                     b.HasIndex("Email")
                         .IsUnique();
 
-                    b.HasIndex("Nome_Schema")
+                    b.HasIndex("NomeDominio")
                         .IsUnique();
 
                     b.ToTable("Clientes");
