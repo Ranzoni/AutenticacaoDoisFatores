@@ -40,5 +40,34 @@ namespace AutenticacaoDoisFatores.Testes.Dominio.Dominios
 
             #endregion Verificação do teste
         }
+
+        [Fact]
+        internal async Task DeveCriarDominioCliente()
+        {
+            #region Preparação do teste
+
+            var nomeParaTeste = _faker.Company.CompanyName();
+            var emailParaTeste = _faker.Internet.Email();
+
+            var cliente = new ConstrutorDeCliente()
+                .ComNome(nomeParaTeste)
+                .ComEmail(emailParaTeste)
+                .ConstruirNovoCliente();
+
+            var dominio = _mocker.CreateInstance<DominioDeClientes>();
+
+            _mocker.GetMock<IRepositorioDeClientes>().Setup(r => r.BuscarUnicoAsync(cliente.Id)).ReturnsAsync(cliente);
+
+            #endregion Preparação do teste
+
+            await dominio.CriarDominioDoClienteAsync(cliente.Id);
+
+            #region Verificação do teste
+
+            _mocker.Verify<IRepositorioDeClientes>(r => r.BuscarUnicoAsync(cliente.Id), Times.Once);
+            _mocker.Verify<IRepositorioDeClientes>(r => r.CriarDominio(cliente.NomeDominio), Times.Once);
+
+            #endregion Verificação do teste
+        }
     }
 }

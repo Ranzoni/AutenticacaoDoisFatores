@@ -14,5 +14,11 @@ namespace AutenticacaoDoisFatores.Dominio.Dominios
 
             return cliente;
         }
+
+        public async Task CriarDominioDoClienteAsync(Guid idCliente)
+        {
+            var cliente = await _repositorio.BuscarUnicoAsync(idCliente);
+            await _repositorio.CriarDominio(cliente.NomeDominio);
+        }
     }
 }
