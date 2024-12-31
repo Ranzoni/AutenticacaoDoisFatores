@@ -1,6 +1,12 @@
+using AutenticacaoDoisFatores.Infra.Contexto;
+using Microsoft.EntityFrameworkCore;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+builder.Services.AddDbContext<CrudContexto>(opt =>
+    opt.UseNpgsql(builder.Configuration.GetConnectionString("AutenticacaoDoisFatoresCrudConnection"))
+);
 
 builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi

@@ -16,7 +16,7 @@ namespace AutenticacaoDoisFatores.Infra.Configuracoes
                 .IsRequired(true);
 
             builder
-                .Property("Nome_Schema")
+                .Property<string>("Nome_Schema")
                 .IsRequired()
                 .HasMaxLength(100);
 
@@ -27,11 +27,15 @@ namespace AutenticacaoDoisFatores.Infra.Configuracoes
             builder
                 .Property(p => p.Email)
                 .IsRequired()
-                .HasMaxLength(60);
+                .HasMaxLength(256);
 
             builder
                 .HasIndex(p => p.Email)
                 .IsUnique();
+
+            builder
+                .Property(p => p.Ativo)
+                .HasDefaultValue(false);
         }
     }
 }
