@@ -16,7 +16,7 @@ namespace AutenticacaoDoisFatores.Controllers
             try
             {
                 var retorno = await criarCliente.ExecutarAsync(novoCliente);
-
+                
                 return CriadoComSucesso(retorno);
             }
             catch (Exception e)

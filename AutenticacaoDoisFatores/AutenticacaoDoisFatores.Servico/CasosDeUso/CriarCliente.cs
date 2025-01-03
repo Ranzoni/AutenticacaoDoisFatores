@@ -31,18 +31,13 @@ namespace AutenticacaoDoisFatores.Servico.CasosDeUso
         private bool NovoClienteEhValido(NovoCliente novoCliente)
         {
             if (!ValidadorDeCliente.NomeEhValido(novoCliente.Nome))
-            {
                 _notificador.AddMensagem(MensagensCliente.NomeInvalido);
-                return false;
-            }
 
             if (!ValidadorDeCliente.EmailEhValido(novoCliente.Email))
-            {
                 _notificador.AddMensagem(MensagensCliente.EmailInvalido);
-                return false;
-            }
 
-            return true;
+            var clienteEhValido = !_notificador.ExisteMensagem();
+            return clienteEhValido;
         }
     }
 }

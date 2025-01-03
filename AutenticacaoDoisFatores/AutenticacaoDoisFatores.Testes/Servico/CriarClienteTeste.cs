@@ -18,7 +18,7 @@ namespace AutenticacaoDoisFatores.Testes.Servico
     {
         private readonly Faker _faker = new();
         private readonly AutoMocker _mocker = new();
-        private readonly IMapper _mapeador; 
+        private readonly IMapper _mapeador;
 
         public CriarClienteTeste()
         {
@@ -83,6 +83,7 @@ namespace AutenticacaoDoisFatores.Testes.Servico
 
             _mocker.CreateInstance<DominioDeClientes>();
             _mocker.Use(_mapeador);
+            _mocker.GetMock<INotificador>().Setup(n => n.ExisteMensagem()).Returns(true);
             var servico = _mocker.CreateInstance<CriarCliente>();
 
             #endregion Preparação do teste
@@ -112,6 +113,7 @@ namespace AutenticacaoDoisFatores.Testes.Servico
 
             _mocker.CreateInstance<DominioDeClientes>();
             _mocker.Use(_mapeador);
+            _mocker.GetMock<INotificador>().Setup(n => n.ExisteMensagem()).Returns(true);
             var servico = _mocker.CreateInstance<CriarCliente>();
 
             #endregion Preparação do teste

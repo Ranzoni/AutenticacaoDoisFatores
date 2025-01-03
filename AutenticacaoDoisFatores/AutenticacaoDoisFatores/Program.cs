@@ -2,6 +2,7 @@ using AutenticacaoDoisFatores;
 using AutenticacaoDoisFatores.Infra.Contexto;
 using AutenticacaoDoisFatores.Servico.Mapeadores;
 using Mensageiro;
+using Mensageiro.WebApi;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -14,7 +15,7 @@ builder.Services.AddDbContext<CrudContexto>(opt =>
 AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 
 builder.Services.AddAutoMapper(typeof(MapeadorDeCliente));
-builder.Services.AddSingleton<INotificador, Notificador>();
+builder.Services.AddMensageiro();
 
 builder.Services.AddRepositorios();
 builder.Services.AddDominios();
