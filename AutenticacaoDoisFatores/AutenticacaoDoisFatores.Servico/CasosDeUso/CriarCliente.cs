@@ -36,6 +36,9 @@ namespace AutenticacaoDoisFatores.Servico.CasosDeUso
             if (!ValidadorDeCliente.EmailEhValido(novoCliente.Email))
                 _notificador.AddMensagem(MensagensCliente.EmailInvalido);
 
+            if (!ValidadorDeCliente.NomeDominioEhValido(novoCliente.NomeDominio))
+                _notificador.AddMensagem(MensagensCliente.NomeDominioInvalido);
+
             var clienteEhValido = !_notificador.ExisteMensagem();
             return clienteEhValido;
         }

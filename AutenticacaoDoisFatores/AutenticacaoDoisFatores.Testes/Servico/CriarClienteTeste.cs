@@ -129,5 +129,41 @@ namespace AutenticacaoDoisFatores.Testes.Servico
 
             #endregion Preparação do teste
         }
+
+        [Theory]
+        [InlineData("")]
+        [InlineData(" ")]
+        [InlineData("ab")]
+        [InlineData("abcdefghijklmnop")]
+        [InlineData("teste dominio")]
+        [InlineData("domínio")]
+        [InlineData("dominio.")]
+        [InlineData("dominio@")]
+        [InlineData("dominio!")]
+        internal async Task DeveRetornarNuloEMensagemQuandoNomeDominioForInvalido(string nomeDominioInvalido)
+        {
+            #region Preparação do teste
+
+            var nomeParaTeste = _faker.Company.CompanyName();
+            var emailParaTeste = _faker.Internet.Email();
+
+            var novoCliente = new NovoCliente(nome: nomeParaTeste, email: emailParaTeste, nomeDominio: nomeDominioInvalido);
+
+            _mocker.CreateInstance<DominioDeClientes>();
+            _mocker.Use(_mapeador);
+            _mocker.GetMock<INotificador>().Setup(n => n.ExisteMensagem()).Returns(true);
+            var servico = _mocker.CreateInstance<CriarCliente>();
+
+            #endregion Preparação do teste
+
+            var clienteCadastrado = await servico.ExecutarAsync(novoCliente);
+
+            #region Verificação do teste
+
+            Assert.Null(clienteCadastrado);
+            _mocker.Verify<INotificador>(n => n.AddMensagem(MensagensCliente.NomeDominioInvalido), Times.Once);
+
+            #endregion Preparação do teste
+        }
     }
 }
