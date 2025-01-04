@@ -22,10 +22,12 @@ namespace AutenticacaoDoisFatores.Testes.Dominio.Dominios
 
             var nomeParaTeste = _faker.Company.CompanyName();
             var emailParaTeste = _faker.Internet.Email();
+            var dominioParaTeste = _faker.Internet.DomainWord();
                 
             var cliente = new ConstrutorDeCliente()
                 .ComNome(nomeParaTeste)
                 .ComEmail(emailParaTeste)
+                .ComNomeDominio(dominioParaTeste)
                 .ConstruirNovoCliente();
 
             var dominio = _mocker.CreateInstance<DominioDeClientes>();
@@ -51,10 +53,12 @@ namespace AutenticacaoDoisFatores.Testes.Dominio.Dominios
 
             var nomeParaTeste = _faker.Company.CompanyName();
             var emailParaTeste = _faker.Internet.Email();
+            var dominioParaTeste = _faker.Internet.DomainWord();
 
             var cliente = new ConstrutorDeCliente()
                 .ComNome(nomeParaTeste)
                 .ComEmail(emailParaTeste)
+                .ComNomeDominio(dominioParaTeste)
                 .ConstruirNovoCliente();
 
             var dominio = _mocker.CreateInstance<DominioDeClientes>();

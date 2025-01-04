@@ -1,5 +1,4 @@
-﻿using AutenticacaoDoisFatores.Dominio.Compartilhados;
-using AutenticacaoDoisFatores.Dominio.Compartilhados.Entidades;
+﻿using AutenticacaoDoisFatores.Dominio.Compartilhados.Entidades;
 using AutenticacaoDoisFatores.Dominio.Validadores;
 
 namespace AutenticacaoDoisFatores.Dominio.Entidades
@@ -12,11 +11,11 @@ namespace AutenticacaoDoisFatores.Dominio.Entidades
         public Guid ChaveAcesso { get; private set; } = Guid.NewGuid();
         public bool Ativo { get; private set; } = false;
 
-        public Cliente(string nome, string email)
+        public Cliente(string nome, string email, string nomeDominio)
         {
             Nome = nome;
             Email = email;
-            NomeDominio = ConstruirNomeDominio(Nome);
+            NomeDominio = nomeDominio;
 
             this.ValidarCriacao();
         }
@@ -31,14 +30,6 @@ namespace AutenticacaoDoisFatores.Dominio.Entidades
             Ativo = ativo;
             DataCadastro = dataCadastro;
             DataAlteracao = dataAlteracao;
-        }
-
-        public static string ConstruirNomeDominio(string nomeBase)
-        {
-            if (nomeBase.EstaVazio())
-                return nomeBase;
-
-            return nomeBase.Split(" ").First().RemoverCaracteresEspeciais().ToLower();
         }
     }
 }

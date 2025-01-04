@@ -71,7 +71,7 @@ namespace AutenticacaoDoisFatores.Dominio.Construtores
 
         public Cliente ConstruirNovoCliente()
         {
-            var cliente = new Cliente(nome: _nome, email: _email);
+            var cliente = new Cliente(nome: _nome, email: _email, nomeDominio: _nomeDominio);
 
             return cliente;
         }

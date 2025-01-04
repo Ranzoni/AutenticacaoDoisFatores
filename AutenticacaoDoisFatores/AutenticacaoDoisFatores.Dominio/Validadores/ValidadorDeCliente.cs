@@ -9,10 +9,13 @@ namespace AutenticacaoDoisFatores.Dominio.Validadores
         internal static void ValidarCriacao(this Cliente cliente)
         {
             if (!NomeEhValido(cliente.Nome))
-                ExcecoesCliente.NomeNaoPreenchido();
+                ExcecoesCliente.NomeInvalido();
 
             if (!EmailEhValido(cliente.Email))
-                ExcecoesCliente.EmailNaoPreenchido();
+                ExcecoesCliente.EmailInvalido();
+
+            if (!NomeDominioEhValido(cliente.NomeDominio))
+                ExcecoesCliente.NomeDominioInvalido();
         }
 
         public static bool NomeEhValido(string nome)
@@ -23,6 +26,15 @@ namespace AutenticacaoDoisFatores.Dominio.Validadores
         public static bool EmailEhValido(string email)
         {
             return !email.EstaVazio() && email.Length >= 5 && email.Length <= 256;
+        }
+
+        public static bool NomeDominioEhValido(string nomeDominio)
+        {
+            return !nomeDominio.EstaVazio()
+                && nomeDominio.Length >= 3
+                && nomeDominio.Length <= 15
+                && !nomeDominio.ExistemCaracteresEspeciaisAcentosOuPontuacoes()
+                && !nomeDominio.Contains(' ');
         }
     }
 }

@@ -1,7 +1,6 @@
 ﻿using AutenticacaoDoisFatores.Dominio.Compartilhados.Mensagens;
 using AutenticacaoDoisFatores.Dominio.Construtores;
 using AutenticacaoDoisFatores.Dominio.Dominios;
-using AutenticacaoDoisFatores.Dominio.Entidades;
 using AutenticacaoDoisFatores.Dominio.Repositorios;
 using AutenticacaoDoisFatores.Servico.CasosDeUso;
 using AutenticacaoDoisFatores.Servico.DTO;
@@ -36,14 +35,15 @@ namespace AutenticacaoDoisFatores.Testes.Servico
 
             var nomeParaTeste = _faker.Company.CompanyName();
             var emailParaTeste = _faker.Internet.Email();
+            var dominioParaTeste = _faker.Internet.DomainWord();
 
-            var novoCliente = new NovoCliente(nome: nomeParaTeste, email: emailParaTeste);
+            var novoCliente = new NovoCliente(nome: nomeParaTeste, email: emailParaTeste, nomeDominio: dominioParaTeste);
 
             var cliente = new ConstrutorDeCliente()
                 .ComId(Guid.NewGuid())
                 .ComNome(nomeParaTeste)
                 .ComEmail(emailParaTeste)
-                .ComNomeDominio(Cliente.ConstruirNomeDominio(nomeParaTeste))
+                .ComNomeDominio(dominioParaTeste)
                 .ComDataCadastro(_faker.Date.Past())
                 .ConstruirNovoCliente();
 
@@ -78,8 +78,9 @@ namespace AutenticacaoDoisFatores.Testes.Servico
             #region Preparação do teste
 
             var emailParaTeste = _faker.Internet.Email();
+            var dominioParaTeste = _faker.Internet.DomainName();
 
-            var novoCliente = new NovoCliente(nome: nomeInvalido, email: emailParaTeste);
+            var novoCliente = new NovoCliente(nome: nomeInvalido, email: emailParaTeste, nomeDominio: dominioParaTeste);
 
             _mocker.CreateInstance<DominioDeClientes>();
             _mocker.Use(_mapeador);
@@ -108,8 +109,9 @@ namespace AutenticacaoDoisFatores.Testes.Servico
             #region Preparação do teste
 
             var nomeParaTeste = _faker.Company.CompanyName();
+            var dominioParaTeste = _faker.Internet.DomainName();
 
-            var novoCliente = new NovoCliente(nome: nomeParaTeste, email: emailInvalido);
+            var novoCliente = new NovoCliente(nome: nomeParaTeste, email: emailInvalido, nomeDominio: dominioParaTeste);
 
             _mocker.CreateInstance<DominioDeClientes>();
             _mocker.Use(_mapeador);

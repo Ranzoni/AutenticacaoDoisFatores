@@ -1,32 +1,30 @@
 ﻿using System.Globalization;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace AutenticacaoDoisFatores.Dominio.Compartilhados
 {
-    public static class ExtensaoString
+    public static partial class ExtensaoString
     {
         public static bool EstaVazio(this string valor)
         {
             return string.IsNullOrEmpty(valor) || string.IsNullOrWhiteSpace(valor);
         }
 
-        public static string RemoverCaracteresEspeciais(this string valor)
+        public static bool ExistemCaracteresEspeciaisAcentosOuPontuacoes(this string valor)
         {
-            var sb = new StringBuilder();
-
-            var valorEmLista = valor.Normalize(NormalizationForm.FormD).ToCharArray();
-            foreach (var letter in valorEmLista)
-                if (CharUnicodeInfo.GetUnicodeCategory(letter) != UnicodeCategory.NonSpacingMark)
-                    sb.Append(letter);
-
-            valor = sb.ToString();
-            sb.Clear();
-
-            foreach (var c in valor)
-                if ((c >= '0' && c <= '9') || (c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z') || c == '.' || c == '_')
-                    sb.Append(c);
-
-            return sb.ToString();
+            var regex = CaracteresEspeciaisOuPontuacoes();
+            return regex.IsMatch(valor) || ExistemAcentos(valor);
         }
+
+        public static bool ExistemAcentos(this string valor)
+        {
+            const string ACENTOS = "ÄÅÁÂÀÃäáâàãÉÊËÈéêëèÍÎÏÌíîïìÖÓÔÒÕöóôòõÜÚÛüúûùÇç";
+
+            return ACENTOS.Any(a => valor.Contains(a));
+        }
+
+        [GeneratedRegex(@"[^\w\s]")]
+        private static partial Regex CaracteresEspeciaisOuPontuacoes();
     }
 }

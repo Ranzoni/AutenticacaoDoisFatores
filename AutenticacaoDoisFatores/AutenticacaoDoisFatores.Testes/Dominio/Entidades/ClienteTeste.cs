@@ -18,12 +18,14 @@ namespace AutenticacaoDoisFatores.Testes.Dominio.Entidades
 
             var nomeParaTeste = _faker.Company.CompanyName();
             var emailParaTeste = _faker.Internet.Email();
+            var nomeDominioParaTeste = _faker.Internet.DomainWord();
 
             #endregion Preparação do teste
 
             var cliente = new ConstrutorDeCliente()
                 .ComNome(nomeParaTeste)
                 .ComEmail(emailParaTeste)
+                .ComNomeDominio(nomeDominioParaTeste)
                 .ConstruirNovoCliente();
 
             #region Verificação do teste
@@ -36,25 +38,10 @@ namespace AutenticacaoDoisFatores.Testes.Dominio.Entidades
             Assert.Equal(emailParaTeste, cliente.Email);
             Assert.True(ValidadorDeCliente.EmailEhValido(cliente.Email));
 
+            Assert.Equal(nomeDominioParaTeste, cliente.NomeDominio);
+            Assert.True(ValidadorDeCliente.NomeDominioEhValido(cliente.NomeDominio));
+
             #endregion Verificação do teste
-        }
-
-        [Theory]
-        [InlineData("Magazine Luíza", "magazine")]
-        [InlineData("Aurora_Teste 2034", "aurora_teste")]
-        [InlineData("Aurora_Teste2034", "aurora_teste2034")]
-        [InlineData("Caíçara", "caicara")]
-        [InlineData("Caíçara Teste", "caicara")]
-        internal void DeveMontarNomeDominioComPrimeiroNomeESemAcentoEMinusculo(string nomeCliente, string dominioEsperado)
-        {
-            var emailParaTeste = _faker.Internet.Email();
-
-            var cliente = new ConstrutorDeCliente()
-                .ComNome(nomeCliente)
-                .ComEmail(emailParaTeste)
-                .ConstruirNovoCliente();
-
-            Assert.Equal(dominioEsperado, cliente.NomeDominio);
         }
 
         [Theory]
@@ -65,12 +52,14 @@ namespace AutenticacaoDoisFatores.Testes.Dominio.Entidades
         internal void NaoDeveInstanciarNovoClienteComNomeInvalido(string nomeInvalido)
         {
             var emailParaTeste = _faker.Internet.Email();
+            var nomeDominioParaTeste = _faker.Internet.DomainName();
 
             var excecao = Assert.Throws<ExcecoesCliente>
             (() =>
                 new ConstrutorDeCliente()
                     .ComNome(nomeInvalido)
                     .ComEmail(emailParaTeste)
+                    .ComNomeDominio(nomeDominioParaTeste)
                     .ConstruirNovoCliente()
             );
 
@@ -85,16 +74,45 @@ namespace AutenticacaoDoisFatores.Testes.Dominio.Entidades
         internal void NaoDeveInstanciarNovoClienteComEmailInvalido(string emailInvalido)
         {
             var nomeParaTeste = _faker.Company.CompanyName();
+            var nomeDominioParaTeste = _faker.Internet.DomainName();
 
             var excecao = Assert.Throws<ExcecoesCliente>
             (() =>
                 new ConstrutorDeCliente()
                     .ComNome(nomeParaTeste)
                     .ComEmail(emailInvalido)
+                    .ComNomeDominio(nomeDominioParaTeste)
                     .ConstruirNovoCliente()
             );
 
             Assert.Equal(MensagensCliente.EmailInvalido.Descricao(), excecao.Message);
+        }
+
+        [Theory]
+        [InlineData("")]
+        [InlineData(" ")]
+        [InlineData("ab")]
+        [InlineData("abcdefghijklmnop")]
+        [InlineData("teste dominio")]
+        [InlineData("domínio")]
+        [InlineData("dominio.")]
+        [InlineData("dominio@")]
+        [InlineData("dominio!")]
+        internal void NaoDeveInstanciarNovoClienteComNomeDominioInvalido(string nomeDominioInvalido)
+        {
+            var nomeParaTeste = _faker.Company.CompanyName();
+            var emailParaTeste = _faker.Internet.Email();
+
+            var excecao = Assert.Throws<ExcecoesCliente>
+            (() =>
+                new ConstrutorDeCliente()
+                    .ComNome(nomeParaTeste)
+                    .ComEmail(emailParaTeste)
+                    .ComNomeDominio(nomeDominioInvalido)
+                    .ConstruirNovoCliente()
+            );
+
+            Assert.Equal(MensagensCliente.NomeDominioInvalido.Descricao(), excecao.Message);
         }
     }
 }
