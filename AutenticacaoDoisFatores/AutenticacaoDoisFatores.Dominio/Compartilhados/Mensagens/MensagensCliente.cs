@@ -11,6 +11,8 @@ namespace AutenticacaoDoisFatores.Dominio.Compartilhados.Mensagens
         [Description("O nome de domínio do cliente não é válido. Ele não pode conter caracteres especiais, acentos, espaços ou pontuações.")]
         NomeDominioInvalido,
         [Description("O cliente não foi encontrado.")]
-        ClienteNaoEncontrado
+        ClienteNaoEncontrado,
+        [Description("O domínio informado já existe")]
+        NomeDominioJaCadastrado
     }
 }

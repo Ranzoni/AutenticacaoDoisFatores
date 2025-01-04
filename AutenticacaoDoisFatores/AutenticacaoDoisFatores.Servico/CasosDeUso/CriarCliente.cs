@@ -16,7 +16,8 @@ namespace AutenticacaoDoisFatores.Servico.CasosDeUso
 
         public async Task<ClienteCadastrado?> ExecutarAsync(NovoCliente novoCliente)
         {
-            if (!NovoClienteEhValido(novoCliente))
+            var cadastroEhValido = await NovoClienteEhValido(novoCliente);
+            if (!cadastroEhValido)
                 return null;
 
             var cliente = _mapper.Map<Cliente>(novoCliente);
@@ -28,7 +29,7 @@ namespace AutenticacaoDoisFatores.Servico.CasosDeUso
             return clienteCadastrado;
         }
 
-        private bool NovoClienteEhValido(NovoCliente novoCliente)
+        private async Task<bool> NovoClienteEhValido(NovoCliente novoCliente)
         {
             if (!ValidadorDeCliente.NomeEhValido(novoCliente.Nome))
                 _notificador.AddMensagem(MensagensCliente.NomeInvalido);
@@ -38,6 +39,10 @@ namespace AutenticacaoDoisFatores.Servico.CasosDeUso
 
             if (!ValidadorDeCliente.NomeDominioEhValido(novoCliente.NomeDominio))
                 _notificador.AddMensagem(MensagensCliente.NomeDominioInvalido);
+
+            var nomeDominioJaCadastrado = await _dominio.NomeDominioEstaCadastrado(novoCliente.NomeDominio);
+            if (nomeDominioJaCadastrado)
+                _notificador.AddMensagem(MensagensCliente.NomeDominioJaCadastrado);
 
             var clienteEhValido = !_notificador.ExisteMensagem();
             return clienteEhValido;

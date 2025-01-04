@@ -11,6 +11,10 @@ namespace AutenticacaoDoisFatores.Dominio.Dominios
 
         public async Task<Cliente> CriarClienteAsync(Cliente cliente)
         {
+            var existeDominio = await NomeDominioEstaCadastrado(cliente.NomeDominio);
+            if (existeDominio)
+                ExcecoesCliente.NomeDominioJaCadastrado();
+
             _repositorio.Adicionar(cliente);
             await _repositorio.SalvarAlteracoesAsync();
 
@@ -23,6 +27,11 @@ namespace AutenticacaoDoisFatores.Dominio.Dominios
                 ?? throw new ExcecoesCliente(MensagensCliente.ClienteNaoEncontrado);
 
             await _repositorio.CriarDominio(cliente.NomeDominio);
+        }
+
+        public async Task<bool> NomeDominioEstaCadastrado(string nomeDominio)
+        {
+            return await _repositorio.ExisteDominio(nomeDominio);
         }
     }
 }

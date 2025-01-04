@@ -6,5 +6,6 @@ namespace AutenticacaoDoisFatores.Dominio.Repositorios
     public interface IRepositorioDeClientes : IReporioBase<Cliente>
     {
         Task CriarDominio(string nomeDominio);
+        Task<bool> ExisteDominio(string nomeDominio);
     }
 }

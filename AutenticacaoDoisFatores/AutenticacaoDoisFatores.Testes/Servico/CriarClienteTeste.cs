@@ -165,5 +165,34 @@ namespace AutenticacaoDoisFatores.Testes.Servico
 
             #endregion Preparação do teste
         }
+
+        [Fact]
+        internal async Task DeveRetornarNuloEMensagemQuandoNomeDominioJaEstiverCadastrado()
+        {
+            #region Preparação do teste
+
+            var nomeParaTeste = _faker.Company.CompanyName();
+            var emailParaTeste = _faker.Internet.Email();
+            var nomeDominioParaTeste = _faker.Internet.DomainWord();
+
+            var novoCliente = new NovoCliente(nome: nomeParaTeste, email: emailParaTeste, nomeDominio: nomeDominioParaTeste);
+
+            _mocker.CreateInstance<DominioDeClientes>();
+            _mocker.Use(_mapeador);
+            _mocker.GetMock<IRepositorioDeClientes>().Setup(r => r.ExisteDominio(nomeDominioParaTeste)).ReturnsAsync(true);
+            _mocker.GetMock<INotificador>().Setup(n => n.ExisteMensagem()).Returns(true);
+            var servico = _mocker.CreateInstance<CriarCliente>();
+
+            #endregion Preparação do teste
+
+            var clienteCadastrado = await servico.ExecutarAsync(novoCliente);
+
+            #region Verificação do teste
+
+            Assert.Null(clienteCadastrado);
+            _mocker.Verify<INotificador>(n => n.AddMensagem(MensagensCliente.NomeDominioJaCadastrado), Times.Once);
+
+            #endregion Preparação do teste
+        }
     }
 }

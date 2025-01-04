@@ -36,6 +36,11 @@ namespace AutenticacaoDoisFatores.Infra.Repositorios
             throw new NotImplementedException();
         }
 
+        public async Task<bool> ExisteDominio(string nomeDominio)
+        {
+            return await _contexto.Clientes.AnyAsync(c => c.NomeDominio.Equals(nomeDominio));
+        }
+
         public async Task SalvarAlteracoesAsync()
         {
             await _contexto.SaveChangesAsync();
