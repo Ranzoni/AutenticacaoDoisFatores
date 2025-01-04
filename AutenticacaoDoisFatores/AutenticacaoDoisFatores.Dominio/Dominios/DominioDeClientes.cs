@@ -9,11 +9,11 @@ namespace AutenticacaoDoisFatores.Dominio.Dominios
     {
         private readonly IRepositorioDeClientes _repositorio = repositorio;
 
+        #region Escrita
+
         public async Task<Cliente> CriarClienteAsync(Cliente cliente)
         {
-            var existeDominio = await NomeDominioEstaCadastrado(cliente.NomeDominio);
-            if (existeDominio)
-                ExcecoesCliente.NomeDominioJaCadastrado();
+            await ValidarCriacaoClienteAsync(cliente);
 
             _repositorio.Adicionar(cliente);
             await _repositorio.SalvarAlteracoesAsync();
@@ -29,9 +29,31 @@ namespace AutenticacaoDoisFatores.Dominio.Dominios
             await _repositorio.CriarDominio(cliente.NomeDominio);
         }
 
-        public async Task<bool> NomeDominioEstaCadastrado(string nomeDominio)
+        private async Task ValidarCriacaoClienteAsync(Cliente cliente)
+        {
+            var existeEmail = await EmailEstaCadastradoAsync(cliente.Email);
+            if (existeEmail)
+                ExcecoesCliente.EmailJaCadastrado();
+
+            var existeDominio = await NomeDominioEstaCadastradoAsync(cliente.NomeDominio);
+            if (existeDominio)
+                ExcecoesCliente.NomeDominioJaCadastrado();
+        }
+
+        #endregion Escrita
+
+        #region Leitura
+
+        public async Task<bool> EmailEstaCadastradoAsync(string email)
+        {
+            return await _repositorio.ExisteEmail(email);
+        }
+
+        public async Task<bool> NomeDominioEstaCadastradoAsync(string nomeDominio)
         {
             return await _repositorio.ExisteDominio(nomeDominio);
         }
+
+        #endregion Leitura
     }
 }

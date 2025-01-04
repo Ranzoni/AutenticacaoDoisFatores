@@ -7,5 +7,6 @@ namespace AutenticacaoDoisFatores.Dominio.Repositorios
     {
         Task CriarDominio(string nomeDominio);
         Task<bool> ExisteDominio(string nomeDominio);
+        Task<bool> ExisteEmail(string email);
     }
 }

@@ -12,7 +12,9 @@ namespace AutenticacaoDoisFatores.Dominio.Compartilhados.Mensagens
         NomeDominioInvalido,
         [Description("O cliente não foi encontrado.")]
         ClienteNaoEncontrado,
-        [Description("O domínio informado já existe")]
-        NomeDominioJaCadastrado
+        [Description("O domínio informado já está cadastrado.")]
+        NomeDominioJaCadastrado,
+        [Description("O e-mail informado já está cadastrado.")]
+        EmailJaCadastrado
     }
 }

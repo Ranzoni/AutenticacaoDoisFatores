@@ -101,6 +101,37 @@ namespace AutenticacaoDoisFatores.Testes.Dominio.Dominios
         }
 
         [Fact]
+        internal async Task DeveRetornarExcecaoAoCriarClienteComEmailJaCadastrado()
+        {
+            #region Preparação do teste
+
+            var nomeParaTeste = _faker.Company.CompanyName();
+            var emailParaTeste = _faker.Internet.Email();
+            var dominioParaTeste = _faker.Internet.DomainWord();
+
+            var cliente = new ConstrutorDeCliente()
+                .ComNome(nomeParaTeste)
+                .ComEmail(emailParaTeste)
+                .ComNomeDominio(dominioParaTeste)
+                .ConstruirNovoCliente();
+
+            var dominio = _mocker.CreateInstance<DominioDeClientes>();
+            _mocker.GetMock<IRepositorioDeClientes>().Setup(r => r.ExisteEmail(emailParaTeste)).ReturnsAsync(true);
+
+            #endregion Preparação do teste
+
+            var excecao = await Assert.ThrowsAsync<ExcecoesCliente>(() => dominio.CriarClienteAsync(cliente));
+
+            #region Verificação do teste
+
+            Assert.Equal(MensagensCliente.EmailJaCadastrado.Descricao(), excecao.Message);
+            _mocker.Verify<IRepositorioDeClientes>(r => r.Adicionar(It.IsAny<Cliente>()), Times.Never);
+            _mocker.Verify<IRepositorioDeClientes>(r => r.SalvarAlteracoesAsync(), Times.Never);
+
+            #endregion Verificação do teste
+        }
+
+        [Fact]
         internal async Task DeveRetornarExcecaoAoCriarClienteComNomeDominioJaCadastrado()
         {
             #region Preparação do teste
@@ -134,6 +165,30 @@ namespace AutenticacaoDoisFatores.Testes.Dominio.Dominios
         [Theory]
         [InlineData(false)]
         [InlineData(true)]
+        internal async Task DeveRetornarVerdadeiroOuFalsoEmailCadastrado(bool emailCadastrado)
+        {
+            #region Preparação do teste
+
+            var emailParaTeste = _faker.Internet.Email();
+
+            var dominio = _mocker.CreateInstance<DominioDeClientes>();
+            _mocker.GetMock<IRepositorioDeClientes>().Setup(r => r.ExisteEmail(emailParaTeste)).ReturnsAsync(emailCadastrado);
+
+            #endregion Preparação do teste
+
+            var retorno = await dominio.EmailEstaCadastradoAsync(emailParaTeste);
+
+            #region Verificação do teste
+
+            Assert.Equal(retorno, emailCadastrado);
+            _mocker.Verify<IRepositorioDeClientes>(r => r.ExisteEmail(emailParaTeste), Times.Once);
+
+            #endregion Verificação do teste
+        }
+
+        [Theory]
+        [InlineData(false)]
+        [InlineData(true)]
         internal async Task DeveRetornarVerdadeiroOuFalsoDominioCadastrado(bool dominioJaCadastrado)
         {
             #region Preparação do teste
@@ -145,7 +200,7 @@ namespace AutenticacaoDoisFatores.Testes.Dominio.Dominios
 
             #endregion Preparação do teste
 
-            var retorno = await dominio.NomeDominioEstaCadastrado(nomeDominioParaTeste);
+            var retorno = await dominio.NomeDominioEstaCadastradoAsync(nomeDominioParaTeste);
 
             #region Verificação do teste
 

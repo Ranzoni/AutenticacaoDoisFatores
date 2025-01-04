@@ -38,7 +38,12 @@ namespace AutenticacaoDoisFatores.Infra.Repositorios
 
         public async Task<bool> ExisteDominio(string nomeDominio)
         {
-            return await _contexto.Clientes.AnyAsync(c => c.NomeDominio.Equals(nomeDominio));
+            return await _contexto.Clientes.AnyAsync(c => c.NomeDominio.ToLower().Trim().Equals(nomeDominio.ToLower().Trim()));
+        }
+
+        public async Task<bool> ExisteEmail(string email)
+        {
+            return await _contexto.Clientes.AnyAsync(c => c.Email.ToLower().Trim().Equals(email.ToLower().Trim()));
         }
 
         public async Task SalvarAlteracoesAsync()
