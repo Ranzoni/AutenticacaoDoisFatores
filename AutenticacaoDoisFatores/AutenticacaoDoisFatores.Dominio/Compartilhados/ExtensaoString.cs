@@ -1,6 +1,4 @@
-﻿using System.Globalization;
-using System.Text;
-using System.Text.RegularExpressions;
+﻿using System.Text.RegularExpressions;
 
 namespace AutenticacaoDoisFatores.Dominio.Compartilhados
 {
@@ -13,7 +11,7 @@ namespace AutenticacaoDoisFatores.Dominio.Compartilhados
 
         public static bool ExistemCaracteresEspeciaisAcentosOuPontuacoes(this string valor)
         {
-            var regex = CaracteresEspeciaisOuPontuacoes();
+            var regex = RegexCaracteresEspeciaisOuPontuacoes();
             return regex.IsMatch(valor) || ExistemAcentos(valor);
         }
 
@@ -24,7 +22,20 @@ namespace AutenticacaoDoisFatores.Dominio.Compartilhados
             return ACENTOS.Any(a => valor.Contains(a));
         }
 
+        public static bool EhEmail(this string valor)
+        {
+            var regex = RegexEmail();
+            return regex.IsMatch(valor);
+        }
+
+        #region Regex
+
         [GeneratedRegex(@"[^\w\s]")]
-        private static partial Regex CaracteresEspeciaisOuPontuacoes();
+        private static partial Regex RegexCaracteresEspeciaisOuPontuacoes();
+
+        [GeneratedRegex(@"^[^@\s]+@[^@\s]+\.[^@\s]+$")]
+        private static partial Regex RegexEmail();
+
+        #endregion Regex
     }
 }

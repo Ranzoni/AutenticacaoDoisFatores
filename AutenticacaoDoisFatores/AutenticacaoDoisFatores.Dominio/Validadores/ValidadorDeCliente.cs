@@ -25,7 +25,7 @@ namespace AutenticacaoDoisFatores.Dominio.Validadores
 
         public static bool EmailEhValido(string email)
         {
-            return !email.EstaVazio() && email.Length >= 5 && email.Length <= 256;
+            return !email.EstaVazio() && email.EhEmail() && email.Length <= 256;
         }
 
         public static bool NomeDominioEhValido(string nomeDominio)
