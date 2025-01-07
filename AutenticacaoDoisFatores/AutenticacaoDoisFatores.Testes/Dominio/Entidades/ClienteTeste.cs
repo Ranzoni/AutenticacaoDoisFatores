@@ -3,30 +3,34 @@ using AutenticacaoDoisFatores.Dominio.Excecoes;
 using Bogus;
 using AutenticacaoDoisFatores.Dominio.Compartilhados.Mensagens;
 using AutenticacaoDoisFatores.Dominio.Compartilhados;
-using AutenticacaoDoisFatores.Dominio.Construtores;
+using AutenticacaoDoisFatores.Testes.Compartilhados;
 
 namespace AutenticacaoDoisFatores.Testes.Dominio.Entidades
 {
     public class ClienteTeste
     {
-        private readonly Faker _faker = new();
-
         [Fact]
         internal void DeveInstanciarNovoCliente()
         {
-            #region Preparação do teste
+            #region Preparação do Teste
 
-            var nomeParaTeste = _faker.Company.CompanyName();
-            var emailParaTeste = _faker.Internet.Email();
-            var nomeDominioParaTeste = _faker.Internet.DomainWord();
+            var faker = new Faker();
+            var nomeParaTeste = faker.Company.CompanyName();
+            var emailParaTeste = faker.Internet.Email();
+            var nomeDominioParaTeste = faker.Internet.DomainWord();
+            var chaveAcessoParaTeste = faker.Random.AlphaNumeric(20);
 
-            #endregion Preparação do teste
+            var construtor = ConstrutorDeClientesTeste.RetornarConstrutorDeCliente
+                (
+                    nome: nomeParaTeste,
+                    email: emailParaTeste,
+                    nomeDominio: nomeDominioParaTeste,
+                    chaveAcesso: chaveAcessoParaTeste
+                );
 
-            var cliente = new ConstrutorDeCliente()
-                .ComNome(nomeParaTeste)
-                .ComEmail(emailParaTeste)
-                .ComNomeDominio(nomeDominioParaTeste)
-                .ConstruirNovoCliente();
+            #endregion
+
+            var cliente = construtor.ConstruirNovoCliente();
 
             #region Verificação do teste
 
@@ -41,7 +45,10 @@ namespace AutenticacaoDoisFatores.Testes.Dominio.Entidades
             Assert.Equal(nomeDominioParaTeste, cliente.NomeDominio);
             Assert.True(ValidadorDeCliente.NomeDominioEhValido(cliente.NomeDominio));
 
-            #endregion Verificação do teste
+            Assert.Equal(chaveAcessoParaTeste, cliente.ChaveAcesso);
+            Assert.True(ValidadorDeCliente.ChaveAcessoEhValida(cliente.ChaveAcesso));
+
+            #endregion
         }
 
         [Theory]
@@ -51,17 +58,9 @@ namespace AutenticacaoDoisFatores.Testes.Dominio.Entidades
         [InlineData("abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmno")]
         internal void NaoDeveInstanciarNovoClienteComNomeInvalido(string nomeInvalido)
         {
-            var emailParaTeste = _faker.Internet.Email();
-            var nomeDominioParaTeste = _faker.Internet.DomainName();
+            var construtor = ConstrutorDeClientesTeste.RetornarConstrutorDeCliente(nome: nomeInvalido);
 
-            var excecao = Assert.Throws<ExcecoesCliente>
-            (() =>
-                new ConstrutorDeCliente()
-                    .ComNome(nomeInvalido)
-                    .ComEmail(emailParaTeste)
-                    .ComNomeDominio(nomeDominioParaTeste)
-                    .ConstruirNovoCliente()
-            );
+            var excecao = Assert.Throws<ExcecoesCliente>(construtor.ConstruirNovoCliente);
 
             Assert.Equal(MensagensCliente.NomeInvalido.Descricao(), excecao.Message);
         }
@@ -73,17 +72,9 @@ namespace AutenticacaoDoisFatores.Testes.Dominio.Entidades
         [InlineData("abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcde")]
         internal void NaoDeveInstanciarNovoClienteComEmailInvalido(string emailInvalido)
         {
-            var nomeParaTeste = _faker.Company.CompanyName();
-            var nomeDominioParaTeste = _faker.Internet.DomainName();
+            var construtor = ConstrutorDeClientesTeste.RetornarConstrutorDeCliente(email: emailInvalido);
 
-            var excecao = Assert.Throws<ExcecoesCliente>
-            (() =>
-                new ConstrutorDeCliente()
-                    .ComNome(nomeParaTeste)
-                    .ComEmail(emailInvalido)
-                    .ComNomeDominio(nomeDominioParaTeste)
-                    .ConstruirNovoCliente()
-            );
+            var excecao = Assert.Throws<ExcecoesCliente>(construtor.ConstruirNovoCliente);
 
             Assert.Equal(MensagensCliente.EmailInvalido.Descricao(), excecao.Message);
         }
@@ -100,19 +91,25 @@ namespace AutenticacaoDoisFatores.Testes.Dominio.Entidades
         [InlineData("dominio!")]
         internal void NaoDeveInstanciarNovoClienteComNomeDominioInvalido(string nomeDominioInvalido)
         {
-            var nomeParaTeste = _faker.Company.CompanyName();
-            var emailParaTeste = _faker.Internet.Email();
+            var construtor = ConstrutorDeClientesTeste.RetornarConstrutorDeCliente(nomeDominio: nomeDominioInvalido);
 
-            var excecao = Assert.Throws<ExcecoesCliente>
-            (() =>
-                new ConstrutorDeCliente()
-                    .ComNome(nomeParaTeste)
-                    .ComEmail(emailParaTeste)
-                    .ComNomeDominio(nomeDominioInvalido)
-                    .ConstruirNovoCliente()
-            );
+            var excecao = Assert.Throws<ExcecoesCliente>(construtor.ConstruirNovoCliente);
 
             Assert.Equal(MensagensCliente.NomeDominioInvalido.Descricao(), excecao.Message);
+        }
+
+        [Theory]
+        [InlineData("")]
+        [InlineData(" ")]
+        [InlineData("ab")]
+        [InlineData("abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstu")]
+        internal void NaoDeveInstanciarNovoClienteComChaveAcessoInvalida(string chaveAcessoInvalida)
+        {
+            var construtor = ConstrutorDeClientesTeste.RetornarConstrutorDeCliente(chaveAcesso: chaveAcessoInvalida);
+
+            var excecao = Assert.Throws<ExcecoesCliente>(construtor.ConstruirNovoCliente);
+
+            Assert.Equal(MensagensCliente.ChaveAcessoInvalida.Descricao(), excecao.Message);
         }
     }
 }

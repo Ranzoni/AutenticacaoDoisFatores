@@ -8,19 +8,20 @@ namespace AutenticacaoDoisFatores.Dominio.Entidades
         public string Nome { get; private set; }
         public string Email { get; private set; }
         public string NomeDominio { get; private set; }
-        public Guid ChaveAcesso { get; private set; } = Guid.NewGuid();
+        public string ChaveAcesso { get; private set; }
         public bool Ativo { get; private set; } = false;
 
-        public Cliente(string nome, string email, string nomeDominio)
+        public Cliente(string nome, string email, string nomeDominio, string chaveAcesso)
         {
             Nome = nome;
             Email = email;
             NomeDominio = nomeDominio;
+            ChaveAcesso = chaveAcesso;
 
             this.ValidarCriacao();
         }
 
-        public Cliente(Guid id, string nome, string email, string nomeDominio, Guid chaveAcesso, bool ativo, DateTime dataCadastro, DateTime? dataAlteracao)
+        public Cliente(Guid id, string nome, string email, string nomeDominio, string chaveAcesso, bool ativo, DateTime dataCadastro, DateTime? dataAlteracao)
         {
             Id = id;
             Nome = nome;

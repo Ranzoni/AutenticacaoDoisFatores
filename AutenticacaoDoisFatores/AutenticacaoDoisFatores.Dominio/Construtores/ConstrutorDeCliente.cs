@@ -8,7 +8,7 @@ namespace AutenticacaoDoisFatores.Dominio.Construtores
         private string _nome = "";
         private string _email = "";
         private string _nomeDominio = "";
-        private Guid _chaveAcesso;
+        private string _chaveAcesso = "";
         private bool _ativo;
         private DateTime _dataCadastro;
         private DateTime? _dataAlteracao;
@@ -41,7 +41,7 @@ namespace AutenticacaoDoisFatores.Dominio.Construtores
             return this;
         }
 
-        public ConstrutorDeCliente ComChaveAcesso(Guid chaveAcesso)
+        public ConstrutorDeCliente ComChaveAcesso(string chaveAcesso)
         {
             _chaveAcesso = chaveAcesso;
 
@@ -71,7 +71,7 @@ namespace AutenticacaoDoisFatores.Dominio.Construtores
 
         public Cliente ConstruirNovoCliente()
         {
-            var cliente = new Cliente(nome: _nome, email: _email, nomeDominio: _nomeDominio);
+            var cliente = new Cliente(nome: _nome, email: _email, nomeDominio: _nomeDominio, chaveAcesso: _chaveAcesso);
 
             return cliente;
         }

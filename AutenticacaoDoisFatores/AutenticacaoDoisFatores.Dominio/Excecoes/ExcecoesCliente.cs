@@ -20,6 +20,11 @@ namespace AutenticacaoDoisFatores.Dominio.Excecoes
             throw new ExcecoesCliente(MensagensCliente.NomeDominioInvalido);
         }
 
+        internal static void ChaveAcessoInvalida()
+        {
+            throw new ExcecoesCliente(MensagensCliente.ChaveAcessoInvalida);
+        }
+
         internal static void EmailJaCadastrado()
         {
             throw new ExcecoesCliente(MensagensCliente.EmailJaCadastrado);

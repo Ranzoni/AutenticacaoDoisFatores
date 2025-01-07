@@ -40,6 +40,9 @@ namespace AutenticacaoDoisFatores.Servico.CasosDeUso
             if (!ValidadorDeCliente.NomeDominioEhValido(novoCliente.NomeDominio))
                 _notificador.AddMensagem(MensagensCliente.NomeDominioInvalido);
 
+            if (!ValidadorDeCliente.ChaveAcessoEhValida(novoCliente.ChaveAcesso))
+                _notificador.AddMensagem(MensagensCliente.ChaveAcessoInvalida);
+
             var emailJaCadastrado = await _dominio.EmailEstaCadastradoAsync(novoCliente.Email);
             if (emailJaCadastrado)
                 _notificador.AddMensagem(MensagensCliente.EmailJaCadastrado);

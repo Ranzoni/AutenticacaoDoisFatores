@@ -16,6 +16,9 @@ namespace AutenticacaoDoisFatores.Dominio.Validadores
 
             if (!NomeDominioEhValido(cliente.NomeDominio))
                 ExcecoesCliente.NomeDominioInvalido();
+
+            if (!ChaveAcessoEhValida(cliente.ChaveAcesso))
+                ExcecoesCliente.ChaveAcessoInvalida();
         }
 
         public static bool NomeEhValido(string nome)
@@ -35,6 +38,13 @@ namespace AutenticacaoDoisFatores.Dominio.Validadores
                 && nomeDominio.Length <= 15
                 && !nomeDominio.ExistemCaracteresEspeciaisAcentosOuPontuacoes()
                 && !nomeDominio.Contains(' ');
+        }
+
+        public static bool ChaveAcessoEhValida(string chaveAcesso)
+        {
+            return !chaveAcesso.EstaVazio()
+                && chaveAcesso.Length >= 3
+                && chaveAcesso.Length <= 2000;
         }
     }
 }

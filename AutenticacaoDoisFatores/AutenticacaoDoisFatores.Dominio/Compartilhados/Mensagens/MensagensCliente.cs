@@ -10,6 +10,8 @@ namespace AutenticacaoDoisFatores.Dominio.Compartilhados.Mensagens
         EmailInvalido,
         [Description("O nome de domínio do cliente não é válido. Ele não pode conter caracteres especiais, acentos, espaços ou pontuações.")]
         NomeDominioInvalido,
+        [Description("A chave de acesso gerada está inválida.")]
+        ChaveAcessoInvalida,
         [Description("O cliente não foi encontrado.")]
         ClienteNaoEncontrado,
         [Description("O domínio informado já está cadastrado.")]

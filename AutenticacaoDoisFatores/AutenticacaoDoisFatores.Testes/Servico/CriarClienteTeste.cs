@@ -1,10 +1,9 @@
 ﻿using AutenticacaoDoisFatores.Dominio.Compartilhados.Mensagens;
-using AutenticacaoDoisFatores.Dominio.Construtores;
 using AutenticacaoDoisFatores.Dominio.Dominios;
 using AutenticacaoDoisFatores.Dominio.Repositorios;
 using AutenticacaoDoisFatores.Servico.CasosDeUso;
-using AutenticacaoDoisFatores.Servico.DTO;
 using AutenticacaoDoisFatores.Servico.Mapeadores;
+using AutenticacaoDoisFatores.Testes.Compartilhados;
 using AutoMapper;
 using Bogus;
 using Mensageiro;
@@ -36,16 +35,25 @@ namespace AutenticacaoDoisFatores.Testes.Servico
             var nomeParaTeste = _faker.Company.CompanyName();
             var emailParaTeste = _faker.Internet.Email();
             var dominioParaTeste = _faker.Internet.DomainWord();
+            var chaveAcessoParaTeste = _faker.Random.AlphaNumeric(20);
 
-            var novoCliente = new NovoCliente(nome: nomeParaTeste, email: emailParaTeste, nomeDominio: dominioParaTeste);
-
-            var cliente = new ConstrutorDeCliente()
-                .ComId(Guid.NewGuid())
-                .ComNome(nomeParaTeste)
-                .ComEmail(emailParaTeste)
-                .ComNomeDominio(dominioParaTeste)
-                .ComDataCadastro(_faker.Date.Past())
-                .ConstruirNovoCliente();
+            var construtorDeDto = ConstrutorDeClientesTeste.RetornarConstrutorDeNovoCliente
+                (
+                    nome: nomeParaTeste,
+                    email: emailParaTeste,
+                    nomeDominio: dominioParaTeste,
+                    chaveAcesso: chaveAcessoParaTeste
+                );
+            var novoCliente = construtorDeDto.Construir();
+            var construtorDeCliente = ConstrutorDeClientesTeste
+                .RetornarConstrutorDeCliente
+                (
+                    nome: nomeParaTeste,
+                    email: emailParaTeste,
+                    nomeDominio: dominioParaTeste,
+                    chaveAcesso: chaveAcessoParaTeste
+                );
+            var cliente = construtorDeCliente.ConstruirNovoCliente();
 
             _mocker.CreateInstance<DominioDeClientes>();
             _mocker.Use(_mapeador);
@@ -62,6 +70,7 @@ namespace AutenticacaoDoisFatores.Testes.Servico
             Assert.NotNull(clienteCadastrado);
             Assert.Equal(nomeParaTeste, clienteCadastrado.Nome);
             Assert.Equal(emailParaTeste, clienteCadastrado.Email);
+            Assert.Equal(dominioParaTeste, clienteCadastrado.NomeDominio);
             _mocker.Verify<IRepositorioDeClientes>(r => r.CriarDominio(cliente.NomeDominio), Times.Once);
             _mocker.Verify<INotificador>(n => n.AddMensagem(It.IsAny<MensagensCliente>()), Times.Never);
 
@@ -77,10 +86,8 @@ namespace AutenticacaoDoisFatores.Testes.Servico
         {
             #region Preparação do teste
 
-            var emailParaTeste = _faker.Internet.Email();
-            var dominioParaTeste = _faker.Internet.DomainName();
-
-            var novoCliente = new NovoCliente(nome: nomeInvalido, email: emailParaTeste, nomeDominio: dominioParaTeste);
+            var construtor = ConstrutorDeClientesTeste.RetornarConstrutorDeNovoCliente(nome: nomeInvalido);
+            var novoCliente = construtor.Construir();
 
             _mocker.CreateInstance<DominioDeClientes>();
             _mocker.Use(_mapeador);
@@ -108,10 +115,8 @@ namespace AutenticacaoDoisFatores.Testes.Servico
         {
             #region Preparação do teste
 
-            var nomeParaTeste = _faker.Company.CompanyName();
-            var dominioParaTeste = _faker.Internet.DomainName();
-
-            var novoCliente = new NovoCliente(nome: nomeParaTeste, email: emailInvalido, nomeDominio: dominioParaTeste);
+            var construtor = ConstrutorDeClientesTeste.RetornarConstrutorDeNovoCliente(email: emailInvalido);
+            var novoCliente = construtor.Construir();
 
             _mocker.CreateInstance<DominioDeClientes>();
             _mocker.Use(_mapeador);
@@ -144,10 +149,8 @@ namespace AutenticacaoDoisFatores.Testes.Servico
         {
             #region Preparação do teste
 
-            var nomeParaTeste = _faker.Company.CompanyName();
-            var emailParaTeste = _faker.Internet.Email();
-
-            var novoCliente = new NovoCliente(nome: nomeParaTeste, email: emailParaTeste, nomeDominio: nomeDominioInvalido);
+            var construtor = ConstrutorDeClientesTeste.RetornarConstrutorDeNovoCliente(nomeDominio: nomeDominioInvalido);
+            var novoCliente = construtor.Construir();
 
             _mocker.CreateInstance<DominioDeClientes>();
             _mocker.Use(_mapeador);
@@ -166,20 +169,48 @@ namespace AutenticacaoDoisFatores.Testes.Servico
             #endregion Preparação do teste
         }
 
+        [Theory]
+        [InlineData("")]
+        [InlineData(" ")]
+        [InlineData("ab")]
+        [InlineData("abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstu")]
+        internal async Task DeveRetornarNuloEMensagemQuandoChaveAcessoForInvalida(string chaveAcessoInvalida)
+        {
+            #region Preparação do teste
+
+            var construtor = ConstrutorDeClientesTeste.RetornarConstrutorDeNovoCliente(chaveAcesso: chaveAcessoInvalida);
+            var novoCliente = construtor.Construir();
+
+            _mocker.CreateInstance<DominioDeClientes>();
+            _mocker.Use(_mapeador);
+            _mocker.GetMock<INotificador>().Setup(n => n.ExisteMensagem()).Returns(true);
+            var servico = _mocker.CreateInstance<CriarCliente>();
+
+            #endregion Preparação do teste
+
+            var clienteCadastrado = await servico.ExecutarAsync(novoCliente);
+
+            #region Verificação do teste
+
+            Assert.Null(clienteCadastrado);
+            _mocker.Verify<INotificador>(n => n.AddMensagem(MensagensCliente.ChaveAcessoInvalida), Times.Once);
+
+            #endregion Preparação do teste
+        }
+
         [Fact]
         internal async Task DeveRetornarNuloEMensagemQuandoEmailJaEstiverCadastrado()
         {
             #region Preparação do teste
 
-            var nomeParaTeste = _faker.Company.CompanyName();
-            var emailParaTeste = _faker.Internet.Email();
-            var nomeDominioParaTeste = _faker.Internet.DomainWord();
+            var emailJaCadastrado = _faker.Internet.Email();
 
-            var novoCliente = new NovoCliente(nome: nomeParaTeste, email: emailParaTeste, nomeDominio: nomeDominioParaTeste);
+            var construtor = ConstrutorDeClientesTeste.RetornarConstrutorDeNovoCliente(email: emailJaCadastrado);
+            var novoCliente = construtor.Construir();
 
             _mocker.CreateInstance<DominioDeClientes>();
             _mocker.Use(_mapeador);
-            _mocker.GetMock<IRepositorioDeClientes>().Setup(r => r.ExisteEmail(emailParaTeste)).ReturnsAsync(true);
+            _mocker.GetMock<IRepositorioDeClientes>().Setup(r => r.ExisteEmail(emailJaCadastrado)).ReturnsAsync(true);
             _mocker.GetMock<INotificador>().Setup(n => n.ExisteMensagem()).Returns(true);
             var servico = _mocker.CreateInstance<CriarCliente>();
 
@@ -200,15 +231,14 @@ namespace AutenticacaoDoisFatores.Testes.Servico
         {
             #region Preparação do teste
 
-            var nomeParaTeste = _faker.Company.CompanyName();
-            var emailParaTeste = _faker.Internet.Email();
-            var nomeDominioParaTeste = _faker.Internet.DomainWord();
+            var nomeDominioJaCadastrado = _faker.Internet.DomainWord();
 
-            var novoCliente = new NovoCliente(nome: nomeParaTeste, email: emailParaTeste, nomeDominio: nomeDominioParaTeste);
+            var construtor = ConstrutorDeClientesTeste.RetornarConstrutorDeNovoCliente(nomeDominio: nomeDominioJaCadastrado);
+            var novoCliente = construtor.Construir();
 
             _mocker.CreateInstance<DominioDeClientes>();
             _mocker.Use(_mapeador);
-            _mocker.GetMock<IRepositorioDeClientes>().Setup(r => r.ExisteDominio(nomeDominioParaTeste)).ReturnsAsync(true);
+            _mocker.GetMock<IRepositorioDeClientes>().Setup(r => r.ExisteDominio(nomeDominioJaCadastrado)).ReturnsAsync(true);
             _mocker.GetMock<INotificador>().Setup(n => n.ExisteMensagem()).Returns(true);
             var servico = _mocker.CreateInstance<CriarCliente>();
 

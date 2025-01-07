@@ -1,10 +1,10 @@
 ﻿using AutenticacaoDoisFatores.Dominio.Compartilhados;
 using AutenticacaoDoisFatores.Dominio.Compartilhados.Mensagens;
-using AutenticacaoDoisFatores.Dominio.Construtores;
 using AutenticacaoDoisFatores.Dominio.Dominios;
 using AutenticacaoDoisFatores.Dominio.Entidades;
 using AutenticacaoDoisFatores.Dominio.Excecoes;
 using AutenticacaoDoisFatores.Dominio.Repositorios;
+using AutenticacaoDoisFatores.Testes.Compartilhados;
 using Bogus;
 using Moq;
 using Moq.AutoMock;
@@ -21,15 +21,8 @@ namespace AutenticacaoDoisFatores.Testes.Dominio.Dominios
         {
             #region Preparação do teste
 
-            var nomeParaTeste = _faker.Company.CompanyName();
-            var emailParaTeste = _faker.Internet.Email();
-            var dominioParaTeste = _faker.Internet.DomainWord();
-                
-            var cliente = new ConstrutorDeCliente()
-                .ComNome(nomeParaTeste)
-                .ComEmail(emailParaTeste)
-                .ComNomeDominio(dominioParaTeste)
-                .ConstruirNovoCliente();
+            var construtor = ConstrutorDeClientesTeste.RetornarConstrutorDeCliente();
+            var cliente = construtor.ConstruirNovoCliente();
 
             var dominio = _mocker.CreateInstance<DominioDeClientes>();
 
@@ -52,15 +45,8 @@ namespace AutenticacaoDoisFatores.Testes.Dominio.Dominios
         {
             #region Preparação do teste
 
-            var nomeParaTeste = _faker.Company.CompanyName();
-            var emailParaTeste = _faker.Internet.Email();
-            var dominioParaTeste = _faker.Internet.DomainWord();
-
-            var cliente = new ConstrutorDeCliente()
-                .ComNome(nomeParaTeste)
-                .ComEmail(emailParaTeste)
-                .ComNomeDominio(dominioParaTeste)
-                .ConstruirNovoCliente();
+            var construtor = ConstrutorDeClientesTeste.RetornarConstrutorDeCliente();
+            var cliente = construtor.ConstruirNovoCliente();
 
             var dominio = _mocker.CreateInstance<DominioDeClientes>();
 
@@ -105,18 +91,13 @@ namespace AutenticacaoDoisFatores.Testes.Dominio.Dominios
         {
             #region Preparação do teste
 
-            var nomeParaTeste = _faker.Company.CompanyName();
-            var emailParaTeste = _faker.Internet.Email();
-            var dominioParaTeste = _faker.Internet.DomainWord();
+            var emailJaCadastrado = _faker.Internet.Email();
 
-            var cliente = new ConstrutorDeCliente()
-                .ComNome(nomeParaTeste)
-                .ComEmail(emailParaTeste)
-                .ComNomeDominio(dominioParaTeste)
-                .ConstruirNovoCliente();
+            var construtor = ConstrutorDeClientesTeste.RetornarConstrutorDeCliente(email: emailJaCadastrado);
+            var cliente = construtor.ConstruirNovoCliente();
 
             var dominio = _mocker.CreateInstance<DominioDeClientes>();
-            _mocker.GetMock<IRepositorioDeClientes>().Setup(r => r.ExisteEmail(emailParaTeste)).ReturnsAsync(true);
+            _mocker.GetMock<IRepositorioDeClientes>().Setup(r => r.ExisteEmail(emailJaCadastrado)).ReturnsAsync(true);
 
             #endregion Preparação do teste
 
@@ -136,18 +117,13 @@ namespace AutenticacaoDoisFatores.Testes.Dominio.Dominios
         {
             #region Preparação do teste
 
-            var nomeParaTeste = _faker.Company.CompanyName();
-            var emailParaTeste = _faker.Internet.Email();
-            var dominioParaTeste = _faker.Internet.DomainWord();
+            var dominioJaCadastrado = _faker.Internet.DomainWord();
 
-            var cliente = new ConstrutorDeCliente()
-                .ComNome(nomeParaTeste)
-                .ComEmail(emailParaTeste)
-                .ComNomeDominio(dominioParaTeste)
-                .ConstruirNovoCliente();
+            var construtor = ConstrutorDeClientesTeste.RetornarConstrutorDeCliente(nomeDominio: dominioJaCadastrado);
+            var cliente = construtor.ConstruirNovoCliente();
 
             var dominio = _mocker.CreateInstance<DominioDeClientes>();
-            _mocker.GetMock<IRepositorioDeClientes>().Setup(r => r.ExisteDominio(dominioParaTeste)).ReturnsAsync(true);
+            _mocker.GetMock<IRepositorioDeClientes>().Setup(r => r.ExisteDominio(dominioJaCadastrado)).ReturnsAsync(true);
 
             #endregion Preparação do teste
 

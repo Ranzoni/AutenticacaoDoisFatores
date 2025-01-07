@@ -34,6 +34,11 @@ namespace AutenticacaoDoisFatores.Infra.Configuracoes
                 .IsUnique();
 
             builder
+                .Property(p => p.ChaveAcesso)
+                .HasMaxLength(2000)
+                .IsRequired();
+
+            builder
                 .Property(p => p.Ativo)
                 .HasDefaultValue(false);
         }
