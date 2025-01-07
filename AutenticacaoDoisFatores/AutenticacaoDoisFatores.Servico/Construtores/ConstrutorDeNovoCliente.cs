@@ -7,7 +7,6 @@ namespace AutenticacaoDoisFatores.Servico.Construtores
         private string _nome = "";
         private string _email = "";
         private string _nomeDominio = "";
-        private string _chaveAcesso = "";
 
         public ConstrutorDeNovoCliente ComNome(string nome)
         {
@@ -30,21 +29,13 @@ namespace AutenticacaoDoisFatores.Servico.Construtores
             return this;
         }
 
-        public ConstrutorDeNovoCliente ComChaveAcesso(string chaveAcesso)
-        {
-            _chaveAcesso = chaveAcesso;
-
-            return this;
-        }
-
         public NovoCliente Construir()
         {
             var novoCliente = new NovoCliente
                 (
                     nome: _nome,
                     email: _email,
-                    nomeDominio: _nomeDominio,
-                    chaveAcesso: _chaveAcesso
+                    nomeDominio: _nomeDominio
                 );
 
             return novoCliente;

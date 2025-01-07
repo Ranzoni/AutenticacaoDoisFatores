@@ -35,14 +35,12 @@ namespace AutenticacaoDoisFatores.Testes.Servico
             var nomeParaTeste = _faker.Company.CompanyName();
             var emailParaTeste = _faker.Internet.Email();
             var dominioParaTeste = _faker.Internet.DomainWord();
-            var chaveAcessoParaTeste = _faker.Random.AlphaNumeric(20);
 
             var construtorDeDto = ConstrutorDeClientesTeste.RetornarConstrutorDeNovoCliente
                 (
                     nome: nomeParaTeste,
                     email: emailParaTeste,
-                    nomeDominio: dominioParaTeste,
-                    chaveAcesso: chaveAcessoParaTeste
+                    nomeDominio: dominioParaTeste
                 );
             var novoCliente = construtorDeDto.Construir();
             var construtorDeCliente = ConstrutorDeClientesTeste
@@ -51,7 +49,7 @@ namespace AutenticacaoDoisFatores.Testes.Servico
                     nome: nomeParaTeste,
                     email: emailParaTeste,
                     nomeDominio: dominioParaTeste,
-                    chaveAcesso: chaveAcessoParaTeste
+                    chaveAcesso: novoCliente.ChaveAcesso
                 );
             var cliente = construtorDeCliente.ConstruirNovoCliente();
 
@@ -165,35 +163,6 @@ namespace AutenticacaoDoisFatores.Testes.Servico
 
             Assert.Null(clienteCadastrado);
             _mocker.Verify<INotificador>(n => n.AddMensagem(MensagensCliente.NomeDominioInvalido), Times.Once);
-
-            #endregion Preparação do teste
-        }
-
-        [Theory]
-        [InlineData("")]
-        [InlineData(" ")]
-        [InlineData("ab")]
-        [InlineData("abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstu")]
-        internal async Task DeveRetornarNuloEMensagemQuandoChaveAcessoForInvalida(string chaveAcessoInvalida)
-        {
-            #region Preparação do teste
-
-            var construtor = ConstrutorDeClientesTeste.RetornarConstrutorDeNovoCliente(chaveAcesso: chaveAcessoInvalida);
-            var novoCliente = construtor.Construir();
-
-            _mocker.CreateInstance<DominioDeClientes>();
-            _mocker.Use(_mapeador);
-            _mocker.GetMock<INotificador>().Setup(n => n.ExisteMensagem()).Returns(true);
-            var servico = _mocker.CreateInstance<CriarCliente>();
-
-            #endregion Preparação do teste
-
-            var clienteCadastrado = await servico.ExecutarAsync(novoCliente);
-
-            #region Verificação do teste
-
-            Assert.Null(clienteCadastrado);
-            _mocker.Verify<INotificador>(n => n.AddMensagem(MensagensCliente.ChaveAcessoInvalida), Times.Once);
 
             #endregion Preparação do teste
         }
