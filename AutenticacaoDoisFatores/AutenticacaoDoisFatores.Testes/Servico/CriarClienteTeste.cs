@@ -63,7 +63,7 @@ namespace AutenticacaoDoisFatores.Testes.Servico
             Assert.Equal(novoCliente.NomeDominio, clienteCadastrado.NomeDominio);
             Assert.NotEqual(novoCliente.ChaveAcesso, novoCliente.ChaveDescriptografada());
             _mocker.Verify<IRepositorioDeClientes>(r => r.CriarDominio(cliente.NomeDominio), Times.Once);
-            _mocker.Verify<INotificador>(n => n.AddMensagem(It.IsAny<MensagensCliente>()), Times.Never);
+            _mocker.Verify<INotificador>(n => n.AddMensagem(It.IsAny<MensagensValidacaoCliente>()), Times.Never);
 
             #endregion Preparação do teste
         }
@@ -113,7 +113,7 @@ namespace AutenticacaoDoisFatores.Testes.Servico
             #region Verificação do teste
 
             Assert.Null(clienteCadastrado);
-            _mocker.Verify<INotificador>(n => n.AddMensagem(MensagensCliente.NomeInvalido), Times.Once);
+            _mocker.Verify<INotificador>(n => n.AddMensagem(MensagensValidacaoCliente.NomeInvalido), Times.Once);
 
             #endregion Preparação do teste
         }
@@ -142,7 +142,7 @@ namespace AutenticacaoDoisFatores.Testes.Servico
             #region Verificação do teste
 
             Assert.Null(clienteCadastrado);
-            _mocker.Verify<INotificador>(n => n.AddMensagem(MensagensCliente.EmailInvalido), Times.Once);
+            _mocker.Verify<INotificador>(n => n.AddMensagem(MensagensValidacaoCliente.EmailInvalido), Times.Once);
 
             #endregion Preparação do teste
         }
@@ -176,7 +176,7 @@ namespace AutenticacaoDoisFatores.Testes.Servico
             #region Verificação do teste
 
             Assert.Null(clienteCadastrado);
-            _mocker.Verify<INotificador>(n => n.AddMensagem(MensagensCliente.NomeDominioInvalido), Times.Once);
+            _mocker.Verify<INotificador>(n => n.AddMensagem(MensagensValidacaoCliente.NomeDominioInvalido), Times.Once);
 
             #endregion Preparação do teste
         }
@@ -204,7 +204,7 @@ namespace AutenticacaoDoisFatores.Testes.Servico
             #region Verificação do teste
 
             Assert.Null(clienteCadastrado);
-            _mocker.Verify<INotificador>(n => n.AddMensagem(MensagensCliente.EmailJaCadastrado), Times.Once);
+            _mocker.Verify<INotificador>(n => n.AddMensagem(MensagensValidacaoCliente.EmailJaCadastrado), Times.Once);
 
             #endregion Preparação do teste
         }
@@ -232,7 +232,7 @@ namespace AutenticacaoDoisFatores.Testes.Servico
             #region Verificação do teste
 
             Assert.Null(clienteCadastrado);
-            _mocker.Verify<INotificador>(n => n.AddMensagem(MensagensCliente.NomeDominioJaCadastrado), Times.Once);
+            _mocker.Verify<INotificador>(n => n.AddMensagem(MensagensValidacaoCliente.NomeDominioJaCadastrado), Times.Once);
 
             #endregion Preparação do teste
         }

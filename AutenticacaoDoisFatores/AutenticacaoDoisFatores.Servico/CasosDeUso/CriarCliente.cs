@@ -32,24 +32,24 @@ namespace AutenticacaoDoisFatores.Servico.CasosDeUso
         private async Task<bool> NovoClienteEhValidoAsync(NovoCliente novoCliente)
         {
             if (!ValidadorDeCliente.NomeEhValido(novoCliente.Nome))
-                _notificador.AddMensagem(MensagensCliente.NomeInvalido);
+                _notificador.AddMensagem(MensagensValidacaoCliente.NomeInvalido);
 
             if (!ValidadorDeCliente.EmailEhValido(novoCliente.Email))
-                _notificador.AddMensagem(MensagensCliente.EmailInvalido);
+                _notificador.AddMensagem(MensagensValidacaoCliente.EmailInvalido);
 
             if (!ValidadorDeCliente.NomeDominioEhValido(novoCliente.NomeDominio))
-                _notificador.AddMensagem(MensagensCliente.NomeDominioInvalido);
+                _notificador.AddMensagem(MensagensValidacaoCliente.NomeDominioInvalido);
 
             if (!ValidadorDeCliente.ChaveAcessoEhValida(novoCliente.ChaveAcesso))
-                _notificador.AddMensagem(MensagensCliente.ChaveAcessoInvalida);
+                _notificador.AddMensagem(MensagensValidacaoCliente.ChaveAcessoInvalida);
 
             var emailJaCadastrado = await _dominio.EmailEstaCadastradoAsync(novoCliente.Email);
             if (emailJaCadastrado)
-                _notificador.AddMensagem(MensagensCliente.EmailJaCadastrado);
+                _notificador.AddMensagem(MensagensValidacaoCliente.EmailJaCadastrado);
 
             var nomeDominioJaCadastrado = await _dominio.NomeDominioEstaCadastradoAsync(novoCliente.NomeDominio);
             if (nomeDominioJaCadastrado)
-                _notificador.AddMensagem(MensagensCliente.NomeDominioJaCadastrado);
+                _notificador.AddMensagem(MensagensValidacaoCliente.NomeDominioJaCadastrado);
 
             var clienteEhValido = !_notificador.ExisteMensagem();
             return clienteEhValido;

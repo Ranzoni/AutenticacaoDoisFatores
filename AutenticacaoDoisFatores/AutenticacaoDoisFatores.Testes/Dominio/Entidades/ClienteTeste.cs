@@ -62,13 +62,19 @@ namespace AutenticacaoDoisFatores.Testes.Dominio.Entidades
 
             var excecao = Assert.Throws<ExcecoesCliente>(construtor.ConstruirNovoCliente);
 
-            Assert.Equal(MensagensCliente.NomeInvalido.Descricao(), excecao.Message);
+            Assert.Equal(MensagensValidacaoCliente.NomeInvalido.Descricao(), excecao.Message);
         }
 
         [Theory]
         [InlineData("")]
         [InlineData(" ")]
-        [InlineData("abcd")]
+        [InlineData("@")]
+        [InlineData("a@")]
+        [InlineData("a@.")]
+        [InlineData("a@.com")]
+        [InlineData("@.")]
+        [InlineData("@.com")]
+        [InlineData("@dominio.com")]
         [InlineData("abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcde")]
         internal void NaoDeveInstanciarNovoClienteComEmailInvalido(string emailInvalido)
         {
@@ -76,7 +82,7 @@ namespace AutenticacaoDoisFatores.Testes.Dominio.Entidades
 
             var excecao = Assert.Throws<ExcecoesCliente>(construtor.ConstruirNovoCliente);
 
-            Assert.Equal(MensagensCliente.EmailInvalido.Descricao(), excecao.Message);
+            Assert.Equal(MensagensValidacaoCliente.EmailInvalido.Descricao(), excecao.Message);
         }
 
         [Theory]
@@ -95,7 +101,7 @@ namespace AutenticacaoDoisFatores.Testes.Dominio.Entidades
 
             var excecao = Assert.Throws<ExcecoesCliente>(construtor.ConstruirNovoCliente);
 
-            Assert.Equal(MensagensCliente.NomeDominioInvalido.Descricao(), excecao.Message);
+            Assert.Equal(MensagensValidacaoCliente.NomeDominioInvalido.Descricao(), excecao.Message);
         }
 
         [Theory]
@@ -109,7 +115,7 @@ namespace AutenticacaoDoisFatores.Testes.Dominio.Entidades
 
             var excecao = Assert.Throws<ExcecoesCliente>(construtor.ConstruirNovoCliente);
 
-            Assert.Equal(MensagensCliente.ChaveAcessoInvalida.Descricao(), excecao.Message);
+            Assert.Equal(MensagensValidacaoCliente.ChaveAcessoInvalida.Descricao(), excecao.Message);
         }
     }
 }

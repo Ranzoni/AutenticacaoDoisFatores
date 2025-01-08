@@ -2,7 +2,7 @@
 
 namespace AutenticacaoDoisFatores.Dominio.Compartilhados.Mensagens
 {
-    public enum MensagensCliente
+    public enum MensagensValidacaoCliente
     {
         [Description("O nome do cliente não é válido. Ele deve conter entre 3 e 50 caracteres.")]
         NomeInvalido,

@@ -24,7 +24,7 @@ namespace AutenticacaoDoisFatores.Dominio.Dominios
         public async Task CriarDominioDoClienteAsync(Guid idCliente)
         {
             var cliente = await _repositorio.BuscarUnicoAsync(idCliente)
-                ?? throw new ExcecoesCliente(MensagensCliente.ClienteNaoEncontrado);
+                ?? throw new ExcecoesCliente(MensagensValidacaoCliente.ClienteNaoEncontrado);
 
             await _repositorio.CriarDominio(cliente.NomeDominio);
         }

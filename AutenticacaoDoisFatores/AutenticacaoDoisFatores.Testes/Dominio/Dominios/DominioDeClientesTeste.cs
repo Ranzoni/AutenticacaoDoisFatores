@@ -79,7 +79,7 @@ namespace AutenticacaoDoisFatores.Testes.Dominio.Dominios
 
             #region Verificação do teste
 
-            Assert.Equal(MensagensCliente.ClienteNaoEncontrado.Descricao(), excecao.Message);
+            Assert.Equal(MensagensValidacaoCliente.ClienteNaoEncontrado.Descricao(), excecao.Message);
             _mocker.Verify<IRepositorioDeClientes>(r => r.BuscarUnicoAsync(idParaTeste), Times.Once);
             _mocker.Verify<IRepositorioDeClientes>(r => r.CriarDominio(It.IsAny<string>()), Times.Never);
 
@@ -105,7 +105,7 @@ namespace AutenticacaoDoisFatores.Testes.Dominio.Dominios
 
             #region Verificação do teste
 
-            Assert.Equal(MensagensCliente.EmailJaCadastrado.Descricao(), excecao.Message);
+            Assert.Equal(MensagensValidacaoCliente.EmailJaCadastrado.Descricao(), excecao.Message);
             _mocker.Verify<IRepositorioDeClientes>(r => r.Adicionar(It.IsAny<Cliente>()), Times.Never);
             _mocker.Verify<IRepositorioDeClientes>(r => r.SalvarAlteracoesAsync(), Times.Never);
 
@@ -131,7 +131,7 @@ namespace AutenticacaoDoisFatores.Testes.Dominio.Dominios
 
             #region Verificação do teste
 
-            Assert.Equal(MensagensCliente.NomeDominioJaCadastrado.Descricao(), excecao.Message);
+            Assert.Equal(MensagensValidacaoCliente.NomeDominioJaCadastrado.Descricao(), excecao.Message);
             _mocker.Verify<IRepositorioDeClientes>(r => r.Adicionar(It.IsAny<Cliente>()), Times.Never);
             _mocker.Verify<IRepositorioDeClientes>(r => r.SalvarAlteracoesAsync(), Times.Never);
 
