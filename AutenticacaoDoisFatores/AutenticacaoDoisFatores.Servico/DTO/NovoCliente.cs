@@ -16,7 +16,7 @@ namespace AutenticacaoDoisFatores.Servico.DTO
             Nome = nome;
             Email = email;
             NomeDominio = nomeDominio;
-            (ChaveAcesso, _chaveDescriptografada) = GerarChaveAcesso();
+            (_chaveDescriptografada, ChaveAcesso) = GerarChaveAcesso();
         }
 
         public string ChaveDescriptografada()

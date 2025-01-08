@@ -1,5 +1,6 @@
 ﻿using AutenticacaoDoisFatores.Dominio.Compartilhados.Mensagens;
 using AutenticacaoDoisFatores.Dominio.Dominios;
+using AutenticacaoDoisFatores.Dominio.Entidades;
 using AutenticacaoDoisFatores.Dominio.Repositorios;
 using AutenticacaoDoisFatores.Servico.CasosDeUso;
 using AutenticacaoDoisFatores.Servico.Mapeadores;
@@ -32,24 +33,15 @@ namespace AutenticacaoDoisFatores.Testes.Servico
         {
             #region Preparação do teste
 
-            var nomeParaTeste = _faker.Company.CompanyName();
-            var emailParaTeste = _faker.Internet.Email();
-            var dominioParaTeste = _faker.Internet.DomainWord();
-
-            var construtorDeDto = ConstrutorDeClientesTeste.RetornarConstrutorDeNovoCliente
-                (
-                    nome: nomeParaTeste,
-                    email: emailParaTeste,
-                    nomeDominio: dominioParaTeste
-                );
+            var construtorDeDto = ConstrutorDeClientesTeste.RetornarConstrutorDeNovoCliente();
             var novoCliente = construtorDeDto.Construir();
             var construtorDeCliente = ConstrutorDeClientesTeste
                 .RetornarConstrutorDeCliente
                 (
-                    nome: nomeParaTeste,
-                    email: emailParaTeste,
-                    nomeDominio: dominioParaTeste,
-                    chaveAcesso: novoCliente.ChaveAcesso
+                    nome: novoCliente.Nome,
+                    email: novoCliente.Email,
+                    nomeDominio: novoCliente.NomeDominio,
+                    chaveAcesso: novoCliente.ChaveDescriptografada()
                 );
             var cliente = construtorDeCliente.ConstruirNovoCliente();
 
@@ -66,11 +58,33 @@ namespace AutenticacaoDoisFatores.Testes.Servico
             #region Verificação do teste
 
             Assert.NotNull(clienteCadastrado);
-            Assert.Equal(nomeParaTeste, clienteCadastrado.Nome);
-            Assert.Equal(emailParaTeste, clienteCadastrado.Email);
-            Assert.Equal(dominioParaTeste, clienteCadastrado.NomeDominio);
+            Assert.Equal(novoCliente.Nome, clienteCadastrado.Nome);
+            Assert.Equal(novoCliente.Email, clienteCadastrado.Email);
+            Assert.Equal(novoCliente.NomeDominio, clienteCadastrado.NomeDominio);
+            Assert.NotEqual(novoCliente.ChaveAcesso, novoCliente.ChaveDescriptografada());
             _mocker.Verify<IRepositorioDeClientes>(r => r.CriarDominio(cliente.NomeDominio), Times.Once);
             _mocker.Verify<INotificador>(n => n.AddMensagem(It.IsAny<MensagensCliente>()), Times.Never);
+
+            #endregion Preparação do teste
+        }
+
+        [Fact]
+        internal void DeveMapearParaClienteAChaveAcessoCriptografada()
+        {
+            #region Preparação do teste
+
+            var construtorDeDto = ConstrutorDeClientesTeste.RetornarConstrutorDeNovoCliente();
+            var novoCliente = construtorDeDto.Construir();
+
+            #endregion Preparação do teste
+
+            var cliente = _mapeador.Map<Cliente>(novoCliente);
+
+            #region Verificação do teste
+
+            Assert.NotNull(cliente);
+            Assert.NotEqual(novoCliente.ChaveDescriptografada(), cliente.ChaveAcesso);
+            Assert.Equal(novoCliente.ChaveAcesso, cliente.ChaveAcesso);
 
             #endregion Preparação do teste
         }
