@@ -17,6 +17,8 @@ namespace AutenticacaoDoisFatores.Dominio.Compartilhados.Mensagens
         [Description("O domínio informado já está cadastrado.")]
         NomeDominioJaCadastrado,
         [Description("O e-mail informado já está cadastrado.")]
-        EmailJaCadastrado
+        EmailJaCadastrado,
+        [Description("O link para a confirmação do cadastro não foi informado.")]
+        LinkConfirmacaoCadastroNaoInformado
     }
 }

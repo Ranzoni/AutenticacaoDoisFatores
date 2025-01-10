@@ -5,6 +5,7 @@ using AutenticacaoDoisFatores.Dominio.Entidades;
 using AutenticacaoDoisFatores.Dominio.Repositorios;
 using AutenticacaoDoisFatores.Dominio.Servicos;
 using AutenticacaoDoisFatores.Servico.CasosDeUso;
+using AutenticacaoDoisFatores.Servico.Excecoes;
 using AutenticacaoDoisFatores.Servico.Mapeadores;
 using AutenticacaoDoisFatores.Testes.Compartilhados;
 using AutoMapper;
@@ -51,11 +52,13 @@ namespace AutenticacaoDoisFatores.Testes.Servico
             _mocker.Use(_mapeador);
             _mocker.GetMock<IRepositorioDeClientes>().Setup(r => r.BuscarUnicoAsync(It.IsAny<Guid>())).ReturnsAsync(cliente);
 
+            var linkConfirmacaoCadastroParaTeste = _faker.Internet.UrlWithPath();
+
             var servico = _mocker.CreateInstance<CriarCliente>();
 
             #endregion Preparação do teste
 
-            var clienteCadastrado = await servico.ExecutarAsync(novoCliente);
+            var clienteCadastrado = await servico.ExecutarAsync(novoCliente, linkConfirmacaoCadastroParaTeste);
 
             #region Verificação do teste
 
@@ -114,11 +117,14 @@ namespace AutenticacaoDoisFatores.Testes.Servico
             _mocker.CreateInstance<DominioDeClientes>();
             _mocker.Use(_mapeador);
             _mocker.GetMock<INotificador>().Setup(n => n.ExisteMensagem()).Returns(true);
+            
+            var linkConfirmacaoCadastroParaTeste = _faker.Internet.UrlWithPath();
+
             var servico = _mocker.CreateInstance<CriarCliente>();
 
             #endregion Preparação do teste
 
-            var clienteCadastrado = await servico.ExecutarAsync(novoCliente);
+            var clienteCadastrado = await servico.ExecutarAsync(novoCliente, linkConfirmacaoCadastroParaTeste);
 
             #region Verificação do teste
 
@@ -145,11 +151,14 @@ namespace AutenticacaoDoisFatores.Testes.Servico
             _mocker.CreateInstance<DominioDeClientes>();
             _mocker.Use(_mapeador);
             _mocker.GetMock<INotificador>().Setup(n => n.ExisteMensagem()).Returns(true);
+
+            var linkConfirmacaoCadastroParaTeste = _faker.Internet.UrlWithPath();
+
             var servico = _mocker.CreateInstance<CriarCliente>();
 
             #endregion Preparação do teste
 
-            var clienteCadastrado = await servico.ExecutarAsync(novoCliente);
+            var clienteCadastrado = await servico.ExecutarAsync(novoCliente, linkConfirmacaoCadastroParaTeste);
 
             #region Verificação do teste
 
@@ -181,11 +190,14 @@ namespace AutenticacaoDoisFatores.Testes.Servico
             _mocker.CreateInstance<DominioDeClientes>();
             _mocker.Use(_mapeador);
             _mocker.GetMock<INotificador>().Setup(n => n.ExisteMensagem()).Returns(true);
+
+            var linkConfirmacaoCadastroParaTeste = _faker.Internet.UrlWithPath();
+
             var servico = _mocker.CreateInstance<CriarCliente>();
 
             #endregion Preparação do teste
 
-            var clienteCadastrado = await servico.ExecutarAsync(novoCliente);
+            var clienteCadastrado = await servico.ExecutarAsync(novoCliente, linkConfirmacaoCadastroParaTeste);
 
             #region Verificação do teste
 
@@ -211,11 +223,14 @@ namespace AutenticacaoDoisFatores.Testes.Servico
             _mocker.Use(_mapeador);
             _mocker.GetMock<IRepositorioDeClientes>().Setup(r => r.ExisteEmail(emailJaCadastrado)).ReturnsAsync(true);
             _mocker.GetMock<INotificador>().Setup(n => n.ExisteMensagem()).Returns(true);
+
+            var linkConfirmacaoCadastroParaTeste = _faker.Internet.UrlWithPath();
+
             var servico = _mocker.CreateInstance<CriarCliente>();
 
             #endregion Preparação do teste
 
-            var clienteCadastrado = await servico.ExecutarAsync(novoCliente);
+            var clienteCadastrado = await servico.ExecutarAsync(novoCliente, linkConfirmacaoCadastroParaTeste);
 
             #region Verificação do teste
 
@@ -241,11 +256,14 @@ namespace AutenticacaoDoisFatores.Testes.Servico
             _mocker.Use(_mapeador);
             _mocker.GetMock<IRepositorioDeClientes>().Setup(r => r.ExisteDominio(nomeDominioJaCadastrado)).ReturnsAsync(true);
             _mocker.GetMock<INotificador>().Setup(n => n.ExisteMensagem()).Returns(true);
+
+            var linkConfirmacaoCadastroParaTeste = _faker.Internet.UrlWithPath();
+
             var servico = _mocker.CreateInstance<CriarCliente>();
 
             #endregion Preparação do teste
 
-            var clienteCadastrado = await servico.ExecutarAsync(novoCliente);
+            var clienteCadastrado = await servico.ExecutarAsync(novoCliente, linkConfirmacaoCadastroParaTeste);
 
             #region Verificação do teste
 
@@ -253,6 +271,33 @@ namespace AutenticacaoDoisFatores.Testes.Servico
             _mocker.Verify<IRepositorioDeClientes>(r => r.Adicionar(It.IsAny<Cliente>()), Times.Never);
             _mocker.Verify<IServicoDeEmail>(s => s.Enviar(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()), Times.Never);
             _mocker.Verify<INotificador>(n => n.AddMensagem(MensagensValidacaoCliente.NomeDominioJaCadastrado), Times.Once);
+
+            #endregion Preparação do teste
+        }
+
+        [Theory]
+        [InlineData("")]
+        [InlineData(" ")]
+        internal async Task DeveRetornarExcecaoQuandoLinkDeConfirmacaoDeCadastroNaoForInformado(string linkConfirmacaoCadastroVazio)
+        {
+            #region Preparação do teste
+
+            var construtor = ConstrutorDeClientesTeste.RetornarConstrutorDeNovoCliente();
+            var novoCliente = construtor.Construir();
+
+            _mocker.CreateInstance<DominioDeClientes>();
+
+            var servico = _mocker.CreateInstance<CriarCliente>();
+
+            #endregion Preparação do teste
+
+            var excecao = await Assert.ThrowsAsync<ExcecoesCriacaoCliente>(() => servico.ExecutarAsync(novoCliente, linkConfirmacaoCadastroVazio));
+
+            #region Verificação do teste
+
+            Assert.Equal(MensagensValidacaoCliente.LinkConfirmacaoCadastroNaoInformado.Descricao(), excecao.Message);
+            _mocker.Verify<IRepositorioDeClientes>(r => r.Adicionar(It.IsAny<Cliente>()), Times.Never);
+            _mocker.Verify<IServicoDeEmail>(s => s.Enviar(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()), Times.Never);
 
             #endregion Preparação do teste
         }

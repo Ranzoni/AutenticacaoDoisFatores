@@ -20,12 +20,14 @@ namespace AutenticacaoDoisFatores.Testes.Dominio.Dominios
             #region Preparação do teste
 
             var emailDestinoParaTeste = _faker.Internet.Email();
+            var chaveAcessoParaTeste = _faker.Random.AlphaNumeric(20);
+            var linkDeConfirmacaoParaTeste = _faker.Internet.UrlWithPath();
 
             var email = _mocker.CreateInstance<Email>();
 
             #endregion
 
-            email.EnviarConfirmacaoDeCadastroDeCliente(emailDestinoParaTeste);
+            email.EnviarConfirmacaoDeCadastroDeCliente(emailDestinoParaTeste, chaveAcessoParaTeste, linkDeConfirmacaoParaTeste);
 
             #region Verificação do teste
 
@@ -53,9 +55,15 @@ namespace AutenticacaoDoisFatores.Testes.Dominio.Dominios
         [InlineData("abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcde")]
         internal void DeveRetornarExcecaoAoEnviarEmailConfirmacaoCadastroClienteComEmailVazio(string emailInvalido)
         {
-            var email = _mocker.CreateInstance<Email>();
+            #region Preparação do teste
 
-            var excecao = Assert.Throws<ExcecoesEmail>(() => email.EnviarConfirmacaoDeCadastroDeCliente(emailInvalido));
+            var email = _mocker.CreateInstance<Email>();
+            var chaveAcessoParaTeste = _faker.Random.AlphaNumeric(20);
+            var linkDeConfirmacaoParaTeste = _faker.Internet.UrlWithPath();
+
+            #endregion
+
+            var excecao = Assert.Throws<ExcecoesEmail>(() => email.EnviarConfirmacaoDeCadastroDeCliente(emailInvalido, chaveAcessoParaTeste, linkDeConfirmacaoParaTeste));
 
             #region Verificação do teste
 

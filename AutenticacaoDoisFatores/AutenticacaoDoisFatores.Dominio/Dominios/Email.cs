@@ -9,13 +9,14 @@ namespace AutenticacaoDoisFatores.Dominio.Dominios
     {
         private readonly IServicoDeEmail _servico = servico;
 
-        public void EnviarConfirmacaoDeCadastroDeCliente(string para)
+        public void EnviarConfirmacaoDeCadastroDeCliente(string para, string chaveAcesso, string linkConfirmacao)
         {
             if (para.EstaVazio() || !para.EhEmail())
                 ExcecoesEmail.EmailDestinoInvalido();
 
             var tituloConfirmacaoCadastro = MensagensEnvioEmail.TituloConfirmacaoCadastroCliente.Descricao() ?? "";
             var msgConfirmacaoCadastro = MensagensEnvioEmail.MensagemConfirmacaoCadastroCliente.Descricao() ?? "";
+            var textoEstaEhChaveDeAcesso = MensagensEnvioEmail.EstaEhChaveDeAcesso.Descricao() ?? "";
             var textoPararConfirmarCadastroCliente = MensagensEnvioEmail.ParaConfirmarCadastroCliente.Descricao() ?? "";
             var textoLinkConfirmacaoCadastro = MensagensEnvioEmail.TextoDoLinkDeCadastroCliente.Descricao() ?? "";
 
@@ -24,8 +25,9 @@ namespace AutenticacaoDoisFatores.Dominio.Dominios
                     mensagem: msgConfirmacaoCadastro,
                     detalhes: @$"
                         <p style='font-size: 18px; color: #666666;'>{textoPararConfirmarCadastroCliente}</p>
+                        <p style='font-size: 18px; color: #666666;'>{textoEstaEhChaveDeAcesso} {chaveAcesso}</p>
                         <div style='text-align: center; margin-top: 20px;>
-                            <a href='#' style='text-decoration: none; background-color: #1e87f0; color: #ffffff; padding: 10px 20px; border-radius: 5px; font-size: 16px;>{textoLinkConfirmacaoCadastro}</a>
+                            <a href='{linkConfirmacao}' style='text-decoration: none; background-color: #1e87f0; color: #ffffff; padding: 10px 20px; border-radius: 5px; font-size: 16px;>{textoLinkConfirmacaoCadastro}</a>
                         </div>"
                 );
 

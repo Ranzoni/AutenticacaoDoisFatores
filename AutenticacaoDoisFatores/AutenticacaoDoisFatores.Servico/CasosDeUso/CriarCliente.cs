@@ -1,8 +1,10 @@
-﻿using AutenticacaoDoisFatores.Dominio.Compartilhados.Mensagens;
+﻿using AutenticacaoDoisFatores.Dominio.Compartilhados;
+using AutenticacaoDoisFatores.Dominio.Compartilhados.Mensagens;
 using AutenticacaoDoisFatores.Dominio.Dominios;
 using AutenticacaoDoisFatores.Dominio.Entidades;
 using AutenticacaoDoisFatores.Dominio.Validadores;
 using AutenticacaoDoisFatores.Servico.DTO;
+using AutenticacaoDoisFatores.Servico.Excecoes;
 using AutoMapper;
 using Mensageiro;
 
@@ -15,9 +17,9 @@ namespace AutenticacaoDoisFatores.Servico.CasosDeUso
         private readonly INotificador _notificador = notificador;
         private readonly Email _email = email;
 
-        public async Task<ClienteCadastrado?> ExecutarAsync(NovoCliente novoCliente)
+        public async Task<ClienteCadastrado?> ExecutarAsync(NovoCliente novoCliente, string linkConfirmacaoCadastro)
         {
-            var cadastroEhValido = await NovoClienteEhValidoAsync(novoCliente);
+            var cadastroEhValido = await NovoClienteEhValidoAsync(novoCliente, linkConfirmacaoCadastro);
             if (!cadastroEhValido)
                 return null;
 
@@ -26,13 +28,13 @@ namespace AutenticacaoDoisFatores.Servico.CasosDeUso
             await _dominio.CriarClienteAsync(cliente);
             await _dominio.CriarDominioDoClienteAsync(cliente.Id);
 
-            _email.EnviarConfirmacaoDeCadastroDeCliente(cliente.Email);
+            _email.EnviarConfirmacaoDeCadastroDeCliente(cliente.Email, novoCliente.ChaveDescriptografada(), linkConfirmacaoCadastro);
 
             var clienteCadastrado = _mapper.Map<ClienteCadastrado>(cliente);
             return clienteCadastrado;
         }
 
-        private async Task<bool> NovoClienteEhValidoAsync(NovoCliente novoCliente)
+        private async Task<bool> NovoClienteEhValidoAsync(NovoCliente novoCliente, string linkConfirmacaoCadastro)
         {
             if (!ValidadorDeCliente.NomeEhValido(novoCliente.Nome))
                 _notificador.AddMensagem(MensagensValidacaoCliente.NomeInvalido);
@@ -45,6 +47,9 @@ namespace AutenticacaoDoisFatores.Servico.CasosDeUso
 
             if (!ValidadorDeCliente.ChaveAcessoEhValida(novoCliente.ChaveAcesso))
                 _notificador.AddMensagem(MensagensValidacaoCliente.ChaveAcessoInvalida);
+
+            if (linkConfirmacaoCadastro.EstaVazio())
+                ExcecoesCriacaoCliente.LinkConfirmacaoCadastroNaoInformado();
 
             var emailJaCadastrado = await _dominio.EmailEstaCadastradoAsync(novoCliente.Email);
             if (emailJaCadastrado)
