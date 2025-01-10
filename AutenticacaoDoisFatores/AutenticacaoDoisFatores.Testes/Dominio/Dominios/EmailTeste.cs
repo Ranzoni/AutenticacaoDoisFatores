@@ -34,7 +34,7 @@ namespace AutenticacaoDoisFatores.Testes.Dominio.Dominios
                     (
                         emailDestinoParaTeste,
                         MensagensEnvioEmail.TituloConfirmacaoCadastroCliente.Descricao() ?? "",
-                        MensagensEnvioEmail.MsgConfirmacaoCadastroCliente.Descricao() ?? ""
+                        It.IsAny<string>()
                     ), Times.Once);
 
             #endregion

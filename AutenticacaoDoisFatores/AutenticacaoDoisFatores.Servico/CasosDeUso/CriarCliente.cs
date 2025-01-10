@@ -8,11 +8,12 @@ using Mensageiro;
 
 namespace AutenticacaoDoisFatores.Servico.CasosDeUso
 {
-    public class CriarCliente(IMapper mapper, DominioDeClientes dominio, INotificador notificador)
+    public class CriarCliente(IMapper mapper, DominioDeClientes dominio, INotificador notificador, Email email)
     {
         private readonly IMapper _mapper = mapper;
         private readonly DominioDeClientes _dominio = dominio;
         private readonly INotificador _notificador = notificador;
+        private readonly Email _email = email;
 
         public async Task<ClienteCadastrado?> ExecutarAsync(NovoCliente novoCliente)
         {
@@ -24,6 +25,8 @@ namespace AutenticacaoDoisFatores.Servico.CasosDeUso
 
             await _dominio.CriarClienteAsync(cliente);
             await _dominio.CriarDominioDoClienteAsync(cliente.Id);
+
+            _email.EnviarConfirmacaoDeCadastroDeCliente(cliente.Email);
 
             var clienteCadastrado = _mapper.Map<ClienteCadastrado>(cliente);
             return clienteCadastrado;

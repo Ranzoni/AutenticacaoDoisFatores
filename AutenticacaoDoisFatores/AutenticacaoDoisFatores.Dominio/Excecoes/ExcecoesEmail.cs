@@ -19,5 +19,10 @@ namespace AutenticacaoDoisFatores.Dominio.Excecoes
         {
             throw new ExcecoesEmail(MensagensValidacaoEmail.MensagemEmailNaoInformada);
         }
+
+        public static void EnderecoEmailEnvioNaoConfigurado()
+        {
+            throw new ExcecoesEmail(MensagensValidacaoEmail.EnderecoEmailEnvioNaoConfigurado);
+        }
     }
 }

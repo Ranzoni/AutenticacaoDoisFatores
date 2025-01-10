@@ -1,7 +1,9 @@
-﻿using AutenticacaoDoisFatores.Dominio.Compartilhados.Mensagens;
+﻿using AutenticacaoDoisFatores.Dominio.Compartilhados;
+using AutenticacaoDoisFatores.Dominio.Compartilhados.Mensagens;
 using AutenticacaoDoisFatores.Dominio.Dominios;
 using AutenticacaoDoisFatores.Dominio.Entidades;
 using AutenticacaoDoisFatores.Dominio.Repositorios;
+using AutenticacaoDoisFatores.Dominio.Servicos;
 using AutenticacaoDoisFatores.Servico.CasosDeUso;
 using AutenticacaoDoisFatores.Servico.Mapeadores;
 using AutenticacaoDoisFatores.Testes.Compartilhados;
@@ -63,6 +65,14 @@ namespace AutenticacaoDoisFatores.Testes.Servico
             Assert.Equal(novoCliente.NomeDominio, clienteCadastrado.NomeDominio);
             Assert.NotEqual(novoCliente.ChaveAcesso, novoCliente.ChaveDescriptografada());
             _mocker.Verify<IRepositorioDeClientes>(r => r.CriarDominio(cliente.NomeDominio), Times.Once);
+            _mocker.Verify<IServicoDeEmail>(s =>
+                s.Enviar
+                    (
+                        cliente.Email,
+                        MensagensEnvioEmail.TituloConfirmacaoCadastroCliente.Descricao() ?? "",
+                        It.IsAny<string>()
+                    ),
+                Times.Once);
             _mocker.Verify<INotificador>(n => n.AddMensagem(It.IsAny<MensagensValidacaoCliente>()), Times.Never);
 
             #endregion Preparação do teste
@@ -113,6 +123,8 @@ namespace AutenticacaoDoisFatores.Testes.Servico
             #region Verificação do teste
 
             Assert.Null(clienteCadastrado);
+            _mocker.Verify<IRepositorioDeClientes>(r => r.Adicionar(It.IsAny<Cliente>()), Times.Never);
+            _mocker.Verify<IServicoDeEmail>(s => s.Enviar(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()), Times.Never);
             _mocker.Verify<INotificador>(n => n.AddMensagem(MensagensValidacaoCliente.NomeInvalido), Times.Once);
 
             #endregion Preparação do teste
@@ -142,6 +154,8 @@ namespace AutenticacaoDoisFatores.Testes.Servico
             #region Verificação do teste
 
             Assert.Null(clienteCadastrado);
+            _mocker.Verify<IRepositorioDeClientes>(r => r.Adicionar(It.IsAny<Cliente>()), Times.Never);
+            _mocker.Verify<IServicoDeEmail>(s => s.Enviar(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()), Times.Never);
             _mocker.Verify<INotificador>(n => n.AddMensagem(MensagensValidacaoCliente.EmailInvalido), Times.Once);
 
             #endregion Preparação do teste
@@ -176,6 +190,8 @@ namespace AutenticacaoDoisFatores.Testes.Servico
             #region Verificação do teste
 
             Assert.Null(clienteCadastrado);
+            _mocker.Verify<IRepositorioDeClientes>(r => r.Adicionar(It.IsAny<Cliente>()), Times.Never);
+            _mocker.Verify<IServicoDeEmail>(s => s.Enviar(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()), Times.Never);
             _mocker.Verify<INotificador>(n => n.AddMensagem(MensagensValidacaoCliente.NomeDominioInvalido), Times.Once);
 
             #endregion Preparação do teste
@@ -204,6 +220,8 @@ namespace AutenticacaoDoisFatores.Testes.Servico
             #region Verificação do teste
 
             Assert.Null(clienteCadastrado);
+            _mocker.Verify<IRepositorioDeClientes>(r => r.Adicionar(It.IsAny<Cliente>()), Times.Never);
+            _mocker.Verify<IServicoDeEmail>(s => s.Enviar(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()), Times.Never);
             _mocker.Verify<INotificador>(n => n.AddMensagem(MensagensValidacaoCliente.EmailJaCadastrado), Times.Once);
 
             #endregion Preparação do teste
@@ -232,6 +250,8 @@ namespace AutenticacaoDoisFatores.Testes.Servico
             #region Verificação do teste
 
             Assert.Null(clienteCadastrado);
+            _mocker.Verify<IRepositorioDeClientes>(r => r.Adicionar(It.IsAny<Cliente>()), Times.Never);
+            _mocker.Verify<IServicoDeEmail>(s => s.Enviar(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()), Times.Never);
             _mocker.Verify<INotificador>(n => n.AddMensagem(MensagensValidacaoCliente.NomeDominioJaCadastrado), Times.Once);
 
             #endregion Preparação do teste
