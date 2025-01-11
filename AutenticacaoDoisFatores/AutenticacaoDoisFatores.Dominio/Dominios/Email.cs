@@ -24,11 +24,10 @@ namespace AutenticacaoDoisFatores.Dominio.Dominios
                 (
                     mensagem: msgConfirmacaoCadastro,
                     detalhes: @$"
-                        <p style='font-size: 18px; color: #666666;'>{textoPararConfirmarCadastroCliente}</p>
-                        <p style='font-size: 18px; color: #666666;'>{textoEstaEhChaveDeAcesso} {chaveAcesso}</p>
-                        <div style='text-align: center; margin-top: 20px;>
-                            <a href='{linkConfirmacao}' style='text-decoration: none; background-color: #1e87f0; color: #ffffff; padding: 10px 20px; border-radius: 5px; font-size: 16px;>{textoLinkConfirmacaoCadastro}</a>
-                        </div>"
+                        <p style='font-size: 18px; color: #666666;'>
+                            {textoPararConfirmarCadastroCliente} <a href='{linkConfirmacao}' style='text-decoration: none; background-color: #1e87f0; color: #ffffff; padding: 10px 20px; border-radius: 5px; font-size: 16px;'>{textoLinkConfirmacaoCadastro}</a>
+                        </p>
+                        <p style='font-size: 18px; color: #666666;'>{textoEstaEhChaveDeAcesso} {chaveAcesso}</p>"
                 );
 
             _servico.Enviar(para: para, titulo: tituloConfirmacaoCadastro, mensagem: mensagemDoEmail);
