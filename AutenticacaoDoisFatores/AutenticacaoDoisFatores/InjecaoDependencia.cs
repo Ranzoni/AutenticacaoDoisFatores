@@ -3,7 +3,7 @@ using AutenticacaoDoisFatores.Dominio.Repositorios;
 using AutenticacaoDoisFatores.Dominio.Servicos;
 using AutenticacaoDoisFatores.Infra.Repositorios;
 using AutenticacaoDoisFatores.Infra.Servicos;
-using AutenticacaoDoisFatores.Servico.CasosDeUso;
+using AutenticacaoDoisFatores.Servico.CasosDeUso.Clientes;
 
 namespace AutenticacaoDoisFatores
 {

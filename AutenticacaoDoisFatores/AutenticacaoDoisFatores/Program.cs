@@ -10,12 +10,12 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Configuration.AddEnvironmentVariables();
 
-var connectionString = Environment.GetEnvironmentVariable("ADF_CONEXAO_BANCO");
-if (connectionString is null || connectionString.EstaVazio())
+var stringDeConexao = Environment.GetEnvironmentVariable("ADF_CONEXAO_BANCO");
+if (stringDeConexao is null || stringDeConexao.EstaVazio())
     throw new ApplicationException("A string de conexão com o banco de dados não foi encontrada");
 
 builder.Services.AddDbContext<CrudContexto>(opt =>
-    opt.UseNpgsql(connectionString)
+    opt.UseNpgsql(stringDeConexao)
 );
 
 AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);

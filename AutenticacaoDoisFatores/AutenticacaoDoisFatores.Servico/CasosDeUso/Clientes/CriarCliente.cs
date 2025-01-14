@@ -3,12 +3,13 @@ using AutenticacaoDoisFatores.Dominio.Compartilhados.Mensagens;
 using AutenticacaoDoisFatores.Dominio.Dominios;
 using AutenticacaoDoisFatores.Dominio.Entidades;
 using AutenticacaoDoisFatores.Dominio.Validadores;
+using AutenticacaoDoisFatores.Servico.Compartilhados;
 using AutenticacaoDoisFatores.Servico.DTO;
 using AutenticacaoDoisFatores.Servico.Excecoes;
 using AutoMapper;
 using Mensageiro;
 
-namespace AutenticacaoDoisFatores.Servico.CasosDeUso
+namespace AutenticacaoDoisFatores.Servico.CasosDeUso.Clientes
 {
     public class CriarCliente(IMapper mapper, DominioDeClientes dominio, INotificador notificador, Email email)
     {
@@ -17,18 +18,15 @@ namespace AutenticacaoDoisFatores.Servico.CasosDeUso
         private readonly INotificador _notificador = notificador;
         private readonly Email _email = email;
 
-        public async Task<ClienteCadastrado?> ExecutarAsync(NovoCliente novoCliente, string linkConfirmacaoCadastro)
+        public async Task<ClienteCadastrado?> ExecutarAsync(NovoCliente novoCliente, string linkBaseConfirmacaoCadastro)
         {
-            var cadastroEhValido = await NovoClienteEhValidoAsync(novoCliente, linkConfirmacaoCadastro);
+            var cadastroEhValido = await NovoClienteEhValidoAsync(novoCliente, linkBaseConfirmacaoCadastro);
             if (!cadastroEhValido)
                 return null;
 
-            var cliente = _mapper.Map<Cliente>(novoCliente);
+            var cliente = await CriarClienteAsync(novoCliente);
 
-            await _dominio.CriarClienteAsync(cliente);
-            await _dominio.CriarDominioDoClienteAsync(cliente.Id);
-
-            _email.EnviarConfirmacaoDeCadastroDeCliente(cliente.Email, novoCliente.ChaveDescriptografada(), linkConfirmacaoCadastro);
+            EnviarEmail(novoCliente, linkBaseConfirmacaoCadastro);
 
             var clienteCadastrado = _mapper.Map<ClienteCadastrado>(cliente);
             return clienteCadastrado;
@@ -61,6 +59,23 @@ namespace AutenticacaoDoisFatores.Servico.CasosDeUso
 
             var clienteEhValido = !_notificador.ExisteMensagem();
             return clienteEhValido;
+        }
+
+        private async Task<Cliente> CriarClienteAsync(NovoCliente novoCliente)
+        {
+            var cliente = _mapper.Map<Cliente>(novoCliente);
+
+            await _dominio.CriarClienteAsync(cliente);
+            await _dominio.CriarDominioDoClienteAsync(cliente.Id);
+
+            return cliente;
+        }
+
+        private void EnviarEmail(NovoCliente novoCliente, string linkBaseConfirmacaoCadastro)
+        {
+            var tokenConfirmacaoDeCadastro = Seguranca.GerarTokenDeConfirmacaoDeCliente(novoCliente.Email);
+            var linkConfirmacaoCadastro = $"{linkBaseConfirmacaoCadastro}/{tokenConfirmacaoDeCadastro}";
+            _email.EnviarConfirmacaoDeCadastroDeCliente(novoCliente.Email, novoCliente.ChaveDescriptografada(), linkConfirmacaoCadastro);
         }
     }
 }

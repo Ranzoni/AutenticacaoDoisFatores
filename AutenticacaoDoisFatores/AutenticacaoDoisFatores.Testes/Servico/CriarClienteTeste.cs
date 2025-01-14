@@ -4,7 +4,7 @@ using AutenticacaoDoisFatores.Dominio.Dominios;
 using AutenticacaoDoisFatores.Dominio.Entidades;
 using AutenticacaoDoisFatores.Dominio.Repositorios;
 using AutenticacaoDoisFatores.Dominio.Servicos;
-using AutenticacaoDoisFatores.Servico.CasosDeUso;
+using AutenticacaoDoisFatores.Servico.CasosDeUso.Clientes;
 using AutenticacaoDoisFatores.Servico.Excecoes;
 using AutenticacaoDoisFatores.Servico.Mapeadores;
 using AutenticacaoDoisFatores.Testes.Compartilhados;
@@ -53,6 +53,9 @@ namespace AutenticacaoDoisFatores.Testes.Servico
             _mocker.GetMock<IRepositorioDeClientes>().Setup(r => r.BuscarUnicoAsync(It.IsAny<Guid>())).ReturnsAsync(cliente);
 
             var linkConfirmacaoCadastroParaTeste = _faker.Internet.UrlWithPath();
+
+            var chaveAutenticacaoParaTeste = _faker.Random.AlphaNumeric(40);
+            Environment.SetEnvironmentVariable("ADF_CHAVE_AUTENTICACAO", chaveAutenticacaoParaTeste);
 
             var servico = _mocker.CreateInstance<CriarCliente>();
 

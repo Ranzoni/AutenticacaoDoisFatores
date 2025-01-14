@@ -1,5 +1,5 @@
 ﻿using AutenticacaoDoisFatores.Compartilhados;
-using AutenticacaoDoisFatores.Servico.CasosDeUso;
+using AutenticacaoDoisFatores.Servico.CasosDeUso.Clientes;
 using AutenticacaoDoisFatores.Servico.DTO;
 using Mensageiro;
 using Microsoft.AspNetCore.Mvc;
