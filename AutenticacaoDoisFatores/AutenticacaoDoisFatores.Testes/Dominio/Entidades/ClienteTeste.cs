@@ -9,16 +9,17 @@ namespace AutenticacaoDoisFatores.Testes.Dominio.Entidades
 {
     public class ClienteTeste
     {
+        private readonly Faker _faker = new();
+
         [Fact]
         internal void DeveInstanciarNovoCliente()
         {
             #region Preparação do Teste
 
-            var faker = new Faker();
-            var nomeParaTeste = faker.Company.CompanyName();
-            var emailParaTeste = faker.Internet.Email();
-            var nomeDominioParaTeste = faker.Internet.DomainWord();
-            var chaveAcessoParaTeste = faker.Random.AlphaNumeric(20);
+            var nomeParaTeste = _faker.Company.CompanyName();
+            var emailParaTeste = _faker.Internet.Email();
+            var nomeDominioParaTeste = _faker.Internet.DomainWord();
+            var chaveAcessoParaTeste = _faker.Random.AlphaNumeric(20);
 
             var construtor = ConstrutorDeClientesTeste.RetornarConstrutorDeCliente
                 (
@@ -47,6 +48,59 @@ namespace AutenticacaoDoisFatores.Testes.Dominio.Entidades
 
             Assert.Equal(chaveAcessoParaTeste, cliente.ChaveAcesso);
             Assert.True(ValidadorDeCliente.ChaveAcessoEhValida(cliente.ChaveAcesso));
+
+            #endregion
+        }
+
+        [Fact]
+        internal void DeveInstanciarClienteCadastrado()
+        {
+            #region Preparação do Teste
+
+            var nomeParaTeste = _faker.Company.CompanyName();
+            var emailParaTeste = _faker.Internet.Email();
+            var nomeDominioParaTeste = _faker.Internet.DomainWord();
+            var chaveAcessoParaTeste = _faker.Random.AlphaNumeric(20);
+            var ativoParaTeste = _faker.Random.Bool();
+            var dataCadastroParaTeste = _faker.Date.Past(1);
+            var dataAlteracaoParaTeste = _faker.Date.Past(1, dataCadastroParaTeste);
+
+            var construtor = ConstrutorDeClientesTeste.RetornarConstrutorDeCliente
+                (
+                    nome: nomeParaTeste,
+                    email: emailParaTeste,
+                    nomeDominio: nomeDominioParaTeste,
+                    chaveAcesso: chaveAcessoParaTeste,
+                    ativo: ativoParaTeste,
+                    dataCadastro: dataCadastroParaTeste,
+                    dataAlteracao: dataAlteracaoParaTeste
+                );
+
+            #endregion
+
+            var cliente = construtor.ConstruirClienteCadastrado();
+
+            #region Verificação do teste
+
+            Assert.NotNull(cliente);
+
+            Assert.Equal(nomeParaTeste, cliente.Nome);
+            Assert.True(ValidadorDeCliente.NomeEhValido(cliente.Nome));
+
+            Assert.Equal(emailParaTeste, cliente.Email);
+            Assert.True(ValidadorDeCliente.EmailEhValido(cliente.Email));
+
+            Assert.Equal(nomeDominioParaTeste, cliente.NomeDominio);
+            Assert.True(ValidadorDeCliente.NomeDominioEhValido(cliente.NomeDominio));
+
+            Assert.Equal(chaveAcessoParaTeste, cliente.ChaveAcesso);
+            Assert.True(ValidadorDeCliente.ChaveAcessoEhValida(cliente.ChaveAcesso));
+
+            Assert.Equal(ativoParaTeste, cliente.Ativo);
+
+            Assert.Equal(dataCadastroParaTeste, cliente.DataCadastro);
+
+            Assert.Equal(dataAlteracaoParaTeste, cliente.DataAlteracao);
 
             #endregion
         }
@@ -116,6 +170,58 @@ namespace AutenticacaoDoisFatores.Testes.Dominio.Entidades
             var excecao = Assert.Throws<ExcecoesCliente>(construtor.ConstruirNovoCliente);
 
             Assert.Equal(MensagensValidacaoCliente.ChaveAcessoInvalida.Descricao(), excecao.Message);
+        }
+
+        [Theory]
+        [InlineData(false)]
+        [InlineData(true)]
+        internal void DeveAtivarOuDesativarNovaEntidade(bool valor)
+        {
+            #region Preparação do Teste
+
+            var construtor = ConstrutorDeClientesTeste.RetornarConstrutorDeCliente();
+
+            var cliente = construtor.ConstruirNovoCliente();
+
+            #endregion
+
+            cliente.Ativar(valor);
+
+            #region Verificação do teste
+
+            Assert.Equal(valor, cliente.Ativo);
+            Assert.Null(cliente.DataAlteracao);
+
+            #endregion
+        }
+
+        [Theory]
+        [InlineData(false)]
+        [InlineData(true)]
+        internal void DeveAtivarOuDesativarEntidadeCadastrada(bool valor)
+        {
+            #region Preparação do Teste
+
+            var dataAlteracaoParaTeste = _faker.Date.Past();
+
+            var construtor = ConstrutorDeClientesTeste.RetornarConstrutorDeCliente
+                (
+                    ativo: !valor,
+                    dataAlteracao: dataAlteracaoParaTeste
+                );
+
+            var cliente = construtor.ConstruirClienteCadastrado();
+
+            #endregion
+
+            cliente.Ativar(valor);
+
+            #region Verificação do teste
+
+            Assert.Equal(valor, cliente.Ativo);
+            Assert.NotEqual(dataAlteracaoParaTeste, cliente.DataAlteracao);
+
+            #endregion
         }
     }
 }

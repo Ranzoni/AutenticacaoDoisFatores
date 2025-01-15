@@ -6,7 +6,7 @@ using System.Text;
 
 namespace AutenticacaoDoisFatores.Servico.Compartilhados
 {
-    internal static class Seguranca
+    public static class Seguranca
     {
         private static readonly string _perfilSeguranca = "acaoToken";
         private static readonly string _confirmacaoDeCliente = "confirmacaoCliente";
@@ -42,7 +42,7 @@ namespace AutenticacaoDoisFatores.Servico.Compartilhados
             return geradorDeToken.WriteToken(token);
         }
 
-        private static byte[] Chave()
+        public static byte[] Chave()
         {
             var chaveDeAutenticacao = Environment.GetEnvironmentVariable("ADF_CHAVE_AUTENTICACAO");
             if (chaveDeAutenticacao is null || chaveDeAutenticacao.EstaVazio())

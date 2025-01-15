@@ -22,6 +22,7 @@ namespace AutenticacaoDoisFatores.Dominio.Entidades
         }
 
         public Cliente(Guid id, string nome, string email, string nomeDominio, string chaveAcesso, bool ativo, DateTime dataCadastro, DateTime? dataAlteracao)
+            : base(true)
         {
             Id = id;
             Nome = nome;
@@ -31,6 +32,13 @@ namespace AutenticacaoDoisFatores.Dominio.Entidades
             Ativo = ativo;
             DataCadastro = dataCadastro;
             DataAlteracao = dataAlteracao;
+        }
+
+        public void Ativar(bool valor)
+        {
+            Ativo = valor;
+
+            AtualizarDataAlteracao();
         }
     }
 }

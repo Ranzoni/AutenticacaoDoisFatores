@@ -62,7 +62,7 @@ namespace AutenticacaoDoisFatores.Dominio.Construtores
             return this;
         }
 
-        public ConstrutorDeCliente ComDataAlteracao(DateTime dataAlteracao)
+        public ConstrutorDeCliente ComDataAlteracao(DateTime? dataAlteracao)
         {
             _dataAlteracao = dataAlteracao;
 
@@ -76,7 +76,7 @@ namespace AutenticacaoDoisFatores.Dominio.Construtores
             return cliente;
         }
 
-        public Cliente ConstruirClienteCompleto()
+        public Cliente ConstruirClienteCadastrado()
         {
             var cliente = new Cliente
             (
