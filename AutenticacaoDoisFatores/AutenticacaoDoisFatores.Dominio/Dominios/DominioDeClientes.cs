@@ -5,7 +5,7 @@ using AutenticacaoDoisFatores.Dominio.Repositorios;
 
 namespace AutenticacaoDoisFatores.Dominio.Dominios
 {
-    public class DominioDeClientes(IRepositorioDeClientes repositorio)
+    public partial class DominioDeClientes(IRepositorioDeClientes repositorio)
     {
         private readonly IRepositorioDeClientes _repositorio = repositorio;
 
@@ -29,15 +29,14 @@ namespace AutenticacaoDoisFatores.Dominio.Dominios
             await _repositorio.CriarDominio(cliente.NomeDominio);
         }
 
-        private async Task ValidarCriacaoClienteAsync(Cliente cliente)
+        public async Task<Cliente> AlterarClienteAsync(Cliente cliente)
         {
-            var existeEmail = await EmailEstaCadastradoAsync(cliente.Email);
-            if (existeEmail)
-                ExcecoesCliente.EmailJaCadastrado();
+            await ValidarAlteracaoClienteAsync(cliente);
 
-            var existeDominio = await NomeDominioEstaCadastradoAsync(cliente.NomeDominio);
-            if (existeDominio)
-                ExcecoesCliente.NomeDominioJaCadastrado();
+            _repositorio.Editar(cliente);
+            await _repositorio.SalvarAlteracoesAsync();
+
+            return cliente;
         }
 
         #endregion Escrita
@@ -56,4 +55,29 @@ namespace AutenticacaoDoisFatores.Dominio.Dominios
 
         #endregion Leitura
     }
+
+    #region Validador
+
+    public partial class DominioDeClientes
+    {
+        private async Task ValidarCriacaoClienteAsync(Cliente cliente)
+        {
+            var existeEmail = await _repositorio.ExisteEmail(cliente.Email);
+            if (existeEmail)
+                ExcecoesCliente.EmailJaCadastrado();
+
+            var existeDominio = await _repositorio.ExisteDominio(cliente.NomeDominio);
+            if (existeDominio)
+                ExcecoesCliente.NomeDominioJaCadastrado();
+        }
+
+        private async Task ValidarAlteracaoClienteAsync(Cliente cliente)
+        {
+            var existeCliente = await _repositorio.ExisteCliente(cliente.Id);
+            if (!existeCliente)
+                ExcecoesCliente.ClienteNaoEncontrado();
+        }
+    }
+
+    #endregion
 }

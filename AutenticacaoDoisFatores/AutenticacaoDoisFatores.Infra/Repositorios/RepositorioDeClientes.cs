@@ -9,14 +9,11 @@ namespace AutenticacaoDoisFatores.Infra.Repositorios
     {
         private readonly CrudContexto _contexto = contexto;
 
+        #region Escrita
+
         public void Adicionar(Cliente entidade)
         {
             _contexto.Add(entidade);
-        }
-
-        public Task<Cliente?> BuscarUnicoAsync(Guid id)
-        {
-            return _contexto.Clientes.FirstOrDefaultAsync(c => c.Id.Equals(id));
         }
 
         public async Task CriarDominio(string nomeDominio)
@@ -28,12 +25,26 @@ namespace AutenticacaoDoisFatores.Infra.Repositorios
 
         public void Editar(Cliente entidade)
         {
-            throw new NotImplementedException();
+            _contexto.Update(entidade);
         }
 
         public void Excluir(Guid id)
         {
             throw new NotImplementedException();
+        }
+
+        public async Task SalvarAlteracoesAsync()
+        {
+            await _contexto.SaveChangesAsync();
+        }
+
+        #endregion
+
+        #region Leitura
+
+        public Task<Cliente?> BuscarUnicoAsync(Guid id)
+        {
+            return _contexto.Clientes.FirstOrDefaultAsync(c => c.Id.Equals(id));
         }
 
         public async Task<bool> ExisteDominio(string nomeDominio)
@@ -46,9 +57,6 @@ namespace AutenticacaoDoisFatores.Infra.Repositorios
             return await _contexto.Clientes.AnyAsync(c => c.Email.ToLower().Trim().Equals(email.ToLower().Trim()));
         }
 
-        public async Task SalvarAlteracoesAsync()
-        {
-            await _contexto.SaveChangesAsync();
-        }
+        #endregion
     }
 }

@@ -16,6 +16,8 @@ namespace AutenticacaoDoisFatores.Testes.Dominio.Dominios
         private readonly Faker _faker = new();
         private readonly AutoMocker _mocker = new();
 
+        #region Teste de cadastro
+
         [Fact]
         internal async Task DeveCriarCliente()
         {
@@ -185,5 +187,60 @@ namespace AutenticacaoDoisFatores.Testes.Dominio.Dominios
 
             #endregion Verificação do teste
         }
+
+        #endregion
+
+        #region Teste de alteração
+
+        [Fact]
+        internal async Task DeveAlterarCliente()
+        {
+            #region Preparação do teste
+
+            var construtor = ConstrutorDeClientesTeste.RetornarConstrutorDeCliente();
+            var cliente = construtor.ConstruirClienteCadastrado();
+
+            _mocker.GetMock<IRepositorioDeClientes>().Setup(r => r.ExisteCliente(cliente.Id)).ReturnsAsync(true);
+            var dominio = _mocker.CreateInstance<DominioDeClientes>();
+
+            #endregion Preparação do teste
+
+            var retorno = await dominio.AlterarClienteAsync(cliente);
+
+            #region Verificação do teste
+
+            Assert.NotNull(retorno);
+            Assert.Equal(cliente, retorno);
+            _mocker.Verify<IRepositorioDeClientes>(r => r.Editar(cliente), Times.Once);
+            _mocker.Verify<IRepositorioDeClientes>(r => r.SalvarAlteracoesAsync(), Times.Once);
+
+            #endregion Verificação do teste
+        }
+
+        [Fact]
+        internal async Task NaoDeveAlterarClienteNaoCadastrado()
+        {
+            #region Preparação do teste
+
+            var construtor = ConstrutorDeClientesTeste.RetornarConstrutorDeCliente();
+            var cliente = construtor.ConstruirClienteCadastrado();
+
+            var dominio = _mocker.CreateInstance<DominioDeClientes>();
+
+            #endregion Preparação do teste
+
+            var excecao = await Assert.ThrowsAsync<ExcecoesCliente>(() => dominio.AlterarClienteAsync(cliente));
+
+            #region Verificação do teste
+
+            Assert.NotNull(excecao);
+            Assert.Equal(MensagensValidacaoCliente.ClienteNaoEncontrado.Descricao(), excecao.Message);
+            _mocker.Verify<IRepositorioDeClientes>(r => r.Editar(It.IsAny<Cliente>()), Times.Never);
+            _mocker.Verify<IRepositorioDeClientes>(r => r.SalvarAlteracoesAsync(), Times.Never);
+
+            #endregion Verificação do teste
+        }
+
+        #endregion
     }
 }
