@@ -8,13 +8,31 @@ namespace AutenticacaoDoisFatores.Servico.Compartilhados
 {
     public static class Seguranca
     {
-        private static readonly string _perfilSeguranca = "acaoToken";
+        #region Perfis de segurnça
+
+        private static readonly string _perfilIdentificador = ClaimTypes.SerialNumber;
+        private static readonly string _perfilSeguranca = ClaimTypes.Role;
+
+        #endregion
+
+        #region Regras de segurança
+
         private static readonly string _confirmacaoDeCliente = "confirmacaoCliente";
+
+        public static string RegraConfirmacaoDeCliente
+        {
+            get
+            {
+                return _confirmacaoDeCliente;
+            }
+        }
+
+        #endregion
 
         internal static string GerarTokenDeConfirmacaoDeCliente(string email)
         {
             return GerarToken([
-                new(type: ClaimTypes.Email, email),
+                new(type: _perfilIdentificador, email),
                 new(type: _perfilSeguranca, _confirmacaoDeCliente)
             ]);
         }
@@ -40,6 +58,25 @@ namespace AutenticacaoDoisFatores.Servico.Compartilhados
 
             var token = geradorDeToken.CreateToken(descritorDoToken);
             return geradorDeToken.WriteToken(token);
+        }
+
+        internal static Guid RetornarIdClienteTokenDeConfirmacaoDeCliente(string token)
+        {
+            var geradorDeToken = new JwtSecurityTokenHandler();
+            var perfisDoToken = LerToken(token);
+            var perfilDeIdentificador = perfisDoToken.FirstOrDefault(perfil => perfil.Type.Equals(_perfilIdentificador));
+            if (perfilDeIdentificador is null)
+                return Guid.Empty;
+
+            var id = Guid.Parse(perfilDeIdentificador.Value);
+            return id;
+        }
+
+        private static IEnumerable<Claim> LerToken(string token)
+        {
+            var geradorDeToken = new JwtSecurityTokenHandler();
+            var tokenEmObjeto = geradorDeToken.ReadJwtToken(token);
+            return tokenEmObjeto.Claims;
         }
 
         public static byte[] Chave()

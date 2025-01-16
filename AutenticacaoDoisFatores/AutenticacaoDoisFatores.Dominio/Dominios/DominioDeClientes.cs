@@ -43,6 +43,11 @@ namespace AutenticacaoDoisFatores.Dominio.Dominios
 
         #region Leitura
 
+        public async Task<Cliente?> BuscarClienteAsync(Guid id)
+        {
+            return await _repositorio.BuscarUnicoAsync(id);
+        }
+
         public async Task<bool> EmailEstaCadastradoAsync(string email)
         {
             return await _repositorio.ExisteEmail(email);

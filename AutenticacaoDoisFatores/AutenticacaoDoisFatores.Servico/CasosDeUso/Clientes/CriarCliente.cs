@@ -18,13 +18,13 @@ namespace AutenticacaoDoisFatores.Servico.CasosDeUso.Clientes
         private readonly INotificador _notificador = notificador;
         private readonly Email _email = email;
 
-        public async Task<ClienteCadastrado?> ExecutarAsync(NovoCliente novoCliente, string linkBaseConfirmacaoCadastro)
+        public async Task<ClienteCadastrado?> CriarAsync(NovoCliente novoCliente, string linkBaseConfirmacaoCadastro)
         {
             var cadastroEhValido = await NovoClienteEhValidoAsync(novoCliente, linkBaseConfirmacaoCadastro);
             if (!cadastroEhValido)
                 return null;
 
-            var cliente = await CriarClienteAsync(novoCliente);
+            var cliente = await CadastrarClienteAsync(novoCliente);
 
             EnviarEmail(novoCliente, linkBaseConfirmacaoCadastro);
 
@@ -61,7 +61,7 @@ namespace AutenticacaoDoisFatores.Servico.CasosDeUso.Clientes
             return clienteEhValido;
         }
 
-        private async Task<Cliente> CriarClienteAsync(NovoCliente novoCliente)
+        private async Task<Cliente> CadastrarClienteAsync(NovoCliente novoCliente)
         {
             var cliente = _mapper.Map<Cliente>(novoCliente);
 

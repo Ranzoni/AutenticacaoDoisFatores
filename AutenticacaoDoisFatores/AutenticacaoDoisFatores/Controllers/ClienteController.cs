@@ -17,7 +17,7 @@ namespace AutenticacaoDoisFatores.Controllers
             {
                 var url = UrlAcaoDeConfirmarCadastroDeCliente(HttpContext);
 
-                var retorno = await criarCliente.ExecutarAsync(novoCliente, url);
+                var retorno = await criarCliente.CriarAsync(novoCliente, url);
                 
                 return CriadoComSucesso(retorno);
             }
