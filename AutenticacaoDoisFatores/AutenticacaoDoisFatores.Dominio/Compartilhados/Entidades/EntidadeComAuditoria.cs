@@ -7,19 +7,14 @@
         public DateTime DataCadastro { get; protected set; } = DateTime.Now;
         public DateTime? DataAlteracao { get; protected set; }
 
-        protected EntidadeComAuditoria()
+        private EntidadeComAuditoria()
         {
             _estaCadastrada = false;
         }
 
-        protected EntidadeComAuditoria(bool estaCadastrada)
+        protected EntidadeComAuditoria(bool estaCadastrada = false)
         {
             _estaCadastrada = estaCadastrada;
-        }
-
-        public bool EntidadeCadastrada()
-        {
-            return _estaCadastrada;
         }
 
         public void AtualizarDataAlteracao()

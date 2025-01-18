@@ -14,5 +14,10 @@ namespace AutenticacaoDoisFatores.Compartilhados
         {
             return $"{httpContext.Request.Scheme}://{httpContext.Request.Host}";
         }
+
+        protected static string Token(HttpRequest httpRequest)
+        {
+            return httpRequest.Headers.Authorization.ToString().Replace("Bearer ", "");
+        }
     }
 }

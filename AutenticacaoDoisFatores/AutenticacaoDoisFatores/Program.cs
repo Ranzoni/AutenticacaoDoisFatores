@@ -7,7 +7,6 @@ using Mensageiro.WebApi;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-using System.Security.Claims;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -27,7 +26,7 @@ AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 
 builder.Services.AddAuthorization();
 
-var chaveJwt = Seguranca.Chave().ToString() ?? "";
+var chaveJwt = Seguranca.Chave();
 
 builder.Services.AddAuthentication(opt =>
 {
@@ -41,11 +40,15 @@ builder.Services.AddAuthentication(opt =>
     opt.TokenValidationParameters = new TokenValidationParameters
     {
         ValidateIssuerSigningKey = true,
-        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(chaveJwt)),
+        IssuerSigningKey = new SymmetricSecurityKey(chaveJwt),
+        
         ValidateIssuer = false,
         ValidateAudience = false
     };
 });
+
+builder.Services.AddAuthorizationBuilder()
+    .AddPolicy("ConfirmacaoDeCliente", policy => policy.RequireRole(Seguranca.RegraConfirmacaoDeCliente));
 
 builder.Services.AddAutoMapper(typeof(MapeadorDeCliente));
 builder.Services.AddMensageiro();

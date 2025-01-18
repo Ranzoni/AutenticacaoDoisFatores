@@ -5,11 +5,15 @@ namespace AutenticacaoDoisFatores.Dominio.Entidades
 {
     public class Cliente : EntidadeComAuditoria
     {
-        public string Nome { get; private set; }
-        public string Email { get; private set; }
-        public string NomeDominio { get; private set; }
-        public string ChaveAcesso { get; private set; }
+        public string Nome { get; private set; } = "";
+        public string Email { get; private set; } = "";
+        public string NomeDominio { get; private set; } = "";
+        public string ChaveAcesso { get; private set; } = "";
         public bool Ativo { get; private set; } = false;
+
+        private Cliente() : base(true)
+        {
+        }
 
         public Cliente(string nome, string email, string nomeDominio, string chaveAcesso)
         {

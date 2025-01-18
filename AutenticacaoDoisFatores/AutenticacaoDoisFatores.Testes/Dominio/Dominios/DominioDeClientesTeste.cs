@@ -216,30 +216,6 @@ namespace AutenticacaoDoisFatores.Testes.Dominio.Dominios
             #endregion Verificação do teste
         }
 
-        [Fact]
-        internal async Task NaoDeveAlterarClienteNaoCadastrado()
-        {
-            #region Preparação do teste
-
-            var construtor = ConstrutorDeClientesTeste.RetornarConstrutorDeCliente();
-            var cliente = construtor.ConstruirClienteCadastrado();
-
-            var dominio = _mocker.CreateInstance<DominioDeClientes>();
-
-            #endregion Preparação do teste
-
-            var excecao = await Assert.ThrowsAsync<ExcecoesCliente>(() => dominio.AlterarClienteAsync(cliente));
-
-            #region Verificação do teste
-
-            Assert.NotNull(excecao);
-            Assert.Equal(MensagensValidacaoCliente.ClienteNaoEncontrado.Descricao(), excecao.Message);
-            _mocker.Verify<IRepositorioDeClientes>(r => r.Editar(It.IsAny<Cliente>()), Times.Never);
-            _mocker.Verify<IRepositorioDeClientes>(r => r.SalvarAlteracoesAsync(), Times.Never);
-
-            #endregion Verificação do teste
-        }
-
         #endregion
     }
 }

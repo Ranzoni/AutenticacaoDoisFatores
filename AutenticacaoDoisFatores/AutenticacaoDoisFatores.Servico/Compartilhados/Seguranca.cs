@@ -61,7 +61,7 @@ namespace AutenticacaoDoisFatores.Servico.Compartilhados
             return geradorDeToken.WriteToken(token);
         }
 
-        internal static Guid RetornarIdClienteTokenDeConfirmacaoDeCliente(string token)
+        public static Guid RetornarIdClienteTokenDeConfirmacaoDeCliente(string token)
         {
             var geradorDeToken = new JwtSecurityTokenHandler();
             var perfisDoToken = LerToken(token);
@@ -77,6 +77,7 @@ namespace AutenticacaoDoisFatores.Servico.Compartilhados
         {
             var geradorDeToken = new JwtSecurityTokenHandler();
             var tokenEmObjeto = geradorDeToken.ReadJwtToken(token);
+
             return tokenEmObjeto.Claims;
         }
 

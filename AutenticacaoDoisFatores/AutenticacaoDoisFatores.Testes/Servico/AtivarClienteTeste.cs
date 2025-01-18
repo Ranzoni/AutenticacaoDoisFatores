@@ -1,13 +1,11 @@
 ﻿using AutenticacaoDoisFatores.Dominio.Entidades;
 using AutenticacaoDoisFatores.Dominio.Repositorios;
 using AutenticacaoDoisFatores.Servico.CasosDeUso.Clientes;
-using AutenticacaoDoisFatores.Servico.Compartilhados;
 using AutenticacaoDoisFatores.Testes.Compartilhados;
 using AutenticacaoDoisFatores.Dominio.Compartilhados.Mensagens;
 using Mensageiro;
 using Moq;
 using Moq.AutoMock;
-using AutenticacaoDoisFatores.Dominio.Compartilhados;
 
 namespace AutenticacaoDoisFatores.Testes.Servico
 {
@@ -21,7 +19,6 @@ namespace AutenticacaoDoisFatores.Testes.Servico
             #region Preparação do teste
 
             var cliente = ConstrutorDeClientesTeste.RetornarConstrutorDeCliente(ativo: false).ConstruirClienteCadastrado();
-            var token = Seguranca.GerarTokenDeConfirmacaoDeCliente(cliente.Id);
 
             _mocker.GetMock<IRepositorioDeClientes>().Setup(r => r.BuscarUnicoAsync(cliente.Id)).ReturnsAsync(cliente);
 
@@ -29,7 +26,7 @@ namespace AutenticacaoDoisFatores.Testes.Servico
 
             #endregion
 
-            await servico.AtivarAsync(token);
+            await servico.AtivarAsync(cliente.Id);
 
             #region Verificação do teste
 
@@ -41,12 +38,11 @@ namespace AutenticacaoDoisFatores.Testes.Servico
         }
 
         [Fact]
-        internal async Task NaoDeveAtivarClienteQuandoIdClienteNaoEstaNoToken()
+        internal async Task NaoDeveAtivarClienteQuandoIdClienteNaoExiste()
         {
             #region Preparação do teste
 
-            var cliente = ConstrutorDeClientesTeste.RetornarConstrutorDeCliente(ativo: false).ConstruirClienteCadastrado();
-            var token = Seguranca.GerarTokenDeConfirmacaoDeCliente(Guid.Empty);
+            var idInexistente = Guid.NewGuid();
 
             _mocker.GetMock<INotificador>().Setup(n => n.ExisteMensagem()).Returns(true);
 
@@ -54,40 +50,13 @@ namespace AutenticacaoDoisFatores.Testes.Servico
 
             #endregion
 
-            await servico.AtivarAsync(token);
-
-            #region Verificação do teste
-
-            Assert.False(cliente.Ativo);
-            _mocker.Verify<IRepositorioDeClientes>(r => r.Editar(It.IsAny<Cliente>()), Times.Never);
-            _mocker.Verify<IRepositorioDeClientes>(r => r.SalvarAlteracoesAsync(), Times.Never);
-            _mocker.Verify<INotificador>(n => n.AddMensagem(MensagensValidacaoCliente.TokenInvalido), Times.Once);
-
-            #endregion
-        }
-
-        [Fact]
-        internal async Task NaoDeveAtivarClienteQuandoIdClienteNaoExiste()
-        {
-            #region Preparação do teste
-
-            var token = Seguranca.GerarTokenDeConfirmacaoDeCliente(Guid.NewGuid());
-
-            var notificador = new Notificador();
-            _mocker.Use<INotificador>(notificador);
-
-            var servico = _mocker.CreateInstance<AtivarCliente>();
-
-            #endregion
-
-            await servico.AtivarAsync(token);
+            await servico.AtivarAsync(idInexistente);
 
             #region Verificação do teste
 
             _mocker.Verify<IRepositorioDeClientes>(r => r.Editar(It.IsAny<Cliente>()), Times.Never);
             _mocker.Verify<IRepositorioDeClientes>(r => r.SalvarAlteracoesAsync(), Times.Never);
-            Assert.True(notificador.ExisteMsgNaoEncontrado());
-            Assert.Equal(MensagensValidacaoCliente.ClienteNaoEncontrado.Descricao(), notificador.Mensagens().First());
+            _mocker.Verify<INotificador>(n => n.AddMensagemNaoEncontrado(MensagensValidacaoCliente.ClienteNaoEncontrado), Times.Once);
 
             #endregion
         }
@@ -98,24 +67,21 @@ namespace AutenticacaoDoisFatores.Testes.Servico
             #region Preparação do teste
 
             var cliente = ConstrutorDeClientesTeste.RetornarConstrutorDeCliente(ativo: true).ConstruirClienteCadastrado();
-            var token = Seguranca.GerarTokenDeConfirmacaoDeCliente(cliente.Id);
 
-            var notificador = new Notificador();
-            _mocker.Use<INotificador>(notificador);
             _mocker.GetMock<IRepositorioDeClientes>().Setup(r => r.BuscarUnicoAsync(cliente.Id)).ReturnsAsync(cliente);
+            _mocker.GetMock<INotificador>().Setup(n => n.ExisteMensagem()).Returns(true);
 
             var servico = _mocker.CreateInstance<AtivarCliente>();
 
             #endregion
 
-            await servico.AtivarAsync(token);
+            await servico.AtivarAsync(cliente.Id);
 
             #region Verificação do teste
 
             _mocker.Verify<IRepositorioDeClientes>(r => r.Editar(It.IsAny<Cliente>()), Times.Never);
             _mocker.Verify<IRepositorioDeClientes>(r => r.SalvarAlteracoesAsync(), Times.Never);
-            Assert.True(notificador.ExisteMensagem());
-            Assert.Equal(MensagensValidacaoCliente.ClienteJaAtivado.Descricao(), notificador.Mensagens().First());
+            _mocker.Verify<INotificador>(n => n.AddMensagem(MensagensValidacaoCliente.ClienteJaAtivado), Times.Once);
 
             #endregion
         }
