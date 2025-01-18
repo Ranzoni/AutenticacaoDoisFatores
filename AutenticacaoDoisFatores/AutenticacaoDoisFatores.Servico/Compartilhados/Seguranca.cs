@@ -1,4 +1,5 @@
 ﻿using AutenticacaoDoisFatores.Dominio.Compartilhados;
+using Microsoft.IdentityModel.JsonWebTokens;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -10,7 +11,7 @@ namespace AutenticacaoDoisFatores.Servico.Compartilhados
     {
         #region Perfis de segurnça
 
-        private static readonly string _perfilIdentificador = ClaimTypes.SerialNumber;
+        private static readonly string _perfilIdentificador = "identificadorEntidade";
         private static readonly string _perfilSeguranca = ClaimTypes.Role;
 
         #endregion
@@ -29,10 +30,10 @@ namespace AutenticacaoDoisFatores.Servico.Compartilhados
 
         #endregion
 
-        internal static string GerarTokenDeConfirmacaoDeCliente(string email)
+        public static string GerarTokenDeConfirmacaoDeCliente(Guid idCliente)
         {
             return GerarToken([
-                new(type: _perfilIdentificador, email),
+                new(type: _perfilIdentificador, idCliente.ToString()),
                 new(type: _perfilSeguranca, _confirmacaoDeCliente)
             ]);
         }

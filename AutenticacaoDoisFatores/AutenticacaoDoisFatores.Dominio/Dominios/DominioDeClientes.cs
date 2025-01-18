@@ -31,8 +31,6 @@ namespace AutenticacaoDoisFatores.Dominio.Dominios
 
         public async Task<Cliente> AlterarClienteAsync(Cliente cliente)
         {
-            await ValidarAlteracaoClienteAsync(cliente);
-
             _repositorio.Editar(cliente);
             await _repositorio.SalvarAlteracoesAsync();
 
@@ -74,13 +72,6 @@ namespace AutenticacaoDoisFatores.Dominio.Dominios
             var existeDominio = await _repositorio.ExisteDominio(cliente.NomeDominio);
             if (existeDominio)
                 ExcecoesCliente.NomeDominioJaCadastrado();
-        }
-
-        private async Task ValidarAlteracaoClienteAsync(Cliente cliente)
-        {
-            var existeCliente = await _repositorio.ExisteCliente(cliente.Id);
-            if (!existeCliente)
-                ExcecoesCliente.ClienteNaoEncontrado();
         }
     }
 

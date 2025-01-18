@@ -26,7 +26,7 @@ namespace AutenticacaoDoisFatores.Servico.CasosDeUso.Clientes
 
             var cliente = await CadastrarClienteAsync(novoCliente);
 
-            EnviarEmail(novoCliente, linkBaseConfirmacaoCadastro);
+            EnviarEmail(cliente.Id, novoCliente, linkBaseConfirmacaoCadastro);
 
             var clienteCadastrado = _mapper.Map<ClienteCadastrado>(cliente);
             return clienteCadastrado;
@@ -71,9 +71,9 @@ namespace AutenticacaoDoisFatores.Servico.CasosDeUso.Clientes
             return cliente;
         }
 
-        private void EnviarEmail(NovoCliente novoCliente, string linkBaseConfirmacaoCadastro)
+        private void EnviarEmail(Guid id, NovoCliente novoCliente, string linkBaseConfirmacaoCadastro)
         {
-            var tokenConfirmacaoDeCadastro = Seguranca.GerarTokenDeConfirmacaoDeCliente(novoCliente.Email);
+            var tokenConfirmacaoDeCadastro = Seguranca.GerarTokenDeConfirmacaoDeCliente(id);
             var linkConfirmacaoCadastro = $"{linkBaseConfirmacaoCadastro}/{tokenConfirmacaoDeCadastro}";
             _email.EnviarConfirmacaoDeCadastroDeCliente(novoCliente.Email, novoCliente.ChaveDescriptografada(), linkConfirmacaoCadastro);
         }

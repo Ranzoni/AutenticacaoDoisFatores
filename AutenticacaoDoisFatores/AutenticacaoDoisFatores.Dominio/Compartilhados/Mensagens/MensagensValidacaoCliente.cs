@@ -19,6 +19,10 @@ namespace AutenticacaoDoisFatores.Dominio.Compartilhados.Mensagens
         [Description("O e-mail informado já está cadastrado.")]
         EmailJaCadastrado,
         [Description("O link para a confirmação do cadastro não foi informado.")]
-        LinkConfirmacaoCadastroNaoInformado
+        LinkConfirmacaoCadastroNaoInformado,
+        [Description("O token desta requisição é inválido.")]
+        TokenInvalido,
+        [Description("Este cliente já foi ativado.")]
+        ClienteJaAtivado
     }
 }

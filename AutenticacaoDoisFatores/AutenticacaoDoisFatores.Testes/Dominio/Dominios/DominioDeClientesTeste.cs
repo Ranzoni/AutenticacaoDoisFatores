@@ -200,7 +200,6 @@ namespace AutenticacaoDoisFatores.Testes.Dominio.Dominios
             var construtor = ConstrutorDeClientesTeste.RetornarConstrutorDeCliente();
             var cliente = construtor.ConstruirClienteCadastrado();
 
-            _mocker.GetMock<IRepositorioDeClientes>().Setup(r => r.ExisteCliente(cliente.Id)).ReturnsAsync(true);
             var dominio = _mocker.CreateInstance<DominioDeClientes>();
 
             #endregion Preparação do teste

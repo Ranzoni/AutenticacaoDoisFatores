@@ -20,8 +20,7 @@ namespace AutenticacaoDoisFatores.Servico.CasosDeUso.Clientes
                 return;
 
             var cliente = await _dominio.BuscarClienteAsync(idCliente);
-
-            if (AtivacaoDeClienteEhValida(cliente) || cliente is null)
+            if (!AtivacaoDeClienteEhValida(cliente) || cliente is null)
                 return;
 
             cliente.Ativar(true);
@@ -31,7 +30,7 @@ namespace AutenticacaoDoisFatores.Servico.CasosDeUso.Clientes
         private bool AtivacaoDeClienteEhValida(Guid idCliente)
         {
             if (idCliente.Equals(Guid.Empty))
-                _notificador.AddMensagem(MensagensValidacaoCliente.ClienteNaoEncontrado);
+                _notificador.AddMensagem(MensagensValidacaoCliente.TokenInvalido);
 
             var estaValido = !_notificador.ExisteMensagem();
             return estaValido;
@@ -40,16 +39,10 @@ namespace AutenticacaoDoisFatores.Servico.CasosDeUso.Clientes
         private bool AtivacaoDeClienteEhValida(Cliente? cliente)
         {
             if (cliente is null)
-            {
                 _notificador.AddMensagemNaoEncontrado(MensagensValidacaoCliente.ClienteNaoEncontrado);
-                return false;
-            }
 
-            if (cliente.Ativo)
-            {
-                _notificador.AddMensagem(MensagensValidacaoCliente.ClienteNaoEncontrado);
-                return false;
-            }
+            if (cliente?.Ativo ?? false)
+                _notificador.AddMensagem(MensagensValidacaoCliente.ClienteJaAtivado);
 
             var estaValido = !_notificador.ExisteMensagem();
             return estaValido;
