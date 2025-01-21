@@ -7,7 +7,7 @@ using Mensageiro.WebApi;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-using System.Text;
+using Npgsql;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,8 +18,12 @@ var stringDeConexao = Environment.GetEnvironmentVariable("ADF_CONEXAO_BANCO");
 if (stringDeConexao is null || stringDeConexao.EstaVazio())
     throw new ApplicationException("A string de conexão com o banco de dados não foi encontrada");
 
+var dataSourceBuilder = new NpgsqlDataSourceBuilder(stringDeConexao);
+dataSourceBuilder.EnableDynamicJson();
+var dataSource = dataSourceBuilder.Build();
+
 builder.Services.AddDbContext<CrudContexto>(opt =>
-    opt.UseNpgsql(stringDeConexao)
+    opt.UseNpgsql(dataSource)
 );
 
 AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
