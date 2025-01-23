@@ -13,13 +13,16 @@ namespace AutenticacaoDoisFatores.Controllers
     [Route("api/cliente")]
     public class ClienteController(INotificador _notificador, int? _statusCodeNotificador = null) : ControladorBase(_notificador, _statusCodeNotificador)
     {
+        private readonly string _caminhoPaginaConfirmarCadastro = "clientes/confirmar-cadastro.html";
+
         [HttpPost]
         [AllowAnonymous]
         public async Task<ActionResult<ClienteCadastrado?>> CriarAsync([FromServices] CriarCliente criarCliente, NovoCliente novoCliente)
         {
             try
             {
-                var url = UrlAcaoDeConfirmarCadastroDeCliente(HttpContext);
+                var urlBase = UrlDaApi(HttpContext);
+                var url = $"{urlBase}/{_caminhoPaginaConfirmarCadastro}";
 
                 var retorno = await criarCliente.CriarAsync(novoCliente, url);
                 
@@ -31,7 +34,7 @@ namespace AutenticacaoDoisFatores.Controllers
             }
         }
 
-        [HttpPut("confirmarCadastro")]
+        [HttpPut("confirmar-cadastro")]
         [Authorize(Policy = "ConfirmacaoDeCliente")]
         public async Task<ActionResult> ConfirmarCadastroAsync([FromServices] AtivarCliente ativarCliente)
         {

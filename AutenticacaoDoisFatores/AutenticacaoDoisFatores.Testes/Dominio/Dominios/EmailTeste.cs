@@ -22,12 +22,13 @@ namespace AutenticacaoDoisFatores.Testes.Dominio.Dominios
             var emailDestinoParaTeste = _faker.Internet.Email();
             var chaveAcessoParaTeste = _faker.Random.AlphaNumeric(20);
             var linkDeConfirmacaoParaTeste = _faker.Internet.UrlWithPath();
+            var token = _faker.Random.AlphaNumeric(32);
 
             var email = _mocker.CreateInstance<Email>();
 
             #endregion
 
-            email.EnviarConfirmacaoDeCadastroDeCliente(emailDestinoParaTeste, chaveAcessoParaTeste, linkDeConfirmacaoParaTeste);
+            email.EnviarConfirmacaoDeCadastroDeCliente(emailDestinoParaTeste, chaveAcessoParaTeste, linkDeConfirmacaoParaTeste, token);
 
             #region Verificação do teste
 
@@ -60,10 +61,11 @@ namespace AutenticacaoDoisFatores.Testes.Dominio.Dominios
             var email = _mocker.CreateInstance<Email>();
             var chaveAcessoParaTeste = _faker.Random.AlphaNumeric(20);
             var linkDeConfirmacaoParaTeste = _faker.Internet.UrlWithPath();
+            var token = _faker.Random.AlphaNumeric(32);
 
             #endregion
 
-            var excecao = Assert.Throws<ExcecoesEmail>(() => email.EnviarConfirmacaoDeCadastroDeCliente(emailInvalido, chaveAcessoParaTeste, linkDeConfirmacaoParaTeste));
+            var excecao = Assert.Throws<ExcecoesEmail>(() => email.EnviarConfirmacaoDeCadastroDeCliente(emailInvalido, chaveAcessoParaTeste, linkDeConfirmacaoParaTeste, token));
 
             #region Verificação do teste
 

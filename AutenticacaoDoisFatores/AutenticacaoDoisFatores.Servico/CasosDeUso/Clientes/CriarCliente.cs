@@ -74,8 +74,7 @@ namespace AutenticacaoDoisFatores.Servico.CasosDeUso.Clientes
         private void EnviarEmail(Guid id, NovoCliente novoCliente, string linkBaseConfirmacaoCadastro)
         {
             var tokenConfirmacaoDeCadastro = Seguranca.GerarTokenDeConfirmacaoDeCliente(id);
-            var linkConfirmacaoCadastro = $"{linkBaseConfirmacaoCadastro}/{tokenConfirmacaoDeCadastro}";
-            _email.EnviarConfirmacaoDeCadastroDeCliente(novoCliente.Email, novoCliente.ChaveDescriptografada(), linkConfirmacaoCadastro);
+            _email.EnviarConfirmacaoDeCadastroDeCliente(novoCliente.Email, novoCliente.ChaveDescriptografada(), linkBaseConfirmacaoCadastro, tokenConfirmacaoDeCadastro);
         }
     }
 }

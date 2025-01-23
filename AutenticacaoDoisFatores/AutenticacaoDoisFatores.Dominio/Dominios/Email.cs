@@ -9,7 +9,7 @@ namespace AutenticacaoDoisFatores.Dominio.Dominios
     {
         private readonly IServicoDeEmail _servico = servico;
 
-        public void EnviarConfirmacaoDeCadastroDeCliente(string para, string chaveAcesso, string linkConfirmacao)
+        public void EnviarConfirmacaoDeCadastroDeCliente(string para, string chaveAcesso, string linkConfirmacao, string token)
         {
             if (para.EstaVazio() || !para.EhEmail())
                 ExcecoesEmail.EmailDestinoInvalido();
@@ -24,9 +24,18 @@ namespace AutenticacaoDoisFatores.Dominio.Dominios
                 (
                     mensagem: msgConfirmacaoCadastro,
                     detalhes: @$"
-                        <p style='font-size: 18px; color: #666666;'>
-                            {textoPararConfirmarCadastroCliente} <a href='{linkConfirmacao}' style='text-decoration: none; background-color: #1e87f0; color: #ffffff; padding: 10px 20px; border-radius: 5px; font-size: 16px;'>{textoLinkConfirmacaoCadastro}</a>
-                        </p>
+                        <form id='form-confirmar-cadastro'>
+
+                            <p style='font-size: 18px; color: #666666;'>
+                                {textoPararConfirmarCadastroCliente}
+                            </p>
+
+                            <a href='{linkConfirmacao}?token={token}'>
+                                {textoLinkConfirmacaoCadastro}
+                            </a>
+
+                        </form>
+
                         <p style='font-size: 18px; color: #666666;'>{textoEstaEhChaveDeAcesso} {chaveAcesso}</p>"
                 );
 
@@ -43,9 +52,11 @@ namespace AutenticacaoDoisFatores.Dominio.Dominios
                             <div style='text-align: center; padding: 10px 0;'>
                                 <h1 style='color: #333333;'>{mensagem}</h1>
                             </div>
+
                             <div style='text-align: center; padding: 20px 0;'>
                                 {detalhes}
                             </div>
+
                             <div style='text-align: center; margin-top: 30px; font-size: 12px; color: #999999'>
                                 <p>© 2025 Autenticação em Dois Fatores. Todos os direitos reservados.</p>
                             </div>
