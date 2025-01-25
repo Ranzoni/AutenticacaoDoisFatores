@@ -1,8 +1,8 @@
 ﻿document.getElementById('form-confirmar-cadastro').addEventListener('submit', function (event) {
     event.preventDefault();
 
-    const params = new URLSearchParams(document.location.search);
-    const token = params.get("token");
+    const parametros = new URLSearchParams(document.location.search);
+    const token = parametros.get("token");
 
     fetch('https://localhost:7053/api/cliente/confirmar-cadastro', {
         method: 'PUT',
@@ -11,13 +11,42 @@
             'Authorization': `Bearer ${token}`
         }
     })
-        .then(result => {
-            if (result.status === 401) {
-                alert('O link expirou');
+        .then(async resposta => {
+            if (resposta.status === 401) {
+                apresentarMsgAlerta('O link expirou');
                 return;
             }
 
-            console.log('Sucesso: ', result);
+            if (!resposta.success && resposta.status === 422) {
+                const conteudo = await resposta.json();
+
+                if (conteudo.length > 0) {
+                    const msg = conteudo[0].mensagem;
+                    apresentarMsgAlerta(msg);
+                }
+
+                return;
+            }
+
+            apresentarMsgSucesso();
         })
-        .catch(error => console.error('Erro: ', error));
+        .catch(erro => apresentarMsgErro(`Erro: ${erro}`));
 });
+
+function apresentarMsgSucesso() {
+    apresentarMsg('Cadastro confirmado com sucesso!', 'green');
+}
+
+function apresentarMsgAlerta(msg) {
+    apresentarMsg(msg, 'orange');
+}
+
+function apresentarMsgErro(msg) {
+    console.log(msg);
+    apresentarMsg('Não foi possível realizar o processo.', 'red');
+}
+
+function apresentarMsg(msg, color) {
+    document.getElementById('mensagem').textContent = msg;
+    document.getElementById('mensagem').style.color = color;
+}

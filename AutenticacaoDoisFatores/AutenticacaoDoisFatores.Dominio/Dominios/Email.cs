@@ -36,7 +36,9 @@ namespace AutenticacaoDoisFatores.Dominio.Dominios
 
                         </form>
 
-                        <p style='font-size: 18px; color: #666666;'>{textoEstaEhChaveDeAcesso} {chaveAcesso}</p>"
+                        <p style='font-size: 18px; color: #666666;'>{textoEstaEhChaveDeAcesso}</p>
+
+                        <p style='font-size: 18px; color: #666666;'>{chaveAcesso}</p>"
                 );
 
             _servico.Enviar(para: para, titulo: tituloConfirmacaoCadastro, mensagem: mensagemDoEmail);
