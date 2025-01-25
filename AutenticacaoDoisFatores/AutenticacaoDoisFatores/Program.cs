@@ -30,7 +30,7 @@ AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 
 builder.Services.AddAuthorization();
 
-var chaveJwt = Seguranca.Chave();
+var chaveJwt = Seguranca.ChaveDeAutenticacao();
 
 builder.Services.AddAuthentication(opt =>
 {

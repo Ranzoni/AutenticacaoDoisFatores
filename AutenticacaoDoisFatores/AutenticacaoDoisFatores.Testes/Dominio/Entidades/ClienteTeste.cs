@@ -220,6 +220,59 @@ namespace AutenticacaoDoisFatores.Testes.Dominio.Entidades
 
             Assert.Equal(valor, cliente.Ativo);
             Assert.NotEqual(dataAlteracaoParaTeste, cliente.DataAlteracao);
+            Assert.True(dataAlteracaoParaTeste < cliente.DataAlteracao);
+
+            #endregion
+        }
+
+        [Fact]
+        internal void DeveAlterarChaveAcessoNovaEntidade()
+        {
+            #region Preparação do Teste
+
+            var construtor = ConstrutorDeClientesTeste.RetornarConstrutorDeCliente();
+
+            var novaChave = _faker.Random.AlphaNumeric(32);
+
+            var cliente = construtor.ConstruirNovoCliente();
+
+            #endregion
+
+            cliente.AlterarChaveAcesso(novaChave);
+
+            #region Verificação do teste
+
+            Assert.Equal(novaChave, cliente.ChaveAcesso);
+            Assert.Null(cliente.DataAlteracao);
+
+            #endregion
+        }
+
+        [Fact]
+        internal void DeveAlterarChaveAcessoEntidadeCadastrada()
+        {
+            #region Preparação do Teste
+
+            var dataAlteracaoParaTeste = _faker.Date.Past();
+
+            var construtor = ConstrutorDeClientesTeste.RetornarConstrutorDeCliente
+                (
+                    dataAlteracao: dataAlteracaoParaTeste
+                );
+
+            var novaChave = _faker.Random.AlphaNumeric(32);
+
+            var cliente = construtor.ConstruirClienteCadastrado();
+
+            #endregion
+
+            cliente.AlterarChaveAcesso(novaChave);
+
+            #region Verificação do teste
+
+            Assert.Equal(novaChave, cliente.ChaveAcesso);
+            Assert.NotEqual(dataAlteracaoParaTeste, cliente.DataAlteracao);
+            Assert.True(dataAlteracaoParaTeste < cliente.DataAlteracao);
 
             #endregion
         }

@@ -1,19 +1,18 @@
-﻿using AutenticacaoDoisFatores.Dominio.Construtores;
+﻿using AutenticacaoDoisFatores.Dominio.Dominios;
 using Bogus;
 
 namespace AutenticacaoDoisFatores.Testes.Dominio.Dominios
 {
     public class CriptografiaTeste
     {
-        private readonly Faker _faker = new();
-
         [Fact]
         internal void DeveCriptografar()
         {
-            var criptografia = new ConstrutorDeCriptografia().ConstruirCriptografia();
-            var valor = _faker.Internet.Password();
+            var faker = new Faker();
 
-            var valorCriptografado = criptografia.Criptografar(valor);
+            var valor = faker.Internet.Password();
+
+            var valorCriptografado = Criptografia.CriptografarComSha512(valor);
 
             Assert.NotEqual(valor, valorCriptografado);
         }

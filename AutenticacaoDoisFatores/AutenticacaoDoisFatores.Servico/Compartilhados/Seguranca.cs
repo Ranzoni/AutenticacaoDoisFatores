@@ -1,4 +1,6 @@
 ﻿using AutenticacaoDoisFatores.Dominio.Compartilhados;
+using AutenticacaoDoisFatores.Dominio.Construtores;
+using AutenticacaoDoisFatores.Dominio.Dominios;
 using Microsoft.IdentityModel.JsonWebTokens;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
@@ -45,7 +47,7 @@ namespace AutenticacaoDoisFatores.Servico.Compartilhados
             var perfilDoToken = new ClaimsIdentity();
             perfilDoToken.AddClaims(perfis);
 
-            var chave = Chave();
+            var chave = ChaveDeAutenticacao();
             var chaveSimetrica = new SymmetricSecurityKey(chave);
             var credenciais = new SigningCredentials(chaveSimetrica, SecurityAlgorithms.HmacSha256Signature);
 
@@ -81,7 +83,7 @@ namespace AutenticacaoDoisFatores.Servico.Compartilhados
             return tokenEmObjeto.Claims;
         }
 
-        public static byte[] Chave()
+        public static byte[] ChaveDeAutenticacao()
         {
             var chaveDeAutenticacao = Environment.GetEnvironmentVariable("ADF_CHAVE_AUTENTICACAO");
             if (chaveDeAutenticacao is null || chaveDeAutenticacao.EstaVazio())
@@ -89,6 +91,15 @@ namespace AutenticacaoDoisFatores.Servico.Compartilhados
 
             var chaveEmBytes = Encoding.ASCII.GetBytes(chaveDeAutenticacao);
             return chaveEmBytes;
+        }
+
+        public static (string chave, string chaveCriptografada) GerarChaveComCriptografia()
+        {
+            var chave = Guid.NewGuid().ToString();
+
+            var chaveCriptografada = Criptografia.CriptografarComSha512(chave);
+
+            return (chave, chaveCriptografada);
         }
     }
 }

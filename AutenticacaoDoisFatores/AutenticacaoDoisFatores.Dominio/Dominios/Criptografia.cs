@@ -3,14 +3,17 @@ using System.Text;
 
 namespace AutenticacaoDoisFatores.Dominio.Dominios
 {
-    public class Criptografia(HashAlgorithm algoritmo)
+    public static class Criptografia
     {
-        private readonly HashAlgorithm _algoritmo = algoritmo;
+        public static string CriptografarComSha512(string valor)
+        {
+            return Criptografar(valor, SHA512.Create());
+        }
 
-        public string Criptografar(string valor)
+        public static string Criptografar(string valor, HashAlgorithm algoritmo)
         {
             var valorEmBytes = Encoding.UTF8.GetBytes(valor);
-            var valorCriptografado = _algoritmo.ComputeHash(valorEmBytes);
+            var valorCriptografado = algoritmo.ComputeHash(valorEmBytes);
 
             var sb = new StringBuilder();
             foreach (var caracter in valorCriptografado)

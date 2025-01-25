@@ -38,6 +38,13 @@ namespace AutenticacaoDoisFatores.Dominio.Entidades
             DataAlteracao = dataAlteracao;
         }
 
+        public void AlterarChaveAcesso(string chaveAcesso)
+        {
+            ChaveAcesso = chaveAcesso;
+
+            AtualizarDataAlteracao();
+        }
+
         public void Ativar(bool valor)
         {
             Ativo = valor;

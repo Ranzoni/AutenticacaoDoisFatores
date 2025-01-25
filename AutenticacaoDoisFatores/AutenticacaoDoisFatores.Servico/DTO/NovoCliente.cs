@@ -1,4 +1,4 @@
-﻿using AutenticacaoDoisFatores.Dominio.Construtores;
+﻿using AutenticacaoDoisFatores.Servico.Compartilhados;
 
 namespace AutenticacaoDoisFatores.Servico.DTO
 {
@@ -26,12 +26,7 @@ namespace AutenticacaoDoisFatores.Servico.DTO
 
         private static (string chaveDescriptografada, string chaveCriptograda) GerarChaveAcesso()
         {
-            var chaveDescriptografada = Guid.NewGuid().ToString();
-
-            var criptografia = new ConstrutorDeCriptografia().ConstruirCriptografia();
-            var chaveCriptografada = criptografia.Criptografar(chaveDescriptografada);
-
-            return (chaveDescriptografada, chaveCriptografada);
+            return Seguranca.GerarChaveComCriptografia();
         }
     }
 }
