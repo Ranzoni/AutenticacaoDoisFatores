@@ -12,9 +12,9 @@ namespace AutenticacaoDoisFatores.Servico.CasosDeUso.Clientes
         private readonly INotificador _notificador = notificador;
         private readonly Email _email = email;
 
-        public async Task ReenviarAsync(Guid idCliente, string linkBaseConfirmacaoCadastro)
+        public async Task ReenviarAsync(string email, string linkBaseConfirmacaoCadastro)
         {
-            var cliente = await _dominio.BuscarClienteAsync(idCliente);
+            var cliente = await _dominio.BuscarPorEmailAsync(email);
 
             if (!ReenvioEhValido(cliente) || cliente is null)
                 return;
@@ -22,7 +22,7 @@ namespace AutenticacaoDoisFatores.Servico.CasosDeUso.Clientes
             var (chave, chaveCriptografada) = Seguranca.GerarChaveComCriptografia();
 
             await AlterarChaveAcessoAsync(cliente, chaveCriptografada);
-            EnviarEmail(idCliente, cliente.Email, chave, linkBaseConfirmacaoCadastro);
+            EnviarEmail(cliente.Id, cliente.Email, chave, linkBaseConfirmacaoCadastro);
         }
 
         private async Task AlterarChaveAcessoAsync(Cliente cliente, string chave)

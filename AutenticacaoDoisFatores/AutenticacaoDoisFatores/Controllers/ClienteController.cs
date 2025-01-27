@@ -52,5 +52,24 @@ namespace AutenticacaoDoisFatores.Controllers
                 return BadRequest(e.Message);
             }
         }
+
+        [HttpPut("email/{email}/reenviar-chave")]
+        [AllowAnonymous]
+        public async Task<ActionResult> ReenviarAsync([FromServices] ReenviarChaveCliente renviarChaveCliente, string email)
+        {
+            try
+            {
+                var urlBase = UrlDaApi(HttpContext);
+                var url = $"{urlBase}/{_caminhoPaginaConfirmarCadastro}";
+
+                await renviarChaveCliente.ReenviarAsync(email, url);
+
+                return Sucesso("A nova chave de acesso foi enviada para o e-mail com sucesso.");
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
     }
 }

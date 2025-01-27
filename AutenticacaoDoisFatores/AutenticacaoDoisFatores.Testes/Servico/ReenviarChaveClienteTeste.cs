@@ -21,19 +21,19 @@ namespace AutenticacaoDoisFatores.Testes.Servico
         {
             #region Preparação do teste
 
-            var idCliente = Guid.NewGuid();
+            var emailParaTeste = _faker.Person.Email;
             var urlParaTeste = _faker.Internet.UrlRootedPath();
             var cliente = ConstrutorDeClientesTeste
-                .RetornarConstrutorDeCliente(id: idCliente, ativo: false)
+                .RetornarConstrutorDeCliente(email: emailParaTeste, ativo: false)
                 .ConstruirClienteCadastrado();
 
-            _mock.GetMock<IRepositorioDeClientes>().Setup(r => r.BuscarUnicoAsync(idCliente)).ReturnsAsync(cliente);
+            _mock.GetMock<IRepositorioDeClientes>().Setup(r => r.BuscarPorEmailAsync(emailParaTeste)).ReturnsAsync(cliente);
 
             var servico = _mock.CreateInstance<ReenviarChaveCliente>();
 
             #endregion
 
-            await servico.ReenviarAsync(idCliente, urlParaTeste);
+            await servico.ReenviarAsync(emailParaTeste, urlParaTeste);
 
             #region Verificação do teste
 
@@ -49,13 +49,13 @@ namespace AutenticacaoDoisFatores.Testes.Servico
         {
             #region Preparação do teste
 
-            var idCliente = Guid.NewGuid();
+            var emailParaTeste = _faker.Person.Email;
             var urlParaTeste = _faker.Internet.UrlRootedPath();
             var servico = _mock.CreateInstance<ReenviarChaveCliente>();
 
             #endregion
 
-            await servico.ReenviarAsync(idCliente, urlParaTeste);
+            await servico.ReenviarAsync(emailParaTeste, urlParaTeste);
 
             #region Verificação do teste
 
@@ -72,20 +72,20 @@ namespace AutenticacaoDoisFatores.Testes.Servico
         {
             #region Preparação do teste
 
-            var idCliente = Guid.NewGuid();
+            var emailParaTeste = _faker.Person.Email;
             var urlParaTeste = _faker.Internet.UrlRootedPath();
             var cliente = ConstrutorDeClientesTeste
-                .RetornarConstrutorDeCliente(id: idCliente, ativo: true)
+                .RetornarConstrutorDeCliente(email: emailParaTeste, ativo: true)
                 .ConstruirClienteCadastrado();
 
-            _mock.GetMock<IRepositorioDeClientes>().Setup(r => r.BuscarUnicoAsync(idCliente)).ReturnsAsync(cliente);
+            _mock.GetMock<IRepositorioDeClientes>().Setup(r => r.BuscarPorEmailAsync(emailParaTeste)).ReturnsAsync(cliente);
             _mock.GetMock<INotificador>().Setup(n => n.ExisteMensagem()).Returns(true);
 
             var servico = _mock.CreateInstance<ReenviarChaveCliente>();
 
             #endregion
 
-            await servico.ReenviarAsync(idCliente, urlParaTeste);
+            await servico.ReenviarAsync(emailParaTeste, urlParaTeste);
 
             #region Verificação do teste
 

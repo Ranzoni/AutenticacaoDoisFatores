@@ -57,6 +57,11 @@ namespace AutenticacaoDoisFatores.Infra.Repositorios
             return await _contexto.Clientes.AnyAsync(c => c.Email.ToLower().Trim().Equals(email.ToLower().Trim()));
         }
 
+        public async Task<Cliente?> BuscarPorEmailAsync(string email)
+        {
+            return await _contexto.Clientes.FirstOrDefaultAsync(c => c.Email.Equals(email));
+        }
+
         #endregion
     }
 }
