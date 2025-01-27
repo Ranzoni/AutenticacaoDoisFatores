@@ -8,7 +8,7 @@ namespace AutenticacaoDoisFatores.Dominio.Compartilhados.Mensagens
         TituloConfirmacaoCadastroCliente,
         [Description("O seu cadastro no sistema de autenticação de dois fatores foi realizado!")]
         MensagemConfirmacaoCadastroCliente,
-        [Description("Esta é a sua chave de acesso NÃO A PERCA:")]
+        [Description("Esta é a sua chave de acesso:")]
         EstaEhChaveDeAcesso,
         [Description("Para confirmar, clique neste link:")]
         ParaConfirmarCadastroCliente,

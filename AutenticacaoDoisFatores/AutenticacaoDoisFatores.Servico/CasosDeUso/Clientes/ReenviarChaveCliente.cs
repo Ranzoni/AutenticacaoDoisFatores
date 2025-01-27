@@ -40,7 +40,13 @@ namespace AutenticacaoDoisFatores.Servico.CasosDeUso.Clientes
         private bool ReenvioEhValido(Cliente? cliente)
         {
             if (cliente is null)
+            {
                 _notificador.AddMensagemNaoEncontrado(MensagensValidacaoCliente.ClienteNaoEncontrado);
+                return false;
+            }
+
+            if (cliente.Ativo)
+                _notificador.AddMensagem(MensagensValidacaoCliente.ClienteJaAtivado);
 
             var ehValido = !_notificador.ExisteMensagem();
             return ehValido;
