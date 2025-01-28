@@ -6,11 +6,11 @@ using Mensageiro;
 
 namespace AutenticacaoDoisFatores.Servico.CasosDeUso.Clientes
 {
-    public class ReenviarChaveCliente(DominioDeClientes dominio, INotificador notificador, Email email)
+    public class ReenviarChaveCliente(DominioDeClientes dominio, INotificador notificador, EnvioDeEmail email)
     {
         private readonly DominioDeClientes _dominio = dominio;
         private readonly INotificador _notificador = notificador;
-        private readonly Email _email = email;
+        private readonly EnvioDeEmail _email = email;
 
         public async Task ReenviarAsync(string email, string linkBaseConfirmacaoCadastro)
         {
@@ -19,7 +19,7 @@ namespace AutenticacaoDoisFatores.Servico.CasosDeUso.Clientes
             if (!ReenvioEhValido(cliente) || cliente is null)
                 return;
 
-            var (chave, chaveCriptografada) = Seguranca.GerarChaveComCriptografia();
+            var (chave, chaveCriptografada) = Seguranca.GerarChaveDeAcessoComCriptografia();
 
             await AlterarChaveAcessoAsync(cliente, chaveCriptografada);
             EnviarEmail(cliente.Id, cliente.Email, chave, linkBaseConfirmacaoCadastro);

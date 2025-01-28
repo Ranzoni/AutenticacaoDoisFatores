@@ -13,6 +13,12 @@ namespace AutenticacaoDoisFatores.Dominio.Compartilhados.Mensagens
         [Description("Para confirmar, clique neste link:")]
         ParaConfirmarCadastroCliente,
         [Description("Confirmar o cadastro!")]
-        TextoDoLinkDeCadastroCliente
+        TextoDoLinkDeCadastroCliente,
+        [Description("Confirmação de recuperação da chave de acesso")]
+        TituloConfirmacaoNovaChaveCliente,
+        [Description("Para gerar a nova chave, clique neste link:")]
+        ParaGerarNovaChaveCliente,
+        [Description("Gerar nova chave!")]
+        TextoDoLinkDeNovaChaveCliente
     }
 }

@@ -14,12 +14,13 @@ namespace AutenticacaoDoisFatores
             services.AddTransient<CriarCliente>();
             services.AddTransient<AtivarCliente>();
             services.AddTransient<ReenviarChaveCliente>();
+            services.AddTransient<EnviarConfirmacaoNovaChaveCliente>();
         }
 
         internal static void AddDominios(this IServiceCollection services)
         {
             services.AddTransient<DominioDeClientes>();
-            services.AddTransient<Email>();
+            services.AddTransient<EnvioDeEmail>();
         }
 
         internal static void AddServicos(this IServiceCollection services)

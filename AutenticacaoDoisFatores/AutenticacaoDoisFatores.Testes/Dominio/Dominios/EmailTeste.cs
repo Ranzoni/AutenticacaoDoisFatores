@@ -24,7 +24,7 @@ namespace AutenticacaoDoisFatores.Testes.Dominio.Dominios
             var linkDeConfirmacaoParaTeste = _faker.Internet.UrlWithPath();
             var token = _faker.Random.AlphaNumeric(32);
 
-            var email = _mocker.CreateInstance<Email>();
+            var email = _mocker.CreateInstance<EnvioDeEmail>();
 
             #endregion
 
@@ -58,7 +58,7 @@ namespace AutenticacaoDoisFatores.Testes.Dominio.Dominios
         {
             #region Preparação do teste
 
-            var email = _mocker.CreateInstance<Email>();
+            var email = _mocker.CreateInstance<EnvioDeEmail>();
             var chaveAcessoParaTeste = _faker.Random.AlphaNumeric(20);
             var linkDeConfirmacaoParaTeste = _faker.Internet.UrlWithPath();
             var token = _faker.Random.AlphaNumeric(32);

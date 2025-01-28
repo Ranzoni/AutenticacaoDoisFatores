@@ -1,7 +1,5 @@
 ﻿using AutenticacaoDoisFatores.Dominio.Compartilhados;
-using AutenticacaoDoisFatores.Dominio.Construtores;
 using AutenticacaoDoisFatores.Dominio.Dominios;
-using Microsoft.IdentityModel.JsonWebTokens;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -9,9 +7,33 @@ using System.Text;
 
 namespace AutenticacaoDoisFatores.Servico.Compartilhados
 {
-    public static class Seguranca
+    public static partial class Seguranca
     {
-        #region Perfis de segurnça
+        public static byte[] ChaveDeAutenticacao()
+        {
+            var chaveDeAutenticacao = Environment.GetEnvironmentVariable("ADF_CHAVE_AUTENTICACAO");
+            if (chaveDeAutenticacao is null || chaveDeAutenticacao.EstaVazio())
+                throw new ApplicationException("A chave de autenticação não foi encontrada");
+
+            var chaveEmBytes = Encoding.ASCII.GetBytes(chaveDeAutenticacao);
+            return chaveEmBytes;
+        }
+
+        public static (string chave, string chaveCriptografada) GerarChaveDeAcessoComCriptografia()
+        {
+            var chave = Guid.NewGuid().ToString();
+
+            var chaveCriptografada = Criptografia.CriptografarComSha512(chave);
+
+            return (chave, chaveCriptografada);
+        }
+    }
+
+    #region Geração de tokens
+
+    public static partial class Seguranca
+    {
+        #region Perfis de segurança
 
         private static readonly string _perfilIdentificador = "identificadorEntidade";
         private static readonly string _perfilSeguranca = ClaimTypes.Role;
@@ -21,12 +43,21 @@ namespace AutenticacaoDoisFatores.Servico.Compartilhados
         #region Regras de segurança
 
         private static readonly string _confirmacaoDeCliente = "confirmacaoCliente";
+        private static readonly string _geracaoNovaChaveCliente = "geracaoNovaChaveCliente";
 
         public static string RegraConfirmacaoDeCliente
         {
             get
             {
                 return _confirmacaoDeCliente;
+            }
+        }
+
+        public static string RegraGeracaoNovaChaveCliente
+        {
+            get
+            {
+                return _geracaoNovaChaveCliente;
             }
         }
 
@@ -37,6 +68,14 @@ namespace AutenticacaoDoisFatores.Servico.Compartilhados
             return GerarToken([
                 new(type: _perfilIdentificador, idCliente.ToString()),
                 new(type: _perfilSeguranca, _confirmacaoDeCliente)
+            ]);
+        }
+
+        public static string GerarTokenDeGeracaoNovaChaveDeAcesso(Guid idCliente)
+        {
+            return GerarToken([
+                new(type: _perfilIdentificador, idCliente.ToString()),
+                new(type: _perfilSeguranca, _geracaoNovaChaveCliente)
             ]);
         }
 
@@ -62,7 +101,14 @@ namespace AutenticacaoDoisFatores.Servico.Compartilhados
             var token = geradorDeToken.CreateToken(descritorDoToken);
             return geradorDeToken.WriteToken(token);
         }
+    }
 
+    #endregion
+
+    #region Leitura de tokens
+
+    public static partial class Seguranca
+    {
         public static Guid RetornarIdClienteTokenDeConfirmacaoDeCliente(string token)
         {
             var geradorDeToken = new JwtSecurityTokenHandler();
@@ -82,24 +128,7 @@ namespace AutenticacaoDoisFatores.Servico.Compartilhados
 
             return tokenEmObjeto.Claims;
         }
-
-        public static byte[] ChaveDeAutenticacao()
-        {
-            var chaveDeAutenticacao = Environment.GetEnvironmentVariable("ADF_CHAVE_AUTENTICACAO");
-            if (chaveDeAutenticacao is null || chaveDeAutenticacao.EstaVazio())
-                throw new ApplicationException("A chave de autenticação não foi encontrada");
-
-            var chaveEmBytes = Encoding.ASCII.GetBytes(chaveDeAutenticacao);
-            return chaveEmBytes;
-        }
-
-        public static (string chave, string chaveCriptografada) GerarChaveComCriptografia()
-        {
-            var chave = Guid.NewGuid().ToString();
-
-            var chaveCriptografada = Criptografia.CriptografarComSha512(chave);
-
-            return (chave, chaveCriptografada);
-        }
     }
+
+    #endregion
 }

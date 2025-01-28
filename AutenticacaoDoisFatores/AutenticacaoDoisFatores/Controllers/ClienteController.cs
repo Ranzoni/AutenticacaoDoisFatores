@@ -14,6 +14,7 @@ namespace AutenticacaoDoisFatores.Controllers
     public class ClienteController(INotificador _notificador, int? _statusCodeNotificador = null) : ControladorBase(_notificador, _statusCodeNotificador)
     {
         private readonly string _caminhoPaginaConfirmarCadastro = "clientes/confirmar-cadastro.html";
+        private readonly string _caminhoPaginaConfirmarNovaChave = "clientes/confirmar-geracao-nova-chave.html";
 
         [HttpPost]
         [AllowAnonymous]
@@ -65,6 +66,25 @@ namespace AutenticacaoDoisFatores.Controllers
                 await renviarChaveCliente.ReenviarAsync(email, url);
 
                 return Sucesso("A nova chave de acesso foi enviada para o e-mail com sucesso.");
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
+        [HttpPut("email/{email}/confirmar-geracao-nova-chave")]
+        [AllowAnonymous]
+        public async Task<ActionResult> EnviarConfirmacaoGeracaoNovaChaveAsync([FromServices] EnviarConfirmacaoNovaChaveCliente renviarChaveCliente, string email)
+        {
+            try
+            {
+                var urlBase = UrlDaApi(HttpContext);
+                var url = $"{urlBase}/{_caminhoPaginaConfirmarNovaChave}";
+
+                await renviarChaveCliente.EnviarAsync(email, url);
+
+                return Sucesso("O e-mail foi enviado com sucesso.");
             }
             catch (Exception e)
             {

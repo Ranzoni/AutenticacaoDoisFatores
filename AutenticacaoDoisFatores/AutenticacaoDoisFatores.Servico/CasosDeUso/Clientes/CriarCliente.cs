@@ -11,12 +11,12 @@ using Mensageiro;
 
 namespace AutenticacaoDoisFatores.Servico.CasosDeUso.Clientes
 {
-    public class CriarCliente(IMapper mapper, DominioDeClientes dominio, INotificador notificador, Email email)
+    public class CriarCliente(IMapper mapper, DominioDeClientes dominio, INotificador notificador, EnvioDeEmail email)
     {
         private readonly IMapper _mapper = mapper;
         private readonly DominioDeClientes _dominio = dominio;
         private readonly INotificador _notificador = notificador;
-        private readonly Email _email = email;
+        private readonly EnvioDeEmail _email = email;
 
         public async Task<ClienteCadastrado?> CriarAsync(NovoCliente novoCliente, string linkBaseConfirmacaoCadastro)
         {

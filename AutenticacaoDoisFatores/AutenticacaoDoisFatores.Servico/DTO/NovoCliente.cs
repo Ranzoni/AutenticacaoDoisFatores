@@ -26,7 +26,7 @@ namespace AutenticacaoDoisFatores.Servico.DTO
 
         private static (string chaveDescriptografada, string chaveCriptograda) GerarChaveAcesso()
         {
-            return Seguranca.GerarChaveComCriptografia();
+            return Seguranca.GerarChaveDeAcessoComCriptografia();
         }
     }
 }

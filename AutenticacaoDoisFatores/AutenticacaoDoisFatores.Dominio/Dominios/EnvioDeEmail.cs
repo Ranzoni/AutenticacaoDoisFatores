@@ -5,7 +5,7 @@ using AutenticacaoDoisFatores.Dominio.Servicos;
 
 namespace AutenticacaoDoisFatores.Dominio.Dominios
 {
-    public class Email(IServicoDeEmail servico)
+    public class EnvioDeEmail(IServicoDeEmail servico)
     {
         private readonly IServicoDeEmail _servico = servico;
 
@@ -17,7 +17,7 @@ namespace AutenticacaoDoisFatores.Dominio.Dominios
             var tituloConfirmacaoCadastro = MensagensEnvioEmail.TituloConfirmacaoCadastroCliente.Descricao() ?? "";
             var msgConfirmacaoCadastro = MensagensEnvioEmail.MensagemConfirmacaoCadastroCliente.Descricao() ?? "";
             var textoEstaEhChaveDeAcesso = MensagensEnvioEmail.EstaEhChaveDeAcesso.Descricao() ?? "";
-            var textoPararConfirmarCadastroCliente = MensagensEnvioEmail.ParaConfirmarCadastroCliente.Descricao() ?? "";
+            var textoParaConfirmarCadastroCliente = MensagensEnvioEmail.ParaConfirmarCadastroCliente.Descricao() ?? "";
             var textoLinkConfirmacaoCadastro = MensagensEnvioEmail.TextoDoLinkDeCadastroCliente.Descricao() ?? "";
 
             var mensagemDoEmail = GerarMensagemEmail
@@ -27,7 +27,7 @@ namespace AutenticacaoDoisFatores.Dominio.Dominios
                         <form id='form-confirmar-cadastro'>
 
                             <p style='font-size: 18px; color: #666666;'>
-                                {textoPararConfirmarCadastroCliente}
+                                {textoParaConfirmarCadastroCliente}
                             </p>
 
                             <a href='{linkConfirmacao}?token={token}'>
@@ -42,6 +42,31 @@ namespace AutenticacaoDoisFatores.Dominio.Dominios
                 );
 
             _servico.Enviar(para: para, titulo: tituloConfirmacaoCadastro, mensagem: mensagemDoEmail);
+        }
+
+        public void EnviarConfirmacaoDeNovaChaveCliente(string para, string linkConfirmacao, string token)
+        {
+            if (para.EstaVazio() || !para.EhEmail())
+                ExcecoesEmail.EmailDestinoInvalido();
+
+            var tituloConfirmacaoNovaChave = MensagensEnvioEmail.TituloConfirmacaoNovaChaveCliente.Descricao() ?? "";
+            var textoParaGerarNovaChave = MensagensEnvioEmail.ParaGerarNovaChaveCliente.Descricao() ?? "";
+            var textoLinkGerarNovaChave = MensagensEnvioEmail.TextoDoLinkDeNovaChaveCliente.Descricao() ?? "";
+
+            var mensagemDoEmail = GerarMensagemEmail
+                (
+                    mensagem: textoParaGerarNovaChave,
+                    detalhes: @$"
+                        <form id='form-confirmar-cadastro'>
+
+                            <a href='{linkConfirmacao}?token={token}'>
+                                {textoLinkGerarNovaChave}
+                            </a>
+
+                        </form>"
+                );
+
+            _servico.Enviar(para: para, titulo: tituloConfirmacaoNovaChave, mensagem: mensagemDoEmail);
         }
 
         private static string GerarMensagemEmail(string mensagem, string detalhes)
