@@ -17,7 +17,7 @@ namespace AutenticacaoDoisFatores.Dominio.Dominios
             var tituloConfirmacaoCadastro = MensagensEnvioEmail.TituloConfirmacaoCadastroCliente.Descricao() ?? "";
             var msgConfirmacaoCadastro = MensagensEnvioEmail.MensagemConfirmacaoCadastroCliente.Descricao() ?? "";
             var textoEstaEhChaveDeAcesso = MensagensEnvioEmail.EstaEhChaveDeAcesso.Descricao() ?? "";
-            var textoParaConfirmarCadastroCliente = MensagensEnvioEmail.ParaConfirmarCadastroCliente.Descricao() ?? "";
+            var textoParaConfirmarCadastroCliente = MensagensEnvioEmail.ParaConfirmarChaveCliente.Descricao() ?? "";
             var textoLinkConfirmacaoCadastro = MensagensEnvioEmail.TextoDoLinkDeCadastroCliente.Descricao() ?? "";
 
             var mensagemDoEmail = GerarMensagemEmail
@@ -44,12 +44,12 @@ namespace AutenticacaoDoisFatores.Dominio.Dominios
             _servico.Enviar(para: para, titulo: tituloConfirmacaoCadastro, mensagem: mensagemDoEmail);
         }
 
-        public void EnviarConfirmacaoDeNovaChaveCliente(string para, string linkConfirmacao, string token)
+        public void EnviarGeracaoDeNovaChaveCliente(string para, string linkConfirmacao, string token)
         {
             if (para.EstaVazio() || !para.EhEmail())
                 ExcecoesEmail.EmailDestinoInvalido();
 
-            var tituloConfirmacaoNovaChave = MensagensEnvioEmail.TituloConfirmacaoNovaChaveCliente.Descricao() ?? "";
+            var tituloConfirmacaoNovaChave = MensagensEnvioEmail.TituloGeracaoNovaChaveCliente.Descricao() ?? "";
             var textoParaGerarNovaChave = MensagensEnvioEmail.ParaGerarNovaChaveCliente.Descricao() ?? "";
             var textoLinkGerarNovaChave = MensagensEnvioEmail.TextoDoLinkDeNovaChaveCliente.Descricao() ?? "";
 
@@ -67,6 +67,27 @@ namespace AutenticacaoDoisFatores.Dominio.Dominios
                 );
 
             _servico.Enviar(para: para, titulo: tituloConfirmacaoNovaChave, mensagem: mensagemDoEmail);
+        }
+
+        public void EnviarConfirmacaoDeNovaChaveCliente(string para, string chaveAcesso)
+        {
+            if (para.EstaVazio() || !para.EhEmail())
+                ExcecoesEmail.EmailDestinoInvalido();
+
+            var tituloConfirmacaoNovaChaveCliente = MensagensEnvioEmail.TituloConfirmacaoNovaChaveCliente.Descricao() ?? "";
+            var msgConfirmacaoNovaChaveCliente = MensagensEnvioEmail.MensagemConfirmacaoNovaChaveCliente.Descricao() ?? "";
+            var textoEstaEhChaveDeAcesso = MensagensEnvioEmail.EstaEhChaveDeAcesso.Descricao() ?? "";
+
+            var mensagemDoEmail = GerarMensagemEmail
+                (
+                    mensagem: msgConfirmacaoNovaChaveCliente,
+                    detalhes: @$"
+                        <p style='font-size: 18px; color: #666666;'>{textoEstaEhChaveDeAcesso}</p>
+
+                        <p style='font-size: 18px; color: #666666;'>{chaveAcesso}</p>"
+                );
+
+            _servico.Enviar(para: para, titulo: tituloConfirmacaoNovaChaveCliente, mensagem: mensagemDoEmail);
         }
 
         private static string GerarMensagemEmail(string mensagem, string detalhes)

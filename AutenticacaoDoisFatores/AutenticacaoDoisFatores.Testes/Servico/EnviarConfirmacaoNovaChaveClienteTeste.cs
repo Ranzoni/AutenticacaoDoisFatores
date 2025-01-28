@@ -23,7 +23,9 @@ namespace AutenticacaoDoisFatores.Testes.Servico
             var servico = _mocker.CreateInstance<EnviarConfirmacaoNovaChaveCliente>();
             var emailParaTeste = _faker.Person.Email;
             var urlParaTeste = _faker.Internet.UrlWithPath();
-            var cliente = ConstrutorDeClientesTeste.RetornarConstrutorDeCliente(email: emailParaTeste).ConstruirClienteCadastrado();
+            var cliente = ConstrutorDeClientesTeste
+                .RetornarConstrutorDeCliente(email: emailParaTeste, ativo: true)
+                .ConstruirClienteCadastrado();
 
             _mocker.GetMock<IRepositorioDeClientes>().Setup(r => r.BuscarPorEmailAsync(emailParaTeste)).ReturnsAsync(cliente);
 
@@ -57,6 +59,33 @@ namespace AutenticacaoDoisFatores.Testes.Servico
 
             _mocker.Verify<IServicoDeEmail>(e => e.Enviar(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()), Times.Never);
             _mocker.Verify<INotificador>(n => n.AddMensagemNaoEncontrado(MensagensValidacaoCliente.ClienteNaoEncontrado), Times.Once);
+
+            #endregion
+        }
+
+        [Fact]
+        internal async Task NaoDeveEnviarEmailDeConfirmacaoDeNovaChaveQuandoClienteEstaInativo()
+        {
+            #region Preparação do teste
+
+            var servico = _mocker.CreateInstance<EnviarConfirmacaoNovaChaveCliente>();
+            var emailParaTeste = _faker.Person.Email;
+            var urlParaTeste = _faker.Internet.UrlWithPath();
+            var cliente = ConstrutorDeClientesTeste
+                .RetornarConstrutorDeCliente(email: emailParaTeste, ativo: false)
+                .ConstruirClienteCadastrado();
+
+            _mocker.GetMock<IRepositorioDeClientes>().Setup(r => r.BuscarPorEmailAsync(emailParaTeste)).ReturnsAsync(cliente);
+            _mocker.GetMock<INotificador>().Setup(n => n.ExisteMensagem()).Returns(true);
+
+            #endregion
+
+            await servico.EnviarAsync(emailParaTeste, urlParaTeste);
+
+            #region Verificação do teste
+
+            _mocker.Verify<IServicoDeEmail>(e => e.Enviar(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()), Times.Never);
+            _mocker.Verify<INotificador>(n => n.AddMensagem(MensagensValidacaoCliente.ClienteNaoAtivo), Times.Once);
 
             #endregion
         }

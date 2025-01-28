@@ -23,6 +23,8 @@ namespace AutenticacaoDoisFatores.Dominio.Compartilhados.Mensagens
         [Description("O token desta requisição é inválido.")]
         TokenInvalido,
         [Description("Este cliente já foi ativado.")]
-        ClienteJaAtivado
+        ClienteJaAtivado,
+        [Description("Este cliente não está ativo!")]
+        ClienteNaoAtivo
     }
 }

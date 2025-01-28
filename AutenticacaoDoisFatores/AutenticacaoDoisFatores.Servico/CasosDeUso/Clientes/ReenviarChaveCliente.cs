@@ -12,7 +12,7 @@ namespace AutenticacaoDoisFatores.Servico.CasosDeUso.Clientes
         private readonly INotificador _notificador = notificador;
         private readonly EnvioDeEmail _email = email;
 
-        public async Task ReenviarAsync(string email, string linkBaseConfirmacaoCadastro)
+        public async Task ReenviarAsync(string email, string linkBaseReenvioChave)
         {
             var cliente = await _dominio.BuscarPorEmailAsync(email);
 
@@ -22,7 +22,7 @@ namespace AutenticacaoDoisFatores.Servico.CasosDeUso.Clientes
             var (chave, chaveCriptografada) = Seguranca.GerarChaveDeAcessoComCriptografia();
 
             await AlterarChaveAcessoAsync(cliente, chaveCriptografada);
-            EnviarEmail(cliente.Id, cliente.Email, chave, linkBaseConfirmacaoCadastro);
+            EnviarEmail(cliente.Id, cliente.Email, chave, linkBaseReenvioChave);
         }
 
         private async Task AlterarChaveAcessoAsync(Cliente cliente, string chave)

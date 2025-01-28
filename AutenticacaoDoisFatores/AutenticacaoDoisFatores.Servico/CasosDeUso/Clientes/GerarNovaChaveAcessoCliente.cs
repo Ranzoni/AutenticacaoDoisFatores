@@ -6,24 +6,28 @@ using Mensageiro;
 
 namespace AutenticacaoDoisFatores.Servico.CasosDeUso.Clientes
 {
-    public class EnviarConfirmacaoNovaChaveCliente(DominioDeClientes dominio, INotificador notificador, EnvioDeEmail email)
+    public class GerarNovaChaveAcessoCliente(DominioDeClientes dominio, INotificador notificador, EnvioDeEmail email)
     {
         private readonly DominioDeClientes _dominio = dominio;
         private readonly INotificador _notificador = notificador;
         private readonly EnvioDeEmail _email = email;
 
-        public async Task EnviarAsync(string email, string linkBaseConfirmacaoCadastro)
+        public async Task GerarNovaChaveAsync(Guid idCliente)
         {
-            var cliente = await _dominio.BuscarPorEmailAsync(email);
+            var cliente = await _dominio.BuscarClienteAsync(idCliente);
 
-            if (!EnvioEhValido(cliente) || cliente is null)
+            if (!GeracaoEhValida(cliente) || cliente is null)
                 return;
 
-            var tokenGeracaoNovaChave = Seguranca.GerarTokenDeGeracaoNovaChaveDeAcesso(cliente.Id);
-            _email.EnviarGeracaoDeNovaChaveCliente(cliente.Email, linkBaseConfirmacaoCadastro, tokenGeracaoNovaChave);
+            var (chave, chaveCriptografada) = Seguranca.GerarChaveDeAcessoComCriptografia();
+
+            cliente.AlterarChaveAcesso(chaveCriptografada);
+            await _dominio.AlterarClienteAsync(cliente);
+
+            _email.EnviarConfirmacaoDeNovaChaveCliente(cliente.Email, chave);
         }
 
-        private bool EnvioEhValido(Cliente? cliente)
+        private bool GeracaoEhValida(Cliente? cliente)
         {
             if (cliente is null)
             {
