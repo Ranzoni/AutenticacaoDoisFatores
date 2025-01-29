@@ -18,12 +18,12 @@ main {
     padding: 20px 0;
 }
 
-#form-confirmar-cadastro p {
+#form-principal p {
     font-size: 18px;
     color: #666666;
 }
 
-#form-confirmar-cadastro button {
+#form-principal button {
     text-decoration: none;
     background-color: #1e87f0;
     color: #ffffff;

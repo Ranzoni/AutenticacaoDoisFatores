@@ -22,7 +22,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="wwwroot\clientes\css\confirmar-cadastro.css" />
+    <None Include="wwwroot\clientes\css\style.css" />
     <None Include="wwwroot\clientes\confirmar-cadastro.html" />
     <None Include="wwwroot\clientes\js\confirmar-cadastro.js" />
   </ItemGroup>

@@ -109,7 +109,7 @@ namespace AutenticacaoDoisFatores.Servico.Compartilhados
 
     public static partial class Seguranca
     {
-        public static Guid RetornarIdClienteTokenDeConfirmacaoDeCliente(string token)
+        public static Guid RetornarIdClienteDoToken(string token)
         {
             var geradorDeToken = new JwtSecurityTokenHandler();
             var perfisDoToken = LerToken(token);

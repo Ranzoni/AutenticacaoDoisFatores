@@ -42,7 +42,7 @@ namespace AutenticacaoDoisFatores.Controllers
             try
             {
                 var token = Token(HttpContext.Request);
-                var idCliente = Seguranca.RetornarIdClienteTokenDeConfirmacaoDeCliente(token);
+                var idCliente = Seguranca.RetornarIdClienteDoToken(token);
 
                 await ativarCliente.AtivarAsync(idCliente);
 
@@ -73,7 +73,7 @@ namespace AutenticacaoDoisFatores.Controllers
             }
         }
 
-        [HttpPut("email/{email}/confirmar-geracao-nova-chave")]
+        [HttpPost("email/{email}/enviar-confirmacao-geracao-nova-chave")]
         [AllowAnonymous]
         public async Task<ActionResult> EnviarConfirmacaoGeracaoNovaChaveAsync([FromServices] EnviarConfirmacaoNovaChaveCliente renviarChaveCliente, string email)
         {
@@ -85,6 +85,25 @@ namespace AutenticacaoDoisFatores.Controllers
                 await renviarChaveCliente.EnviarAsync(email, url);
 
                 return Sucesso("O e-mail foi enviado com sucesso.");
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
+        [HttpPut("gerar-nova-chave")]
+        [Authorize(Policy = "GeracaoNovaChaveCliente")]
+        public async Task<ActionResult> GerarNovaChaveAcessoAsync([FromServices] GerarNovaChaveAcessoCliente gerarNovaChaveAcessoCliente)
+        {
+            try
+            {
+                var token = Token(HttpContext.Request);
+                var idCliente = Seguranca.RetornarIdClienteDoToken(token);
+
+                await gerarNovaChaveAcessoCliente.GerarNovaChaveAsync(idCliente);
+
+                return Sucesso("A nova chave de acesso foi enviada para o e-mail do cliente.");
             }
             catch (Exception e)
             {

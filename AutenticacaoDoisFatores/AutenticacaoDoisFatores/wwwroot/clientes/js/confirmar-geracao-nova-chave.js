@@ -4,7 +4,7 @@
     const parametros = new URLSearchParams(document.location.search);
     const token = parametros.get("token");
 
-    fetch('https://localhost:7053/api/cliente/confirmar-cadastro', {
+    fetch('https://localhost:7053/api/cliente/gerar-nova-chave', {
         method: 'PUT',
         headers: {
             'Content-Type': 'application/json',
@@ -34,7 +34,7 @@
 });
 
 function apresentarMsgSucesso() {
-    apresentarMsg('Cadastro confirmado com sucesso!', 'green');
+    apresentarMsg('A nova chave será enviada em seu e-mail!', 'green');
 }
 
 function apresentarMsgAlerta(msg) {
