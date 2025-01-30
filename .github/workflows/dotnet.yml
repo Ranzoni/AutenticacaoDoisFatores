@@ -13,6 +13,8 @@ jobs:
   build:
 
     runs-on: ubuntu-latest
+    env:
+      ADF_CHAVE_AUTENTICACAO: "@TESTE.D&_CH@VE_AUTH...))))"
 
     steps:
     - uses: actions/checkout@v4
