@@ -7,7 +7,24 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Mensageiro.WebApi" Version="1.1.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="9.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\AutenticacaoDoisFatores.Infra\AutenticacaoDoisFatores.Infra.csproj" />
+    <ProjectReference Include="..\AutenticacaoDoisFatores.Servico\AutenticacaoDoisFatores.Servico.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="wwwroot\clientes\css\style.css" />
+    <None Include="wwwroot\clientes\confirmar-cadastro.html" />
+    <None Include="wwwroot\clientes\js\confirmar-cadastro.js" />
   </ItemGroup>
 
 </Project>
