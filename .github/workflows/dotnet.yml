@@ -14,7 +14,7 @@ jobs:
 
     runs-on: ubuntu-latest
     env:
-      ADF_CHAVE_AUTENTICACAO: "@TESTE.D&_CH@VE_AUTH...))))"
+      ADF_CHAVE_AUTENTICACAO: "@TESTE_DE_CH@V&_DE_@UTHENTICAO.____(((FS78N3R20F239J88U@@@111...DSFI10HJ80UTESTE_DE_CH@V&_DE_@UTHENTICAO.____(((FS78N3R20F239J88"
 
     steps:
     - uses: actions/checkout@v4
