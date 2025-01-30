@@ -18,7 +18,7 @@ namespace AutenticacaoDoisFatores.Testes.Servico
         {
             #region Preparação do teste
 
-            var cliente = ConstrutorDeClientesTeste.RetornarConstrutorDeCliente(ativo: false).ConstruirClienteCadastrado();
+            var cliente = ConstrutorDeClientesTeste.RetornarConstrutor(ativo: false).ConstruirCadastrado();
 
             _mocker.GetMock<IRepositorioDeClientes>().Setup(r => r.BuscarUnicoAsync(cliente.Id)).ReturnsAsync(cliente);
 
@@ -66,7 +66,7 @@ namespace AutenticacaoDoisFatores.Testes.Servico
         {
             #region Preparação do teste
 
-            var cliente = ConstrutorDeClientesTeste.RetornarConstrutorDeCliente(ativo: true).ConstruirClienteCadastrado();
+            var cliente = ConstrutorDeClientesTeste.RetornarConstrutor(ativo: true).ConstruirCadastrado();
 
             _mocker.GetMock<IRepositorioDeClientes>().Setup(r => r.BuscarUnicoAsync(cliente.Id)).ReturnsAsync(cliente);
             _mocker.GetMock<INotificador>().Setup(n => n.ExisteMensagem()).Returns(true);

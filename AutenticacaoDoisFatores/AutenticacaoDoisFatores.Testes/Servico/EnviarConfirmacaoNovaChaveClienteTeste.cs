@@ -24,8 +24,8 @@ namespace AutenticacaoDoisFatores.Testes.Servico
             var emailParaTeste = _faker.Person.Email;
             var urlParaTeste = _faker.Internet.UrlWithPath();
             var cliente = ConstrutorDeClientesTeste
-                .RetornarConstrutorDeCliente(email: emailParaTeste, ativo: true)
-                .ConstruirClienteCadastrado();
+                .RetornarConstrutor(email: emailParaTeste, ativo: true)
+                .ConstruirCadastrado();
 
             _mocker.GetMock<IRepositorioDeClientes>().Setup(r => r.BuscarPorEmailAsync(emailParaTeste)).ReturnsAsync(cliente);
 
@@ -72,8 +72,8 @@ namespace AutenticacaoDoisFatores.Testes.Servico
             var emailParaTeste = _faker.Person.Email;
             var urlParaTeste = _faker.Internet.UrlWithPath();
             var cliente = ConstrutorDeClientesTeste
-                .RetornarConstrutorDeCliente(email: emailParaTeste, ativo: false)
-                .ConstruirClienteCadastrado();
+                .RetornarConstrutor(email: emailParaTeste, ativo: false)
+                .ConstruirCadastrado();
 
             _mocker.GetMock<IRepositorioDeClientes>().Setup(r => r.BuscarPorEmailAsync(emailParaTeste)).ReturnsAsync(cliente);
             _mocker.GetMock<INotificador>().Setup(n => n.ExisteMensagem()).Returns(true);

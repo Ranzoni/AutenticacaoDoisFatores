@@ -6,7 +6,7 @@ namespace AutenticacaoDoisFatores.Testes.Compartilhados
 {
     internal static class ConstrutorDeClientesTeste
     {
-        internal static ConstrutorDeCliente RetornarConstrutorDeCliente(Guid? id = null, string? nome = null, string? email = null, string? nomeDominio = null, string? chaveAcesso = null, bool? ativo = null, DateTime? dataCadastro = null, DateTime? dataAlteracao = null)
+        internal static ConstrutorDeCliente RetornarConstrutor(Guid? id = null, string? nome = null, string? email = null, string? nomeDominio = null, string? chaveAcesso = null, bool? ativo = null, DateTime? dataCadastro = null, DateTime? dataAlteracao = null)
         {
             var faker = new Faker();
 
@@ -24,7 +24,7 @@ namespace AutenticacaoDoisFatores.Testes.Compartilhados
             return construtor;
         }
 
-        internal static ConstrutorDeNovoCliente RetornarConstrutorDeNovoCliente(string? nome = null, string? email = null, string? nomeDominio = null)
+        internal static ConstrutorDeNovoCliente RetornarConstrutorDeNovo(string? nome = null, string? email = null, string? nomeDominio = null)
         {
             var faker = new Faker();
 

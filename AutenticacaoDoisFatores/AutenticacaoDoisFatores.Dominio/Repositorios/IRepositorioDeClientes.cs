@@ -3,7 +3,7 @@ using AutenticacaoDoisFatores.Dominio.Entidades;
 
 namespace AutenticacaoDoisFatores.Dominio.Repositorios
 {
-    public interface IRepositorioDeClientes : IReporioBase<Cliente>
+    public interface IRepositorioDeClientes : IRepositorioBase<Cliente>
     {
         Task CriarDominio(string nomeDominio);
         Task<bool> ExisteDominio(string nomeDominio);

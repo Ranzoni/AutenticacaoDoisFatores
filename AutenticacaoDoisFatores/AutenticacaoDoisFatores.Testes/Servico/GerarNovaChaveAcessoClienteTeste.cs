@@ -22,8 +22,8 @@ namespace AutenticacaoDoisFatores.Testes.Servico
             var servico = _mocker.CreateInstance<GerarNovaChaveAcessoCliente>();
             var idClienteParaTeste = Guid.NewGuid();
             var cliente = ConstrutorDeClientesTeste
-                .RetornarConstrutorDeCliente(id: idClienteParaTeste, ativo: true)
-                .ConstruirClienteCadastrado();
+                .RetornarConstrutor(id: idClienteParaTeste, ativo: true)
+                .ConstruirCadastrado();
 
             _mocker.GetMock<IRepositorioDeClientes>().Setup(r => r.BuscarUnicoAsync(idClienteParaTeste)).ReturnsAsync(cliente);
 
@@ -70,8 +70,8 @@ namespace AutenticacaoDoisFatores.Testes.Servico
             var servico = _mocker.CreateInstance<GerarNovaChaveAcessoCliente>();
             var idClienteParaTeste = Guid.NewGuid();
             var cliente = ConstrutorDeClientesTeste
-                .RetornarConstrutorDeCliente(id: idClienteParaTeste, ativo: false)
-                .ConstruirClienteCadastrado();
+                .RetornarConstrutor(id: idClienteParaTeste, ativo: false)
+                .ConstruirCadastrado();
 
             _mocker.GetMock<IRepositorioDeClientes>().Setup(r => r.BuscarUnicoAsync(idClienteParaTeste)).ReturnsAsync(cliente);
             _mocker.GetMock<INotificador>().Setup(n => n.ExisteMensagem()).Returns(true);

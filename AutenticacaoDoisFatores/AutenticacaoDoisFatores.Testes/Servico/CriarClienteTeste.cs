@@ -36,17 +36,17 @@ namespace AutenticacaoDoisFatores.Testes.Servico
         {
             #region Preparação do teste
 
-            var construtorDeDto = ConstrutorDeClientesTeste.RetornarConstrutorDeNovoCliente();
+            var construtorDeDto = ConstrutorDeClientesTeste.RetornarConstrutorDeNovo();
             var novoCliente = construtorDeDto.Construir();
             var construtorDeCliente = ConstrutorDeClientesTeste
-                .RetornarConstrutorDeCliente
+                .RetornarConstrutor
                 (
                     nome: novoCliente.Nome,
                     email: novoCliente.Email,
                     nomeDominio: novoCliente.NomeDominio,
                     chaveAcesso: novoCliente.ChaveDescriptografada()
                 );
-            var cliente = construtorDeCliente.ConstruirNovoCliente();
+            var cliente = construtorDeCliente.ConstruirNovo();
 
             _mocker.CreateInstance<DominioDeClientes>();
             _mocker.Use(_mapeador);
@@ -89,7 +89,7 @@ namespace AutenticacaoDoisFatores.Testes.Servico
         {
             #region Preparação do teste
 
-            var construtorDeDto = ConstrutorDeClientesTeste.RetornarConstrutorDeNovoCliente();
+            var construtorDeDto = ConstrutorDeClientesTeste.RetornarConstrutorDeNovo();
             var novoCliente = construtorDeDto.Construir();
 
             #endregion Preparação do teste
@@ -114,7 +114,7 @@ namespace AutenticacaoDoisFatores.Testes.Servico
         {
             #region Preparação do teste
 
-            var construtor = ConstrutorDeClientesTeste.RetornarConstrutorDeNovoCliente(nome: nomeInvalido);
+            var construtor = ConstrutorDeClientesTeste.RetornarConstrutorDeNovo(nome: nomeInvalido);
             var novoCliente = construtor.Construir();
 
             _mocker.CreateInstance<DominioDeClientes>();
@@ -148,7 +148,7 @@ namespace AutenticacaoDoisFatores.Testes.Servico
         {
             #region Preparação do teste
 
-            var construtor = ConstrutorDeClientesTeste.RetornarConstrutorDeNovoCliente(email: emailInvalido);
+            var construtor = ConstrutorDeClientesTeste.RetornarConstrutorDeNovo(email: emailInvalido);
             var novoCliente = construtor.Construir();
 
             _mocker.CreateInstance<DominioDeClientes>();
@@ -187,7 +187,7 @@ namespace AutenticacaoDoisFatores.Testes.Servico
         {
             #region Preparação do teste
 
-            var construtor = ConstrutorDeClientesTeste.RetornarConstrutorDeNovoCliente(nomeDominio: nomeDominioInvalido);
+            var construtor = ConstrutorDeClientesTeste.RetornarConstrutorDeNovo(nomeDominio: nomeDominioInvalido);
             var novoCliente = construtor.Construir();
 
             _mocker.CreateInstance<DominioDeClientes>();
@@ -219,7 +219,7 @@ namespace AutenticacaoDoisFatores.Testes.Servico
 
             var emailJaCadastrado = _faker.Internet.Email();
 
-            var construtor = ConstrutorDeClientesTeste.RetornarConstrutorDeNovoCliente(email: emailJaCadastrado);
+            var construtor = ConstrutorDeClientesTeste.RetornarConstrutorDeNovo(email: emailJaCadastrado);
             var novoCliente = construtor.Construir();
 
             _mocker.CreateInstance<DominioDeClientes>();
@@ -252,7 +252,7 @@ namespace AutenticacaoDoisFatores.Testes.Servico
 
             var nomeDominioJaCadastrado = _faker.Internet.DomainWord();
 
-            var construtor = ConstrutorDeClientesTeste.RetornarConstrutorDeNovoCliente(nomeDominio: nomeDominioJaCadastrado);
+            var construtor = ConstrutorDeClientesTeste.RetornarConstrutorDeNovo(nomeDominio: nomeDominioJaCadastrado);
             var novoCliente = construtor.Construir();
 
             _mocker.CreateInstance<DominioDeClientes>();
@@ -285,7 +285,7 @@ namespace AutenticacaoDoisFatores.Testes.Servico
         {
             #region Preparação do teste
 
-            var construtor = ConstrutorDeClientesTeste.RetornarConstrutorDeNovoCliente();
+            var construtor = ConstrutorDeClientesTeste.RetornarConstrutorDeNovo();
             var novoCliente = construtor.Construir();
 
             _mocker.CreateInstance<DominioDeClientes>();

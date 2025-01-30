@@ -4,6 +4,12 @@ namespace AutenticacaoDoisFatores.Dominio.Compartilhados
 {
     public static partial class ExtensaoString
     {
+        private static readonly string _letrasMinusculasComAcento = "äáâàãéêëèíîïìöóôòõüúûùç";
+        private static readonly string _letrasMaiusculasComAcento = "ÄÅÁÂÀÃÉÊËÈÍÎÏÌÖÓÔÒÕÜÚÛÇ";
+        private static readonly string _letrasComAcento = _letrasMinusculasComAcento + _letrasMaiusculasComAcento;
+        private static readonly string _letrasMaiusculas = "ABCDEFGHIJKLMNOPQRSTUVWXYZ" + _letrasMaiusculasComAcento;
+        private static readonly string _letrasMinusculas = "abcdefghijklmnopqrstuvwxyz" + _letrasMinusculasComAcento;
+
         public static bool EstaVazio(this string valor)
         {
             return string.IsNullOrEmpty(valor) || string.IsNullOrWhiteSpace(valor);
@@ -15,11 +21,19 @@ namespace AutenticacaoDoisFatores.Dominio.Compartilhados
             return regex.IsMatch(valor) || ExistemAcentos(valor);
         }
 
+        public static bool ExistemLetrasMaiusculas(this string valor)
+        {
+            return _letrasMaiusculas.Any(valor.Contains);
+        }
+
+        public static bool ExistemLetrasMinusculas(this string valor)
+        {
+            return _letrasMinusculas.Any(valor.Contains);
+        }
+
         public static bool ExistemAcentos(this string valor)
         {
-            const string ACENTOS = "ÄÅÁÂÀÃäáâàãÉÊËÈéêëèÍÎÏÌíîïìÖÓÔÒÕöóôòõÜÚÛüúûùÇç";
-
-            return ACENTOS.Any(a => valor.Contains(a));
+            return _letrasComAcento.Any(valor.Contains);
         }
 
         public static bool EhEmail(this string valor)
