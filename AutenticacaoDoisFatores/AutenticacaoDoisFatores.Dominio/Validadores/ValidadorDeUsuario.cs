@@ -6,7 +6,7 @@ namespace AutenticacaoDoisFatores.Dominio.Validadores
 {
     internal static class ValidadorDeUsuario
     {
-        internal static void ValidarCriacao(this Usuario usuario)
+        internal static void Validar(this Usuario usuario)
         {
             if (!NomeEhValido(usuario.Nome))
                 ExcecoesUsuario.NomeInvalido();
@@ -38,7 +38,7 @@ namespace AutenticacaoDoisFatores.Dominio.Validadores
 
         public static bool SenhaEhValida(string senha)
         {
-            return !senha.EstaVazio() && senha.ExistemLetrasMaiusculas() && senha.ExistemLetrasMinusculas() && senha.ExistemCaracteresEspeciaisAcentosOuPontuacoes() && senha.Length <= 50;
+            return !senha.EstaVazio() && senha.ExistemLetrasMaiusculas() && senha.ExistemLetrasMinusculas() && senha.ExistemNumeros() && senha.ExistemCaracteresEspeciaisAcentosOuPontuacoes() && senha.Length >= 7 && senha.Length <= 50;
         }
     }
 }

@@ -22,7 +22,7 @@ namespace AutenticacaoDoisFatores.Dominio.Entidades
             NomeDominio = nomeDominio;
             ChaveAcesso = chaveAcesso;
 
-            this.ValidarCriacao();
+            this.Validar();
         }
 
         public Cliente(Guid id, string nome, string email, string nomeDominio, string chaveAcesso, bool ativo, DateTime dataCadastro, DateTime? dataAlteracao)
@@ -36,6 +36,8 @@ namespace AutenticacaoDoisFatores.Dominio.Entidades
             Ativo = ativo;
             DataCadastro = dataCadastro;
             DataAlteracao = dataAlteracao;
+
+            this.Validar();
         }
 
         public void AlterarChaveAcesso(string chaveAcesso)

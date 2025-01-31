@@ -23,7 +23,7 @@ namespace AutenticacaoDoisFatores.Dominio.Entidades
             Email = email;
             Senha = senha;
 
-            ValidadorDeUsuario.ValidarCriacao(this);
+            this.Validar();
         }
 
         public Usuario(Guid id, string nome, string nomeUsuario, string email, string senha, bool ativo, DateTime? dataUltimoAcesso, DateTime dataCadastro, DateTime? dataAlteracao) : this(nome, nomeUsuario, email, senha)
@@ -33,6 +33,8 @@ namespace AutenticacaoDoisFatores.Dominio.Entidades
             DataUltimoAcesso = dataUltimoAcesso;
             DataCadastro = dataCadastro;
             DataAlteracao = dataAlteracao;
+
+            this.Validar();
         }
     }
 }

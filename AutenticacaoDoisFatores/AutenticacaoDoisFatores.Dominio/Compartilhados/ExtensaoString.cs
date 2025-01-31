@@ -9,6 +9,7 @@ namespace AutenticacaoDoisFatores.Dominio.Compartilhados
         private static readonly string _letrasComAcento = _letrasMinusculasComAcento + _letrasMaiusculasComAcento;
         private static readonly string _letrasMaiusculas = "ABCDEFGHIJKLMNOPQRSTUVWXYZ" + _letrasMaiusculasComAcento;
         private static readonly string _letrasMinusculas = "abcdefghijklmnopqrstuvwxyz" + _letrasMinusculasComAcento;
+        private static readonly string _numeros = "0123456789";
 
         public static bool EstaVazio(this string valor)
         {
@@ -34,6 +35,11 @@ namespace AutenticacaoDoisFatores.Dominio.Compartilhados
         public static bool ExistemAcentos(this string valor)
         {
             return _letrasComAcento.Any(valor.Contains);
+        }
+
+        public static bool ExistemNumeros(this string valor)
+        {
+            return _numeros.Any(valor.Contains);
         }
 
         public static bool EhEmail(this string valor)

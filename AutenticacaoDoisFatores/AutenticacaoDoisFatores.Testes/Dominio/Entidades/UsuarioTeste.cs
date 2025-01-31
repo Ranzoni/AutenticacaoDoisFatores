@@ -1,12 +1,20 @@
-﻿using AutenticacaoDoisFatores.Testes.Compartilhados;
+﻿using AutenticacaoDoisFatores.Dominio.Compartilhados;
+using AutenticacaoDoisFatores.Dominio.Compartilhados.Mensagens;
+using AutenticacaoDoisFatores.Dominio.Excecoes;
+using AutenticacaoDoisFatores.Testes.Compartilhados;
 using Bogus;
 
 namespace AutenticacaoDoisFatores.Testes.Dominio.Entidades
 {
     public class UsuarioTeste
     {
-        [Fact]
-        internal void DeveInstanciarNovoUsuario()
+        [Theory]
+        [InlineData("Teste.De.Senha_1")]
+        [InlineData("2senha@Valida")]
+        [InlineData("2senhaéValida")]
+        [InlineData("S3nha.m")]
+        [InlineData("M@1or_senha_possivel_M@1or_senha_possivel_M@1or_se")]
+        internal void DeveInstanciarNovoUsuario(string senha)
         {
             #region Preparação do teste
 
@@ -15,7 +23,6 @@ namespace AutenticacaoDoisFatores.Testes.Dominio.Entidades
             var nome = faker.Person.FullName;
             var nomeUsuario = faker.Person.UserName;
             var email = faker.Person.Email;
-            var senha = faker.Random.AlphaNumeric(15);
 
             #endregion
 
@@ -31,6 +38,22 @@ namespace AutenticacaoDoisFatores.Testes.Dominio.Entidades
             Assert.Equal(senha, usuario.Senha);
 
             #endregion
+        }
+
+        [Theory]
+        [InlineData("")]
+        [InlineData("         ")]
+        [InlineData("ab")]
+        [InlineData("Teste de nome grande Teste de nome grande Teste de ")]
+        internal void NaoDeveInstanciarNovoUsuarioQuandoNomeEhInvalido(string nomeInvalido)
+        {
+            var excecao = Assert.Throws<ExcecoesUsuario>
+                (() => ConstrutorDeUsuariosTeste
+                    .RetornarConstrutorDeNovo(nome: nomeInvalido)
+                    .ConstruirNovo()
+                );
+
+            Assert.Equal(MensagensValidacaoUsuario.NomeInvalido.Descricao(), excecao.Message);
         }
     }
 }
