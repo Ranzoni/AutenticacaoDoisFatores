@@ -1,4 +1,4 @@
-﻿using AutenticacaoDoisFatores.Servico.DTO;
+﻿using AutenticacaoDoisFatores.Servico.DTO.Clientes;
 
 namespace AutenticacaoDoisFatores.Servico.Construtores
 {

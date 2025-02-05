@@ -1,7 +1,7 @@
 ﻿using AutenticacaoDoisFatores.Compartilhados;
 using AutenticacaoDoisFatores.Servico.CasosDeUso.Clientes;
 using AutenticacaoDoisFatores.Servico.Compartilhados;
-using AutenticacaoDoisFatores.Servico.DTO;
+using AutenticacaoDoisFatores.Servico.DTO.Clientes;
 using Mensageiro;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

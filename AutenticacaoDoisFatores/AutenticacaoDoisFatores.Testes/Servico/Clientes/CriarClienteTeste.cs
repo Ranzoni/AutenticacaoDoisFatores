@@ -14,7 +14,7 @@ using Mensageiro;
 using Moq;
 using Moq.AutoMock;
 
-namespace AutenticacaoDoisFatores.Testes.Servico
+namespace AutenticacaoDoisFatores.Testes.Servico.Clientes
 {
     public class CriarClienteTeste
     {
@@ -120,7 +120,7 @@ namespace AutenticacaoDoisFatores.Testes.Servico
             _mocker.CreateInstance<DominioDeClientes>();
             _mocker.Use(_mapeador);
             _mocker.GetMock<INotificador>().Setup(n => n.ExisteMensagem()).Returns(true);
-            
+
             var linkConfirmacaoCadastroParaTeste = _faker.Internet.UrlWithPath();
 
             var servico = _mocker.CreateInstance<CriarCliente>();

@@ -4,7 +4,7 @@ using AutenticacaoDoisFatores.Dominio.Dominios;
 using AutenticacaoDoisFatores.Dominio.Entidades;
 using AutenticacaoDoisFatores.Dominio.Validadores;
 using AutenticacaoDoisFatores.Servico.Compartilhados;
-using AutenticacaoDoisFatores.Servico.DTO;
+using AutenticacaoDoisFatores.Servico.DTO.Clientes;
 using AutenticacaoDoisFatores.Servico.Excecoes;
 using AutoMapper;
 using Mensageiro;

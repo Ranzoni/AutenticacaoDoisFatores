@@ -1,20 +1,20 @@
 ﻿using AutenticacaoDoisFatores.Dominio.Compartilhados.Entidades;
 
-namespace AutenticacaoDoisFatores.Servico.DTO
+namespace AutenticacaoDoisFatores.Servico.DTO.Usuarios
 {
-    public class ClienteCadastrado : EntidadeComAuditoria
+    public class UsuarioCadastrado : EntidadeComAuditoria
     {
         public string Nome { get; }
+        public string NomeUsuario { get; }
         public string Email { get; }
-        public string NomeDominio { get; }
         public bool Ativo { get; }
 
-        public ClienteCadastrado(Guid id, string nome, string email, string nomeDominio, bool ativo, DateTime dataCadastro, DateTime? dataAlteracao)
+        public UsuarioCadastrado(Guid id, string nome, string nomeUsuario, string email, bool ativo, DateTime dataCadastro, DateTime? dataAlteracao)
         {
             Id = id;
             Nome = nome;
+            NomeUsuario = nomeUsuario;
             Email = email;
-            NomeDominio = nomeDominio;
             Ativo = ativo;
             DataCadastro = dataCadastro;
             DataAlteracao = dataAlteracao;

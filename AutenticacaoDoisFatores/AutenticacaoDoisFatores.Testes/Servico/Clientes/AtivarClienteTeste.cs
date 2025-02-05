@@ -7,7 +7,7 @@ using Mensageiro;
 using Moq;
 using Moq.AutoMock;
 
-namespace AutenticacaoDoisFatores.Testes.Servico
+namespace AutenticacaoDoisFatores.Testes.Servico.Clientes
 {
     public class AtivarClienteTeste
     {

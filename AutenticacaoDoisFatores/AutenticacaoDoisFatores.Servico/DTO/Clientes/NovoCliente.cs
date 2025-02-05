@@ -1,6 +1,6 @@
 ﻿using AutenticacaoDoisFatores.Servico.Compartilhados;
 
-namespace AutenticacaoDoisFatores.Servico.DTO
+namespace AutenticacaoDoisFatores.Servico.DTO.Clientes
 {
     public class NovoCliente
     {

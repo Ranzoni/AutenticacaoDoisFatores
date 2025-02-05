@@ -19,6 +19,20 @@ namespace AutenticacaoDoisFatores.Dominio.Dominios
         }
 
         #endregion
+
+        #region Leitura
+
+        public async Task<bool> ExisteNomeUsuarioAsync(string nomeUsuario)
+        {
+            return await _repositorio.ExisteNomeUsuarioAsync(nomeUsuario);
+        }
+
+        public async Task<bool> ExisteEmailAsync(string email)
+        {
+            return await _repositorio.ExisteEmailAsync(email);
+        }
+
+        #endregion
     }
 
     #region Validador

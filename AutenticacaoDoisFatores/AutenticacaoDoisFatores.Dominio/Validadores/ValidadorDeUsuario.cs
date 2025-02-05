@@ -4,7 +4,7 @@ using AutenticacaoDoisFatores.Dominio.Excecoes;
 
 namespace AutenticacaoDoisFatores.Dominio.Validadores
 {
-    internal static class ValidadorDeUsuario
+    public static class ValidadorDeUsuario
     {
         internal static void Validar(this Usuario usuario)
         {

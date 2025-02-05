@@ -31,7 +31,7 @@ namespace AutenticacaoDoisFatores.Testes.Dominio.Entidades
             #endregion
 
             var usuario = ConstrutorDeUsuariosTeste
-                .RetornarConstrutorDeNovo(nome: nome, nomeUsuario: nomeUsuario, email: email, senha: senha)
+                .RetornarConstrutor(nome: nome, nomeUsuario: nomeUsuario, email: email, senha: senha)
                 .ConstruirNovo();
 
             #region Verificação do teste
@@ -53,7 +53,7 @@ namespace AutenticacaoDoisFatores.Testes.Dominio.Entidades
         {
             var excecao = Assert.Throws<ExcecoesUsuario>
                 (() => ConstrutorDeUsuariosTeste
-                    .RetornarConstrutorDeNovo(nome: nomeInvalido)
+                    .RetornarConstrutor(nome: nomeInvalido)
                     .ConstruirNovo()
                 );
 
@@ -69,7 +69,7 @@ namespace AutenticacaoDoisFatores.Testes.Dominio.Entidades
         {
             var excecao = Assert.Throws<ExcecoesUsuario>
                 (() => ConstrutorDeUsuariosTeste
-                    .RetornarConstrutorDeNovo(nomeUsuario: nomeUsuarioInvalido)
+                    .RetornarConstrutor(nomeUsuario: nomeUsuarioInvalido)
                     .ConstruirNovo()
                 );
 
@@ -91,7 +91,7 @@ namespace AutenticacaoDoisFatores.Testes.Dominio.Entidades
         {
             var excecao = Assert.Throws<ExcecoesUsuario>
                 (() => ConstrutorDeUsuariosTeste
-                    .RetornarConstrutorDeNovo(email: emailInvalido)
+                    .RetornarConstrutor(email: emailInvalido)
                     .ConstruirNovo()
                 );
 
@@ -111,7 +111,7 @@ namespace AutenticacaoDoisFatores.Testes.Dominio.Entidades
         {
             var excecao = Assert.Throws<ExcecoesUsuario>
                 (() => ConstrutorDeUsuariosTeste
-                    .RetornarConstrutorDeNovo(senha: senhaInvalida)
+                    .RetornarConstrutor(senha: senhaInvalida)
                     .ConstruirNovo()
                 );
 

@@ -1,5 +1,5 @@
 ﻿using AutenticacaoDoisFatores.Dominio.Entidades;
-using AutenticacaoDoisFatores.Servico.DTO;
+using AutenticacaoDoisFatores.Servico.DTO.Clientes;
 using AutoMapper;
 
 namespace AutenticacaoDoisFatores.Servico.Mapeadores
