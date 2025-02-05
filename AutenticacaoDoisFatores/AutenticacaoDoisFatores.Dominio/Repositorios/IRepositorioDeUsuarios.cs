@@ -5,5 +5,7 @@ namespace AutenticacaoDoisFatores.Dominio.Repositorios
 {
     public interface IRepositorioDeUsuarios : IRepositorioBase<Usuario>
     {
+        Task<bool> ExisteNomeUsuarioAsync(string nomeUsuario);
+        Task<bool> ExisteEmailAsync(string email);
     }
 }

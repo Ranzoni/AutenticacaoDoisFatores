@@ -224,7 +224,7 @@ namespace AutenticacaoDoisFatores.Testes.Servico
 
             _mocker.CreateInstance<DominioDeClientes>();
             _mocker.Use(_mapeador);
-            _mocker.GetMock<IRepositorioDeClientes>().Setup(r => r.ExisteEmail(emailJaCadastrado)).ReturnsAsync(true);
+            _mocker.GetMock<IRepositorioDeClientes>().Setup(r => r.ExisteEmailAsync(emailJaCadastrado)).ReturnsAsync(true);
             _mocker.GetMock<INotificador>().Setup(n => n.ExisteMensagem()).Returns(true);
 
             var linkConfirmacaoCadastroParaTeste = _faker.Internet.UrlWithPath();
@@ -257,7 +257,7 @@ namespace AutenticacaoDoisFatores.Testes.Servico
 
             _mocker.CreateInstance<DominioDeClientes>();
             _mocker.Use(_mapeador);
-            _mocker.GetMock<IRepositorioDeClientes>().Setup(r => r.ExisteDominio(nomeDominioJaCadastrado)).ReturnsAsync(true);
+            _mocker.GetMock<IRepositorioDeClientes>().Setup(r => r.ExisteDominioAsync(nomeDominioJaCadastrado)).ReturnsAsync(true);
             _mocker.GetMock<INotificador>().Setup(n => n.ExisteMensagem()).Returns(true);
 
             var linkConfirmacaoCadastroParaTeste = _faker.Internet.UrlWithPath();

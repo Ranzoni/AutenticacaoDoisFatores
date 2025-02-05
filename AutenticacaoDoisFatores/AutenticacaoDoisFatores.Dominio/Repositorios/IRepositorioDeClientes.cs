@@ -6,8 +6,8 @@ namespace AutenticacaoDoisFatores.Dominio.Repositorios
     public interface IRepositorioDeClientes : IRepositorioBase<Cliente>
     {
         Task CriarDominio(string nomeDominio);
-        Task<bool> ExisteDominio(string nomeDominio);
-        Task<bool> ExisteEmail(string email);
+        Task<bool> ExisteDominioAsync(string nomeDominio);
+        Task<bool> ExisteEmailAsync(string email);
         Task<Cliente?> BuscarPorEmailAsync(string email);
     }
 }

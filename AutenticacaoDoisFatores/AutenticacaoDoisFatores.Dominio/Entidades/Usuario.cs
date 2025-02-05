@@ -10,7 +10,7 @@ namespace AutenticacaoDoisFatores.Dominio.Entidades
         public string Email { get; private set; } = "";
         public string Senha { get; private set; } = "";
         public bool Ativo { get; private set; }
-        public DateTime? DataUltimoAcesso { get; set; }
+        public DateTime? DataUltimoAcesso { get; private set; }
 
         private Usuario() : base(true)
         {

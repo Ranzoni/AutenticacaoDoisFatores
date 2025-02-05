@@ -20,6 +20,10 @@ namespace AutenticacaoDoisFatores.Testes.Dominio.Entidades
 
             var faker = new Faker();
 
+            var cliente = ConstrutorDeClientesTeste
+                .RetornarConstrutor()
+                .ConstruirCadastrado();
+
             var nome = faker.Person.FullName;
             var nomeUsuario = faker.Person.UserName;
             var email = faker.Person.Email;
@@ -54,6 +58,64 @@ namespace AutenticacaoDoisFatores.Testes.Dominio.Entidades
                 );
 
             Assert.Equal(MensagensValidacaoUsuario.NomeInvalido.Descricao(), excecao.Message);
+        }
+
+        [Theory]
+        [InlineData("")]
+        [InlineData("         ")]
+        [InlineData("abcd")]
+        [InlineData("Teste de nome grande ")]
+        internal void NaoDeveInstanciarNovoUsuarioQuandoNomeUsuarioEhInvalido(string nomeUsuarioInvalido)
+        {
+            var excecao = Assert.Throws<ExcecoesUsuario>
+                (() => ConstrutorDeUsuariosTeste
+                    .RetornarConstrutorDeNovo(nomeUsuario: nomeUsuarioInvalido)
+                    .ConstruirNovo()
+                );
+
+            Assert.Equal(MensagensValidacaoUsuario.NomeUsuarioInvalido.Descricao(), excecao.Message);
+        }
+
+        [Theory]
+        [InlineData("")]
+        [InlineData(" ")]
+        [InlineData("@")]
+        [InlineData("a@")]
+        [InlineData("a@.")]
+        [InlineData("a@.com")]
+        [InlineData("@.")]
+        [InlineData("@.com")]
+        [InlineData("@dominio.com")]
+        [InlineData("abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcde")]
+        internal void NaoDeveInstanciarNovoUsuarioQuandoEmailEhInvalido(string emailInvalido)
+        {
+            var excecao = Assert.Throws<ExcecoesUsuario>
+                (() => ConstrutorDeUsuariosTeste
+                    .RetornarConstrutorDeNovo(email: emailInvalido)
+                    .ConstruirNovo()
+                );
+
+            Assert.Equal(MensagensValidacaoUsuario.EmailInvalido.Descricao(), excecao.Message);
+        }
+
+        [Theory]
+        [InlineData("")]
+        [InlineData("       ")]
+        [InlineData("T&st.1")]
+        [InlineData("Teste.de.senh@.que.é.muito.grand3.Teste.de.senh@.qu")]
+        [InlineData("testedesenha.123")]
+        [InlineData("@Senha.para_teste")]
+        [InlineData("TESTEDESENHA.123")]
+        [InlineData("2senhaInvalida")]
+        internal void NaoDeveInstanciarNovoUsuarioQuandoSenhaEhInvalida(string senhaInvalida)
+        {
+            var excecao = Assert.Throws<ExcecoesUsuario>
+                (() => ConstrutorDeUsuariosTeste
+                    .RetornarConstrutorDeNovo(senha: senhaInvalida)
+                    .ConstruirNovo()
+                );
+
+            Assert.Equal(MensagensValidacaoUsuario.SenhaInvalida.Descricao(), excecao.Message);
         }
     }
 }

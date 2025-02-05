@@ -48,12 +48,12 @@ namespace AutenticacaoDoisFatores.Dominio.Dominios
 
         public async Task<bool> EmailEstaCadastradoAsync(string email)
         {
-            return await _repositorio.ExisteEmail(email);
+            return await _repositorio.ExisteEmailAsync(email);
         }
 
         public async Task<bool> NomeDominioEstaCadastradoAsync(string nomeDominio)
         {
-            return await _repositorio.ExisteDominio(nomeDominio);
+            return await _repositorio.ExisteDominioAsync(nomeDominio);
         }
 
         public async Task<Cliente?> BuscarPorEmailAsync(string email)
@@ -70,11 +70,11 @@ namespace AutenticacaoDoisFatores.Dominio.Dominios
     {
         private async Task ValidarCriacaoClienteAsync(Cliente cliente)
         {
-            var existeEmail = await _repositorio.ExisteEmail(cliente.Email);
+            var existeEmail = await _repositorio.ExisteEmailAsync(cliente.Email);
             if (existeEmail)
                 ExcecoesCliente.EmailJaCadastrado();
 
-            var existeDominio = await _repositorio.ExisteDominio(cliente.NomeDominio);
+            var existeDominio = await _repositorio.ExisteDominioAsync(cliente.NomeDominio);
             if (existeDominio)
                 ExcecoesCliente.NomeDominioJaCadastrado();
         }

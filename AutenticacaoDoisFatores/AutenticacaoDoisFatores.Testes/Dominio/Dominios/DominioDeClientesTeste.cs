@@ -99,7 +99,7 @@ namespace AutenticacaoDoisFatores.Testes.Dominio.Dominios
             var cliente = construtor.ConstruirNovo();
 
             var dominio = _mocker.CreateInstance<DominioDeClientes>();
-            _mocker.GetMock<IRepositorioDeClientes>().Setup(r => r.ExisteEmail(emailJaCadastrado)).ReturnsAsync(true);
+            _mocker.GetMock<IRepositorioDeClientes>().Setup(r => r.ExisteEmailAsync(emailJaCadastrado)).ReturnsAsync(true);
 
             #endregion Preparação do teste
 
@@ -125,7 +125,7 @@ namespace AutenticacaoDoisFatores.Testes.Dominio.Dominios
             var cliente = construtor.ConstruirNovo();
 
             var dominio = _mocker.CreateInstance<DominioDeClientes>();
-            _mocker.GetMock<IRepositorioDeClientes>().Setup(r => r.ExisteDominio(dominioJaCadastrado)).ReturnsAsync(true);
+            _mocker.GetMock<IRepositorioDeClientes>().Setup(r => r.ExisteDominioAsync(dominioJaCadastrado)).ReturnsAsync(true);
 
             #endregion Preparação do teste
 
@@ -150,7 +150,7 @@ namespace AutenticacaoDoisFatores.Testes.Dominio.Dominios
             var emailParaTeste = _faker.Internet.Email();
 
             var dominio = _mocker.CreateInstance<DominioDeClientes>();
-            _mocker.GetMock<IRepositorioDeClientes>().Setup(r => r.ExisteEmail(emailParaTeste)).ReturnsAsync(emailCadastrado);
+            _mocker.GetMock<IRepositorioDeClientes>().Setup(r => r.ExisteEmailAsync(emailParaTeste)).ReturnsAsync(emailCadastrado);
 
             #endregion Preparação do teste
 
@@ -159,7 +159,7 @@ namespace AutenticacaoDoisFatores.Testes.Dominio.Dominios
             #region Verificação do teste
 
             Assert.Equal(retorno, emailCadastrado);
-            _mocker.Verify<IRepositorioDeClientes>(r => r.ExisteEmail(emailParaTeste), Times.Once);
+            _mocker.Verify<IRepositorioDeClientes>(r => r.ExisteEmailAsync(emailParaTeste), Times.Once);
 
             #endregion Verificação do teste
         }
@@ -174,7 +174,7 @@ namespace AutenticacaoDoisFatores.Testes.Dominio.Dominios
             var nomeDominioParaTeste = _faker.Internet.DomainName();
 
             var dominio = _mocker.CreateInstance<DominioDeClientes>();
-            _mocker.GetMock<IRepositorioDeClientes>().Setup(r => r.ExisteDominio(nomeDominioParaTeste)).ReturnsAsync(dominioJaCadastrado);
+            _mocker.GetMock<IRepositorioDeClientes>().Setup(r => r.ExisteDominioAsync(nomeDominioParaTeste)).ReturnsAsync(dominioJaCadastrado);
 
             #endregion Preparação do teste
 
@@ -183,7 +183,7 @@ namespace AutenticacaoDoisFatores.Testes.Dominio.Dominios
             #region Verificação do teste
 
             Assert.Equal(retorno, dominioJaCadastrado);
-            _mocker.Verify<IRepositorioDeClientes>(r => r.ExisteDominio(nomeDominioParaTeste), Times.Once);
+            _mocker.Verify<IRepositorioDeClientes>(r => r.ExisteDominioAsync(nomeDominioParaTeste), Times.Once);
 
             #endregion Verificação do teste
         }

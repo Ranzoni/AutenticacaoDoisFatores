@@ -47,12 +47,12 @@ namespace AutenticacaoDoisFatores.Infra.Repositorios
             return _contexto.Clientes.FirstOrDefaultAsync(c => c.Id.Equals(id));
         }
 
-        public async Task<bool> ExisteDominio(string nomeDominio)
+        public async Task<bool> ExisteDominioAsync(string nomeDominio)
         {
             return await _contexto.Clientes.AnyAsync(c => c.NomeDominio.ToLower().Trim().Equals(nomeDominio.ToLower().Trim()));
         }
 
-        public async Task<bool> ExisteEmail(string email)
+        public async Task<bool> ExisteEmailAsync(string email)
         {
             return await _contexto.Clientes.AnyAsync(c => c.Email.ToLower().Trim().Equals(email.ToLower().Trim()));
         }
