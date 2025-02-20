@@ -1,22 +1,43 @@
 ﻿using AutenticacaoDoisFatores.Dominio.Entidades;
+using AutenticacaoDoisFatores.Infra.Compartilhados;
 using AutenticacaoDoisFatores.Infra.Configuracoes;
 using Microsoft.EntityFrameworkCore;
 using System.Dynamic;
 
 namespace AutenticacaoDoisFatores.Infra.Contexto
 {
-    public class CrudContexto(DbContextOptions options) : DbContext(options)
+    public class ContextoPadrao(DbContextOptions<ContextoPadrao> opcoes) : DbContext(opcoes)
     {
         public DbSet<Cliente> Clientes { get; set; }
         internal DbSet<Auditoria> Auditorias { get; set; }
+
+        public List<string> RetornarSchemas()
+        {
+            var schemas = new List<string>();
+
+            var sql = @"
+                SELECT schema_name 
+                FROM information_schema.schemata 
+                WHERE schema_name NOT LIKE 'pg_%' 
+                AND schema_name != 'information_schema'
+                AND schema_name != 'public'
+                AND schema_name != 'auxiliar';";
+
+            var resultado = Database.SqlQueryRaw<string>(sql);
+            schemas.AddRange(resultado);
+
+            return schemas;
+        }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyConfiguration(new ClienteConfiguracao());
             modelBuilder.ApplyConfiguration(new AuditoriaConfiguracao());
+
+            base.OnModelCreating(modelBuilder);
         }
 
-        public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+        public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
         {
             var entidadesParaAlteracao = ChangeTracker.Entries()
                 .Where(e => e.State != EntityState.Unchanged && e.State != EntityState.Detached)
@@ -57,24 +78,7 @@ namespace AutenticacaoDoisFatores.Infra.Contexto
                 Auditorias.Add(auditoria);
             }
 
-            return base.SaveChangesAsync(cancellationToken);
-        }
-    }
-
-    internal class Auditoria
-    {
-        public Guid Id { get; } = Guid.NewGuid();
-        public string Acao { get; } = "";
-        public object? Detalhes { get; } = null;
-
-        private Auditoria()
-        {
-        }
-
-        public Auditoria(string acao, object detalhes) : this()
-        {
-            Acao = acao;
-            Detalhes = detalhes;
+            return await base.SaveChangesAsync(cancellationToken);
         }
     }
 }

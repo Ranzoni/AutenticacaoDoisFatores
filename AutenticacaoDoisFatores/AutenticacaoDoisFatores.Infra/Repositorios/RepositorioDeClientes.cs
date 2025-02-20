@@ -5,9 +5,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace AutenticacaoDoisFatores.Infra.Repositorios
 {
-    public class RepositorioDeClientes(CrudContexto contexto) : IRepositorioDeClientes
+    public class RepositorioDeClientes(ContextoPadrao contexto) : IRepositorioDeClientes
     {
-        private readonly CrudContexto _contexto = contexto;
+        private readonly ContextoPadrao _contexto = contexto;
 
         #region Escrita
 

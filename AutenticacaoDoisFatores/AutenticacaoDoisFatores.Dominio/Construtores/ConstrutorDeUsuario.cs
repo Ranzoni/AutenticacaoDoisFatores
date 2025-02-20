@@ -44,7 +44,13 @@ namespace AutenticacaoDoisFatores.Dominio.Construtores
 
         public Usuario ConstruirNovo()
         {
-            var usuario = new Usuario(nome: _nome, nomeUsuario: _nomeUsuario, email: _email, senha: _senha);
+            var usuario = new Usuario
+            (
+                nome: _nome,
+                nomeUsuario: _nomeUsuario,
+                email: _email,
+                senha: _senha
+            );
 
             return usuario;
         }

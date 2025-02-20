@@ -3,7 +3,6 @@ using System;
 using AutenticacaoDoisFatores.Infra.Contexto;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,12 +10,10 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace AutenticacaoDoisFatores.Infra.Migrations
 {
-    [DbContext(typeof(CrudContexto))]
-    [Migration("20250106114732_chave-acesso-guid-para-string")]
-    partial class chaveacessoguidparastring
+    [DbContext(typeof(ContextoPadrao))]
+    partial class ContextoPadraoModelSnapshot : ModelSnapshot
     {
-        /// <inheritdoc />
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -71,6 +68,24 @@ namespace AutenticacaoDoisFatores.Infra.Migrations
                         .IsUnique();
 
                     b.ToTable("Clientes");
+                });
+
+            modelBuilder.Entity("AutenticacaoDoisFatores.Infra.Compartilhados.Auditoria", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Acao")
+                        .IsRequired()
+                        .HasColumnType("varchar(256)");
+
+                    b.Property<object>("Detalhes")
+                        .HasColumnType("jsonb");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Auditorias");
                 });
 #pragma warning restore 612, 618
         }

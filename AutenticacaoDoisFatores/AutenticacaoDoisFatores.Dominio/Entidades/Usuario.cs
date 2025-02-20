@@ -12,9 +12,7 @@ namespace AutenticacaoDoisFatores.Dominio.Entidades
         public bool Ativo { get; private set; }
         public DateTime? DataUltimoAcesso { get; private set; }
 
-        private Usuario() : base(true)
-        {
-        }
+        private Usuario() : base(true) { }
 
         public Usuario(string nome, string nomeUsuario, string email, string senha)
         {
@@ -26,9 +24,14 @@ namespace AutenticacaoDoisFatores.Dominio.Entidades
             this.Validar();
         }
 
-        public Usuario(Guid id, string nome, string nomeUsuario, string email, string senha, bool ativo, DateTime? dataUltimoAcesso, DateTime dataCadastro, DateTime? dataAlteracao) : this(nome, nomeUsuario, email, senha)
+        public Usuario(Guid id, string nome, string nomeUsuario, string email, string senha, bool ativo, DateTime? dataUltimoAcesso, DateTime dataCadastro, DateTime? dataAlteracao)
+            : base(true)
         {
             Id = id;
+            Nome = nome;
+            NomeUsuario = nomeUsuario;
+            Email = email;
+            Senha = senha;
             Ativo = ativo;
             DataUltimoAcesso = dataUltimoAcesso;
             DataCadastro = dataCadastro;

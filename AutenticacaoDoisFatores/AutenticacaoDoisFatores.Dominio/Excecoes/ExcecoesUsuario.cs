@@ -25,11 +25,6 @@ namespace AutenticacaoDoisFatores.Dominio.Excecoes
             throw new ExcecoesUsuario(MensagensValidacaoUsuario.SenhaInvalida);
         }
 
-        internal static void ClienteNaoInformado()
-        {
-            throw new ExcecoesUsuario(MensagensValidacaoUsuario.ClienteNaoInformado);
-        }
-
         internal static void NomeUsuarioJaCadastrado()
         {
             throw new ExcecoesUsuario(MensagensValidacaoUsuario.NomeUsuarioJaCadastrado);

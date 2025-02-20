@@ -11,9 +11,9 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace AutenticacaoDoisFatores.Infra.Migrations
 {
-    [DbContext(typeof(CrudContexto))]
-    [Migration("20241231125338_criacao-base-crud")]
-    partial class criacaobasecrud
+    [DbContext(typeof(ContextoPadrao))]
+    [Migration("20250220115319_tabelas_adm")]
+    partial class tabelas_adm
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -36,14 +36,16 @@ namespace AutenticacaoDoisFatores.Infra.Migrations
                         .HasColumnType("boolean")
                         .HasDefaultValue(false);
 
-                    b.Property<Guid>("ChaveAcesso")
-                        .HasColumnType("uuid");
+                    b.Property<string>("ChaveAcesso")
+                        .IsRequired()
+                        .HasMaxLength(2000)
+                        .HasColumnType("character varying(2000)");
 
                     b.Property<DateTime?>("DataAlteracao")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<DateTime>("DataCadastro")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("Email")
                         .IsRequired()
@@ -69,6 +71,24 @@ namespace AutenticacaoDoisFatores.Infra.Migrations
                         .IsUnique();
 
                     b.ToTable("Clientes");
+                });
+
+            modelBuilder.Entity("AutenticacaoDoisFatores.Infra.Compartilhados.Auditoria", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Acao")
+                        .IsRequired()
+                        .HasColumnType("varchar(256)");
+
+                    b.Property<object>("Detalhes")
+                        .HasColumnType("jsonb");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Auditorias");
                 });
 #pragma warning restore 612, 618
         }

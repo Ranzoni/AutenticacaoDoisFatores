@@ -1,5 +1,6 @@
 using AutenticacaoDoisFatores;
 using AutenticacaoDoisFatores.Dominio.Compartilhados;
+using AutenticacaoDoisFatores.Infra.Compartilhados;
 using AutenticacaoDoisFatores.Infra.Contexto;
 using AutenticacaoDoisFatores.Servico.Compartilhados;
 using AutenticacaoDoisFatores.Servico.Mapeadores;
@@ -22,7 +23,7 @@ var dataSourceBuilder = new NpgsqlDataSourceBuilder(stringDeConexao);
 dataSourceBuilder.EnableDynamicJson();
 var dataSource = dataSourceBuilder.Build();
 
-builder.Services.AddDbContext<CrudContexto>(opt =>
+builder.Services.AddDbContext<ContextoPadrao>(opt =>
     opt.UseNpgsql(dataSource)
 );
 
@@ -68,6 +69,14 @@ builder.Services.AddControllers();
 builder.Services.AddOpenApi();
 
 var app = builder.Build();
+
+using(var scope = app.Services.CreateScope())
+{
+    var db = scope.ServiceProvider.GetRequiredService<ContextoPadrao>();
+    await db.Database.MigrateAsync();
+}
+
+InjetorInfra.RetornarMigrador().AplicarMigracoes(stringDeConexao);
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

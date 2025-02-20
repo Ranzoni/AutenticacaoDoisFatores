@@ -1,4 +1,4 @@
-﻿using AutenticacaoDoisFatores.Infra.Contexto;
+﻿using AutenticacaoDoisFatores.Infra.Compartilhados;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
