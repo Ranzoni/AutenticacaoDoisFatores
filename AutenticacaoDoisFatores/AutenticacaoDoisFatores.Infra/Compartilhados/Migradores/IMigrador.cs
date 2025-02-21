@@ -2,6 +2,7 @@
 {
     public interface IMigrador
     {
-        void AplicarMigracoes();
+        Task AplicarMigracoesAsync();
+        Task AplicarMigracoesAsync(string nomeDominio);
     }
 }

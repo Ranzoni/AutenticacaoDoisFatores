@@ -7,7 +7,7 @@ namespace AutenticacaoDoisFatores.Infra.Contexto
     {
         private readonly string _stringDeConexao = stringDeConexao;
 
-        public IEnumerable<string> RetornarNomesDominios()
+        public async Task<IEnumerable<string>> RetornarNomesDominiosAsync()
         {
             using var conexao = new NpgsqlConnection(_stringDeConexao);
             conexao.Open();
@@ -28,7 +28,7 @@ namespace AutenticacaoDoisFatores.Infra.Contexto
                 throw new NpgsqlException("Não foi possível fazer a leitura do comando no PostgreSQL");
 
             var listaDominios = new List<string>();
-            while (leitor.Read())
+            while (await leitor.ReadAsync())
             {
                 var dominio = leitor["schema_name"]?.ToString() ?? "";
                 if (dominio.EstaVazio())
@@ -40,7 +40,7 @@ namespace AutenticacaoDoisFatores.Infra.Contexto
             return listaDominios;
         }
 
-        public void Executar(string sql, string schema)
+        public async Task ExecutarAsync(string sql, string schema)
         {
             using var conexao = new NpgsqlConnection(_stringDeConexao);
             conexao.Open();
@@ -49,10 +49,10 @@ namespace AutenticacaoDoisFatores.Infra.Contexto
             sql = alterarSchema + sql;
 
             using var comando = new NpgsqlCommand(sql, conexao);
-            comando.ExecuteScalar();
+            await comando.ExecuteScalarAsync();
         }
 
-        public bool ScriptMigrado(string nomeDominio, string nomeArquivo)
+        public async Task<bool> ScriptMigradoAsync(string nomeDominio, string nomeArquivo)
         {
             using var conexao = new NpgsqlConnection(_stringDeConexao);
             conexao.Open();
@@ -66,12 +66,12 @@ namespace AutenticacaoDoisFatores.Infra.Contexto
                     LOWER(m.""NomeArquivo"") = '{nomeArquivo.ToLower()}'";
 
             using var comando = new NpgsqlCommand(sql, conexao);
-            var resultado = comando.ExecuteScalar();
+            var resultado = await comando.ExecuteScalarAsync();
 
             return resultado != null && (bool)resultado;
         }
 
-        public void MarcarScriptComoMigrado(string nomeDominio, string nomeArquivo)
+        public async Task MarcarScriptComoMigradoAsync(string nomeDominio, string nomeArquivo)
         {
             using var conexao = new NpgsqlConnection(_stringDeConexao);
             conexao.Open();
@@ -83,7 +83,7 @@ namespace AutenticacaoDoisFatores.Infra.Contexto
                     ('{nomeArquivo}', NOW())";
 
             using var comando = new NpgsqlCommand(sql, conexao);
-            comando.ExecuteScalar();
+            await comando.ExecuteScalarAsync();
         }
     }
 }

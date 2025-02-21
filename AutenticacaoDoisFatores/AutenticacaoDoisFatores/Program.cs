@@ -74,10 +74,10 @@ var app = builder.Build();
 using(var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<ContextoPadrao>();
-    db.Database.Migrate();
+    await db.Database.MigrateAsync();
 
     var migrador = scope.ServiceProvider.GetRequiredService<IMigrador>();
-    migrador.AplicarMigracoes();
+    await migrador.AplicarMigracoesAsync();
 }
 
 // Configure the HTTP request pipeline.

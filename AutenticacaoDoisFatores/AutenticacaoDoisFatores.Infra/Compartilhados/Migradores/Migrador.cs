@@ -8,34 +8,39 @@ namespace AutenticacaoDoisFatores.Infra.Compartilhados.Migradores
         private readonly string _stringDeConexao = stringDeConexao;
         private static readonly string _caminhoScriptTabelaMigracao = "Controle";
 
-        protected void AplicarMigracoes(string pastaScripts)
+        protected async Task ExecutarScriptsAsync(string pastaScripts)
         {
             var contexto = new ContextoCliente(_stringDeConexao);
 
-            var dominios = contexto.RetornarNomesDominios();
+            var dominios = await contexto.RetornarNomesDominiosAsync();
             foreach (var dominio in dominios)
+                await ExecutarScriptsAsync(dominio, pastaScripts);
+        }
+
+        protected async Task ExecutarScriptsAsync(string dominio, string pastaScripts)
+        {
+            var contexto = new ContextoCliente(_stringDeConexao);
+
+            var arquivoTabelaMigracao = RetornarScriptsDiretorio(pastaScripts, _caminhoScriptTabelaMigracao).FirstOrDefault() ?? "";
+            if (!arquivoTabelaMigracao.EstaVazio())
             {
-                var arquivoTabelaMigracao = RetornarScriptsDiretorio(pastaScripts, _caminhoScriptTabelaMigracao).FirstOrDefault() ?? "";
-                if (!arquivoTabelaMigracao.EstaVazio())
-                {
-                    var sql = File.ReadAllText(arquivoTabelaMigracao);
-                    contexto.Executar(sql, dominio);
-                }
+                var sql = File.ReadAllText(arquivoTabelaMigracao);
+                await contexto.ExecutarAsync(sql, dominio);
+            }
 
-                var arquivosDeMigracao = RetornarScriptsDiretorio(pastaScripts);
+            var arquivosDeMigracao = RetornarScriptsDiretorio(pastaScripts);
 
-                foreach (var arquivo in arquivosDeMigracao.OrderBy(f => Path.GetFileName(f)))
-                {
-                    var nomeArquivo = Path.GetFileName(arquivo);
+            foreach (var arquivo in arquivosDeMigracao.OrderBy(f => Path.GetFileName(f)))
+            {
+                var nomeArquivo = Path.GetFileName(arquivo);
 
-                    if (nomeArquivo.EstaVazio() || contexto.ScriptMigrado(dominio, nomeArquivo))
-                        continue;
+                if (nomeArquivo.EstaVazio() || await contexto.ScriptMigradoAsync(dominio, nomeArquivo))
+                    continue;
 
-                    var sql = File.ReadAllText(arquivo);
-                    contexto.Executar(sql, dominio);
+                var sql = File.ReadAllText(arquivo);
+                await contexto.ExecutarAsync(sql, dominio);
 
-                    contexto.MarcarScriptComoMigrado(dominio, nomeArquivo);
-                }
+                await contexto.MarcarScriptComoMigradoAsync(dominio, nomeArquivo);
             }
         }
 

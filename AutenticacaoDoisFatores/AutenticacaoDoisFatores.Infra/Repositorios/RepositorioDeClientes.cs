@@ -1,11 +1,12 @@
 ﻿using AutenticacaoDoisFatores.Dominio.Entidades;
 using AutenticacaoDoisFatores.Dominio.Repositorios;
+using AutenticacaoDoisFatores.Infra.Compartilhados.Migradores;
 using AutenticacaoDoisFatores.Infra.Contexto;
 using Microsoft.EntityFrameworkCore;
 
 namespace AutenticacaoDoisFatores.Infra.Repositorios
 {
-    public class RepositorioDeClientes(ContextoPadrao contexto) : IRepositorioDeClientes
+    public class RepositorioDeClientes(ContextoPadrao contexto, IMigrador migrador) : IRepositorioDeClientes
     {
         private readonly ContextoPadrao _contexto = contexto;
 
@@ -21,6 +22,7 @@ namespace AutenticacaoDoisFatores.Infra.Repositorios
             var sql = $"CREATE SCHEMA IF NOT EXISTS {nomeDominio};";
 
             await _contexto.Database.ExecuteSqlRawAsync(sql);
+            await migrador.AplicarMigracoesAsync(nomeDominio);
         }
 
         public void Editar(Cliente entidade)

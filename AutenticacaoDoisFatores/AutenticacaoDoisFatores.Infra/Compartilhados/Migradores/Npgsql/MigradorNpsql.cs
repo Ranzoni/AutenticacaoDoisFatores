@@ -2,9 +2,14 @@
 {
     public class MigradorNpsql(string stringDeConexao) : Migrador(stringDeConexao), IMigrador
     {
-        public void AplicarMigracoes()
+        public async Task AplicarMigracoesAsync()
         {
-            AplicarMigracoes("Npgsql");
+            await ExecutarScriptsAsync("Npgsql");
+        }
+
+        public async Task AplicarMigracoesAsync(string nomeDominio)
+        {
+            await ExecutarScriptsAsync(nomeDominio, "Npgsql");
         }
     }
 }
