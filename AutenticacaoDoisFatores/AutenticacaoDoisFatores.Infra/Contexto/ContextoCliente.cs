@@ -7,7 +7,7 @@ namespace AutenticacaoDoisFatores.Infra.Contexto
     {
         private readonly string _stringDeConexao = stringDeConexao;
 
-        public IEnumerable<string> RetornarSchemas()
+        public IEnumerable<string> RetornarNomesDominios()
         {
             using var conexao = new NpgsqlConnection(_stringDeConexao);
             conexao.Open();
@@ -27,17 +27,17 @@ namespace AutenticacaoDoisFatores.Infra.Contexto
             if (leitor is null)
                 throw new NpgsqlException("Não foi possível fazer a leitura do comando no PostgreSQL");
 
-            var listaDeSchemas = new List<string>();
+            var listaDominios = new List<string>();
             while (leitor.Read())
             {
-                var schema = leitor["schema_name"]?.ToString() ?? "";
-                if (schema.EstaVazio())
+                var dominio = leitor["schema_name"]?.ToString() ?? "";
+                if (dominio.EstaVazio())
                     continue;
 
-                listaDeSchemas.Add(schema);
+                listaDominios.Add(dominio);
             }
 
-            return listaDeSchemas;
+            return listaDominios;
         }
 
         public void Executar(string sql, string schema)
@@ -52,7 +52,7 @@ namespace AutenticacaoDoisFatores.Infra.Contexto
             comando.ExecuteScalar();
         }
 
-        public bool ScriptMigrado(string schema, string nomeArquivo)
+        public bool ScriptMigrado(string nomeDominio, string nomeArquivo)
         {
             using var conexao = new NpgsqlConnection(_stringDeConexao);
             conexao.Open();
@@ -61,7 +61,7 @@ namespace AutenticacaoDoisFatores.Infra.Contexto
                 SELECT
                     COUNT(1) > 0
                 FROM
-                    {schema}.""__MigracoesAdf"" m
+                    {nomeDominio}.""__MigracoesAdf"" m
                 WHERE
                     LOWER(m.""NomeArquivo"") = '{nomeArquivo.ToLower()}'";
 
@@ -71,13 +71,13 @@ namespace AutenticacaoDoisFatores.Infra.Contexto
             return resultado != null && (bool)resultado;
         }
 
-        public void MarcarScriptComoMigrado(string schema, string nomeArquivo)
+        public void MarcarScriptComoMigrado(string nomeDominio, string nomeArquivo)
         {
             using var conexao = new NpgsqlConnection(_stringDeConexao);
             conexao.Open();
 
             var sql = $@"
-                INSERT INTO {schema}.""__MigracoesAdf""
+                INSERT INTO {nomeDominio}.""__MigracoesAdf""
                     (""NomeArquivo"", ""DataExecucao"")
                 VALUES
                     ('{nomeArquivo}', NOW())";

@@ -2,6 +2,6 @@
 {
     public interface IMigrador
     {
-        void AplicarMigracoes(string stringDeConexao);
+        void AplicarMigracoes();
     }
 }

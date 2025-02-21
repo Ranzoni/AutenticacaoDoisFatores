@@ -3,22 +3,23 @@ using AutenticacaoDoisFatores.Infra.Contexto;
 
 namespace AutenticacaoDoisFatores.Infra.Compartilhados.Migradores
 {
-    internal abstract class Migrador
+    public abstract class Migrador(string stringDeConexao)
     {
+        private readonly string _stringDeConexao = stringDeConexao;
         private static readonly string _caminhoScriptTabelaMigracao = "Controle";
 
-        protected static void AplicarMigracoes(string stringDeConexao, string pastaScripts)
+        protected void AplicarMigracoes(string pastaScripts)
         {
-            var contexto = new ContextoCliente(stringDeConexao);
+            var contexto = new ContextoCliente(_stringDeConexao);
 
-            var schemas = contexto.RetornarSchemas();
-            foreach (var schema in schemas)
+            var dominios = contexto.RetornarNomesDominios();
+            foreach (var dominio in dominios)
             {
                 var arquivoTabelaMigracao = RetornarScriptsDiretorio(pastaScripts, _caminhoScriptTabelaMigracao).FirstOrDefault() ?? "";
                 if (!arquivoTabelaMigracao.EstaVazio())
                 {
                     var sql = File.ReadAllText(arquivoTabelaMigracao);
-                    contexto.Executar(sql, schema);
+                    contexto.Executar(sql, dominio);
                 }
 
                 var arquivosDeMigracao = RetornarScriptsDiretorio(pastaScripts);
@@ -27,13 +28,13 @@ namespace AutenticacaoDoisFatores.Infra.Compartilhados.Migradores
                 {
                     var nomeArquivo = Path.GetFileName(arquivo);
 
-                    if (nomeArquivo.EstaVazio() || contexto.ScriptMigrado(schema, nomeArquivo))
+                    if (nomeArquivo.EstaVazio() || contexto.ScriptMigrado(dominio, nomeArquivo))
                         continue;
 
                     var sql = File.ReadAllText(arquivo);
-                    contexto.Executar(sql, schema);
+                    contexto.Executar(sql, dominio);
 
-                    contexto.MarcarScriptComoMigrado(schema, nomeArquivo);
+                    contexto.MarcarScriptComoMigrado(dominio, nomeArquivo);
                 }
             }
         }

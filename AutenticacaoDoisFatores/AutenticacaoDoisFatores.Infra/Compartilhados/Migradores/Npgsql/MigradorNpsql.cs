@@ -1,10 +1,10 @@
 ﻿namespace AutenticacaoDoisFatores.Infra.Compartilhados.Migradores.Npgsql
 {
-    internal class MigradorNpsql : Migrador, IMigrador
+    public class MigradorNpsql(string stringDeConexao) : Migrador(stringDeConexao), IMigrador
     {
-        public void AplicarMigracoes(string stringDeConexao)
+        public void AplicarMigracoes()
         {
-            AplicarMigracoes(stringDeConexao, "Npgsql");
+            AplicarMigracoes("Npgsql");
         }
     }
 }

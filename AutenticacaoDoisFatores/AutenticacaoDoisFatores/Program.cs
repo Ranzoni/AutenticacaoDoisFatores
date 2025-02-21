@@ -1,6 +1,6 @@
 using AutenticacaoDoisFatores;
 using AutenticacaoDoisFatores.Dominio.Compartilhados;
-using AutenticacaoDoisFatores.Infra.Compartilhados;
+using AutenticacaoDoisFatores.Infra.Compartilhados.Migradores;
 using AutenticacaoDoisFatores.Infra.Contexto;
 using AutenticacaoDoisFatores.Servico.Compartilhados;
 using AutenticacaoDoisFatores.Servico.Mapeadores;
@@ -63,6 +63,7 @@ builder.Services.AddServicos();
 builder.Services.AddRepositorios();
 builder.Services.AddDominios();
 builder.Services.AddCasosDeUso();
+builder.Services.AddContextos();
 
 builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
@@ -73,10 +74,11 @@ var app = builder.Build();
 using(var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<ContextoPadrao>();
-    await db.Database.MigrateAsync();
-}
+    db.Database.Migrate();
 
-InjetorInfra.RetornarMigrador().AplicarMigracoes(stringDeConexao);
+    var migrador = scope.ServiceProvider.GetRequiredService<IMigrador>();
+    migrador.AplicarMigracoes();
+}
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
