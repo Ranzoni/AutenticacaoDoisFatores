@@ -10,22 +10,18 @@ namespace AutenticacaoDoisFatores.Infra.Compartilhados.Migradores
 
         protected async Task ExecutarScriptsAsync(string pastaScripts)
         {
-            var contexto = new ContextoCliente(_stringDeConexao);
-
-            var dominios = await contexto.RetornarNomesDominiosAsync();
+            var dominios = await ContextoCliente.RetornarNomesDominiosAsync(_stringDeConexao);
             foreach (var dominio in dominios)
                 await ExecutarScriptsAsync(dominio, pastaScripts);
         }
 
         protected async Task ExecutarScriptsAsync(string dominio, string pastaScripts)
         {
-            var contexto = new ContextoCliente(_stringDeConexao);
-
             var arquivoTabelaMigracao = RetornarScriptsDiretorio(pastaScripts, _caminhoScriptTabelaMigracao).FirstOrDefault() ?? "";
             if (!arquivoTabelaMigracao.EstaVazio())
             {
                 var sql = File.ReadAllText(arquivoTabelaMigracao);
-                await contexto.ExecutarAsync(sql, dominio);
+                await ContextoCliente.ExecutarEmDominioAsync(sql, dominio, _stringDeConexao);
             }
 
             var arquivosDeMigracao = RetornarScriptsDiretorio(pastaScripts);
@@ -34,13 +30,13 @@ namespace AutenticacaoDoisFatores.Infra.Compartilhados.Migradores
             {
                 var nomeArquivo = Path.GetFileName(arquivo);
 
-                if (nomeArquivo.EstaVazio() || await contexto.ScriptMigradoAsync(dominio, nomeArquivo))
+                if (nomeArquivo.EstaVazio() || await ContextoCliente.ScriptMigradoAsync(dominio, nomeArquivo, _stringDeConexao))
                     continue;
 
                 var sql = File.ReadAllText(arquivo);
-                await contexto.ExecutarAsync(sql, dominio);
+                await ContextoCliente.ExecutarEmDominioAsync(sql, dominio, _stringDeConexao);
 
-                await contexto.MarcarScriptComoMigradoAsync(dominio, nomeArquivo);
+                await ContextoCliente.MarcarScriptComoMigradoAsync(dominio, nomeArquivo, pastaScripts);
             }
         }
 

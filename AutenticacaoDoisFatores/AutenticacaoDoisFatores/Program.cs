@@ -1,4 +1,5 @@
 using AutenticacaoDoisFatores;
+using AutenticacaoDoisFatores.Compartilhados;
 using AutenticacaoDoisFatores.Dominio.Compartilhados;
 using AutenticacaoDoisFatores.Infra.Compartilhados.Migradores;
 using AutenticacaoDoisFatores.Infra.Contexto;
@@ -56,6 +57,8 @@ builder.Services.AddAuthorizationBuilder()
     .AddPolicy("ConfirmacaoDeCliente", policy => policy.RequireRole(Seguranca.RegraConfirmacaoDeCliente))
     .AddPolicy("GeracaoNovaChaveCliente", policy => policy.RequireRole(Seguranca.RegraGeracaoNovaChaveCliente));
 
+builder.Services.AddHttpContextAccessor();
+
 builder.Services.AddAutoMapper(typeof(MapeadorDeCliente));
 builder.Services.AddMensageiro();
 
@@ -85,6 +88,8 @@ if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
 }
+
+app.UseMiddleware<Intermediador>();
 
 app.UseHttpsRedirection();
 

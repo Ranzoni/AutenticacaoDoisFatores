@@ -12,8 +12,6 @@ namespace AutenticacaoDoisFatores.Dominio.Entidades
         public bool Ativo { get; private set; }
         public DateTime? DataUltimoAcesso { get; private set; }
 
-        private Usuario() : base(true) { }
-
         public Usuario(string nome, string nomeUsuario, string email, string senha)
         {
             Nome = nome;

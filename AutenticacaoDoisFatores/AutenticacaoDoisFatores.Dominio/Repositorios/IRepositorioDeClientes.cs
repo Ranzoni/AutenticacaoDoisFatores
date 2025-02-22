@@ -9,5 +9,6 @@ namespace AutenticacaoDoisFatores.Dominio.Repositorios
         Task<bool> ExisteDominioAsync(string nomeDominio);
         Task<bool> ExisteEmailAsync(string email);
         Task<Cliente?> BuscarPorEmailAsync(string email);
+        Task<string?> RetornarNomeDominioAsync(string chave);
     }
 }

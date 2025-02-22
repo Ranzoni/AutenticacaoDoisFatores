@@ -1,15 +1,69 @@
 ﻿using AutenticacaoDoisFatores.Dominio.Compartilhados;
 using Npgsql;
+using System.Data.Common;
 
 namespace AutenticacaoDoisFatores.Infra.Contexto
 {
-    public class ContextoCliente(string stringDeConexao)
+    public partial class ContextoCliente(string stringDeConexao, string nomeDominio)
     {
         private readonly string _stringDeConexao = stringDeConexao;
+        private readonly Queue<string> _comandos = [];
 
-        public async Task<IEnumerable<string>> RetornarNomesDominiosAsync()
+        public string NomeDominio { get; private set; } = nomeDominio;
+
+        public void PrepararComando(string sql)
+        {
+            _comandos.Enqueue(sql);
+        }
+
+        public async Task ExecutarComandosAsync()
+        {
+            var sql = "BEGIN;";
+
+            foreach (var comando in _comandos)
+                sql += $"{comando}\n";
+
+            sql += "COMMIT;";
+
+            await ExecutarEmDominioAsync(sql, NomeDominio, _stringDeConexao);
+        }
+
+        public async Task<T?> LerUnicoAsync<T>(string sql, Func<DbDataReader, T> acao)
         {
             using var conexao = new NpgsqlConnection(_stringDeConexao);
+            await conexao.OpenAsync();
+
+            using var comando = new NpgsqlCommand(sql, conexao);
+            using var leitor = await comando.ExecuteReaderAsync();
+
+            if (leitor is null)
+                return default;
+
+            if (await leitor.ReadAsync())
+                return acao(leitor);
+
+            return default;
+        }
+
+        public async Task<bool> ConsultaEhVerdadeiraAsync(string sql)
+        {
+            using var conexao = new NpgsqlConnection(_stringDeConexao);
+            conexao.Open();
+
+            using var comando = new NpgsqlCommand(sql, conexao);
+            var resultado = await comando.ExecuteScalarAsync();
+
+            return resultado != null && (bool)resultado;
+        }
+    }
+
+    #region Lógica de Migração
+
+    public partial class ContextoCliente
+    {
+        public static async Task<IEnumerable<string>> RetornarNomesDominiosAsync(string stringDeConexao)
+        {
+            using var conexao = new NpgsqlConnection(stringDeConexao);
             conexao.Open();
 
             var sql = @"
@@ -40,21 +94,21 @@ namespace AutenticacaoDoisFatores.Infra.Contexto
             return listaDominios;
         }
 
-        public async Task ExecutarAsync(string sql, string schema)
+        public static async Task ExecutarEmDominioAsync(string sql, string dominio, string stringDeConexao)
         {
-            using var conexao = new NpgsqlConnection(_stringDeConexao);
+            using var conexao = new NpgsqlConnection(stringDeConexao);
             conexao.Open();
 
-            var alterarSchema = $"SET search_path TO {schema};";
+            var alterarSchema = $"SET search_path TO {dominio};";
             sql = alterarSchema + sql;
 
             using var comando = new NpgsqlCommand(sql, conexao);
             await comando.ExecuteScalarAsync();
         }
 
-        public async Task<bool> ScriptMigradoAsync(string nomeDominio, string nomeArquivo)
+        public static async Task<bool> ScriptMigradoAsync(string nomeDominio, string nomeArquivo, string stringDeConexao)
         {
-            using var conexao = new NpgsqlConnection(_stringDeConexao);
+            using var conexao = new NpgsqlConnection(stringDeConexao);
             conexao.Open();
 
             var sql = $@"
@@ -71,9 +125,9 @@ namespace AutenticacaoDoisFatores.Infra.Contexto
             return resultado != null && (bool)resultado;
         }
 
-        public async Task MarcarScriptComoMigradoAsync(string nomeDominio, string nomeArquivo)
+        public static async Task MarcarScriptComoMigradoAsync(string nomeDominio, string nomeArquivo, string stringDeConexao)
         {
-            using var conexao = new NpgsqlConnection(_stringDeConexao);
+            using var conexao = new NpgsqlConnection(stringDeConexao);
             conexao.Open();
 
             var sql = $@"
@@ -86,4 +140,6 @@ namespace AutenticacaoDoisFatores.Infra.Contexto
             await comando.ExecuteScalarAsync();
         }
     }
+
+    #endregion
 }

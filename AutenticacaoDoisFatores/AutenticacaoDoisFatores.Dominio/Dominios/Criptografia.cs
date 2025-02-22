@@ -10,7 +10,7 @@ namespace AutenticacaoDoisFatores.Dominio.Dominios
             return Criptografar(valor, SHA512.Create());
         }
 
-        public static string Criptografar(string valor, HashAlgorithm algoritmo)
+        private static string Criptografar(string valor, HashAlgorithm algoritmo)
         {
             var valorEmBytes = Encoding.UTF8.GetBytes(valor);
             var valorCriptografado = algoritmo.ComputeHash(valorEmBytes);

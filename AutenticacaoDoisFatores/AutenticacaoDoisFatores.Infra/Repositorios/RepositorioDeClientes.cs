@@ -14,6 +14,8 @@ namespace AutenticacaoDoisFatores.Infra.Repositorios
 
         public void Adicionar(Cliente entidade)
         {
+            _contexto.Clientes.Select(s => new { s.Nome });
+
             _contexto.Add(entidade);
         }
 
@@ -62,6 +64,12 @@ namespace AutenticacaoDoisFatores.Infra.Repositorios
         public async Task<Cliente?> BuscarPorEmailAsync(string email)
         {
             return await _contexto.Clientes.FirstOrDefaultAsync(c => c.Email.Equals(email));
+        }
+
+        public async Task<string?> RetornarNomeDominioAsync(string chave)
+        {
+            var cliente = await _contexto.Clientes.FirstOrDefaultAsync(c => c.ChaveAcesso.Equals(chave));
+            return cliente?.NomeDominio;
         }
 
         #endregion
