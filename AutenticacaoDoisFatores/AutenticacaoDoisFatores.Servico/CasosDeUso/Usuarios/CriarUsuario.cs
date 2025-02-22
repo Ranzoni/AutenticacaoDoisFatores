@@ -47,7 +47,7 @@ namespace AutenticacaoDoisFatores.Servico.CasosDeUso.Usuarios
             else
                 verificarEmailJaCadastrado = _dominio.ExisteEmailAsync(novoUsuario.Email);
 
-            if (!ValidadorDeUsuario.SenhaEhValida(novoUsuario.Senha))
+            if (!ValidadorDeUsuario.SenhaEhValida(novoUsuario.SenhaDescriptografada()))
                 _notificador.AddMensagem(MensagensValidacaoUsuario.SenhaInvalida);
 
             if (verificarNomeUsuarioJaCadastrado is not null)
