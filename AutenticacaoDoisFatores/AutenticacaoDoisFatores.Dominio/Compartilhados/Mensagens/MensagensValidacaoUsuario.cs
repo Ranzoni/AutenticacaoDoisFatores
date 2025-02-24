@@ -15,6 +15,10 @@ namespace AutenticacaoDoisFatores.Dominio.Compartilhados.Mensagens
         [Description("Este nome de usuário já está cadastrado.")]
         NomeUsuarioJaCadastrado,
         [Description("Já existe um usuário com este endereço de e-mail.")]
-        EmailJaCadastrado
+        EmailJaCadastrado,
+        [Description("O usuário não foi encontrado.")]
+        UsuarioNaoEncontrado,
+        [Description("Este usuário já está ativo.")]
+        UsuarioJaAtivado
     }
 }

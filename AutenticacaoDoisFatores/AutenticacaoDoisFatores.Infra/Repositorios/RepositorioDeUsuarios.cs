@@ -30,6 +30,7 @@ namespace AutenticacaoDoisFatores.Infra.Repositorios
                     ""NomeUsuario"" = '{entidade.NomeUsuario}',
                     ""Email"" = '{entidade.Email}',
                     ""Senha"" = '{entidade.Senha}',
+                    ""Ativo"" = {entidade.Ativo},
                     ""DataAlteracao"" = '{entidade.DataAlteracao:yyyy-MM-dd HH:mm:ss}'
                 WHERE
                     ""Id"" = '{entidade.Id}';";

@@ -32,6 +32,11 @@ namespace AutenticacaoDoisFatores.Dominio.Dominios
 
         #region Leitura
 
+        public async Task<Usuario?> BuscarUnicoAsync(Guid id)
+        {
+            return await _repositorio.BuscarUnicoAsync(id);
+        }
+
         public async Task<bool> ExisteNomeUsuarioAsync(string nomeUsuario)
         {
             return await _repositorio.ExisteNomeUsuarioAsync(nomeUsuario);

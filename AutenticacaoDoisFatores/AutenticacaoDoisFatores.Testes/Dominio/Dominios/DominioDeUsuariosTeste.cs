@@ -215,5 +215,50 @@ namespace AutenticacaoDoisFatores.Testes.Dominio.Dominios
 
             #endregion
         }
+
+        [Fact]
+        internal async Task DeveBuscarUnicoUsuario()
+        {
+            #region Preparação do teste
+
+            var idUsuario = Guid.NewGuid();
+            var dominio = _mocker.CreateInstance<DominioDeUsuarios>();
+
+            var usuarioCadastrado = ConstrutorDeUsuariosTeste
+                .RetornarConstrutor()
+                .ConstruirCadastrado();
+
+            _mocker.GetMock<IRepositorioDeUsuarios>().Setup(r => r.BuscarUnicoAsync(idUsuario)).ReturnsAsync(usuarioCadastrado);
+
+            #endregion
+
+            var usuario = await dominio.BuscarUnicoAsync(idUsuario);
+
+            #region Verificação do teste
+
+            Assert.NotNull(usuario);
+            Assert.Equal(usuarioCadastrado, usuario);
+
+            #endregion
+        }
+
+        [Fact]
+        internal async Task DeveRetornarNuloAoBuscarUnicoUsuarioNaoExistente()
+        {
+            #region Preparação do teste
+
+            var idUsuario = Guid.NewGuid();
+            var dominio = _mocker.CreateInstance<DominioDeUsuarios>();
+
+            #endregion
+
+            var usuario = await dominio.BuscarUnicoAsync(idUsuario);
+
+            #region Verificação do teste
+
+            Assert.Null(usuario);
+
+            #endregion
+        }
     }
 }
