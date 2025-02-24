@@ -220,7 +220,7 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Usuarios
                 .Construir();
 
             _mocker.CreateInstance<DominioDeUsuarios>();
-            _mocker.GetMock<IRepositorioDeUsuarios>().Setup(r => r.ExisteNomeUsuarioAsync(novoUsuario.NomeUsuario)).ReturnsAsync(true);
+            _mocker.GetMock<IRepositorioDeUsuarios>().Setup(r => r.ExisteNomeUsuarioAsync(novoUsuario.NomeUsuario, It.IsAny<Guid?>())).ReturnsAsync(true);
             _mocker.GetMock<INotificador>().Setup(n => n.ExisteMensagem()).Returns(true);
 
             var servico = _mocker.CreateInstance<CriarUsuario>();
@@ -249,7 +249,7 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Usuarios
                 .Construir();
 
             _mocker.CreateInstance<DominioDeUsuarios>();
-            _mocker.GetMock<IRepositorioDeUsuarios>().Setup(r => r.ExisteEmailAsync(novoUsuario.Email)).ReturnsAsync(true);
+            _mocker.GetMock<IRepositorioDeUsuarios>().Setup(r => r.ExisteEmailAsync(novoUsuario.Email, It.IsAny<Guid?>())).ReturnsAsync(true);
             _mocker.GetMock<INotificador>().Setup(n => n.ExisteMensagem()).Returns(true);
 
             var servico = _mocker.CreateInstance<CriarUsuario>();

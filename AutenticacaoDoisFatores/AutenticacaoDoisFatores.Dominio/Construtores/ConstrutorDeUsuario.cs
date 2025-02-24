@@ -14,6 +14,13 @@ namespace AutenticacaoDoisFatores.Dominio.Construtores
         private DateTime _dataCadastro;
         private DateTime? _dataAlteracao;
 
+        public ConstrutorDeUsuario ComId(Guid id)
+        {
+            _id = id;
+
+            return this;
+        }
+
         public ConstrutorDeUsuario ComNome(string nome)
         {
             _nome = nome;
@@ -42,6 +49,34 @@ namespace AutenticacaoDoisFatores.Dominio.Construtores
             return this;
         }
 
+        public ConstrutorDeUsuario ComAtivo(bool ativo)
+        {
+            _ativo = ativo;
+
+            return this;
+        }
+
+        public ConstrutorDeUsuario ComDataUltimoAcesso(DateTime? dataUltimoAcesso)
+        {
+            _dataUltimoAcesso = dataUltimoAcesso;
+
+            return this;
+        }
+
+        public ConstrutorDeUsuario ComDataCadastro(DateTime dataCadastro)
+        {
+            _dataCadastro = dataCadastro;
+
+            return this;
+        }
+
+        public ConstrutorDeUsuario ComDataAlteracao(DateTime? dataAlteracao)
+        {
+            _dataAlteracao = dataAlteracao;
+
+            return this;
+        }
+
         public Usuario ConstruirNovo()
         {
             var usuario = new Usuario
@@ -50,6 +85,24 @@ namespace AutenticacaoDoisFatores.Dominio.Construtores
                 nomeUsuario: _nomeUsuario,
                 email: _email,
                 senha: _senha
+            );
+
+            return usuario;
+        }
+
+        public Usuario ConstruirCadastrado()
+        {
+            var usuario = new Usuario
+            (
+                id: _id,
+                nome: _nome,
+                nomeUsuario: _nomeUsuario,
+                email: _email,
+                senha: _senha,
+                ativo: _ativo,
+                dataUltimoAcesso: _dataUltimoAcesso,
+                dataCadastro: _dataCadastro,
+                dataAlteracao: _dataAlteracao
             );
 
             return usuario;

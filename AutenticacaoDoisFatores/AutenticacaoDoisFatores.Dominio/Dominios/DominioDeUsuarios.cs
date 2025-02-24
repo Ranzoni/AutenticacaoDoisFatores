@@ -12,10 +12,20 @@ namespace AutenticacaoDoisFatores.Dominio.Dominios
 
         public async Task CriarUsuarioAsync(Usuario usuario)
         {
-            await ValidarCriacaoUsuarioAsync(usuario);
+            await ValidarUsuarioAsync(usuario);
 
             _repositorio.Adicionar(usuario);
             await _repositorio.SalvarAlteracoesAsync();
+        }
+
+        public async Task<Usuario> AlterarUsuarioAsync(Usuario usuario)
+        {
+            await ValidarUsuarioAsync(usuario);
+
+            _repositorio.Editar(usuario);
+            await _repositorio.SalvarAlteracoesAsync();
+
+            return usuario;
         }
 
         #endregion
@@ -39,13 +49,13 @@ namespace AutenticacaoDoisFatores.Dominio.Dominios
 
     public partial class DominioDeUsuarios
     {
-        public async Task ValidarCriacaoUsuarioAsync(Usuario usuario)
+        public async Task ValidarUsuarioAsync(Usuario usuario)
         {
-            var existeNomeUsuario = await _repositorio.ExisteNomeUsuarioAsync(usuario.NomeUsuario);
+            var existeNomeUsuario = await _repositorio.ExisteNomeUsuarioAsync(usuario.NomeUsuario, usuario.Id);
             if (existeNomeUsuario)
                 ExcecoesUsuario.NomeUsuarioJaCadastrado();
 
-            var existeEmail = await _repositorio.ExisteEmailAsync(usuario.Email);
+            var existeEmail = await _repositorio.ExisteEmailAsync(usuario.Email, usuario.Id);
             if (existeEmail)
                 ExcecoesUsuario.EmailJaCadastrado();
         }

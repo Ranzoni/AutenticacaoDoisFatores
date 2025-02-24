@@ -37,5 +37,12 @@ namespace AutenticacaoDoisFatores.Dominio.Entidades
 
             this.Validar();
         }
+
+        public void Ativar(bool valor)
+        {
+            Ativo = valor;
+
+            AtualizarDataAlteracao();
+        }
     }
 }

@@ -50,7 +50,7 @@ namespace AutenticacaoDoisFatores.Testes.Dominio.Dominios
                 .RetornarConstrutor()
                 .ConstruirNovo();
 
-            _mocker.GetMock<IRepositorioDeUsuarios>().Setup(r => r.ExisteNomeUsuarioAsync(usuarioParaCriar.NomeUsuario)).ReturnsAsync(true);
+            _mocker.GetMock<IRepositorioDeUsuarios>().Setup(r => r.ExisteNomeUsuarioAsync(usuarioParaCriar.NomeUsuario, It.IsAny<Guid>())).ReturnsAsync(true);
 
             #endregion
 
@@ -76,7 +76,7 @@ namespace AutenticacaoDoisFatores.Testes.Dominio.Dominios
                 .RetornarConstrutor()
                 .ConstruirNovo();
 
-            _mocker.GetMock<IRepositorioDeUsuarios>().Setup(r => r.ExisteEmailAsync(usuarioParaCriar.Email)).ReturnsAsync(true);
+            _mocker.GetMock<IRepositorioDeUsuarios>().Setup(r => r.ExisteEmailAsync(usuarioParaCriar.Email, It.IsAny<Guid>())).ReturnsAsync(true);
 
             #endregion
 
@@ -102,7 +102,7 @@ namespace AutenticacaoDoisFatores.Testes.Dominio.Dominios
 
             var nomeUsuarioParaTeste = _faker.Person.UserName;
 
-            _mocker.GetMock<IRepositorioDeUsuarios>().Setup(r => r.ExisteNomeUsuarioAsync(nomeUsuarioParaTeste)).ReturnsAsync(resultadoEsperado);
+            _mocker.GetMock<IRepositorioDeUsuarios>().Setup(r => r.ExisteNomeUsuarioAsync(nomeUsuarioParaTeste, It.IsAny<Guid?>())).ReturnsAsync(resultadoEsperado);
 
             #endregion
 
@@ -111,7 +111,7 @@ namespace AutenticacaoDoisFatores.Testes.Dominio.Dominios
             #region Verificação do teste
 
             Assert.Equal(resultadoEsperado, existeNomeUsuario);
-            _mocker.Verify<IRepositorioDeUsuarios>(r => r.ExisteNomeUsuarioAsync(nomeUsuarioParaTeste), Times.Once);
+            _mocker.Verify<IRepositorioDeUsuarios>(r => r.ExisteNomeUsuarioAsync(nomeUsuarioParaTeste, It.IsAny<Guid?>()), Times.Once);
 
             #endregion
         }
@@ -127,7 +127,7 @@ namespace AutenticacaoDoisFatores.Testes.Dominio.Dominios
 
             var nomeUsuarioParaTeste = _faker.Person.Email;
 
-            _mocker.GetMock<IRepositorioDeUsuarios>().Setup(r => r.ExisteEmailAsync(nomeUsuarioParaTeste)).ReturnsAsync(resultadoEsperado);
+            _mocker.GetMock<IRepositorioDeUsuarios>().Setup(r => r.ExisteEmailAsync(nomeUsuarioParaTeste, It.IsAny<Guid?>())).ReturnsAsync(resultadoEsperado);
 
             #endregion
 
@@ -136,7 +136,82 @@ namespace AutenticacaoDoisFatores.Testes.Dominio.Dominios
             #region Verificação do teste
 
             Assert.Equal(resultadoEsperado, existeEmail);
-            _mocker.Verify<IRepositorioDeUsuarios>(r => r.ExisteEmailAsync(nomeUsuarioParaTeste), Times.Once);
+            _mocker.Verify<IRepositorioDeUsuarios>(r => r.ExisteEmailAsync(nomeUsuarioParaTeste, It.IsAny<Guid?>()), Times.Once);
+
+            #endregion
+        }
+
+        [Fact]
+        internal async Task DeveAlterarUsuario()
+        {
+            #region Preparação do teste
+
+            var dominio = _mocker.CreateInstance<DominioDeUsuarios>();
+
+            var usuarioParaEditar = ConstrutorDeUsuariosTeste
+                .RetornarConstrutor()
+                .ConstruirNovo();
+
+            #endregion
+
+            await dominio.AlterarUsuarioAsync(usuarioParaEditar);
+
+            #region Verificação do teste
+
+            _mocker.Verify<IRepositorioDeUsuarios>(r => r.Editar(usuarioParaEditar), Times.Once);
+            _mocker.Verify<IRepositorioDeUsuarios>(r => r.SalvarAlteracoesAsync(), Times.Once);
+
+            #endregion
+        }
+
+        [Fact]
+        internal async Task DeveRetornarExcecaoAoAlterarUsuarioComNomeUsuarioJaExistente()
+        {
+            #region Preparação do teste
+
+            var dominio = _mocker.CreateInstance<DominioDeUsuarios>();
+
+            var usuarioParaAlterar = ConstrutorDeUsuariosTeste
+                .RetornarConstrutor()
+                .ConstruirCadastrado();
+
+            _mocker.GetMock<IRepositorioDeUsuarios>().Setup(r => r.ExisteNomeUsuarioAsync(usuarioParaAlterar.NomeUsuario, usuarioParaAlterar.Id)).ReturnsAsync(true);
+
+            #endregion
+
+            var excecao = await Assert.ThrowsAsync<ExcecoesUsuario>(() => dominio.AlterarUsuarioAsync(usuarioParaAlterar));
+
+            #region Verificação do teste
+
+            Assert.Equal(MensagensValidacaoUsuario.NomeUsuarioJaCadastrado.Descricao(), excecao.Message);
+            _mocker.Verify<IRepositorioDeUsuarios>(r => r.Editar(It.IsAny<Usuario>()), Times.Never);
+            _mocker.Verify<IRepositorioDeUsuarios>(r => r.SalvarAlteracoesAsync(), Times.Never);
+
+            #endregion
+        }
+
+        [Fact]
+        internal async Task DeveRetornarExcecaoAoAlterarUsuarioComEmailJaExistente()
+        {
+            #region Preparação do teste
+
+            var dominio = _mocker.CreateInstance<DominioDeUsuarios>();
+
+            var usuarioParaAlterar = ConstrutorDeUsuariosTeste
+                .RetornarConstrutor()
+                .ConstruirCadastrado();
+
+            _mocker.GetMock<IRepositorioDeUsuarios>().Setup(r => r.ExisteEmailAsync(usuarioParaAlterar.Email, usuarioParaAlterar.Id)).ReturnsAsync(true);
+
+            #endregion
+
+            var excecao = await Assert.ThrowsAsync<ExcecoesUsuario>(() => dominio.AlterarUsuarioAsync(usuarioParaAlterar));
+
+            #region Verificação do teste
+
+            Assert.Equal(MensagensValidacaoUsuario.EmailJaCadastrado.Descricao(), excecao.Message);
+            _mocker.Verify<IRepositorioDeUsuarios>(r => r.Editar(It.IsAny<Usuario>()), Times.Never);
+            _mocker.Verify<IRepositorioDeUsuarios>(r => r.SalvarAlteracoesAsync(), Times.Never);
 
             #endregion
         }

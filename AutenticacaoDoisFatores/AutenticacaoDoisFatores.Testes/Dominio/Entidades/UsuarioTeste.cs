@@ -112,5 +112,28 @@ namespace AutenticacaoDoisFatores.Testes.Dominio.Entidades
 
             Assert.Equal(MensagensValidacaoUsuario.SenhaInvalida.Descricao(), excecao.Message);
         }
+
+        [Theory]
+        [InlineData(false)]
+        [InlineData(true)]
+        internal void DeveAtivarEDesativarUsuario(bool ativar)
+        {
+            #region Preparação do teste
+
+            var usuario = ConstrutorDeUsuariosTeste
+                .RetornarConstrutor(ativo: !ativar)
+                .ConstruirCadastrado();
+
+            #endregion
+
+            usuario.Ativar(ativar);
+
+            #region Verificação do teste
+
+            Assert.Equal(ativar, usuario.Ativo);
+            Assert.NotNull(usuario.DataAlteracao);
+
+            #endregion
+        }
     }
 }

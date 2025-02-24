@@ -10,20 +10,31 @@ namespace AutenticacaoDoisFatores.Infra.Repositorios
 
         #region Escrita
 
-        public void Adicionar(Usuario usuario)
+        public void Adicionar(Usuario entidade)
         {
             var sql = $@"
                 INSERT INTO {_contexto.NomeDominio}.""Usuarios""
                     (""Id"", ""Nome"", ""NomeUsuario"", ""Email"", ""Senha"", ""DataCadastro"")
                 VALUES
-                    ('{usuario.Id}', '{usuario.Nome}', '{usuario.NomeUsuario}', '{usuario.Email}', '{usuario.Senha}', '{usuario.DataCadastro:yyyy-MM-dd HH:mm:ss}');";
+                    ('{entidade.Id}', '{entidade.Nome}', '{entidade.NomeUsuario}', '{entidade.Email}', '{entidade.Senha}', '{entidade.DataCadastro:yyyy-MM-dd HH:mm:ss}');";
 
             _contexto.PrepararComando(sql);
         }
 
         public void Editar(Usuario entidade)
         {
-            throw new NotImplementedException();
+            var sql = $@"
+                UPDATE {_contexto.NomeDominio}.""Usuarios""
+                SET
+                    ""Nome"" = '{entidade.Nome}',
+                    ""NomeUsuario"" = '{entidade.NomeUsuario}',
+                    ""Email"" = '{entidade.Email}',
+                    ""Senha"" = '{entidade.Senha}',
+                    ""DataAlteracao"" = '{entidade.DataAlteracao:yyyy-MM-dd HH:mm:ss}'
+                WHERE
+                    ""Id"" = '{entidade.Id}';";
+
+            _contexto.PrepararComando(sql);
         }
 
         public void Excluir(Guid id)
@@ -73,7 +84,7 @@ namespace AutenticacaoDoisFatores.Infra.Repositorios
                 ));
         }
 
-        public async Task<bool> ExisteEmailAsync(string email)
+        public async Task<bool> ExisteEmailAsync(string email, Guid? id = null)
         {
             var sql = $@"
                 SELECT
@@ -83,10 +94,13 @@ namespace AutenticacaoDoisFatores.Infra.Repositorios
                 WHERE
                     u.""Email"" = '{email}'";
 
+            if (id is not null)
+                sql += $@" AND ""Id"" != '{id}'";
+
             return await _contexto.ConsultaEhVerdadeiraAsync(sql);
         }
 
-        public async Task<bool> ExisteNomeUsuarioAsync(string nomeUsuario)
+        public async Task<bool> ExisteNomeUsuarioAsync(string nomeUsuario, Guid? id = null)
         {
             var sql = $@"
                 SELECT
@@ -95,6 +109,9 @@ namespace AutenticacaoDoisFatores.Infra.Repositorios
                     {_contexto.NomeDominio}.""Usuarios"" u
                 WHERE
                     u.""NomeUsuario"" = '{nomeUsuario}'";
+
+            if (id is not null)
+                sql += $@" AND ""Id"" != '{id}'";
 
             return await _contexto.ConsultaEhVerdadeiraAsync(sql);
         }
