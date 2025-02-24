@@ -2,7 +2,6 @@
 using AutenticacaoDoisFatores.Servico.CasosDeUso.Usuarios;
 using AutenticacaoDoisFatores.Servico.DTO.Usuarios;
 using Mensageiro;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AutenticacaoDoisFatores.Controllers
@@ -31,9 +30,24 @@ namespace AutenticacaoDoisFatores.Controllers
         {
             try
             {
-                await ativarUsuario.AtivarAsync(idUsuario);
+                await ativarUsuario.AtivarAsync(idUsuario, true);
 
                 return Sucesso("O usuário foi ativado com sucesso.");
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
+        [HttpPut("{idUsuario}/desativar")]
+        public async Task<ActionResult<UsuarioCadastrado?>> DesativarAsync([FromServices] AtivarUsuario ativarUsuario, Guid idUsuario)
+        {
+            try
+            {
+                await ativarUsuario.AtivarAsync(idUsuario, false);
+
+                return Sucesso("O usuário foi desativado com sucesso.");
             }
             catch (Exception e)
             {

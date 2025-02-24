@@ -17,8 +17,6 @@ namespace AutenticacaoDoisFatores.Dominio.Compartilhados.Mensagens
         [Description("Já existe um usuário com este endereço de e-mail.")]
         EmailJaCadastrado,
         [Description("O usuário não foi encontrado.")]
-        UsuarioNaoEncontrado,
-        [Description("Este usuário já está ativo.")]
-        UsuarioJaAtivado
+        UsuarioNaoEncontrado
     }
 }

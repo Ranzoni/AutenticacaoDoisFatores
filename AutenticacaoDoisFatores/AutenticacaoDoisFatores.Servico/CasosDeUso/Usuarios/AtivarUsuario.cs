@@ -10,13 +10,13 @@ namespace AutenticacaoDoisFatores.Servico.CasosDeUso.Usuarios
         private readonly DominioDeUsuarios _dominio = dominio;
         private readonly INotificador _notificador = notificador;
 
-        public async Task AtivarAsync(Guid idUsuario)
+        public async Task AtivarAsync(Guid idUsuario, bool ativar)
         {
             var usuario = await _dominio.BuscarUnicoAsync(idUsuario);
             if (!AtivacaoEhValida(usuario) || usuario is null)
                 return;
 
-            usuario.Ativar(true);
+            usuario.Ativar(ativar);
             await _dominio.AlterarUsuarioAsync(usuario);
         }
 
@@ -27,9 +27,6 @@ namespace AutenticacaoDoisFatores.Servico.CasosDeUso.Usuarios
                 _notificador.AddMensagemNaoEncontrado(MensagensValidacaoUsuario.UsuarioNaoEncontrado);
                 return false;
             }
-
-            if (usuario.Ativo)
-                _notificador.AddMensagem(MensagensValidacaoUsuario.UsuarioJaAtivado);
 
             return !_notificador.ExisteMensagem();
         }

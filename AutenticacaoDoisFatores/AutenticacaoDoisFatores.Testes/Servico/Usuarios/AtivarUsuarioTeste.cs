@@ -13,8 +13,10 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Usuarios
     {
         private readonly AutoMocker _mocker = new();
 
-        [Fact]
-        internal async Task DeveAtivarUsuario()
+        [Theory]
+        [InlineData(false)]
+        [InlineData(true)]
+        internal async Task DeveAtivarUsuario(bool ativar)
         {
             #region Preparação do teste
 
@@ -30,19 +32,21 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Usuarios
 
             #endregion
 
-            await servico.AtivarAsync(idUsuario);
+            await servico.AtivarAsync(idUsuario, ativar);
 
             #region Verificação do teste
 
-            Assert.True(usuarioCadastradoTeste.Ativo);
+            Assert.Equal(ativar, usuarioCadastradoTeste.Ativo);
             _mocker.Verify<IRepositorioDeUsuarios>(r => r.Editar(usuarioCadastradoTeste), Times.Once);
             _mocker.Verify<IRepositorioDeUsuarios>(r => r.SalvarAlteracoesAsync(), Times.Once);
 
             #endregion
         }
 
-        [Fact]
-        internal async Task NaoDeveAtivarUsuarioQuandoUsuarioNaoExiste()
+        [Theory]
+        [InlineData(false)]
+        [InlineData(true)]
+        internal async Task NaoDeveAtivarUsuarioQuandoUsuarioNaoExiste(bool ativar)
         {
             #region Preparação do teste
 
@@ -52,42 +56,13 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Usuarios
 
             #endregion
 
-            await servico.AtivarAsync(idUsuario);
+            await servico.AtivarAsync(idUsuario, ativar);
 
             #region Verificação do teste
 
             _mocker.Verify<IRepositorioDeUsuarios>(r => r.Editar(It.IsAny<Usuario>()), Times.Never);
             _mocker.Verify<IRepositorioDeUsuarios>(r => r.SalvarAlteracoesAsync(), Times.Never);
             _mocker.Verify<INotificador>(n => n.AddMensagemNaoEncontrado(MensagensValidacaoUsuario.UsuarioNaoEncontrado), Times.Once);
-
-            #endregion
-        }
-
-        [Fact]
-        internal async Task NaoDeveAtivarUsuarioQuandoJaAtivo()
-        {
-            #region Preparação do teste
-
-            var idUsuario = Guid.NewGuid();
-
-            var usuarioCadastradoTeste = ConstrutorDeUsuariosTeste
-                .RetornarConstrutor(id: idUsuario, ativo: true)
-                .ConstruirCadastrado();
-
-            var servico = _mocker.CreateInstance<AtivarUsuario>();
-
-            _mocker.GetMock<IRepositorioDeUsuarios>().Setup(r => r.BuscarUnicoAsync(idUsuario)).ReturnsAsync(usuarioCadastradoTeste);
-            _mocker.GetMock<INotificador>().Setup(n => n.ExisteMensagem()).Returns(true);
-
-            #endregion
-
-            await servico.AtivarAsync(idUsuario);
-
-            #region Verificação do teste
-
-            _mocker.Verify<IRepositorioDeUsuarios>(r => r.Editar(It.IsAny<Usuario>()), Times.Never);
-            _mocker.Verify<IRepositorioDeUsuarios>(r => r.SalvarAlteracoesAsync(), Times.Never);
-            _mocker.Verify<INotificador>(n => n.AddMensagem(MensagensValidacaoUsuario.UsuarioJaAtivado), Times.Once);
 
             #endregion
         }
