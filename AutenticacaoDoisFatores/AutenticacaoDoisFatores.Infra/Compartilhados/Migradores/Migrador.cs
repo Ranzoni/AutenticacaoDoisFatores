@@ -36,7 +36,7 @@ namespace AutenticacaoDoisFatores.Infra.Compartilhados.Migradores
                 var sql = File.ReadAllText(arquivo);
                 await ContextoCliente.ExecutarEmDominioAsync(sql, dominio, _stringDeConexao);
 
-                await ContextoCliente.MarcarScriptComoMigradoAsync(dominio, nomeArquivo, pastaScripts);
+                await ContextoCliente.MarcarScriptComoMigradoAsync(dominio, nomeArquivo, _stringDeConexao);
             }
         }
 

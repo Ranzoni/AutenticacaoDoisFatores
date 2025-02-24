@@ -13,7 +13,7 @@ namespace AutenticacaoDoisFatores.Testes.Dominio.Entidades
         [InlineData("2senha@Valida")]
         [InlineData("2senhaéValida")]
         [InlineData("S3nha.m")]
-        [InlineData("M@1or_senha_possivel_M@1or_senha_possivel_M@1or_se")]
+        [InlineData("Teste.de.senh@.que.é.muito.grand3.Teste.de.senh@.que.é.muito.grand3.Teste.de.senh@.que.é.muito.grand3.Teste.de.senh@.que.é.muito.grand3.Teste.de.senh@.que.é.muito.grand3.Teste.de.senh@.que.é.muito.grand3.Teste.de.senh@.que.é.muito.grand3.Teste.de.senh@.que")]
         internal void DeveInstanciarNovoUsuario(string senha)
         {
             #region Preparação do teste
@@ -101,12 +101,7 @@ namespace AutenticacaoDoisFatores.Testes.Dominio.Entidades
         [Theory]
         [InlineData("")]
         [InlineData("       ")]
-        [InlineData("T&st.1")]
-        [InlineData("Teste.de.senh@.que.é.muito.grand3.Teste.de.senh@.qu")]
-        [InlineData("testedesenha.123")]
-        [InlineData("@Senha.para_teste")]
-        [InlineData("TESTEDESENHA.123")]
-        [InlineData("2senhaInvalida")]
+        [InlineData("Teste.de.senh@.que.é.muito.grand3.Teste.de.senh@.que.é.muito.grand3.Teste.de.senh@.que.é.muito.grand3.Teste.de.senh@.que.é.muito.grand3.Teste.de.senh@.que.é.muito.grand3.Teste.de.senh@.que.é.muito.grand3.Teste.de.senh@.que.é.muito.grand3.Teste.de.senh@.que.")]
         internal void NaoDeveInstanciarNovoUsuarioQuandoSenhaEhInvalida(string senhaInvalida)
         {
             var excecao = Assert.Throws<ExcecoesUsuario>

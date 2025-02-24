@@ -38,7 +38,7 @@ namespace AutenticacaoDoisFatores.Dominio.Validadores
 
         public static bool SenhaEhValida(string senha)
         {
-            return !senha.EstaVazio() && senha.ExistemLetrasMaiusculas() && senha.ExistemLetrasMinusculas() && senha.ExistemNumeros() && senha.ExistemCaracteresEspeciaisAcentosOuPontuacoes() && senha.Length >= 7 && senha.Length <= 50;
+            return !senha.EstaVazio() && senha.Length <= 256;
         }
     }
 }

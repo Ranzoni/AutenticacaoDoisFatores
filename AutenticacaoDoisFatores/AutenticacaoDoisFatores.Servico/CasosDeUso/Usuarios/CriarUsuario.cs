@@ -1,4 +1,5 @@
-﻿using AutenticacaoDoisFatores.Dominio.Compartilhados.Mensagens;
+﻿using AutenticacaoDoisFatores.Dominio.Compartilhados;
+using AutenticacaoDoisFatores.Dominio.Compartilhados.Mensagens;
 using AutenticacaoDoisFatores.Dominio.Dominios;
 using AutenticacaoDoisFatores.Dominio.Entidades;
 using AutenticacaoDoisFatores.Dominio.Validadores;
@@ -47,7 +48,7 @@ namespace AutenticacaoDoisFatores.Servico.CasosDeUso.Usuarios
             else
                 verificarEmailJaCadastrado = _dominio.ExisteEmailAsync(novoUsuario.Email);
 
-            if (!ValidadorDeUsuario.SenhaEhValida(novoUsuario.SenhaDescriptografada()))
+            if (!ComposicaoSenhaEhValida(novoUsuario.SenhaDescriptografada()))
                 _notificador.AddMensagem(MensagensValidacaoUsuario.SenhaInvalida);
 
             if (verificarNomeUsuarioJaCadastrado is not null)
@@ -65,6 +66,11 @@ namespace AutenticacaoDoisFatores.Servico.CasosDeUso.Usuarios
             }
 
             return !_notificador.ExisteMensagem();
+        }
+
+        private static bool ComposicaoSenhaEhValida(string senha)
+        {
+            return !senha.EstaVazio() && senha.ExistemLetrasMaiusculas() && senha.ExistemLetrasMinusculas() && senha.ExistemNumeros() && senha.ExistemCaracteresEspeciaisAcentosOuPontuacoes() && senha.Length >= 7 && senha.Length <= 50;
         }
     }
 }
