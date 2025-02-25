@@ -37,6 +37,16 @@ namespace AutenticacaoDoisFatores.Dominio.Dominios
             return await _repositorio.BuscarUnicoAsync(id);
         }
 
+        public async Task<Usuario?> BuscarPorNomeUsuarioAsync(string nomeUsuario)
+        {
+            return await _repositorio.BuscarPorNomeUsuarioAsync(nomeUsuario);
+        }
+
+        public async Task<Usuario?> BuscarPorEmailAsync(string email)
+        {
+            return await _repositorio.BuscarPorEmailAsync(email);
+        }
+
         public async Task<bool> ExisteNomeUsuarioAsync(string nomeUsuario)
         {
             return await _repositorio.ExisteNomeUsuarioAsync(nomeUsuario);

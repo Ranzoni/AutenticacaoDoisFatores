@@ -10,7 +10,7 @@ namespace AutenticacaoDoisFatores.Compartilhados
 
         public async Task InvokeAsync(HttpContext contexto)
         {
-            if (contexto.Request.Path.StartsWithSegments("/api/cliente"))
+            if (ContextoDeveSerIgnorado(contexto))
                 await _proximo(contexto);
 
             if (!await ChaveApiEhValidaAsync(contexto))
@@ -20,6 +20,17 @@ namespace AutenticacaoDoisFatores.Compartilhados
             }
 
             await _proximo(contexto);
+        }
+
+        private static bool ContextoDeveSerIgnorado(HttpContext contexto)
+        {
+            if (contexto.Request.Path.StartsWithSegments("/api/cliente"))
+                return true;
+
+            if (contexto.Request.Path.StartsWithSegments("/clientes"))
+                return true;
+
+            return false;
         }
 
         private static async Task<bool> ChaveApiEhValidaAsync(HttpContext contexto)

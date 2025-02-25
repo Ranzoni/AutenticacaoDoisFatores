@@ -7,5 +7,7 @@ namespace AutenticacaoDoisFatores.Dominio.Repositorios
     {
         Task<bool> ExisteNomeUsuarioAsync(string nomeUsuario, Guid? id = null);
         Task<bool> ExisteEmailAsync(string email, Guid? id = null);
+        Task<Usuario?> BuscarPorNomeUsuarioAsync(string nomeUsuario);
+        Task<Usuario?> BuscarPorEmailAsync(string email);
     }
 }

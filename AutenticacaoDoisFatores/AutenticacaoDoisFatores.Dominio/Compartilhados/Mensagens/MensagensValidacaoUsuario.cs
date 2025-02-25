@@ -17,6 +17,10 @@ namespace AutenticacaoDoisFatores.Dominio.Compartilhados.Mensagens
         [Description("Já existe um usuário com este endereço de e-mail.")]
         EmailJaCadastrado,
         [Description("O usuário não foi encontrado.")]
-        UsuarioNaoEncontrado
+        UsuarioNaoEncontrado,
+        [Description("É necessário informar o nome de usuário ou o e-mail para realizar o acesso.")]
+        NomeUsuarioOuEmailObrigatorio,
+        [Description("Nome de usuário, e-mail ou senha são inválidos.")]
+        NaoAutenticado
     }
 }
