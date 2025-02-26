@@ -1,0 +1,1 @@
+ALTER TABLE "Auditorias" ADD "Data" timestamp NOT NULL DEFAULT CURRENT_DATE;

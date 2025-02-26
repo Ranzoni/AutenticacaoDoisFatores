@@ -40,9 +40,9 @@ namespace AutenticacaoDoisFatores.Dominio.Entidades
 
         public void Ativar(bool valor)
         {
-            Ativo = valor;
+            AuditarModificacao("Ativo", Ativo.ToString(), valor.ToString());
 
-            AtualizarDataAlteracao();
+            Ativo = valor;
         }
     }
 }

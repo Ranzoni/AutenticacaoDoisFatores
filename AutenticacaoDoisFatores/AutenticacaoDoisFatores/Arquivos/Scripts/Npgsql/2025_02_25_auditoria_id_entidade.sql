@@ -1,0 +1,1 @@
+ALTER TABLE "Auditorias" ADD "IdEntidade" uuid NOT NULL;

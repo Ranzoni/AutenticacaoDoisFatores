@@ -1,9 +1,18 @@
 ﻿using AutenticacaoDoisFatores.Dominio.Compartilhados;
+using AutenticacaoDoisFatores.Dominio.Compartilhados.Entidades;
+using Newtonsoft.Json;
 using Npgsql;
 using System.Data.Common;
 
 namespace AutenticacaoDoisFatores.Infra.Contexto
 {
+    public enum TipoComando
+    {
+        Inclusao,
+        Alteracao,
+        Exclusao
+    }
+
     public partial class ContextoCliente(string stringDeConexao, string nomeDominio)
     {
         private readonly string _stringDeConexao = stringDeConexao;
@@ -11,9 +20,32 @@ namespace AutenticacaoDoisFatores.Infra.Contexto
 
         public string NomeDominio { get; private set; } = nomeDominio;
 
-        public void PrepararComando(string sql)
+        public void PrepararComando(EntidadeComAuditoria entidade, TipoComando tipo, string tabela, string sql)
         {
             _comandos.Enqueue(sql);
+
+            var json = JsonConvert.SerializeObject(entidade);
+
+            var acao = "";
+            switch (tipo)
+            {
+                case TipoComando.Inclusao:
+                    acao = "Inclusão";
+                    break;
+                case TipoComando.Alteracao:
+                    acao = "Modificação";
+                    json = JsonConvert.SerializeObject(entidade.RetornarAlteracoes());
+                    break;
+                case TipoComando.Exclusao:
+                    acao = "Exclusão";
+                    break;
+            }
+
+            _comandos.Enqueue($@"
+                INSERT INTO {NomeDominio}.""Auditorias""
+                    (""Id"", ""Acao"", ""IdEntidade"", ""Tabela"", ""Detalhes"", ""Data"")
+                VALUES
+                    ('{Guid.NewGuid()}', '{acao}', '{entidade.Id}', '{tabela}', '{json}', '{DateTime.Now:yyyy-MM-dd HH:mm:ss}');");
         }
 
         public async Task ExecutarComandosAsync()

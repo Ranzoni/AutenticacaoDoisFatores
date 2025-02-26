@@ -11,7 +11,10 @@ namespace AutenticacaoDoisFatores.Compartilhados
         public async Task InvokeAsync(HttpContext contexto)
         {
             if (ContextoDeveSerIgnorado(contexto))
+            {
                 await _proximo(contexto);
+                return;
+            }
 
             if (!await ChaveApiEhValidaAsync(contexto))
             {

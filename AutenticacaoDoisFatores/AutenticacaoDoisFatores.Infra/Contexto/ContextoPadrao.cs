@@ -47,6 +47,8 @@ namespace AutenticacaoDoisFatores.Infra.Contexto
             {
                 Auditoria auditoria;
 
+                var chavePrimaria = entidadeEmAlteracao.Properties.FirstOrDefault(p => p.Metadata.IsPrimaryKey())?.CurrentValue;
+
                 var entidadeSeraModificada = entidadeEmAlteracao.State == EntityState.Modified;
                 if (entidadeSeraModificada)
                 {
@@ -63,7 +65,7 @@ namespace AutenticacaoDoisFatores.Infra.Contexto
                             campos.Add(nomeDoCampo, $"Valor antigo = '{valorOriginal}' | Valor novo = '{valorAtual}'");
                     }
 
-                    auditoria = new(acao: "Modificação", detalhes: campos);
+                    auditoria = new(acao: "Modificação", idEntidade: (Guid)chavePrimaria, tabela: entidadeEmAlteracao.Metadata.Name, detalhes: campos);
                 }
                 else
                 {
@@ -72,7 +74,7 @@ namespace AutenticacaoDoisFatores.Infra.Contexto
                     foreach (var propriedade in entidadeEmAlteracao.Properties)
                         campos.Add(propriedade.Metadata.Name, propriedade.CurrentValue);
 
-                    auditoria = new(acao: acao, detalhes: campos);
+                    auditoria = new(acao: acao, idEntidade: (Guid)chavePrimaria, tabela: entidadeEmAlteracao.Metadata.Name, detalhes: campos);
                 }
 
                 Auditorias.Add(auditoria);

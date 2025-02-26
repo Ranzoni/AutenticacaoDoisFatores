@@ -40,16 +40,16 @@ namespace AutenticacaoDoisFatores.Dominio.Entidades
 
         public void AlterarChaveAcesso(string chaveAcesso)
         {
-            ChaveAcesso = chaveAcesso;
+            AuditarModificacao("ChaveAcesso", ChaveAcesso, chaveAcesso);
 
-            AtualizarDataAlteracao();
+            ChaveAcesso = chaveAcesso;
         }
 
         public void Ativar(bool valor)
         {
-            Ativo = valor;
+            AuditarModificacao("Ativo", Ativo.ToString(), valor.ToString());
 
-            AtualizarDataAlteracao();
+            Ativo = valor;
         }
     }
 }

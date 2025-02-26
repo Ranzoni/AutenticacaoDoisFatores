@@ -18,7 +18,11 @@ namespace AutenticacaoDoisFatores.Infra.Repositorios
                 VALUES
                     ('{entidade.Id}', '{entidade.Nome}', '{entidade.NomeUsuario}', '{entidade.Email}', '{entidade.Senha}', '{entidade.DataCadastro:yyyy-MM-dd HH:mm:ss}');";
 
-            _contexto.PrepararComando(sql);
+            _contexto.PrepararComando(
+                entidade: entidade,
+                tipo: TipoComando.Inclusao,
+                tabela: "Usuarios",
+                sql: sql);
         }
 
         public void Editar(Usuario entidade)
@@ -35,7 +39,11 @@ namespace AutenticacaoDoisFatores.Infra.Repositorios
                 WHERE
                     ""Id"" = '{entidade.Id}';";
 
-            _contexto.PrepararComando(sql);
+            _contexto.PrepararComando(
+                entidade: entidade,
+                tipo: TipoComando.Alteracao,
+                tabela: "Usuarios",
+                sql: sql);
         }
 
         public void Excluir(Guid id)
