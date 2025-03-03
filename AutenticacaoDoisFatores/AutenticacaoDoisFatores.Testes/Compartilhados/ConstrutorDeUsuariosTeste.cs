@@ -1,4 +1,5 @@
-﻿using AutenticacaoDoisFatores.Dominio.Construtores;
+﻿using AutenticacaoDoisFatores.Dominio.Compartilhados.Permissoes;
+using AutenticacaoDoisFatores.Dominio.Construtores;
 using AutenticacaoDoisFatores.Servico.Construtores;
 using Bogus;
 
@@ -24,7 +25,7 @@ namespace AutenticacaoDoisFatores.Testes.Compartilhados
                 .ComDataAlteracao(dataAlteracao);
         }
 
-        internal static ConstrutorDeNovoUsuario RetornarConstrutorDeNovo(string? nome = null, string? nomeUsuario = null, string? email = null, string? senha = null)
+        internal static ConstrutorDeNovoUsuario RetornarConstrutorDeNovo(string? nome = null, string? nomeUsuario = null, string? email = null, string? senha = null, IEnumerable<TipoDePermissao>? permissoes = null)
         {
             var faker = new Faker();
 
@@ -32,7 +33,8 @@ namespace AutenticacaoDoisFatores.Testes.Compartilhados
                 .ComNome(nome ?? faker.Person.FullName)
                 .ComNomeUsuario(nomeUsuario ?? faker.Person.UserName)
                 .ComEmail(email ?? faker.Person.Email)
-                .ComSenha(senha ?? "T3ste.de.Senh@");
+                .ComSenha(senha ?? "T3ste.de.Senh@")
+                .ComPermissoes(permissoes);
         }
     }
 }

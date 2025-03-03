@@ -44,7 +44,7 @@ namespace AutenticacaoDoisFatores.Servico.Compartilhados
 
         private static readonly string _confirmacaoDeCliente = "confirmacaoCliente";
         private static readonly string _geracaoNovaChaveCliente = "geracaoNovaChaveCliente";
-        private static readonly string _usuarioAutenticadao = "usuarioAutenticado";
+        private static readonly string _usuarioAutenticado = "usuarioAutenticado";
 
         public static string RegraConfirmacaoDeCliente
         {
@@ -68,7 +68,7 @@ namespace AutenticacaoDoisFatores.Servico.Compartilhados
         {
             return GerarToken([
                 new(type: _perfilIdentificador, idUsuario.ToString()),
-                new(type: _perfilSeguranca, _usuarioAutenticadao)
+                new(type: _perfilSeguranca, _usuarioAutenticado)
             ]);
         }
 

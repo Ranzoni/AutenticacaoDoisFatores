@@ -1,4 +1,5 @@
-﻿using AutenticacaoDoisFatores.Servico.DTO.Usuarios;
+﻿using AutenticacaoDoisFatores.Dominio.Compartilhados.Permissoes;
+using AutenticacaoDoisFatores.Servico.DTO.Usuarios;
 
 namespace AutenticacaoDoisFatores.Servico.Construtores
 {
@@ -8,6 +9,7 @@ namespace AutenticacaoDoisFatores.Servico.Construtores
         private string _email = "";
         private string _nomeUsuario = "";
         private string _senha = "";
+        private IEnumerable<TipoDePermissao>? _permissoes = null;
 
         public ConstrutorDeNovoUsuario ComNome(string nome)
         {
@@ -37,6 +39,13 @@ namespace AutenticacaoDoisFatores.Servico.Construtores
             return this;
         }
 
+        public ConstrutorDeNovoUsuario ComPermissoes(IEnumerable<TipoDePermissao>? permissoes)
+        {
+            _permissoes = permissoes;
+
+            return this;
+        }
+
         public NovoUsuario Construir()
         {
             var novoUsuario = new NovoUsuario
@@ -45,6 +54,20 @@ namespace AutenticacaoDoisFatores.Servico.Construtores
                     nomeUsuario: _nomeUsuario,
                     email: _email,
                     senha: _senha
+                );
+
+            return novoUsuario;
+        }
+
+        public NovoUsuario ConstruirComPermissoes()
+        {
+            var novoUsuario = new NovoUsuario
+                (
+                    nome: _nome,
+                    nomeUsuario: _nomeUsuario,
+                    email: _email,
+                    senha: _senha,
+                    permissoes: _permissoes
                 );
 
             return novoUsuario;
