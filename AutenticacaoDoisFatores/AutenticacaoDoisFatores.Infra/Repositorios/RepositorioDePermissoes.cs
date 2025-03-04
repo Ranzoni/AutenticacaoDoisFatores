@@ -24,13 +24,13 @@ namespace AutenticacaoDoisFatores.Infra.Repositorios
             await GetCollection().InsertManyAsync(permissoesParaIncluir);
         }
 
-        public async Task<bool> ExistePermissaoAsync(Guid idUsuario, TipoDePermissao tipoDePermissao)
+        public async Task<IEnumerable<TipoDePermissao>> RetornarPermissoes(Guid idUsuario)
         {
             return await GetCollection()
-                    .Find(p =>
-                        p.IdUsuario.Equals(idUsuario) &&
-                        p.TipoDePermissao.Equals(tipoDePermissao))
-                    .AnyAsync();
+                .Find(p =>
+                    p.IdUsuario.Equals(idUsuario))
+                .Project(p => p.TipoDePermissao)
+                .ToListAsync();
         }
     }
 

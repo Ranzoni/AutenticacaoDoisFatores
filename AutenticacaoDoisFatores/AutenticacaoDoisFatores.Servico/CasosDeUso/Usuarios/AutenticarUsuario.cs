@@ -9,9 +9,10 @@ using Mensageiro;
 
 namespace AutenticacaoDoisFatores.Servico.CasosDeUso.Usuarios
 {
-    public class AutenticarUsuario(DominioDeUsuarios dominio, INotificador notificador, IMapper mapper)
+    public class AutenticarUsuario(DominioDeUsuarios dominio, DominioDePermissoes permissoes, INotificador notificador, IMapper mapper)
     {
         private readonly DominioDeUsuarios _dominio = dominio;
+        private readonly DominioDePermissoes _permissoes = permissoes;
         private readonly INotificador _notificador = notificador;
         private readonly IMapper _mapper = mapper;
 
@@ -25,7 +26,8 @@ namespace AutenticacaoDoisFatores.Servico.CasosDeUso.Usuarios
             if (!AutenticacaoEhValida(usuario, dadosAutenticacao.Senha) || usuario is null)
                 return null;
 
-            var token = Seguranca.GerarTokenAutenticacaoUsuario(usuario.Id);
+            var permissoesUsuario = await _permissoes.RetornarPermissoes(usuario.Id);
+            var token = Seguranca.GerarTokenAutenticacaoUsuario(usuario.Id, permissoesUsuario);
 
             var usuarioCadastrado = _mapper.Map<UsuarioCadastrado>(usuario);
 

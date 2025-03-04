@@ -1,4 +1,5 @@
 ﻿using AutenticacaoDoisFatores.Dominio.Compartilhados;
+using AutenticacaoDoisFatores.Dominio.Compartilhados.Permissoes;
 using AutenticacaoDoisFatores.Dominio.Dominios;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
@@ -50,6 +51,12 @@ namespace AutenticacaoDoisFatores.Servico.Compartilhados
         private static readonly string _confirmacaoDeCliente = "confirmacaoCliente";
         private static readonly string _geracaoNovaChaveCliente = "geracaoNovaChaveCliente";
         private static readonly string _usuarioAutenticado = "usuarioAutenticado";
+        private static readonly string _criacaoDeUsuario = "criacaoDeUsuario";
+
+        private static readonly Dictionary<TipoDePermissao, string> _perfisPermissoes = new()
+        {
+            { TipoDePermissao.CriarUsuario, _criacaoDeUsuario }
+        };
 
         public static string RegraConfirmacaoDeCliente
         {
@@ -67,14 +74,31 @@ namespace AutenticacaoDoisFatores.Servico.Compartilhados
             }
         }
 
+        public static string RegraCriacaoDeUsuairo
+        {
+            get
+            {
+                return _criacaoDeUsuario;
+            }
+        }
+
         #endregion
 
-        public static string GerarTokenAutenticacaoUsuario(Guid idUsuario)
+        public static string GerarTokenAutenticacaoUsuario(Guid idUsuario, IEnumerable<TipoDePermissao>? permissoes)
         {
-            return GerarToken([
+            var perfis = new List<Claim>()
+            {
                 new(type: _perfilIdentificador, idUsuario.ToString()),
                 new(type: _perfilSeguranca, _usuarioAutenticado)
-            ]);
+            };
+
+            foreach (var permissao in permissoes ?? [])
+            {
+                var perfilPermissao = _perfisPermissoes[permissao];
+                perfis.Add(new(type: _perfilSeguranca, perfilPermissao));
+            }
+
+            return GerarToken(perfis);
         }
 
         public static string GerarTokenDeConfirmacaoDeCliente(Guid idCliente)

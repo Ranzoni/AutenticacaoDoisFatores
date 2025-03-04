@@ -55,7 +55,8 @@ builder.Services.AddAuthentication(opt =>
 
 builder.Services.AddAuthorizationBuilder()
     .AddPolicy("ConfirmacaoDeCliente", policy => policy.RequireRole(Seguranca.RegraConfirmacaoDeCliente))
-    .AddPolicy("GeracaoNovaChaveCliente", policy => policy.RequireRole(Seguranca.RegraGeracaoNovaChaveCliente));
+    .AddPolicy("GeracaoNovaChaveCliente", policy => policy.RequireRole(Seguranca.RegraGeracaoNovaChaveCliente))
+    .AddPolicy("CriacaoDeUsuario", policy => policy.RequireRole(Seguranca.RegraCriacaoDeUsuairo));
 
 builder.Services.AddHttpContextAccessor();
 

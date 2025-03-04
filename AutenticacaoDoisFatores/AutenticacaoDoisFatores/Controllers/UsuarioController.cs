@@ -2,15 +2,18 @@
 using AutenticacaoDoisFatores.Servico.CasosDeUso.Usuarios;
 using AutenticacaoDoisFatores.Servico.DTO.Usuarios;
 using Mensageiro;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AutenticacaoDoisFatores.Controllers
 {
     [ApiController]
+    [Authorize]
     [Route("api/usuario")]
     public class UsuarioController(INotificador _notificador, int? _statusCodeNotificador = null) : ControladorBase(_notificador, _statusCodeNotificador)
     {
         [HttpPost]
+        [Authorize(Policy = "CriacaoDeUsuario")]
         public async Task<ActionResult<UsuarioCadastrado?>> CriarAsync([FromServices] CriarUsuario criarUsuario, NovoUsuario novoUsuario)
         {
             try
@@ -56,6 +59,7 @@ namespace AutenticacaoDoisFatores.Controllers
         }
 
         [HttpPost("autenticar")]
+        [AllowAnonymous]
         public async Task<ActionResult<UsuarioAutenticado?>> AutenticarAsync([FromServices] AutenticarUsuario autenticarUsuario, DadosAutenticacao dadosAutenticacao)
         {
             try
