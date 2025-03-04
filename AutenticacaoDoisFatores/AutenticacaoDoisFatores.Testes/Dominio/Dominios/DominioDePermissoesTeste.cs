@@ -1,5 +1,4 @@
-﻿using AutenticacaoDoisFatores.Dominio.Compartilhados;
-using AutenticacaoDoisFatores.Dominio.Compartilhados.Permissoes;
+﻿using AutenticacaoDoisFatores.Dominio.Compartilhados.Permissoes;
 using AutenticacaoDoisFatores.Dominio.Dominios;
 using AutenticacaoDoisFatores.Dominio.Repositorios;
 using Bogus;
@@ -34,28 +33,27 @@ namespace AutenticacaoDoisFatores.Testes.Dominio.Dominios
             #endregion
         }
 
-        [Fact]
-        internal async Task DeveRetornarPermissao()
+        [Theory]
+        [InlineData(true)]
+        [InlineData(false)]
+        internal async Task DeveRetornarSePossuiPermissao(bool valorEsperado)
         {
             #region Preparação do teste
 
             var idUsuario = Guid.NewGuid();
             var permissao = _faker.Random.Enum<TipoDePermissao>();
-            var idPermissao = _faker.Random.AlphaNumeric(12);
 
             var dominio = _mocker.CreateInstance<DominioDePermissoes>();
-            _mocker.GetMock<IRepositorioDePermissoes>().Setup(r => r.BuscarAsync(idUsuario, permissao)).ReturnsAsync(idPermissao);
+            _mocker.GetMock<IRepositorioDePermissoes>().Setup(r => r.ExistePermissaoAsync(idUsuario, permissao)).ReturnsAsync(valorEsperado);
 
             #endregion
 
-            var retorno = await dominio.BuscarAsync(idUsuario, permissao);
+            var retorno = await dominio.TemPermissaoAsync(idUsuario, permissao);
 
             #region Verificação do teste
 
-            Assert.NotNull(retorno);
-            Assert.False(retorno.EstaVazio());
-            Assert.Equal(idPermissao, retorno);
-            _mocker.Verify<IRepositorioDePermissoes>(r => r.BuscarAsync(idUsuario, permissao), Times.Once);
+            Assert.Equal(valorEsperado, retorno);
+            _mocker.Verify<IRepositorioDePermissoes>(r => r.ExistePermissaoAsync(idUsuario, permissao), Times.Once);
 
             #endregion
         }

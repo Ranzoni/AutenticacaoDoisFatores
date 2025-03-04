@@ -18,6 +18,14 @@ namespace AutenticacaoDoisFatores.Dominio.Dominios
             await _repositorio.SalvarAlteracoesAsync();
         }
 
+        public async Task CriarUsuarioComDominioAsync(Usuario usuario, string dominio)
+        {
+            await ValidarUsuarioComDominioAsync(usuario, dominio);
+
+            _repositorio.Adicionar(usuario, dominio);
+            await _repositorio.SalvarAlteracoesAsync();
+        }
+
         public async Task<Usuario> AlterarUsuarioAsync(Usuario usuario)
         {
             await ValidarUsuarioAsync(usuario);
@@ -71,6 +79,17 @@ namespace AutenticacaoDoisFatores.Dominio.Dominios
                 ExcecoesUsuario.NomeUsuarioJaCadastrado();
 
             var existeEmail = await _repositorio.ExisteEmailAsync(usuario.Email, usuario.Id);
+            if (existeEmail)
+                ExcecoesUsuario.EmailJaCadastrado();
+        }
+
+        public async Task ValidarUsuarioComDominioAsync(Usuario usuario, string dominio)
+        {
+            var existeNomeUsuario = await _repositorio.ExisteNomeUsuarioAsync(usuario.NomeUsuario, dominio);
+            if (existeNomeUsuario)
+                ExcecoesUsuario.NomeUsuarioJaCadastrado();
+
+            var existeEmail = await _repositorio.ExisteEmailAsync(usuario.Email, dominio);
             if (existeEmail)
                 ExcecoesUsuario.EmailJaCadastrado();
         }

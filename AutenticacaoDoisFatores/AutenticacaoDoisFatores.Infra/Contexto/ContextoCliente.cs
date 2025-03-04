@@ -20,7 +20,7 @@ namespace AutenticacaoDoisFatores.Infra.Contexto
 
         public string NomeDominio { get; private set; } = nomeDominio;
 
-        public void PrepararComando(EntidadeComAuditoria entidade, TipoComando tipo, string tabela, string sql)
+        public void PrepararComando(EntidadeComAuditoria entidade, TipoComando tipo, string tabela, string sql, string? nomeDominio = null)
         {
             _comandos.Enqueue(sql);
 
@@ -41,8 +41,10 @@ namespace AutenticacaoDoisFatores.Infra.Contexto
                     break;
             }
 
+            var dominio = nomeDominio is null || nomeDominio.EstaVazio() ? NomeDominio : nomeDominio;
+
             _comandos.Enqueue($@"
-                INSERT INTO {NomeDominio}.""Auditorias""
+                INSERT INTO {dominio}.""Auditorias""
                     (""Id"", ""Acao"", ""IdEntidade"", ""Tabela"", ""Detalhes"", ""Data"")
                 VALUES
                     ('{Guid.NewGuid()}', '{acao}', '{entidade.Id}', '{tabela}', '{json}', '{DateTime.Now:yyyy-MM-dd HH:mm:ss}');");
@@ -131,8 +133,11 @@ namespace AutenticacaoDoisFatores.Infra.Contexto
             using var conexao = new NpgsqlConnection(stringDeConexao);
             conexao.Open();
 
-            var alterarSchema = $"SET search_path TO {dominio};";
-            sql = alterarSchema + sql;
+            if (!dominio.EstaVazio())
+            {
+                var alterarSchema = $"SET search_path TO {dominio};";
+                sql = alterarSchema + sql;
+            }
 
             using var comando = new NpgsqlCommand(sql, conexao);
             await comando.ExecuteScalarAsync();

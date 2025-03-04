@@ -4,6 +4,7 @@ using AutenticacaoDoisFatores.Dominio.Compartilhados.Permissoes;
 using AutenticacaoDoisFatores.Dominio.Dominios;
 using AutenticacaoDoisFatores.Dominio.Entidades;
 using AutenticacaoDoisFatores.Dominio.Validadores;
+using AutenticacaoDoisFatores.Servico.Compartilhados;
 using AutenticacaoDoisFatores.Servico.DTO.Usuarios;
 using AutoMapper;
 using Mensageiro;
@@ -51,7 +52,7 @@ namespace AutenticacaoDoisFatores.Servico.CasosDeUso.Usuarios
             else
                 verificarEmailJaCadastrado = _dominio.ExisteEmailAsync(novoUsuario.Email);
 
-            if (!ComposicaoSenhaEhValida(novoUsuario.SenhaDescriptografada()))
+            if (!Seguranca.ComposicaoSenhaEhValida(novoUsuario.SenhaDescriptografada()))
                 _notificador.AddMensagem(MensagensValidacaoUsuario.SenhaInvalida);
 
             if (verificarNomeUsuarioJaCadastrado is not null)
@@ -69,11 +70,6 @@ namespace AutenticacaoDoisFatores.Servico.CasosDeUso.Usuarios
             }
 
             return !_notificador.ExisteMensagem();
-        }
-
-        private static bool ComposicaoSenhaEhValida(string senha)
-        {
-            return !senha.EstaVazio() && senha.ExistemLetrasMaiusculas() && senha.ExistemLetrasMinusculas() && senha.ExistemNumeros() && senha.ExistemCaracteresEspeciaisAcentosOuPontuacoes() && senha.Length >= 7 && senha.Length <= 50;
         }
 
         private async Task DefinirPermissoes(Guid idUsuario, IEnumerable<TipoDePermissao>? permissoes)

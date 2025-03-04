@@ -68,7 +68,7 @@ namespace AutenticacaoDoisFatores.Infra.Repositorios
 
         public async Task<string?> RetornarNomeDominioAsync(string chave)
         {
-            var cliente = await _contexto.Clientes.FirstOrDefaultAsync(c => c.ChaveAcesso.Equals(chave));
+            var cliente = await _contexto.Clientes.FirstOrDefaultAsync(c => c.Ativo && c.ChaveAcesso.Equals(chave));
             return cliente?.NomeDominio;
         }
 

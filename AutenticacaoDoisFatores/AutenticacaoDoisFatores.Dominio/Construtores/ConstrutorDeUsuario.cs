@@ -9,7 +9,8 @@ namespace AutenticacaoDoisFatores.Dominio.Construtores
         private string _nomeUsuario = "";
         private string _email = "";
         private string _senha = "";
-        private bool _ativo;
+        private bool _ativo = false;
+        private bool _ehAdmin = false;
         private DateTime? _dataUltimoAcesso;
         private DateTime _dataCadastro;
         private DateTime? _dataAlteracao;
@@ -56,6 +57,13 @@ namespace AutenticacaoDoisFatores.Dominio.Construtores
             return this;
         }
 
+        public ConstrutorDeUsuario ComEhAdmin(bool ehAdmin)
+        {
+            _ehAdmin = ehAdmin;
+
+            return this;
+        }
+
         public ConstrutorDeUsuario ComDataUltimoAcesso(DateTime? dataUltimoAcesso)
         {
             _dataUltimoAcesso = dataUltimoAcesso;
@@ -84,7 +92,8 @@ namespace AutenticacaoDoisFatores.Dominio.Construtores
                 nome: _nome,
                 nomeUsuario: _nomeUsuario,
                 email: _email,
-                senha: _senha
+                senha: _senha,
+                ehAdmin: _ehAdmin
             );
 
             return usuario;
@@ -102,7 +111,8 @@ namespace AutenticacaoDoisFatores.Dominio.Construtores
                 ativo: _ativo,
                 dataUltimoAcesso: _dataUltimoAcesso,
                 dataCadastro: _dataCadastro,
-                dataAlteracao: _dataAlteracao
+                dataAlteracao: _dataAlteracao,
+                ehAdmin: _ehAdmin
             );
 
             return usuario;

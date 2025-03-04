@@ -12,9 +12,9 @@ namespace AutenticacaoDoisFatores.Dominio.Dominios
             await _repositorio.AdicionarAsync(idUsuario, permissoes);
         }
 
-        public async Task<string?> BuscarAsync(Guid idUsuario, TipoDePermissao tipoDePermissao)
+        public async Task<bool> TemPermissaoAsync(Guid idUsuario, TipoDePermissao tipoDePermissao)
         {
-            return await _repositorio.BuscarAsync(idUsuario, tipoDePermissao);
+            return await _repositorio.ExistePermissaoAsync(idUsuario, tipoDePermissao);
         }
     }
 }

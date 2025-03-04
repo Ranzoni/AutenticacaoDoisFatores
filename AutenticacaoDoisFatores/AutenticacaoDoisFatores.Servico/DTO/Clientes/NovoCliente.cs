@@ -10,13 +10,15 @@ namespace AutenticacaoDoisFatores.Servico.DTO.Clientes
         public string Email { get; }
         public string NomeDominio { get; }
         public string ChaveAcesso { get; }
+        public string SenhaAdm { get; }
 
-        public NovoCliente(string nome, string email, string nomeDominio)
+        public NovoCliente(string nome, string email, string nomeDominio, string senhaAdm)
         {
             Nome = nome;
             Email = email;
             NomeDominio = nomeDominio;
             (_chaveDescriptografada, ChaveAcesso) = GerarChaveAcesso();
+            SenhaAdm = senhaAdm;
         }
 
         public string ChaveDescriptografada()

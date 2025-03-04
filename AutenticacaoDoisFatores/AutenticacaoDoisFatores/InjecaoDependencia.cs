@@ -30,6 +30,7 @@ namespace AutenticacaoDoisFatores
         {
             servicos.AddTransient<DominioDeClientes>();
             servicos.AddTransient<EnvioDeEmail>();
+            servicos.AddTransient<DominioDePermissoes>();
             servicos.AddTransient<DominioDeUsuarios>();
         }
 
@@ -42,6 +43,7 @@ namespace AutenticacaoDoisFatores
         {
             servicos.AddTransient<IRepositorioDeClientes, RepositorioDeClientes>();
             servicos.AddTransient<IRepositorioDeUsuarios, RepositorioDeUsuarios>();
+            servicos.AddTransient<IRepositorioDePermissoes, RepositorioDePermissoes>();
         }
 
         internal static void AddContextos(this IServiceCollection servicos)
@@ -64,11 +66,21 @@ namespace AutenticacaoDoisFatores
                 var httpContextAccessor = provider.GetRequiredService<IHttpContextAccessor>();
                 var httpContext = httpContextAccessor.HttpContext;
 
-                var nomeDominio = httpContext?.Request.Headers["Dominio"].ToString() ?? "";
-                if (nomeDominio.EstaVazio())
-                    throw new ApplicationException("O Domínio do cliente não foi encontrado na requisição");
-
+                var nomeDominio = httpContext?.Request.Headers["Dominio"].ToString() ?? "public";
                 return new ContextoCliente(stringDeConexao, nomeDominio);
+            });
+
+            servicos.AddScoped(provider =>
+            {
+                var stringDeConexao = Environment.GetEnvironmentVariable("ADF_PERMISSOES_CONEXAO_BANCO");
+                if (stringDeConexao is null || stringDeConexao.EstaVazio())
+                    throw new ApplicationException("A string de conexão com o banco de dados de permissões não foi encontrada");
+
+                var httpContextAccessor = provider.GetRequiredService<IHttpContextAccessor>();
+                var httpContext = httpContextAccessor.HttpContext;
+
+                var nomeDominio = httpContext?.Request.Headers["Dominio"].ToString() ?? "public";
+                return new ContextoPermissoes(stringDeConexao, nomeDominio);
             });
         }
     }

@@ -27,6 +27,11 @@ namespace AutenticacaoDoisFatores.Servico.Compartilhados
 
             return (chave, chaveCriptografada);
         }
+
+        public static bool ComposicaoSenhaEhValida(string senha)
+        {
+            return !senha.EstaVazio() && senha.ExistemLetrasMaiusculas() && senha.ExistemLetrasMinusculas() && senha.ExistemNumeros() && senha.ExistemCaracteresEspeciaisAcentosOuPontuacoes() && senha.Length >= 7 && senha.Length <= 50;
+        }
     }
 
     #region Geração de tokens

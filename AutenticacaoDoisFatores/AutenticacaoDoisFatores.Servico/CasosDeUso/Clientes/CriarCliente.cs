@@ -1,5 +1,6 @@
 ﻿using AutenticacaoDoisFatores.Dominio.Compartilhados;
 using AutenticacaoDoisFatores.Dominio.Compartilhados.Mensagens;
+using AutenticacaoDoisFatores.Dominio.Construtores;
 using AutenticacaoDoisFatores.Dominio.Dominios;
 using AutenticacaoDoisFatores.Dominio.Entidades;
 using AutenticacaoDoisFatores.Dominio.Validadores;
@@ -11,10 +12,16 @@ using Mensageiro;
 
 namespace AutenticacaoDoisFatores.Servico.CasosDeUso.Clientes
 {
-    public class CriarCliente(IMapper mapper, DominioDeClientes dominio, INotificador notificador, EnvioDeEmail email)
+    public class CriarCliente(
+        IMapper mapper,
+        DominioDeClientes dominio,
+        DominioDeUsuarios usuarios,
+        INotificador notificador,
+        EnvioDeEmail email)
     {
         private readonly IMapper _mapper = mapper;
         private readonly DominioDeClientes _dominio = dominio;
+        private readonly DominioDeUsuarios _usuarios = usuarios;
         private readonly INotificador _notificador = notificador;
         private readonly EnvioDeEmail _email = email;
 
@@ -25,6 +32,9 @@ namespace AutenticacaoDoisFatores.Servico.CasosDeUso.Clientes
                 return null;
 
             var cliente = await CadastrarClienteAsync(novoCliente);
+
+            var usuarioAdm = CriarUsuarioAdm(novoCliente);
+            await _usuarios.CriarUsuarioComDominioAsync(usuarioAdm, cliente.NomeDominio);
 
             EnviarEmail(cliente.Id, novoCliente, linkBaseConfirmacaoCadastro);
 
@@ -45,6 +55,9 @@ namespace AutenticacaoDoisFatores.Servico.CasosDeUso.Clientes
 
             if (!ValidadorDeCliente.ChaveAcessoEhValida(novoCliente.ChaveAcesso))
                 _notificador.AddMensagem(MensagensValidacaoCliente.ChaveAcessoInvalida);
+
+            if (!Seguranca.ComposicaoSenhaEhValida(novoCliente.SenhaAdm))
+                _notificador.AddMensagem(MensagensValidacaoUsuario.SenhaInvalida);
 
             if (linkConfirmacaoCadastro.EstaVazio())
                 ExcecoesCriacaoCliente.LinkConfirmacaoCadastroNaoInformado();
@@ -69,6 +82,21 @@ namespace AutenticacaoDoisFatores.Servico.CasosDeUso.Clientes
             await _dominio.CriarDominioDoClienteAsync(cliente.Id);
 
             return cliente;
+        }
+
+        private static Usuario CriarUsuarioAdm(NovoCliente novoCliente)
+        {
+            var senhaCriptografada = Criptografia.CriptografarComSha512(novoCliente.SenhaAdm);
+
+            var usuarioAdm = new ConstrutorDeUsuario()
+                .ComNome(novoCliente.Nome)
+                .ComNomeUsuario("Administrador")
+                .ComEmail(novoCliente.Email)
+                .ComSenha(senhaCriptografada)
+                .ComEhAdmin(true)
+                .ConstruirNovo();
+
+            return usuarioAdm;
         }
 
         private void EnviarEmail(Guid id, NovoCliente novoCliente, string linkBaseConfirmacaoCadastro)
