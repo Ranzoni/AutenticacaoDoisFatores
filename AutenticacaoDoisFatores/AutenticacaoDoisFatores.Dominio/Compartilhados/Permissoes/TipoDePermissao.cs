@@ -11,6 +11,8 @@ namespace AutenticacaoDoisFatores.Dominio.Compartilhados.Permissoes
         [Description("Inativar usuário")]
         DesativarUsuario,
         [Description("Trocar a senha de um usuário")]
-        TrocarSenhaUsuario
+        TrocarSenhaUsuario,
+        [Description("Definir as permissões de um usuário")]
+        DefinirPermissoes
     }
 }

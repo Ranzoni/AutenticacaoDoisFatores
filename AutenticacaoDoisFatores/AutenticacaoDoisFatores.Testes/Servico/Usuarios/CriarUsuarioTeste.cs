@@ -1,5 +1,4 @@
 ﻿using AutenticacaoDoisFatores.Dominio.Compartilhados.Mensagens;
-using AutenticacaoDoisFatores.Dominio.Compartilhados.Permissoes;
 using AutenticacaoDoisFatores.Dominio.Dominios;
 using AutenticacaoDoisFatores.Dominio.Entidades;
 using AutenticacaoDoisFatores.Dominio.Repositorios;
@@ -30,7 +29,7 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Usuarios
         }
 
         [Fact]
-        internal async Task DeveCriarUsuarioSemPermissoes()
+        internal async Task DeveCriarUsuario()
         {
             #region Preparação do teste
 
@@ -60,48 +59,6 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Usuarios
             Assert.False(usuarioCadastrado.Ativo);
             _mocker.Verify<IRepositorioDeUsuarios>(r => r.Adicionar(It.IsAny<Usuario>()), Times.Once);
             _mocker.Verify<IRepositorioDeUsuarios>(r => r.SalvarAlteracoesAsync(), Times.Once);
-            _mocker.Verify<IRepositorioDePermissoes>(r => r.AdicionarAsync(It.IsAny<Guid>(), It.IsAny<IEnumerable<TipoDePermissao>>()), Times.Never);
-
-            #endregion
-        }
-
-        [Fact]
-        internal async Task DeveCriarUsuarioComPermissoes()
-        {
-            #region Preparação do teste
-
-            var nome = _faker.Person.FullName;
-            var nomeUsuario = _faker.Person.UserName;
-            var email = _faker.Person.Email;
-            var permissoes = _faker.Random.EnumValues<TipoDePermissao>(1);
-
-            var novoUsuario = ConstrutorDeUsuariosTeste
-                .RetornarConstrutorDeNovo(
-                    nome: nome,
-                    nomeUsuario: nomeUsuario,
-                    email: email,
-                    permissoes: permissoes)
-                .ConstruirComPermissoes();
-
-            _mocker.CreateInstance<DominioDeUsuarios>();
-            _mocker.Use(_mapeador);
-
-            var servico = _mocker.CreateInstance<CriarUsuario>();
-
-            #endregion
-
-            var usuarioCadastrado = await servico.CriarAsync(novoUsuario);
-
-            #region Verificação do teste
-
-            Assert.NotNull(usuarioCadastrado);
-            Assert.Equal(nome, usuarioCadastrado.Nome);
-            Assert.Equal(nomeUsuario, usuarioCadastrado.NomeUsuario);
-            Assert.Equal(email, usuarioCadastrado.Email);
-            Assert.False(usuarioCadastrado.Ativo);
-            _mocker.Verify<IRepositorioDeUsuarios>(r => r.Adicionar(It.IsAny<Usuario>()), Times.Once);
-            _mocker.Verify<IRepositorioDeUsuarios>(r => r.SalvarAlteracoesAsync(), Times.Once);
-            _mocker.Verify<IRepositorioDePermissoes>(r => r.AdicionarAsync(usuarioCadastrado.Id, permissoes), Times.Once);
 
             #endregion
         }

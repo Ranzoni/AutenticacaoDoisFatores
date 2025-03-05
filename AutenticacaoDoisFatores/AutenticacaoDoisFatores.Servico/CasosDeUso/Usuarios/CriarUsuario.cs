@@ -1,5 +1,4 @@
 ﻿using AutenticacaoDoisFatores.Dominio.Compartilhados.Mensagens;
-using AutenticacaoDoisFatores.Dominio.Compartilhados.Permissoes;
 using AutenticacaoDoisFatores.Dominio.Dominios;
 using AutenticacaoDoisFatores.Dominio.Entidades;
 using AutenticacaoDoisFatores.Dominio.Validadores;
@@ -10,12 +9,11 @@ using Mensageiro;
 
 namespace AutenticacaoDoisFatores.Servico.CasosDeUso.Usuarios
 {
-    public class CriarUsuario(IMapper mapeador, INotificador notificador, DominioDeUsuarios dominio, DominioDePermissoes permissoes)
+    public class CriarUsuario(IMapper mapeador, INotificador notificador, DominioDeUsuarios dominio)
     {
         private readonly IMapper _mapeador = mapeador;
         private readonly INotificador _notificador = notificador;
         private readonly DominioDeUsuarios _dominio = dominio;
-        private readonly DominioDePermissoes _permissoes = permissoes;
 
         public async Task<UsuarioCadastrado?> CriarAsync(NovoUsuario novoUsuario)
         {
@@ -26,7 +24,6 @@ namespace AutenticacaoDoisFatores.Servico.CasosDeUso.Usuarios
             var usuario = _mapeador.Map<Usuario>(novoUsuario);
 
             await _dominio.CriarUsuarioAsync(usuario);
-            await DefinirPermissoes(usuario.Id, novoUsuario.Permissoes);
 
             var usuarioCriado = _mapeador.Map<UsuarioCadastrado>(usuario);
 
@@ -69,14 +66,6 @@ namespace AutenticacaoDoisFatores.Servico.CasosDeUso.Usuarios
             }
 
             return !_notificador.ExisteMensagem();
-        }
-
-        private async Task DefinirPermissoes(Guid idUsuario, IEnumerable<TipoDePermissao>? permissoes)
-        {
-            if (permissoes is null || !permissoes.Any())
-                return;
-
-            await _permissoes.AdicionarAsync(idUsuario, permissoes);
         }
     }
 }

@@ -1,7 +1,6 @@
 ﻿using AutenticacaoDoisFatores.Dominio.Compartilhados;
 using AutenticacaoDoisFatores.Dominio.Compartilhados.Permissoes;
 using AutenticacaoDoisFatores.Dominio.Dominios;
-using AutenticacaoDoisFatores.Servico.DTO.Usuarios;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -56,13 +55,15 @@ namespace AutenticacaoDoisFatores.Servico.Compartilhados
         private static readonly string _ativarUsuario = "ativacaoDeUsuario";
         private static readonly string _desativarUsuario = "desativacaoDeUsuario";
         private static readonly string _trocarSenhaUsuario = "trocarSenhaDeUsuario";
+        private static readonly string _definirPermissoes = "definirPermissoes";
 
         private static readonly Dictionary<TipoDePermissao, string> _perfisPermissoes = new()
         {
             { TipoDePermissao.CriarUsuario, _criacaoDeUsuario },
             { TipoDePermissao.AtivarUsuario, _ativarUsuario },
             { TipoDePermissao.DesativarUsuario, _desativarUsuario },
-            { TipoDePermissao.TrocarSenhaUsuario, _trocarSenhaUsuario }
+            { TipoDePermissao.TrocarSenhaUsuario, _trocarSenhaUsuario },
+            { TipoDePermissao.DefinirPermissoes, _definirPermissoes }
         };
 
         public static string RegraConfirmacaoDeCliente
@@ -110,6 +111,14 @@ namespace AutenticacaoDoisFatores.Servico.Compartilhados
             get
             {
                 return _trocarSenhaUsuario;
+            }
+        }
+
+        public static string RegraDefinirPermissoes
+        {
+            get
+            {
+                return _definirPermissoes;
             }
         }
 

@@ -8,6 +8,7 @@ using AutenticacaoDoisFatores.Infra.Contexto;
 using AutenticacaoDoisFatores.Infra.Repositorios;
 using AutenticacaoDoisFatores.Infra.Servicos;
 using AutenticacaoDoisFatores.Servico.CasosDeUso.Clientes;
+using AutenticacaoDoisFatores.Servico.CasosDeUso.Permissoes;
 using AutenticacaoDoisFatores.Servico.CasosDeUso.Usuarios;
 
 namespace AutenticacaoDoisFatores
@@ -25,6 +26,7 @@ namespace AutenticacaoDoisFatores
             servicos.AddTransient<AtivarUsuario>();
             servicos.AddTransient<AutenticarUsuario>();
             servicos.AddTransient<GerarNovaSenhaUsuario>();
+            servicos.AddTransient<IncluirPermissoesParaUsuario>();
         }
 
         internal static void AddDominios(this IServiceCollection servicos)
