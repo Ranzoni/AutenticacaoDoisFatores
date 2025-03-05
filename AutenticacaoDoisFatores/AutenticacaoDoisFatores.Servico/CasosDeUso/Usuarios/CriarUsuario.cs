@@ -1,5 +1,4 @@
-﻿using AutenticacaoDoisFatores.Dominio.Compartilhados;
-using AutenticacaoDoisFatores.Dominio.Compartilhados.Mensagens;
+﻿using AutenticacaoDoisFatores.Dominio.Compartilhados.Mensagens;
 using AutenticacaoDoisFatores.Dominio.Compartilhados.Permissoes;
 using AutenticacaoDoisFatores.Dominio.Dominios;
 using AutenticacaoDoisFatores.Dominio.Entidades;

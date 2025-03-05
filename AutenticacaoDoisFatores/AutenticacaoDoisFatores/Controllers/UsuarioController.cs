@@ -1,5 +1,6 @@
 ﻿using AutenticacaoDoisFatores.Compartilhados;
 using AutenticacaoDoisFatores.Servico.CasosDeUso.Usuarios;
+using AutenticacaoDoisFatores.Servico.Compartilhados;
 using AutenticacaoDoisFatores.Servico.DTO.Usuarios;
 using Mensageiro;
 using Microsoft.AspNetCore.Authorization;
@@ -69,6 +70,22 @@ namespace AutenticacaoDoisFatores.Controllers
                 var token = await autenticarUsuario.AutenticarAsync(dadosAutenticacao);
 
                 return Sucesso(token);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
+        [HttpPut("{idUsuario}/gerar-nova-senha")]
+        [Authorize(Policy = "TrocarSenhaDeUsuario")]
+        public async Task<ActionResult> GerarNovaSenhaAsync([FromServices] GerarNovaSenhaUsuario gerarNovaSenhaUsuario, Guid idUsuario, TrocarSenhaUsuario trocarSenhaUsuario)
+        {
+            try
+            {
+                await gerarNovaSenhaUsuario.ExecutarAsync(idUsuario, trocarSenhaUsuario.NovaSenha);
+
+                return Sucesso("A senha foi atualizada com sucesso.");
             }
             catch (Exception e)
             {

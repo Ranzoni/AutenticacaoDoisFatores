@@ -42,7 +42,7 @@ namespace AutenticacaoDoisFatores.Controllers
             try
             {
                 var token = Token(HttpContext.Request);
-                var idCliente = Seguranca.RetornarIdClienteDoToken(token);
+                var idCliente = Seguranca.RetornarIdDoToken(token);
 
                 await ativarCliente.AtivarAsync(idCliente);
 
@@ -99,7 +99,7 @@ namespace AutenticacaoDoisFatores.Controllers
             try
             {
                 var token = Token(HttpContext.Request);
-                var idCliente = Seguranca.RetornarIdClienteDoToken(token);
+                var idCliente = Seguranca.RetornarIdDoToken(token);
 
                 await gerarNovaChaveAcessoCliente.GerarNovaChaveAsync(idCliente);
 

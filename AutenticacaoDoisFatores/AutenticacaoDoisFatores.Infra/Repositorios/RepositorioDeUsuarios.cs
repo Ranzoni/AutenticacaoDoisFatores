@@ -2,7 +2,6 @@
 using AutenticacaoDoisFatores.Dominio.Entidades;
 using AutenticacaoDoisFatores.Dominio.Repositorios;
 using AutenticacaoDoisFatores.Infra.Contexto;
-using System.Numerics;
 
 namespace AutenticacaoDoisFatores.Infra.Repositorios
 {

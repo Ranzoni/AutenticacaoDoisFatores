@@ -135,5 +135,29 @@ namespace AutenticacaoDoisFatores.Testes.Dominio.Entidades
 
             #endregion
         }
+
+        [Fact]
+        internal void DeveAlterarSenhaUsuario()
+        {
+            #region Preparação do teste
+
+            var senhaAtual = "Senh4#Atu@al";
+            var novaSenha = "Nov@Senh4_!";
+
+            var usuario = ConstrutorDeUsuariosTeste
+                .RetornarConstrutor(senha: senhaAtual)
+                .ConstruirCadastrado();
+
+            #endregion
+
+            usuario.AlterarSenha(novaSenha);
+
+            #region Verificação do teste
+
+            Assert.Equal(novaSenha, usuario.Senha);
+            Assert.NotNull(usuario.DataAlteracao);
+
+            #endregion
+        }
     }
 }

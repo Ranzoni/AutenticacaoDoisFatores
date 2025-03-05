@@ -66,5 +66,35 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Usuarios
 
             #endregion
         }
+
+        [Theory]
+        [InlineData(false)]
+        [InlineData(true)]
+        internal async Task NaoDeveAtivarUsuarioQuandoUsuarioEhAdm(bool ativar)
+        {
+            #region Preparação do teste
+
+            var idUsuario = Guid.NewGuid();
+
+            var usuarioCadastradoTeste = ConstrutorDeUsuariosTeste
+                .RetornarConstrutor(id: idUsuario, ativo: true, ehAdm: true)
+                .ConstruirCadastrado();
+
+            var servico = _mocker.CreateInstance<AtivarUsuario>();
+
+            _mocker.GetMock<IRepositorioDeUsuarios>().Setup(r => r.BuscarUnicoAsync(idUsuario)).ReturnsAsync(usuarioCadastradoTeste);
+
+            #endregion
+
+            await servico.AtivarAsync(idUsuario, ativar);
+
+            #region Verificação do teste
+
+            _mocker.Verify<IRepositorioDeUsuarios>(r => r.Editar(It.IsAny<Usuario>()), Times.Never);
+            _mocker.Verify<IRepositorioDeUsuarios>(r => r.SalvarAlteracoesAsync(), Times.Never);
+            _mocker.Verify<INotificador>(n => n.AddMensagemNaoEncontrado(MensagensValidacaoUsuario.UsuarioNaoEncontrado), Times.Once);
+
+            #endregion
+        }
     }
 }

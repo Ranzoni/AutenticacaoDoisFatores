@@ -9,7 +9,7 @@ namespace AutenticacaoDoisFatores.Testes.Compartilhados
     {
         private static readonly string _senhaParaTeste = "Teste.De.Senha_1";
 
-        internal static ConstrutorDeUsuario RetornarConstrutor(Guid? id = null, string? nome = null, string? nomeUsuario = null, string? email = null, string? senha = null, bool? ativo = null, DateTime? dataUltimoAcesso = null, DateTime? dataCadastro = null, DateTime? dataAlteracao = null)
+        internal static ConstrutorDeUsuario RetornarConstrutor(Guid? id = null, string? nome = null, string? nomeUsuario = null, string? email = null, string? senha = null, bool? ativo = null, DateTime? dataUltimoAcesso = null, DateTime? dataCadastro = null, DateTime? dataAlteracao = null, bool? ehAdm = null)
         {
             var faker = new Faker();
 
@@ -22,7 +22,8 @@ namespace AutenticacaoDoisFatores.Testes.Compartilhados
                 .ComAtivo(ativo ?? faker.Random.Bool())
                 .ComDataUltimoAcesso(dataUltimoAcesso)
                 .ComDataCadastro(dataCadastro ?? faker.Date.Past())
-                .ComDataAlteracao(dataAlteracao);
+                .ComDataAlteracao(dataAlteracao)
+                .ComEhAdmin(ehAdm ?? false);
         }
 
         internal static ConstrutorDeNovoUsuario RetornarConstrutorDeNovo(string? nome = null, string? nomeUsuario = null, string? email = null, string? senha = null, IEnumerable<TipoDePermissao>? permissoes = null)

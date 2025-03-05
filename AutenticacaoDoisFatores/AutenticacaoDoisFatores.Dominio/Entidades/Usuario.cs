@@ -52,5 +52,12 @@ namespace AutenticacaoDoisFatores.Dominio.Entidades
 
             Ativo = valor;
         }
+
+        public void AlterarSenha(string senha)
+        {
+            AuditarModificacao("Senha", Senha, senha);
+
+            Senha = senha;
+        }
     }
 }

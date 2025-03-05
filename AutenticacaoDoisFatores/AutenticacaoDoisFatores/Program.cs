@@ -58,7 +58,8 @@ builder.Services.AddAuthorizationBuilder()
     .AddPolicy("GeracaoNovaChaveCliente", policy => policy.RequireRole(Seguranca.RegraGeracaoNovaChaveCliente))
     .AddPolicy("CriacaoDeUsuario", policy => policy.RequireRole(Seguranca.RegraCriacaoDeUsuario))
     .AddPolicy("AtivacaoDeUsuario", policy => policy.RequireRole(Seguranca.RegraAtivacaoUsuario))
-    .AddPolicy("DesativacaoDeUsuario", policy => policy.RequireRole(Seguranca.RegraDesativacaoUsuario));
+    .AddPolicy("DesativacaoDeUsuario", policy => policy.RequireRole(Seguranca.RegraDesativacaoUsuario))
+    .AddPolicy("TrocarSenhaDeUsuario", policy => policy.RequireRole(Seguranca.RegraTrocarSenhaUsuario));
 
 builder.Services.AddHttpContextAccessor();
 

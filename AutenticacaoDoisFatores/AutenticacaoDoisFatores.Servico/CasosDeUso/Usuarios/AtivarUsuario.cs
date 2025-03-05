@@ -22,7 +22,7 @@ namespace AutenticacaoDoisFatores.Servico.CasosDeUso.Usuarios
 
         public bool AtivacaoEhValida(Usuario? usuario)
         {
-            if (usuario is null)
+            if (usuario is null || usuario.EhAdmin)
             {
                 _notificador.AddMensagemNaoEncontrado(MensagensValidacaoUsuario.UsuarioNaoEncontrado);
                 return false;
