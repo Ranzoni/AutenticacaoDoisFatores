@@ -29,6 +29,7 @@ namespace AutenticacaoDoisFatores.Controllers
         }
 
         [HttpPut("{idUsuario}/ativar")]
+        [Authorize(Policy = "AtivacaoDeUsuario")]
         public async Task<ActionResult<UsuarioCadastrado?>> AtivarAsync([FromServices] AtivarUsuario ativarUsuario, Guid idUsuario)
         {
             try
@@ -44,6 +45,7 @@ namespace AutenticacaoDoisFatores.Controllers
         }
 
         [HttpPut("{idUsuario}/desativar")]
+        [Authorize(Policy = "DesativacaoDeUsuario")]
         public async Task<ActionResult<UsuarioCadastrado?>> DesativarAsync([FromServices] AtivarUsuario ativarUsuario, Guid idUsuario)
         {
             try

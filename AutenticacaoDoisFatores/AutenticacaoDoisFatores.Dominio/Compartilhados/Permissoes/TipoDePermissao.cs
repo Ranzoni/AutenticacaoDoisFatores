@@ -6,7 +6,9 @@ namespace AutenticacaoDoisFatores.Dominio.Compartilhados.Permissoes
     {
         [Description("Criar um usuário")]
         CriarUsuario,
+        [Description("Ativar usuário")]
+        AtivarUsuario,
         [Description("Inativar usuário")]
-        AtivarUsuario
+        DesativarUsuario
     }
 }

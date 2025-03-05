@@ -238,6 +238,20 @@ namespace AutenticacaoDoisFatores.Infra.Repositorios
             return await _contexto.ConsultaEhVerdadeiraAsync(sql);
         }
 
+        public async Task<bool> EhAdm(Guid id)
+        {
+            var sql = $@"
+                SELECT
+                    COUNT(1) > 0
+                FROM
+                    {_contexto.NomeDominio}.""Usuarios"" u
+                WHERE
+                    u.""Id"" = '{id}' AND
+                    u.""EhAdmin"" = true";
+
+            return await _contexto.ConsultaEhVerdadeiraAsync(sql);
+        }
+
         #endregion
     }
 }

@@ -12,5 +12,6 @@ namespace AutenticacaoDoisFatores.Dominio.Repositorios
         void Adicionar(Usuario entidade, string dominio);
         Task<bool> ExisteNomeUsuarioAsync(string nomeUsuario, string dominio);
         Task<bool> ExisteEmailAsync(string email, string dominio);
+        Task<bool> EhAdm(Guid id);
     }
 }

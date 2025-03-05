@@ -53,11 +53,13 @@ namespace AutenticacaoDoisFatores.Servico.Compartilhados
         private static readonly string _usuarioAutenticado = "usuarioAutenticado";
         private static readonly string _criacaoDeUsuario = "criacaoDeUsuario";
         private static readonly string _ativarUsuario = "ativacaoDeUsuario";
+        private static readonly string _desativarUsuario = "desativacaoDeUsuario";
 
         private static readonly Dictionary<TipoDePermissao, string> _perfisPermissoes = new()
         {
             { TipoDePermissao.CriarUsuario, _criacaoDeUsuario },
-            { TipoDePermissao.AtivarUsuario, _ativarUsuario }
+            { TipoDePermissao.AtivarUsuario, _ativarUsuario },
+            { TipoDePermissao.DesativarUsuario, _desativarUsuario }
         };
 
         public static string RegraConfirmacaoDeCliente
@@ -89,6 +91,14 @@ namespace AutenticacaoDoisFatores.Servico.Compartilhados
             get
             {
                 return _ativarUsuario;
+            }
+        }
+
+        public static string RegraDesativacaoUsuario
+        {
+            get
+            {
+                return _desativarUsuario;
             }
         }
 
