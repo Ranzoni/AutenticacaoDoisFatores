@@ -33,7 +33,7 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Permissoes
 
             #endregion
 
-            await servico.ExecuteAsync(idUsuario, permissoesParaIncluir);
+            await servico.ExecutarAsync(idUsuario, permissoesParaIncluir);
 
             _mocker.Verify<IRepositorioDePermissoes>(r => r.AdicionarAsync(idUsuario, permissoesParaIncluir), Times.Once);
         }
@@ -50,7 +50,7 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Permissoes
 
             #endregion
 
-            await servico.ExecuteAsync(idUsuario, permissoesParaIncluir);
+            await servico.ExecutarAsync(idUsuario, permissoesParaIncluir);
 
             #region Verificação do teste
 
@@ -78,7 +78,7 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Permissoes
 
             #endregion
 
-            await servico.ExecuteAsync(idUsuario, permissoesParaIncluir);
+            await servico.ExecutarAsync(idUsuario, permissoesParaIncluir);
 
             #region Verificação do teste
 
@@ -106,7 +106,7 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Permissoes
 
             #endregion
 
-            await servico.ExecuteAsync(idUsuario, permissoesParaIncluir);
+            await servico.ExecutarAsync(idUsuario, permissoesParaIncluir);
 
             #region Verificação do teste
 

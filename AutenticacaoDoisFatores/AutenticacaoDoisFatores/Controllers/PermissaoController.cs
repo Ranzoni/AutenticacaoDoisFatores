@@ -14,11 +14,11 @@ namespace AutenticacaoDoisFatores.Controllers
     public class PermissaoController(INotificador _notificador, int? _statusCodeNotificador = null) : ControladorBase(_notificador, _statusCodeNotificador)
     {
         [HttpGet]
-        public ActionResult<IEnumerable<PermissaoDisponivel>> RetornarPermissoes()
+        public ActionResult<IEnumerable<PermissaoDisponivel>> RetornarTodas()
         {
             try
             {
-                var permissoes = RetornarTodasPermissoes.Executar();
+                var permissoes = Servico.CasosDeUso.Permissoes.RetornarPermissoes.RetornarTodas();
 
                 return Sucesso(permissoes);
             }
@@ -29,13 +29,28 @@ namespace AutenticacaoDoisFatores.Controllers
         }
 
         [HttpPost("usuario/{idUsuario}")]
-        public async Task<ActionResult> IncluirPermissoesUsuarioAsync([FromServices] IncluirPermissoesParaUsuario incluirPermissoesParaUsuario, Guid idUsuario, IEnumerable<TipoDePermissao> permissoes)
+        public async Task<ActionResult> IncluirParaUsuarioAsync([FromServices] IncluirPermissoesParaUsuario incluirPermissoesParaUsuario, Guid idUsuario, IEnumerable<TipoDePermissao> permissoes)
         {
             try
             {
-                await incluirPermissoesParaUsuario.ExecuteAsync(idUsuario, permissoes);
+                await incluirPermissoesParaUsuario.ExecutarAsync(idUsuario, permissoes);
 
                 return Sucesso("Permissões incluídas com sucesso.");
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
+        [HttpGet("usuario/{idUsuario}")]
+        public async Task<ActionResult<IEnumerable<PermissaoDisponivel>>> RetornarPorUsuarioAsync([FromServices] RetornarPermissoes retornarPermissoes, Guid idUsuario)
+        {
+            try
+            {
+                var retorno = await retornarPermissoes.RetornarPorUsuarioAsync(idUsuario);
+
+                return Sucesso(retorno);
             }
             catch (Exception e)
             {

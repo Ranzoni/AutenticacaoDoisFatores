@@ -12,7 +12,7 @@ namespace AutenticacaoDoisFatores.Servico.CasosDeUso.Permissoes
         private readonly DominioDeUsuarios _usuarios = usuarios;
         private readonly INotificador _notificador = notificador;
 
-        public async Task ExecuteAsync(Guid idUsuario, IEnumerable<TipoDePermissao> permissoes)
+        public async Task ExecutarAsync(Guid idUsuario, IEnumerable<TipoDePermissao> permissoes)
         {
             var usuario = await _usuarios.BuscarUnicoAsync(idUsuario);
             if (!InclusaoPermissoesEhValida(usuario))

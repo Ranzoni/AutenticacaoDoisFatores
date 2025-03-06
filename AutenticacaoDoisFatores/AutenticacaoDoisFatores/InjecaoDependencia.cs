@@ -27,6 +27,7 @@ namespace AutenticacaoDoisFatores
             servicos.AddTransient<AutenticarUsuario>();
             servicos.AddTransient<GerarNovaSenhaUsuario>();
             servicos.AddTransient<IncluirPermissoesParaUsuario>();
+            servicos.AddTransient<RetornarPermissoes>();
         }
 
         internal static void AddDominios(this IServiceCollection servicos)
