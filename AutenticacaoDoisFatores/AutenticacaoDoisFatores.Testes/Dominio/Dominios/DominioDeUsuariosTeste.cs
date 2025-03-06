@@ -341,5 +341,30 @@ namespace AutenticacaoDoisFatores.Testes.Dominio.Dominios
 
             #endregion
         }
+
+        [Theory]
+        [InlineData(true)]
+        [InlineData(false)]
+        internal async Task DeveRetornarSeUsuarioEhAdmin(bool resultadoEsperado)
+        {
+            #region Preparação do teste
+
+            var idUsuario = Guid.NewGuid();
+
+            var dominio = _mocker.CreateInstance<DominioDeUsuarios>();
+
+            _mocker.GetMock<IRepositorioDeUsuarios>().Setup(r => r.EhAdmAsync(idUsuario)).ReturnsAsync(resultadoEsperado);
+
+            #endregion
+
+            var retorno = await dominio.EhAdmAsync(idUsuario);
+
+            #region Verificação do teste
+
+            Assert.Equal(resultadoEsperado, retorno);
+            _mocker.Verify<IRepositorioDeUsuarios>(r => r.EhAdmAsync(idUsuario), Times.Once);
+
+            #endregion
+        }
     }
 }

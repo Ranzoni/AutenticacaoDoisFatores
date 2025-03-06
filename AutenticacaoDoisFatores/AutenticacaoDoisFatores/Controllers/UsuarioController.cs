@@ -66,7 +66,7 @@ namespace AutenticacaoDoisFatores.Controllers
         {
             try
             {
-                var token = await autenticarUsuario.AutenticarAsync(dadosAutenticacao);
+                var token = await autenticarUsuario.ExecutarAsync(dadosAutenticacao);
 
                 return Sucesso(token);
             }

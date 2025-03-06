@@ -18,23 +18,31 @@ namespace AutenticacaoDoisFatores.Infra.Repositorios
 
         public async Task AdicionarAsync(Guid idUsuario, IEnumerable<TipoDePermissao> permissoes)
         {
-            var permissoesParaIncluir = permissoes
-                .Select(tipoDePermissao => new Permissao(idUsuario, tipoDePermissao));
+            var permissao = new Permissao(idUsuario, permissoes);
 
-            await GetCollection().InsertManyAsync(permissoesParaIncluir);
+            await GetCollection().InsertOneAsync(permissao);
         }
 
-        public async Task<IEnumerable<TipoDePermissao>> RetornarPermissoes(Guid idUsuario)
+        public async Task<IEnumerable<TipoDePermissao>> RetornarPermissoesAsync(Guid idUsuario)
         {
-            return await GetCollection()
+            var permissao = await GetCollection()
                 .Find(p =>
                     p.IdUsuario.Equals(idUsuario))
-                .Project(p => p.TipoDePermissao)
-                .ToListAsync();
+                .FirstOrDefaultAsync();
+
+            return permissao?.Permissoes ?? [];
+        }
+
+        public async Task EditarAsync(Guid idUsuario, IEnumerable<TipoDePermissao> permissoes)
+        {
+            var filtro = Builders<Permissao>.Filter.Eq(p => p.IdUsuario, idUsuario);
+            var acao = Builders<Permissao>.Update.Set(pu => pu.Permissoes, permissoes);
+
+            await GetCollection().UpdateOneAsync(filtro, acao);
         }
     }
 
-    public class Permissao
+    internal class Permissao
     {
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
@@ -44,7 +52,7 @@ namespace AutenticacaoDoisFatores.Infra.Repositorios
         [BsonRepresentation(BsonType.String)]
         public Guid IdUsuario { get; private set; }
         [BsonElement("tipoDePermissao")]
-        public TipoDePermissao TipoDePermissao { get; private set; }
+        public IEnumerable<TipoDePermissao> Permissoes { get; private set; } = [];
         [BsonDateTimeOptions(Kind = DateTimeKind.Local)]
         public DateTime CreatedAt { get; private set; }
         [BsonDateTimeOptions(Kind = DateTimeKind.Local)]
@@ -52,19 +60,19 @@ namespace AutenticacaoDoisFatores.Infra.Repositorios
 
         public Permissao() { }
 
-        public Permissao(Guid idUsuario, TipoDePermissao tipoDePermissao)
+        public Permissao(Guid idUsuario, IEnumerable<TipoDePermissao> permissoes)
         {
             Id = "";
             IdUsuario = idUsuario;
-            TipoDePermissao = tipoDePermissao;
+            Permissoes = permissoes;
             CreatedAt = DateTime.Now;
         }
 
-        public Permissao(string id, Guid idUsuario, TipoDePermissao tipoDePermissao, DateTime createdAt, DateTime updatedAt)
+        public Permissao(string id, Guid idUsuario, IEnumerable<TipoDePermissao> permissoes, DateTime createdAt, DateTime updatedAt)
         {
             Id = id;
             IdUsuario = idUsuario;
-            TipoDePermissao = tipoDePermissao;
+            Permissoes = permissoes;
             CreatedAt = createdAt;
             UpdatedAt = updatedAt;
         }

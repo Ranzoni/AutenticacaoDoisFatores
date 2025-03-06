@@ -12,13 +12,22 @@ namespace AutenticacaoDoisFatores.Servico.CasosDeUso.Permissoes
         private readonly DominioDeUsuarios _usuarios = usuarios;
         private readonly INotificador _notificador = notificador;
 
-        public async Task ExecutarAsync(Guid idUsuario, IEnumerable<TipoDePermissao> permissoes)
+        public async Task ExecutarAsync(Guid idUsuario, IEnumerable<TipoDePermissao> permissoesParaIncluir)
         {
             var usuario = await _usuarios.BuscarUnicoAsync(idUsuario);
             if (!InclusaoPermissoesEhValida(usuario))
                 return;
 
-            await _dominio.AdicionarAsync(idUsuario, permissoes);
+            var permissoesJaInclusas = await _dominio.RetornarPermissoesAsync(idUsuario) ?? [];
+            if (permissoesJaInclusas.Any())
+            {
+                var novasPermissoes = permissoesParaIncluir.Except(permissoesJaInclusas);
+                var permissoesAtualizadas = permissoesJaInclusas.Concat(novasPermissoes);
+                await _dominio.EditarAsync(idUsuario, permissoesAtualizadas);
+            }
+            else
+                await _dominio.AdicionarAsync(idUsuario, permissoesParaIncluir);
+
         }
 
         private bool InclusaoPermissoesEhValida(Usuario? usuario)

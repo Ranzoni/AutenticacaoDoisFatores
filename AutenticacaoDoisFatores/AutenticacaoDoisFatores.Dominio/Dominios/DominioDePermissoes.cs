@@ -3,22 +3,23 @@ using AutenticacaoDoisFatores.Dominio.Repositorios;
 
 namespace AutenticacaoDoisFatores.Dominio.Dominios
 {
-    public class DominioDePermissoes(IRepositorioDePermissoes repositorio, IRepositorioDeUsuarios repositorioDeUsuarios)
+    public class DominioDePermissoes(IRepositorioDePermissoes repositorio)
     {
         private readonly IRepositorioDePermissoes _repositorio = repositorio;
-        private readonly IRepositorioDeUsuarios _repositorioDeUsuarios = repositorioDeUsuarios;
 
         public async Task AdicionarAsync(Guid idUsuario, IEnumerable<TipoDePermissao> permissoes)
         {
             await _repositorio.AdicionarAsync(idUsuario, permissoes);
         }
 
-        public async Task<IEnumerable<TipoDePermissao>> RetornarPermissoes(Guid idUsuario)
+        public async Task EditarAsync(Guid idUsuario, IEnumerable<TipoDePermissao> permissoes)
         {
-            if (await _repositorioDeUsuarios.EhAdm(idUsuario))
-                return RetornarTodasPermissoes();
+            await _repositorio.EditarAsync(idUsuario, permissoes);
+        }
 
-            return await _repositorio.RetornarPermissoes(idUsuario);
+        public async Task<IEnumerable<TipoDePermissao>> RetornarPermissoesAsync(Guid idUsuario)
+        {
+            return await _repositorio.RetornarPermissoesAsync(idUsuario);
         }
 
         public static IEnumerable<TipoDePermissao> RetornarTodasPermissoes()

@@ -20,7 +20,7 @@ namespace AutenticacaoDoisFatores.Testes.Dominio.Dominios
             var dominio = _mocker.CreateInstance<DominioDePermissoes>();
 
             var idUsuario = Guid.NewGuid();
-            var permissoes = _faker.Random.EnumValues<TipoDePermissao>(1);
+            var permissoes = _faker.Random.EnumValues<TipoDePermissao>();
 
             #endregion
 
@@ -42,40 +42,17 @@ namespace AutenticacaoDoisFatores.Testes.Dominio.Dominios
             var permissoes = _faker.Random.EnumValues<TipoDePermissao>();
 
             var dominio = _mocker.CreateInstance<DominioDePermissoes>();
-            _mocker.GetMock<IRepositorioDePermissoes>().Setup(r => r.RetornarPermissoes(idUsuario)).ReturnsAsync(permissoes);
-            _mocker.GetMock<IRepositorioDeUsuarios>().Setup(r => r.EhAdm(idUsuario)).ReturnsAsync(false);
+            _mocker.GetMock<IRepositorioDePermissoes>().Setup(r => r.RetornarPermissoesAsync(idUsuario)).ReturnsAsync(permissoes);
+            _mocker.GetMock<IRepositorioDeUsuarios>().Setup(r => r.EhAdmAsync(idUsuario)).ReturnsAsync(false);
 
             #endregion
 
-            var retorno = await dominio.RetornarPermissoes(idUsuario);
+            var retorno = await dominio.RetornarPermissoesAsync(idUsuario);
 
             #region Verificação do teste
 
             Assert.Equal(permissoes, retorno);
-            _mocker.Verify<IRepositorioDePermissoes>(r => r.RetornarPermissoes(idUsuario), Times.Once);
-
-            #endregion
-        }
-
-        [Fact]
-        internal async Task DeveRetornarPermissoesDoUsuarioAdm()
-        {
-            #region Preparação do teste
-
-            var idUsuario = Guid.NewGuid();
-            var permissoesEsperadas = Enum.GetValues<TipoDePermissao>();
-
-            var dominio = _mocker.CreateInstance<DominioDePermissoes>();
-            _mocker.GetMock<IRepositorioDeUsuarios>().Setup(r => r.EhAdm(idUsuario)).ReturnsAsync(true);
-
-            #endregion
-
-            var retorno = await dominio.RetornarPermissoes(idUsuario);
-
-            #region Verificação do teste
-
-            Assert.Equal(permissoesEsperadas, retorno);
-            _mocker.Verify<IRepositorioDePermissoes>(r => r.RetornarPermissoes(It.IsAny<Guid>()), Times.Never);
+            _mocker.Verify<IRepositorioDePermissoes>(r => r.RetornarPermissoesAsync(idUsuario), Times.Once);
 
             #endregion
         }
@@ -88,6 +65,27 @@ namespace AutenticacaoDoisFatores.Testes.Dominio.Dominios
             var retorno = DominioDePermissoes.RetornarTodasPermissoes();
 
             Assert.Equal(permissoesEsperadas, retorno);
+        }
+
+        [Fact]
+        internal async Task DeveEditarPermissao()
+        {
+            #region Preparação do teste
+
+            var dominio = _mocker.CreateInstance<DominioDePermissoes>();
+
+            var idUsuario = Guid.NewGuid();
+            var permissoes = _faker.Random.EnumValues<TipoDePermissao>();
+
+            #endregion
+
+            await dominio.EditarAsync(idUsuario, permissoes);
+
+            #region Verificação do teste
+
+            _mocker.Verify<IRepositorioDePermissoes>(r => r.EditarAsync(idUsuario, permissoes), Times.Once);
+
+            #endregion
         }
     }
 }

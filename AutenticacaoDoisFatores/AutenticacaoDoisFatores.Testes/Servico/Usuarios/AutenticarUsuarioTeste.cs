@@ -52,7 +52,7 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Usuarios
 
             #endregion
 
-            var resposta = await servico.AutenticarAsync(dadosAutenticacao);
+            var resposta = await servico.ExecutarAsync(dadosAutenticacao);
 
             #region Verificação do teste
 
@@ -88,7 +88,7 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Usuarios
 
             #endregion
 
-            var resposta = await servico.AutenticarAsync(dadosAutenticacao);
+            var resposta = await servico.ExecutarAsync(dadosAutenticacao);
 
             #region Verificação do teste
 
@@ -115,7 +115,7 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Usuarios
 
             #endregion
 
-            var resposta = await servico.AutenticarAsync(dadosAutenticacao);
+            var resposta = await servico.ExecutarAsync(dadosAutenticacao);
 
             #region Verificação do teste
 
@@ -139,7 +139,7 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Usuarios
 
             #endregion
 
-            var resposta = await servico.AutenticarAsync(dadosAutenticacao);
+            var resposta = await servico.ExecutarAsync(dadosAutenticacao);
 
             #region Verificação do teste
 
@@ -163,7 +163,7 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Usuarios
 
             #endregion
 
-            var resposta = await servico.AutenticarAsync(dadosAutenticacao);
+            var resposta = await servico.ExecutarAsync(dadosAutenticacao);
 
             #region Verificação do teste
 
@@ -195,7 +195,7 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Usuarios
 
             #endregion
 
-            var resposta = await servico.AutenticarAsync(dadosAutenticacao);
+            var resposta = await servico.ExecutarAsync(dadosAutenticacao);
 
             #region Verificação do teste
 
@@ -225,7 +225,7 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Usuarios
 
             #endregion
 
-            var resposta = await servico.AutenticarAsync(dadosAutenticacao);
+            var resposta = await servico.ExecutarAsync(dadosAutenticacao);
 
             #region Verificação do teste
 
@@ -257,7 +257,7 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Usuarios
 
             #endregion
 
-            var resposta = await servico.AutenticarAsync(dadosAutenticacao);
+            var resposta = await servico.ExecutarAsync(dadosAutenticacao);
 
             #region Verificação do teste
 
@@ -289,7 +289,7 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Usuarios
 
             #endregion
 
-            var resposta = await servico.AutenticarAsync(dadosAutenticacao);
+            var resposta = await servico.ExecutarAsync(dadosAutenticacao);
 
             #region Verificação do teste
 

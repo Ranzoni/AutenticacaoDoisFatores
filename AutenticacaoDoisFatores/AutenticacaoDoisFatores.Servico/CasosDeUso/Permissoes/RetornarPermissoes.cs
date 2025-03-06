@@ -4,9 +4,10 @@ using AutenticacaoDoisFatores.Servico.DTO.Permissoes;
 
 namespace AutenticacaoDoisFatores.Servico.CasosDeUso.Permissoes
 {
-    public class RetornarPermissoes(DominioDePermissoes dominio)
+    public class RetornarPermissoes(DominioDePermissoes dominio, DominioDeUsuarios usuarios)
     {
         private readonly DominioDePermissoes _dominio = dominio;
+        private readonly DominioDeUsuarios _usuarios = usuarios;
 
         public static IEnumerable<PermissaoDisponivel> RetornarTodas()
         {
@@ -18,7 +19,10 @@ namespace AutenticacaoDoisFatores.Servico.CasosDeUso.Permissoes
 
         public async Task<IEnumerable<PermissaoDisponivel>> RetornarPorUsuarioAsync(Guid idUsuario)
         {
-            var permissoes = await _dominio.RetornarPermissoes(idUsuario);
+            if (await _usuarios.EhAdmAsync(idUsuario))
+                return RetornarTodas();
+
+            var permissoes = await _dominio.RetornarPermissoesAsync(idUsuario);
 
             return permissoes
                 .Select(tipo => new PermissaoDisponivel(tipo.Descricao() ?? "", tipo));

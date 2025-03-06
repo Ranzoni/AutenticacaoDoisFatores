@@ -65,6 +65,11 @@ namespace AutenticacaoDoisFatores.Dominio.Dominios
             return await _repositorio.ExisteEmailAsync(email);
         }
 
+        public async Task<bool> EhAdmAsync(Guid idUsuario)
+        {
+            return await _repositorio.EhAdmAsync(idUsuario);
+        }
+
         #endregion
     }
 

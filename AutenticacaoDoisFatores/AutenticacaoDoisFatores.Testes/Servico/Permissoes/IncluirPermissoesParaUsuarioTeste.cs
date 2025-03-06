@@ -55,6 +55,7 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Permissoes
             #region Verificação do teste
 
             _mocker.Verify<IRepositorioDePermissoes>(r => r.AdicionarAsync(It.IsAny<Guid>(), It.IsAny<IEnumerable<TipoDePermissao>>()), Times.Never);
+            _mocker.Verify<IRepositorioDePermissoes>(r => r.EditarAsync(It.IsAny<Guid>(), It.IsAny<IEnumerable<TipoDePermissao>>()), Times.Never);
             _mocker.Verify<INotificador>(n => n.AddMensagemNaoEncontrado(MensagensValidacaoUsuario.UsuarioNaoEncontrado), Times.Once);
 
             #endregion
@@ -83,6 +84,7 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Permissoes
             #region Verificação do teste
 
             _mocker.Verify<IRepositorioDePermissoes>(r => r.AdicionarAsync(It.IsAny<Guid>(), It.IsAny<IEnumerable<TipoDePermissao>>()), Times.Never);
+            _mocker.Verify<IRepositorioDePermissoes>(r => r.EditarAsync(It.IsAny<Guid>(), It.IsAny<IEnumerable<TipoDePermissao>>()), Times.Never);
             _mocker.Verify<INotificador>(n => n.AddMensagemNaoEncontrado(MensagensValidacaoUsuario.UsuarioNaoEncontrado), Times.Once);
 
             #endregion

@@ -1,5 +1,6 @@
 ﻿using AutenticacaoDoisFatores.Dominio.Compartilhados;
 using AutenticacaoDoisFatores.Dominio.Compartilhados.Mensagens;
+using AutenticacaoDoisFatores.Dominio.Compartilhados.Permissoes;
 using AutenticacaoDoisFatores.Dominio.Dominios;
 using AutenticacaoDoisFatores.Dominio.Entidades;
 using AutenticacaoDoisFatores.Servico.Compartilhados;
@@ -16,7 +17,7 @@ namespace AutenticacaoDoisFatores.Servico.CasosDeUso.Usuarios
         private readonly INotificador _notificador = notificador;
         private readonly IMapper _mapper = mapper;
 
-        public async Task<UsuarioAutenticado?> AutenticarAsync(DadosAutenticacao dadosAutenticacao)
+        public async Task<UsuarioAutenticado?> ExecutarAsync(DadosAutenticacao dadosAutenticacao)
         {
             if (!DadosAutenticaoSaoValidos(dadosAutenticacao))
                 return null;
@@ -26,7 +27,7 @@ namespace AutenticacaoDoisFatores.Servico.CasosDeUso.Usuarios
             if (!AutenticacaoEhValida(usuario, dadosAutenticacao.Senha) || usuario is null)
                 return null;
 
-            var permissoesUsuario = await _permissoes.RetornarPermissoes(usuario.Id);
+            var permissoesUsuario = await RetornarPermissoesAsync(usuario);
             var token = Seguranca.GerarTokenAutenticacaoUsuario(usuario.Id, permissoesUsuario);
 
             var usuarioCadastrado = _mapper.Map<UsuarioCadastrado>(usuario);
@@ -49,6 +50,16 @@ namespace AutenticacaoDoisFatores.Servico.CasosDeUso.Usuarios
             return true;
         }
 
+        private async Task<Usuario?> BuscarUsuarioAsync(DadosAutenticacao dadosAutenticacao)
+        {
+            if (dadosAutenticacao.NomeUsuario is not null && !dadosAutenticacao.NomeUsuario.EstaVazio())
+                return await _dominio.BuscarPorNomeUsuarioAsync(dadosAutenticacao.NomeUsuario);
+            else if (dadosAutenticacao.Email is not null && !dadosAutenticacao.Email.EstaVazio())
+                return await _dominio.BuscarPorEmailAsync(dadosAutenticacao.Email);
+
+            return null;
+        }
+
         private bool AutenticacaoEhValida(Usuario? usuario, string senha)
         {
             if (usuario is null || !usuario.Ativo)
@@ -67,14 +78,12 @@ namespace AutenticacaoDoisFatores.Servico.CasosDeUso.Usuarios
             return true;
         }
 
-        private async Task<Usuario?> BuscarUsuarioAsync(DadosAutenticacao dadosAutenticacao)
+        private async Task<IEnumerable<TipoDePermissao>> RetornarPermissoesAsync(Usuario usuario)
         {
-            if (dadosAutenticacao.NomeUsuario is not null && !dadosAutenticacao.NomeUsuario.EstaVazio())
-                return await _dominio.BuscarPorNomeUsuarioAsync(dadosAutenticacao.NomeUsuario);
-            else if (dadosAutenticacao.Email is not null && !dadosAutenticacao.Email.EstaVazio())
-                return await _dominio.BuscarPorEmailAsync(dadosAutenticacao.Email);
-
-            return null;
+            if (usuario.EhAdmin)
+                return DominioDePermissoes.RetornarTodasPermissoes();
+                
+            return await _permissoes.RetornarPermissoesAsync(usuario.Id);
         }
     }
 }
