@@ -1,9 +1,8 @@
 ﻿using AutenticacaoDoisFatores.Dominio.Compartilhados.Permissoes;
 using AutenticacaoDoisFatores.Dominio.Repositorios;
 using AutenticacaoDoisFatores.Infra.Contexto;
-using MongoDB.Bson;
-using MongoDB.Bson.Serialization.Attributes;
-using MongoDB.Driver;
+using AutenticacaoDoisFatores.Infra.Entidades;
+using AutenticacaoDoisFatores.Infra.Utilitarios;
 
 namespace AutenticacaoDoisFatores.Infra.Repositorios
 {
@@ -11,70 +10,37 @@ namespace AutenticacaoDoisFatores.Infra.Repositorios
     {
         private readonly ContextoPermissoes _contexto = contexto;
 
-        private IMongoCollection<Permissao> GetCollection()
-        {
-            return _contexto.GetDatabase().GetCollection<Permissao>("permissao");
-        }
-
         public async Task AdicionarAsync(Guid idUsuario, IEnumerable<TipoDePermissao> permissoes)
         {
             var permissao = new Permissao(idUsuario, permissoes);
 
-            await GetCollection().InsertOneAsync(permissao);
+            await _contexto.Permissoes.AdicionarAsync(permissao);
+
+            var auditoria = _contexto.MontarAuditoria(typeof(Permissao), idUsuario, AcoesDeAuditoria.Inclusao, permissao);
+            if (auditoria is not null)
+                await _contexto.Audiorias.AdicionarAsync(auditoria);
         }
 
-        public async Task<IEnumerable<TipoDePermissao>> RetornarPermissoesAsync(Guid idUsuario)
+        public async Task<IEnumerable<TipoDePermissao>> RetornarPorUsuarioAsync(Guid idUsuario)
         {
-            var permissao = await GetCollection()
-                .Find(p =>
-                    p.IdUsuario.Equals(idUsuario))
-                .FirstOrDefaultAsync();
+            var permissao = await _contexto.Permissoes
+                .BuscarUnicoAsync(p => p.IdUsuario.Equals(idUsuario));
 
             return permissao?.Permissoes ?? [];
         }
 
         public async Task EditarAsync(Guid idUsuario, IEnumerable<TipoDePermissao> permissoes)
         {
-            var filtro = Builders<Permissao>.Filter.Eq(p => p.IdUsuario, idUsuario);
-            var acao = Builders<Permissao>.Update.Set(pu => pu.Permissoes, permissoes);
+            await _contexto.Permissoes.EditarAsync
+            (
+                filtroExpressao: p => p.IdUsuario == idUsuario,
+                campo: p => p.Permissoes,
+                valor: permissoes
+            );
 
-            await GetCollection().UpdateOneAsync(filtro, acao);
-        }
-    }
-
-    internal class Permissao
-    {
-        [BsonId]
-        [BsonRepresentation(BsonType.ObjectId)]
-        [BsonElement("_id")]
-        public string Id { get; private set; } = "";
-        [BsonElement("idUsuario")]
-        [BsonRepresentation(BsonType.String)]
-        public Guid IdUsuario { get; private set; }
-        [BsonElement("tipoDePermissao")]
-        public IEnumerable<TipoDePermissao> Permissoes { get; private set; } = [];
-        [BsonDateTimeOptions(Kind = DateTimeKind.Local)]
-        public DateTime CreatedAt { get; private set; }
-        [BsonDateTimeOptions(Kind = DateTimeKind.Local)]
-        public DateTime? UpdatedAt { get; private set; }
-
-        public Permissao() { }
-
-        public Permissao(Guid idUsuario, IEnumerable<TipoDePermissao> permissoes)
-        {
-            Id = "";
-            IdUsuario = idUsuario;
-            Permissoes = permissoes;
-            CreatedAt = DateTime.Now;
-        }
-
-        public Permissao(string id, Guid idUsuario, IEnumerable<TipoDePermissao> permissoes, DateTime createdAt, DateTime updatedAt)
-        {
-            Id = id;
-            IdUsuario = idUsuario;
-            Permissoes = permissoes;
-            CreatedAt = createdAt;
-            UpdatedAt = updatedAt;
+            var auditoria = _contexto.MontarAuditoria(typeof(Permissao), idUsuario, AcoesDeAuditoria.Modificacao, new { permissoes });
+            if (auditoria is not null)
+                await _contexto.Audiorias.AdicionarAsync(auditoria);
         }
     }
 }

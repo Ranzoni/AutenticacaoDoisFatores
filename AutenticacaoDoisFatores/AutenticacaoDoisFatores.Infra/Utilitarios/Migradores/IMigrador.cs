@@ -1,4 +1,4 @@
-﻿namespace AutenticacaoDoisFatores.Infra.Compartilhados.Migradores
+﻿namespace AutenticacaoDoisFatores.Infra.Utilitarios.Migradores
 {
     public interface IMigrador
     {

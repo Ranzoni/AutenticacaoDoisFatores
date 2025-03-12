@@ -42,7 +42,7 @@ namespace AutenticacaoDoisFatores.Testes.Dominio.Dominios
             var permissoes = _faker.Random.EnumValues<TipoDePermissao>();
 
             var dominio = _mocker.CreateInstance<DominioDePermissoes>();
-            _mocker.GetMock<IRepositorioDePermissoes>().Setup(r => r.RetornarPermissoesAsync(idUsuario)).ReturnsAsync(permissoes);
+            _mocker.GetMock<IRepositorioDePermissoes>().Setup(r => r.RetornarPorUsuarioAsync(idUsuario)).ReturnsAsync(permissoes);
             _mocker.GetMock<IRepositorioDeUsuarios>().Setup(r => r.EhAdmAsync(idUsuario)).ReturnsAsync(false);
 
             #endregion
@@ -52,7 +52,7 @@ namespace AutenticacaoDoisFatores.Testes.Dominio.Dominios
             #region Verificação do teste
 
             Assert.Equal(permissoes, retorno);
-            _mocker.Verify<IRepositorioDePermissoes>(r => r.RetornarPermissoesAsync(idUsuario), Times.Once);
+            _mocker.Verify<IRepositorioDePermissoes>(r => r.RetornarPorUsuarioAsync(idUsuario), Times.Once);
 
             #endregion
         }

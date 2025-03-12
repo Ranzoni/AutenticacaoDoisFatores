@@ -19,7 +19,7 @@ namespace AutenticacaoDoisFatores.Dominio.Dominios
 
         public async Task<IEnumerable<TipoDePermissao>> RetornarPermissoesAsync(Guid idUsuario)
         {
-            return await _repositorio.RetornarPermissoesAsync(idUsuario);
+            return await _repositorio.RetornarPorUsuarioAsync(idUsuario);
         }
 
         public static IEnumerable<TipoDePermissao> RetornarTodasPermissoes()

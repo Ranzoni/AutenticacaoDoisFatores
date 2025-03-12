@@ -1,6 +1,6 @@
 ﻿using AutenticacaoDoisFatores.Dominio.Entidades;
 using AutenticacaoDoisFatores.Dominio.Repositorios;
-using AutenticacaoDoisFatores.Infra.Compartilhados.Migradores;
+using AutenticacaoDoisFatores.Infra.Utilitarios.Migradores;
 using AutenticacaoDoisFatores.Infra.Contexto;
 using Microsoft.EntityFrameworkCore;
 
@@ -14,8 +14,6 @@ namespace AutenticacaoDoisFatores.Infra.Repositorios
 
         public void Adicionar(Cliente entidade)
         {
-            _contexto.Clientes.Select(s => new { s.Nome });
-
             _contexto.Add(entidade);
         }
 

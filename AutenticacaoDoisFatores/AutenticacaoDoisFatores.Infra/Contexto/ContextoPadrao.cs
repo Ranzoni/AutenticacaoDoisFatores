@@ -1,6 +1,7 @@
 ﻿using AutenticacaoDoisFatores.Dominio.Entidades;
-using AutenticacaoDoisFatores.Infra.Compartilhados;
 using AutenticacaoDoisFatores.Infra.Configuracoes;
+using AutenticacaoDoisFatores.Infra.Entidades;
+using AutenticacaoDoisFatores.Infra.Utilitarios;
 using Microsoft.EntityFrameworkCore;
 using System.Dynamic;
 
@@ -65,11 +66,11 @@ namespace AutenticacaoDoisFatores.Infra.Contexto
                             campos.Add(nomeDoCampo, $"Valor antigo = '{valorOriginal}' | Valor novo = '{valorAtual}'");
                     }
 
-                    auditoria = new(acao: "Modificação", idEntidade: (Guid)chavePrimaria, tabela: entidadeEmAlteracao.Metadata.Name, detalhes: campos);
+                    auditoria = new(acao: AcoesDeAuditoria.Modificacao, idEntidade: (Guid)chavePrimaria, tabela: entidadeEmAlteracao.Metadata.Name, detalhes: campos);
                 }
                 else
                 {
-                    var acao = entidadeEmAlteracao.State == EntityState.Added ? "Inclusão" : "Remoção";
+                    var acao = entidadeEmAlteracao.State == EntityState.Added ? AcoesDeAuditoria.Inclusao : AcoesDeAuditoria.Exclusao;
                     var campos = new ExpandoObject() as IDictionary<string, Object?>;
                     foreach (var propriedade in entidadeEmAlteracao.Properties)
                         campos.Add(propriedade.Metadata.Name, propriedade.CurrentValue);

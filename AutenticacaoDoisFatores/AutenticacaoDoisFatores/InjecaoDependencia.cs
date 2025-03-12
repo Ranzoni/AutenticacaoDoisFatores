@@ -2,8 +2,8 @@
 using AutenticacaoDoisFatores.Dominio.Dominios;
 using AutenticacaoDoisFatores.Dominio.Repositorios;
 using AutenticacaoDoisFatores.Dominio.Servicos;
-using AutenticacaoDoisFatores.Infra.Compartilhados.Migradores;
-using AutenticacaoDoisFatores.Infra.Compartilhados.Migradores.Npgsql;
+using AutenticacaoDoisFatores.Infra.Utilitarios.Migradores;
+using AutenticacaoDoisFatores.Infra.Utilitarios.Migradores.Npgsql;
 using AutenticacaoDoisFatores.Infra.Contexto;
 using AutenticacaoDoisFatores.Infra.Repositorios;
 using AutenticacaoDoisFatores.Infra.Servicos;
@@ -73,6 +73,8 @@ namespace AutenticacaoDoisFatores
                 var nomeDominio = httpContext?.Request.Headers["Dominio"].ToString() ?? "public";
                 return new ContextoCliente(stringDeConexao, nomeDominio);
             });
+
+            ContextoPermissoes.AplicarConfiguracoes();
 
             servicos.AddScoped(provider =>
             {

@@ -53,7 +53,7 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Permissoes
 
             var servico = mocker.CreateInstance<RetornarPermissoes>();
 
-            mocker.GetMock<IRepositorioDePermissoes>().Setup(r => r.RetornarPermissoesAsync(idUsuario)).ReturnsAsync(permissoesUsuario);
+            mocker.GetMock<IRepositorioDePermissoes>().Setup(r => r.RetornarPorUsuarioAsync(idUsuario)).ReturnsAsync(permissoesUsuario);
 
             #endregion
 

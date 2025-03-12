@@ -5,7 +5,7 @@ namespace AutenticacaoDoisFatores.Dominio.Repositorios
     public interface IRepositorioDePermissoes
     {
         Task AdicionarAsync(Guid idUsuario, IEnumerable<TipoDePermissao> permissoes);
-        Task<IEnumerable<TipoDePermissao>> RetornarPermissoesAsync(Guid idUsuario);
+        Task<IEnumerable<TipoDePermissao>> RetornarPorUsuarioAsync(Guid idUsuario);
         Task EditarAsync(Guid idUsuario, IEnumerable<TipoDePermissao> permissoes);
     }
 }

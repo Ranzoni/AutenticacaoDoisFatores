@@ -1,7 +1,7 @@
 ﻿using AutenticacaoDoisFatores.Dominio.Compartilhados;
 using AutenticacaoDoisFatores.Infra.Contexto;
 
-namespace AutenticacaoDoisFatores.Infra.Compartilhados.Migradores
+namespace AutenticacaoDoisFatores.Infra.Utilitarios.Migradores
 {
     public abstract class Migrador(string stringDeConexao)
     {

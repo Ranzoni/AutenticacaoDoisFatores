@@ -1,6 +1,9 @@
-﻿using AutenticacaoDoisFatores.Infra.Compartilhados;
+﻿using AutenticacaoDoisFatores.Infra.Entidades;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using MongoDB.Bson;
+using MongoDB.Bson.Serialization;
+using MongoDB.Bson.Serialization.Serializers;
 
 namespace AutenticacaoDoisFatores.Infra.Configuracoes
 {
@@ -28,6 +31,34 @@ namespace AutenticacaoDoisFatores.Infra.Configuracoes
             builder.Property(a => a.Data)
                 .HasColumnType("timestamp")
                 .IsRequired();
+        }
+
+        internal static void Configurar()
+        {
+            BsonClassMap.RegisterClassMap<Auditoria>(map =>
+            {
+                map.MapIdMember(a => a.Id)
+                    .SetSerializer(new GuidSerializer(BsonType.String))
+                    .SetElementName("_id");
+
+                map.MapMember(a => a.IdEntidade)
+                    .SetSerializer(new GuidSerializer(BsonType.String))
+                    .SetElementName("idEntidade");
+
+                map.MapMember(a => a.Acao)
+                    .SetElementName("acao");
+
+                map.MapMember(a => a.Tabela)
+                    .SetElementName("tabela");
+
+                map.MapMember(a => a.Detalhes)
+                    .SetSerializer(new ObjectSerializer())
+                    .SetElementName("detalhes");
+
+                map.MapMember(c => c.Data)
+                    .SetSerializer(new DateTimeSerializer(DateTimeKind.Local))
+                    .SetElementName("data");
+            });
         }
     }
 }

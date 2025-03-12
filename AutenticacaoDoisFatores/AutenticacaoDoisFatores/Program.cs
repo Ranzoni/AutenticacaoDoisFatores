@@ -1,7 +1,7 @@
 using AutenticacaoDoisFatores;
 using AutenticacaoDoisFatores.Compartilhados;
 using AutenticacaoDoisFatores.Dominio.Compartilhados;
-using AutenticacaoDoisFatores.Infra.Compartilhados.Migradores;
+using AutenticacaoDoisFatores.Infra.Utilitarios.Migradores;
 using AutenticacaoDoisFatores.Infra.Contexto;
 using AutenticacaoDoisFatores.Servico.Compartilhados;
 using AutenticacaoDoisFatores.Servico.Mapeadores;

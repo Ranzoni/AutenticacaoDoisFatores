@@ -1,4 +1,4 @@
-﻿namespace AutenticacaoDoisFatores.Infra.Compartilhados.Migradores.Npgsql
+﻿namespace AutenticacaoDoisFatores.Infra.Utilitarios.Migradores.Npgsql
 {
     public class MigradorNpsql(string stringDeConexao) : Migrador(stringDeConexao), IMigrador
     {
