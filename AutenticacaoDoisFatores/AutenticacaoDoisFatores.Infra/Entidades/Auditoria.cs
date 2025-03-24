@@ -12,6 +12,8 @@ namespace AutenticacaoDoisFatores.Infra.Entidades
         internal object? Detalhes { get; } = null;
         internal DateTime Data { get; } = DateTime.Now;
 
+        private Auditoria() { }
+
         internal Auditoria(AcoesDeAuditoria acao, Guid idEntidade, string tabela, object detalhes)
         {
             Acao = acao.Descricao() ?? "";

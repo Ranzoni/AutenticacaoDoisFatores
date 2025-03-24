@@ -4,7 +4,7 @@ namespace AutenticacaoDoisFatores.Infra.Entidades
 {
     internal class Permissao
     {
-        internal string Id { get; private set; } = "";
+        internal Guid Id { get; private set; } = Guid.NewGuid();
 
         internal Guid IdUsuario { get; private set; }
 
@@ -14,11 +14,8 @@ namespace AutenticacaoDoisFatores.Infra.Entidades
 
         internal DateTime? DataAlteracao { get; private set; }
 
-        internal Permissao() { }
-
         internal Permissao(Guid idUsuario, IEnumerable<TipoDePermissao> permissoes)
         {
-            Id = "";
             IdUsuario = idUsuario;
             Permissoes = permissoes;
             DataCadastro = DateTime.Now;

@@ -37,6 +37,8 @@ namespace AutenticacaoDoisFatores.Infra.Configuracoes
         {
             BsonClassMap.RegisterClassMap<Auditoria>(map =>
             {
+                map.AutoMap();
+
                 map.MapIdMember(a => a.Id)
                     .SetSerializer(new GuidSerializer(BsonType.String))
                     .SetElementName("_id");
@@ -52,7 +54,7 @@ namespace AutenticacaoDoisFatores.Infra.Configuracoes
                     .SetElementName("tabela");
 
                 map.MapMember(a => a.Detalhes)
-                    .SetSerializer(new ObjectSerializer())
+                    .SetSerializer(new ObjectSerializer(type => true))
                     .SetElementName("detalhes");
 
                 map.MapMember(c => c.Data)

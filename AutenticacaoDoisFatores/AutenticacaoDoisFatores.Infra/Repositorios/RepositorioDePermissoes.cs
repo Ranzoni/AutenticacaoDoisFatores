@@ -3,6 +3,7 @@ using AutenticacaoDoisFatores.Dominio.Repositorios;
 using AutenticacaoDoisFatores.Infra.Contexto;
 using AutenticacaoDoisFatores.Infra.Entidades;
 using AutenticacaoDoisFatores.Infra.Utilitarios;
+using System.Linq.Expressions;
 
 namespace AutenticacaoDoisFatores.Infra.Repositorios
 {
@@ -31,11 +32,16 @@ namespace AutenticacaoDoisFatores.Infra.Repositorios
 
         public async Task EditarAsync(Guid idUsuario, IEnumerable<TipoDePermissao> permissoes)
         {
+            var camposParaEditar = new Dictionary<Expression<Func<Permissao, object>>, object>
+            {
+                { p => p.Permissoes, permissoes },
+                { p => p.DataAlteracao, DateTime.Now }
+            };
+
             await _contexto.Permissoes.EditarAsync
             (
                 filtroExpressao: p => p.IdUsuario == idUsuario,
-                campo: p => p.Permissoes,
-                valor: permissoes
+                camposParaEditar: camposParaEditar
             );
 
             var auditoria = _contexto.MontarAuditoria(typeof(Permissao), idUsuario, AcoesDeAuditoria.Modificacao, new { permissoes });

@@ -11,9 +11,10 @@ namespace AutenticacaoDoisFatores.Infra.Contexto
         private readonly MongoClient _mongoClient = new(stringDeConexao);
         private readonly string _nomeBanco = nomeDominio;
         private readonly string _nomeColecaoPermissao = "permissao";
+        private readonly string _nomeColecaoAuditoria = "auditoria";
 
         internal IMongoCollection<Permissao> Permissoes => GetDatabase().GetCollection<Permissao>(_nomeColecaoPermissao);
-        internal IMongoCollection<Auditoria> Audiorias => GetDatabase().GetCollection<Auditoria>("auditoria");
+        internal IMongoCollection<Auditoria> Audiorias => GetDatabase().GetCollection<Auditoria>(_nomeColecaoAuditoria);
 
         public static void AplicarConfiguracoes()
         {
@@ -42,10 +43,20 @@ namespace AutenticacaoDoisFatores.Infra.Contexto
             await mongoCollection.InsertOneAsync(entidade);
         }
 
-        internal static async Task EditarAsync<TEntidade, TCampo>(this IMongoCollection<TEntidade> mongoCollection, Expression<Func<TEntidade, bool>> filtroExpressao, Expression<Func<TEntidade, TCampo>> campo, TCampo valor)
+        internal static async Task EditarAsync<TEntidade>(this IMongoCollection<TEntidade> mongoCollection, Expression<Func<TEntidade, bool>> filtroExpressao, IDictionary<Expression<Func<TEntidade, object>>, object> camposParaEditar)
         {
+            if (!camposParaEditar.Any())
+                return;
+
             var filtro = Builders<TEntidade>.Filter.Where(filtroExpressao);
-            var acao = Builders<TEntidade>.Update.Set(campo, valor);
+            var update = Builders<TEntidade>.Update;
+            UpdateDefinition<TEntidade>? acao = null;
+
+            foreach (var campo in camposParaEditar)
+                if (acao is null)
+                    acao = update.Set(campo.Key, campo.Value);
+                else
+                    acao = acao.Set(campo.Key, campo.Value);
 
             await mongoCollection.UpdateManyAsync(filtro, acao);
         }
