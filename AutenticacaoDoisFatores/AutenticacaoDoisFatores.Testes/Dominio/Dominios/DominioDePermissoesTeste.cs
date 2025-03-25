@@ -43,7 +43,6 @@ namespace AutenticacaoDoisFatores.Testes.Dominio.Dominios
 
             var dominio = _mocker.CreateInstance<DominioDePermissoes>();
             _mocker.GetMock<IRepositorioDePermissoes>().Setup(r => r.RetornarPorUsuarioAsync(idUsuario)).ReturnsAsync(permissoes);
-            _mocker.GetMock<IRepositorioDeUsuarios>().Setup(r => r.EhAdmAsync(idUsuario)).ReturnsAsync(false);
 
             #endregion
 
@@ -68,22 +67,93 @@ namespace AutenticacaoDoisFatores.Testes.Dominio.Dominios
         }
 
         [Fact]
-        internal async Task DeveEditarPermissao()
+        internal async Task DeveEditarPermissoes()
         {
             #region Preparação do teste
 
             var dominio = _mocker.CreateInstance<DominioDePermissoes>();
 
             var idUsuario = Guid.NewGuid();
-            var permissoes = _faker.Random.EnumValues<TipoDePermissao>();
+            var permissoesParaIncluir = new List<TipoDePermissao>()
+            {
+                TipoDePermissao.TrocarSenhaUsuario
+            };
+            var permissoesInclusas = new List<TipoDePermissao>
+            {
+                TipoDePermissao.AtivarUsuario,
+                TipoDePermissao.DesativarUsuario
+            };
+
+            var permissoesEsperadas = permissoesInclusas.Concat(permissoesParaIncluir);
+
+            _mocker.GetMock<IRepositorioDePermissoes>().Setup(r => r.RetornarPorUsuarioAsync(idUsuario)).ReturnsAsync(permissoesInclusas);
 
             #endregion
 
-            await dominio.EditarAsync(idUsuario, permissoes);
+            await dominio.AdicionarAsync(idUsuario, permissoesParaIncluir);
 
             #region Verificação do teste
 
-            _mocker.Verify<IRepositorioDePermissoes>(r => r.EditarAsync(idUsuario, permissoes), Times.Once);
+            _mocker.Verify<IRepositorioDePermissoes>(r => r.EditarAsync(idUsuario, permissoesEsperadas), Times.Once);
+
+            #endregion
+        }
+
+        [Fact]
+        internal async Task DeveRemoverPermissoes()
+        {
+            #region Preparação do teste
+
+            var dominio = _mocker.CreateInstance<DominioDePermissoes>();
+
+            var idUsuario = Guid.NewGuid();
+            var permissoesParaExcluir = new List<TipoDePermissao>()
+            {
+                TipoDePermissao.AtivarUsuario,
+                TipoDePermissao.DesativarUsuario
+            };
+            var permissoesInclusas = new List<TipoDePermissao>
+            {
+                TipoDePermissao.TrocarSenhaUsuario,
+                TipoDePermissao.AtivarUsuario,
+                TipoDePermissao.DesativarUsuario
+            };
+            var permissoesEsperadas = permissoesInclusas.Except(permissoesParaExcluir);
+
+            _mocker.GetMock<IRepositorioDePermissoes>().Setup(r => r.RetornarPorUsuarioAsync(idUsuario)).ReturnsAsync(permissoesInclusas);
+
+            #endregion
+
+            await dominio.RemoverAsync(idUsuario, permissoesParaExcluir);
+
+            #region Verificação do teste
+
+            _mocker.Verify<IRepositorioDePermissoes>(r => r.EditarAsync(idUsuario, permissoesEsperadas), Times.Once);
+
+            #endregion
+        }
+
+        [Fact]
+        internal async Task NaoDeveRemoverQuandoNaoHouverPermissoes()
+        {
+            #region Preparação do teste
+
+            var dominio = _mocker.CreateInstance<DominioDePermissoes>();
+
+            var idUsuario = Guid.NewGuid();
+            var permissoesParaExcluir = new List<TipoDePermissao>()
+            {
+                TipoDePermissao.AtivarUsuario,
+                TipoDePermissao.DesativarUsuario
+            };
+
+            #endregion
+
+            await dominio.RemoverAsync(idUsuario, permissoesParaExcluir);
+
+            #region Verificação do teste
+
+            _mocker.Verify<IRepositorioDePermissoes>(r => r.EditarAsync(It.IsAny<Guid>(), It.IsAny<IEnumerable<TipoDePermissao>>()), Times.Never);
 
             #endregion
         }

@@ -7,14 +7,28 @@ namespace AutenticacaoDoisFatores.Dominio.Dominios
     {
         private readonly IRepositorioDePermissoes _repositorio = repositorio;
 
-        public async Task AdicionarAsync(Guid idUsuario, IEnumerable<TipoDePermissao> permissoes)
+        public async Task AdicionarAsync(Guid idUsuario, IEnumerable<TipoDePermissao> permissoesParaIncluir)
         {
-            await _repositorio.AdicionarAsync(idUsuario, permissoes);
+            var permissoesJaInclusas = await RetornarPermissoesAsync(idUsuario) ?? [];
+            if (permissoesJaInclusas.Any())
+            {
+                var novasPermissoes = permissoesParaIncluir.Except(permissoesJaInclusas);
+                var permissoesAtualizadas = permissoesJaInclusas.Concat(novasPermissoes);
+                await _repositorio.EditarAsync(idUsuario, permissoesAtualizadas);
+            }
+            else
+                await _repositorio.AdicionarAsync(idUsuario, permissoesParaIncluir);
         }
 
-        public async Task EditarAsync(Guid idUsuario, IEnumerable<TipoDePermissao> permissoes)
+        public async Task RemoverAsync(Guid idUsuario, IEnumerable<TipoDePermissao> permissoesParaRemover)
         {
-            await _repositorio.EditarAsync(idUsuario, permissoes);
+            var permissoesJaInclusas = await RetornarPermissoesAsync(idUsuario) ?? [];
+            if (!permissoesJaInclusas.Any())
+                return;
+
+            var permissoesRestantes = permissoesJaInclusas.Except(permissoesParaRemover);
+
+            await _repositorio.EditarAsync(idUsuario, permissoesRestantes);
         }
 
         public async Task<IEnumerable<TipoDePermissao>> RetornarPermissoesAsync(Guid idUsuario)
