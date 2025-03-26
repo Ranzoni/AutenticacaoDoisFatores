@@ -29,7 +29,7 @@ namespace AutenticacaoDoisFatores.Infra.Configuracoes
                     .SetElementName("dataCadastro");
 
                 map.MapMember(c => c.DataAlteracao)
-                    .SetSerializer(new NullableSerializer<DateTime>(new DateTimeSerializer(DateTimeKind.Local)))
+                    .SetSerializer(new NullableSerializer<DateTime>(new DateTimeSerializer(DateTimeKind.Utc)))
                     .SetElementName("dataAlteracao");
             });
         }

@@ -35,7 +35,7 @@ namespace AutenticacaoDoisFatores.Controllers
             {
                 await incluirPermissoesParaUsuario.ExecutarAsync(idUsuario, permissoes);
 
-                return Sucesso("Permissões incluídas com sucesso.");
+                return Sucesso("As permissões foram incluídas com sucesso.");
             }
             catch (Exception e)
             {
@@ -51,6 +51,21 @@ namespace AutenticacaoDoisFatores.Controllers
                 var retorno = await retornarPermissoes.RetornarPorUsuarioAsync(idUsuario);
 
                 return Sucesso(retorno);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
+        [HttpDelete("usuario/{idUsuario}")]
+        public async Task<ActionResult> RemoverParaUsuarioAsync([FromServices] RemoverPermissoesParaUsuario removerPermissoesParaUsuario, Guid idUsuario, IEnumerable<TipoDePermissao> permissoes)
+        {
+            try
+            {
+                await removerPermissoesParaUsuario.ExecutarAsync(idUsuario, permissoes);
+
+                return Sucesso("As permissões foram removidas com sucesso!");
             }
             catch (Exception e)
             {

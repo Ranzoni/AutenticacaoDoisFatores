@@ -35,7 +35,7 @@ namespace AutenticacaoDoisFatores.Infra.Repositorios
             var camposParaEditar = new Dictionary<Expression<Func<Permissao, object>>, object>
             {
                 { p => p.Permissoes, permissoes },
-                { p => p.DataAlteracao, DateTime.Now }
+                { p => p.DataAlteracao, DateTime.UtcNow }
             };
 
             await _contexto.Permissoes.EditarAsync

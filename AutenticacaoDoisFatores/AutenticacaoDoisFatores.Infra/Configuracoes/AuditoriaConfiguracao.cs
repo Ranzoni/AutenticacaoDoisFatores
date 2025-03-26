@@ -58,7 +58,7 @@ namespace AutenticacaoDoisFatores.Infra.Configuracoes
                     .SetElementName("detalhes");
 
                 map.MapMember(c => c.Data)
-                    .SetSerializer(new DateTimeSerializer(DateTimeKind.Local))
+                    .SetSerializer(new DateTimeSerializer(DateTimeKind.Utc))
                     .SetElementName("data");
             });
         }
