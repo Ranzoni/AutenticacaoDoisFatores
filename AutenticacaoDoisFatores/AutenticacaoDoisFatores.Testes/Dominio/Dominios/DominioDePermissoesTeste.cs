@@ -104,7 +104,8 @@ namespace AutenticacaoDoisFatores.Testes.Dominio.Dominios
         {
             #region Preparação do teste
 
-            var dominio = _mocker.CreateInstance<DominioDePermissoes>();
+            var mocker = new AutoMocker();
+            var dominio = mocker.CreateInstance<DominioDePermissoes>();
 
             var idUsuario = Guid.NewGuid();
             var permissoesParaExcluir = new List<TipoDePermissao>()
@@ -120,7 +121,7 @@ namespace AutenticacaoDoisFatores.Testes.Dominio.Dominios
             };
             var permissoesEsperadas = permissoesInclusas.Except(permissoesParaExcluir);
 
-            _mocker.GetMock<IRepositorioDePermissoes>().Setup(r => r.RetornarPorUsuarioAsync(idUsuario)).ReturnsAsync(permissoesInclusas);
+            mocker.GetMock<IRepositorioDePermissoes>().Setup(r => r.RetornarPorUsuarioAsync(idUsuario)).ReturnsAsync(permissoesInclusas);
 
             #endregion
 
@@ -128,7 +129,7 @@ namespace AutenticacaoDoisFatores.Testes.Dominio.Dominios
 
             #region Verificação do teste
 
-            _mocker.Verify<IRepositorioDePermissoes>(r => r.EditarAsync(idUsuario, permissoesEsperadas), Times.Once);
+            mocker.Verify<IRepositorioDePermissoes>(r => r.EditarAsync(idUsuario, permissoesEsperadas), Times.Once);
 
             #endregion
         }

@@ -10,7 +10,7 @@ namespace AutenticacaoDoisFatores.Dominio.Dominios
 
         #region Escrita
 
-        public async Task CriarUsuarioAsync(Usuario usuario)
+        public async Task CriarAsync(Usuario usuario)
         {
             await ValidarUsuarioAsync(usuario);
 
@@ -26,14 +26,22 @@ namespace AutenticacaoDoisFatores.Dominio.Dominios
             await _repositorio.SalvarAlteracoesAsync();
         }
 
-        public async Task<Usuario> AlterarUsuarioAsync(Usuario usuario)
+        public async Task<Usuario> AlterarAsync(Usuario usuario)
         {
-            await ValidarUsuarioAsync(usuario);
+            await ValidarAlteracaoUsuarioAsync(usuario);
 
             _repositorio.Editar(usuario);
             await _repositorio.SalvarAlteracoesAsync();
 
             return usuario;
+        }
+
+        public async Task ExcluirUsuarioAsync(Guid id)
+        {
+            await ValidarExclusaoUsuarioAsync(id);
+
+            _repositorio.Excluir(id);
+            await _repositorio.SalvarAlteracoesAsync();
         }
 
         #endregion
@@ -88,6 +96,12 @@ namespace AutenticacaoDoisFatores.Dominio.Dominios
                 ExcecoesUsuario.EmailJaCadastrado();
         }
 
+        public async Task ValidarAlteracaoUsuarioAsync(Usuario usuario)
+        {
+            await ValidarUsuarioAsync(usuario);
+            await ValidarSeUsuarioExisteAsync(usuario.Id);
+        }
+
         public async Task ValidarUsuarioComDominioAsync(Usuario usuario, string dominio)
         {
             var existeNomeUsuario = await _repositorio.ExisteNomeUsuarioAsync(usuario.NomeUsuario, dominio);
@@ -97,6 +111,18 @@ namespace AutenticacaoDoisFatores.Dominio.Dominios
             var existeEmail = await _repositorio.ExisteEmailAsync(usuario.Email, dominio);
             if (existeEmail)
                 ExcecoesUsuario.EmailJaCadastrado();
+        }
+
+        public async Task ValidarExclusaoUsuarioAsync(Guid id)
+        {
+            await ValidarSeUsuarioExisteAsync(id);
+        }
+
+        private async Task ValidarSeUsuarioExisteAsync(Guid id)
+        {
+            var usuarioExiste = await _repositorio.BuscarUnicoAsync(id) is not null;
+            if (!usuarioExiste)
+                ExcecoesUsuario.UsuarioNaoEncontrado();
         }
     }
 

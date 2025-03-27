@@ -20,10 +20,6 @@ namespace AutenticacaoDoisFatores.Testes.Dominio.Entidades
 
             var faker = new Faker();
 
-            var cliente = ConstrutorDeClientesTeste
-                .RetornarConstrutor()
-                .ConstruirCadastrado();
-
             var nome = faker.Person.FullName;
             var nomeUsuario = faker.Person.UserName;
             var email = faker.Person.Email;

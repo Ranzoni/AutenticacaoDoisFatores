@@ -17,7 +17,7 @@ namespace AutenticacaoDoisFatores.Servico.CasosDeUso.Usuarios
                 return;
 
             usuario.Ativar(ativar);
-            await _dominio.AlterarUsuarioAsync(usuario);
+            await _dominio.AlterarAsync(usuario);
         }
 
         public bool AtivacaoEhValida(Usuario? usuario)

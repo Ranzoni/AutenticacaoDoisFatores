@@ -22,7 +22,7 @@ namespace AutenticacaoDoisFatores.Servico.CasosDeUso.Usuarios
 
             var novaSenhaCriptografada = Criptografia.CriptografarComSha512(novaSenha);
             usuario.AlterarSenha(novaSenhaCriptografada);
-            await _dominio.AlterarUsuarioAsync(usuario);
+            await _dominio.AlterarAsync(usuario);
         }
 
         private bool SenhaEhValida(string novaSenha)

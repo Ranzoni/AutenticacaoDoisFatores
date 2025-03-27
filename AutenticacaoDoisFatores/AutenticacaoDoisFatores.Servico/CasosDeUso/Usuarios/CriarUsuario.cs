@@ -23,7 +23,7 @@ namespace AutenticacaoDoisFatores.Servico.CasosDeUso.Usuarios
 
             var usuario = _mapeador.Map<Usuario>(novoUsuario);
 
-            await _dominio.CriarUsuarioAsync(usuario);
+            await _dominio.CriarAsync(usuario);
 
             var usuarioCriado = _mapeador.Map<UsuarioCadastrado>(usuario);
 

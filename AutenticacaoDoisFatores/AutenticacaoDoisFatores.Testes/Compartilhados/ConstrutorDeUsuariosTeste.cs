@@ -15,7 +15,7 @@ namespace AutenticacaoDoisFatores.Testes.Compartilhados
             return new ConstrutorDeUsuario()
                 .ComId(id ?? Guid.NewGuid())
                 .ComNome(nome ?? faker.Person.FullName)
-                .ComNomeUsuario(nomeUsuario ?? faker.Person.UserName)
+                .ComNomeUsuario(nomeUsuario ?? "teste_user_2010234")
                 .ComEmail(email ?? faker.Person.Email)
                 .ComSenha(senha ?? _senhaParaTeste)
                 .ComAtivo(ativo ?? faker.Random.Bool())
@@ -31,7 +31,7 @@ namespace AutenticacaoDoisFatores.Testes.Compartilhados
 
             return new ConstrutorDeNovoUsuario()
                 .ComNome(nome ?? faker.Person.FullName)
-                .ComNomeUsuario(nomeUsuario ?? faker.Person.UserName)
+                .ComNomeUsuario(nomeUsuario ?? "teste_user_2010234")
                 .ComEmail(email ?? faker.Person.Email)
                 .ComSenha(senha ?? "T3ste.de.Senh@");
         }

@@ -29,7 +29,7 @@ namespace AutenticacaoDoisFatores.Testes.Dominio.Dominios
 
             #endregion
 
-            await dominio.CriarUsuarioAsync(usuarioParaCriar);
+            await dominio.CriarAsync(usuarioParaCriar);
 
             #region Verificação do teste
 
@@ -79,7 +79,7 @@ namespace AutenticacaoDoisFatores.Testes.Dominio.Dominios
 
             #endregion
 
-            var excecao = await Assert.ThrowsAsync<ExcecoesUsuario>(() => dominio.CriarUsuarioAsync(usuarioParaCriar));
+            var excecao = await Assert.ThrowsAsync<ExcecoesUsuario>(() => dominio.CriarAsync(usuarioParaCriar));
 
             #region Verificação do teste
 
@@ -133,7 +133,7 @@ namespace AutenticacaoDoisFatores.Testes.Dominio.Dominios
 
             #endregion
 
-            var excecao = await Assert.ThrowsAsync<ExcecoesUsuario>(() => dominio.CriarUsuarioAsync(usuarioParaCriar));
+            var excecao = await Assert.ThrowsAsync<ExcecoesUsuario>(() => dominio.CriarAsync(usuarioParaCriar));
 
             #region Verificação do teste
 
@@ -233,9 +233,11 @@ namespace AutenticacaoDoisFatores.Testes.Dominio.Dominios
                 .RetornarConstrutor()
                 .ConstruirNovo();
 
+            _mocker.GetMock<IRepositorioDeUsuarios>().Setup(r => r.BuscarUnicoAsync(usuarioParaEditar.Id)).ReturnsAsync(usuarioParaEditar);
+
             #endregion
 
-            await dominio.AlterarUsuarioAsync(usuarioParaEditar);
+            await dominio.AlterarAsync(usuarioParaEditar);
 
             #region Verificação do teste
 
@@ -260,7 +262,7 @@ namespace AutenticacaoDoisFatores.Testes.Dominio.Dominios
 
             #endregion
 
-            var excecao = await Assert.ThrowsAsync<ExcecoesUsuario>(() => dominio.AlterarUsuarioAsync(usuarioParaAlterar));
+            var excecao = await Assert.ThrowsAsync<ExcecoesUsuario>(() => dominio.AlterarAsync(usuarioParaAlterar));
 
             #region Verificação do teste
 
@@ -286,7 +288,7 @@ namespace AutenticacaoDoisFatores.Testes.Dominio.Dominios
 
             #endregion
 
-            var excecao = await Assert.ThrowsAsync<ExcecoesUsuario>(() => dominio.AlterarUsuarioAsync(usuarioParaAlterar));
+            var excecao = await Assert.ThrowsAsync<ExcecoesUsuario>(() => dominio.AlterarAsync(usuarioParaAlterar));
 
             #region Verificação do teste
 
@@ -363,6 +365,51 @@ namespace AutenticacaoDoisFatores.Testes.Dominio.Dominios
 
             Assert.Equal(resultadoEsperado, retorno);
             _mocker.Verify<IRepositorioDeUsuarios>(r => r.EhAdmAsync(idUsuario), Times.Once);
+
+            #endregion
+        }
+
+        [Fact]
+        internal async Task DeveExcluirUsuario()
+        {
+            #region Preparação do teste
+
+            var dominio = _mocker.CreateInstance<DominioDeUsuarios>();
+
+            var usuarioParaExcluir = ConstrutorDeUsuariosTeste
+                .RetornarConstrutor()
+                .ConstruirNovo();
+
+            _mocker.GetMock<IRepositorioDeUsuarios>().Setup(r => r.BuscarUnicoAsync(usuarioParaExcluir.Id)).ReturnsAsync(usuarioParaExcluir);
+
+            #endregion
+
+            await dominio.ExcluirUsuarioAsync(usuarioParaExcluir.Id);
+
+            #region Verificação do teste
+
+            _mocker.Verify<IRepositorioDeUsuarios>(r => r.Excluir(usuarioParaExcluir.Id), Times.Once);
+            _mocker.Verify<IRepositorioDeUsuarios>(r => r.SalvarAlteracoesAsync(), Times.Once);
+
+            #endregion
+        }
+
+        [Fact]
+        internal async Task DeveRetornarExcecaoAoTentarExcluirUsuarioInexistente()
+        {
+            #region Preparação do teste
+
+            var dominio = _mocker.CreateInstance<DominioDeUsuarios>();
+
+            #endregion
+
+            var excecao = await Assert.ThrowsAsync<ExcecoesUsuario>(() => dominio.ExcluirUsuarioAsync(Guid.NewGuid()));
+
+            #region Verificação do teste
+
+            Assert.Equal(MensagensValidacaoUsuario.UsuarioNaoEncontrado.Descricao(), excecao.Message);
+            _mocker.Verify<IRepositorioDeUsuarios>(r => r.Excluir(It.IsAny<Guid>()), Times.Never);
+            _mocker.Verify<IRepositorioDeUsuarios>(r => r.SalvarAlteracoesAsync(), Times.Never);
 
             #endregion
         }

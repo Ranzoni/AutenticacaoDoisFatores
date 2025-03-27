@@ -34,5 +34,10 @@ namespace AutenticacaoDoisFatores.Dominio.Excecoes
         {
             throw new ExcecoesUsuario(MensagensValidacaoUsuario.EmailJaCadastrado);
         }
+
+        internal static void UsuarioNaoEncontrado()
+        {
+            throw new ExcecoesUsuario(MensagensValidacaoUsuario.UsuarioNaoEncontrado);
+        }
     }
 }
