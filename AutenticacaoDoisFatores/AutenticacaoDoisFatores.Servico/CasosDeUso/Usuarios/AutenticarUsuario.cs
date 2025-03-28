@@ -30,6 +30,9 @@ namespace AutenticacaoDoisFatores.Servico.CasosDeUso.Usuarios
             var permissoesUsuario = await RetornarPermissoesAsync(usuario);
             var token = Seguranca.GerarTokenAutenticacaoUsuario(usuario.Id, permissoesUsuario);
 
+            usuario.AtualizarDataUltimoAcesso();
+            await _dominio.AlterarAsync(usuario);
+
             var usuarioCadastrado = _mapper.Map<UsuarioCadastrado>(usuario);
 
             var resposta = new UsuarioAutenticado(usuario: usuarioCadastrado, token: token);

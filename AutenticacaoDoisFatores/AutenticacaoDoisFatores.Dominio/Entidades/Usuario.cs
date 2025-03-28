@@ -1,5 +1,6 @@
 ﻿using AutenticacaoDoisFatores.Dominio.Compartilhados.Entidades;
 using AutenticacaoDoisFatores.Dominio.Validadores;
+using System.Drawing;
 
 namespace AutenticacaoDoisFatores.Dominio.Entidades
 {
@@ -58,6 +59,15 @@ namespace AutenticacaoDoisFatores.Dominio.Entidades
             AuditarModificacao("Senha", Senha, senha);
 
             Senha = senha;
+        }
+
+        public void AtualizarDataUltimoAcesso()
+        {
+            var novaData = DateTime.Now;
+
+            AuditarModificacao("DataUltimoAcesso", $"{DataUltimoAcesso:yyyy-MM-dd HH:mm:ss}", $"{novaData:yyyy-MM-dd HH:mm:ss}");
+
+            DataUltimoAcesso = novaData;
         }
     }
 }

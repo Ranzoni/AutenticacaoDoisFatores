@@ -52,7 +52,8 @@ namespace AutenticacaoDoisFatores.Infra.Repositorios
                     ""Email"" = '{entidade.Email}',
                     ""Senha"" = '{entidade.Senha}',
                     ""Ativo"" = {entidade.Ativo},
-                    ""DataAlteracao"" = '{entidade.DataAlteracao:yyyy-MM-dd HH:mm:ss}'
+                    ""DataAlteracao"" = '{entidade.DataAlteracao:yyyy-MM-dd HH:mm:ss}',
+                    ""DataUltimoAcesso"" = '{entidade.DataUltimoAcesso:yyyy-MM-dd HH:mm:ss}'
                 WHERE
                     ""Id"" = '{entidade.Id}';";
 
