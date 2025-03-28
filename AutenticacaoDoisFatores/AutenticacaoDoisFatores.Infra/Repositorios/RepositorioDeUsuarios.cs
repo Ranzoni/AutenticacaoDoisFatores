@@ -63,9 +63,19 @@ namespace AutenticacaoDoisFatores.Infra.Repositorios
                 sql: sql);
         }
 
-        public void Excluir(Guid id)
+        public void Excluir(Usuario entidade)
         {
-            throw new NotImplementedException();
+            var sql = $@"
+                DELETE FROM
+                    {_contexto.NomeDominio}.""Usuarios""
+                WHERE
+                    ""Id"" = '{entidade.Id}';";
+
+            _contexto.PrepararComando(
+                entidade: entidade,
+                tipo: TipoComando.Exclusao,
+                tabela: "Usuarios",
+                sql: sql);
         }
 
         public async Task SalvarAlteracoesAsync()

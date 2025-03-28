@@ -388,7 +388,7 @@ namespace AutenticacaoDoisFatores.Testes.Dominio.Dominios
 
             #region Verificação do teste
 
-            _mocker.Verify<IRepositorioDeUsuarios>(r => r.Excluir(usuarioParaExcluir.Id), Times.Once);
+            _mocker.Verify<IRepositorioDeUsuarios>(r => r.Excluir(usuarioParaExcluir), Times.Once);
             _mocker.Verify<IRepositorioDeUsuarios>(r => r.SalvarAlteracoesAsync(), Times.Once);
 
             #endregion
@@ -408,7 +408,7 @@ namespace AutenticacaoDoisFatores.Testes.Dominio.Dominios
             #region Verificação do teste
 
             Assert.Equal(MensagensValidacaoUsuario.UsuarioNaoEncontrado.Descricao(), excecao.Message);
-            _mocker.Verify<IRepositorioDeUsuarios>(r => r.Excluir(It.IsAny<Guid>()), Times.Never);
+            _mocker.Verify<IRepositorioDeUsuarios>(r => r.Excluir(It.IsAny<Usuario>()), Times.Never);
             _mocker.Verify<IRepositorioDeUsuarios>(r => r.SalvarAlteracoesAsync(), Times.Never);
 
             #endregion

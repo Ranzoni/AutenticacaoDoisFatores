@@ -56,6 +56,7 @@ namespace AutenticacaoDoisFatores.Servico.Compartilhados
         private static readonly string _desativarUsuario = "desativacaoDeUsuario";
         private static readonly string _trocarSenhaUsuario = "trocarSenhaDeUsuario";
         private static readonly string _definirPermissoes = "definirPermissoes";
+        private static readonly string _exclusaoDeUsuario = "exclusaoDeUsuario";
 
         private static readonly Dictionary<TipoDePermissao, string> _perfisPermissoes = new()
         {
@@ -63,7 +64,8 @@ namespace AutenticacaoDoisFatores.Servico.Compartilhados
             { TipoDePermissao.AtivarUsuario, _ativarUsuario },
             { TipoDePermissao.DesativarUsuario, _desativarUsuario },
             { TipoDePermissao.TrocarSenhaUsuario, _trocarSenhaUsuario },
-            { TipoDePermissao.DefinirPermissoes, _definirPermissoes }
+            { TipoDePermissao.DefinirPermissoes, _definirPermissoes },
+            { TipoDePermissao.ExcluirUsuario, _exclusaoDeUsuario },
         };
 
         public static string RegraConfirmacaoDeCliente
@@ -119,6 +121,14 @@ namespace AutenticacaoDoisFatores.Servico.Compartilhados
             get
             {
                 return _definirPermissoes;
+            }
+        }
+
+        public static string RegraExclusaoDeUsuario
+        {
+            get
+            {
+                return _exclusaoDeUsuario;
             }
         }
 

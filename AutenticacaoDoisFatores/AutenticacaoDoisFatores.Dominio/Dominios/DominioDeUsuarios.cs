@@ -38,9 +38,11 @@ namespace AutenticacaoDoisFatores.Dominio.Dominios
 
         public async Task ExcluirUsuarioAsync(Guid id)
         {
-            await ValidarExclusaoUsuarioAsync(id);
+            var usuario = await _repositorio.BuscarUnicoAsync(id);
 
-            _repositorio.Excluir(id);
+            ValidarExclusaoUsuario(usuario);
+
+            _repositorio.Excluir(usuario);
             await _repositorio.SalvarAlteracoesAsync();
         }
 
@@ -99,7 +101,7 @@ namespace AutenticacaoDoisFatores.Dominio.Dominios
         public async Task ValidarAlteracaoUsuarioAsync(Usuario usuario)
         {
             await ValidarUsuarioAsync(usuario);
-            await ValidarSeUsuarioExisteAsync(usuario.Id);
+            ValidarSeUsuarioExiste(usuario);
         }
 
         public async Task ValidarUsuarioComDominioAsync(Usuario usuario, string dominio)
@@ -113,15 +115,14 @@ namespace AutenticacaoDoisFatores.Dominio.Dominios
                 ExcecoesUsuario.EmailJaCadastrado();
         }
 
-        public async Task ValidarExclusaoUsuarioAsync(Guid id)
+        public static void ValidarExclusaoUsuario(Usuario? usuario)
         {
-            await ValidarSeUsuarioExisteAsync(id);
+            ValidarSeUsuarioExiste(usuario);
         }
 
-        private async Task ValidarSeUsuarioExisteAsync(Guid id)
+        private static void ValidarSeUsuarioExiste(Usuario? usuario)
         {
-            var usuarioExiste = await _repositorio.BuscarUnicoAsync(id) is not null;
-            if (!usuarioExiste)
+            if (usuario is null)
                 ExcecoesUsuario.UsuarioNaoEncontrado();
         }
     }

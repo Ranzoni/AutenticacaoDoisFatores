@@ -4,7 +4,7 @@
     {
         void Adicionar(T entidade);
         void Editar(T entidade);
-        void Excluir(Guid id);
+        void Excluir(T entidade);
         Task<T?> BuscarUnicoAsync(Guid id);
         Task SalvarAlteracoesAsync();
     }

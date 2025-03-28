@@ -30,7 +30,7 @@ namespace AutenticacaoDoisFatores.Infra.Repositorios
             _contexto.Update(entidade);
         }
 
-        public void Excluir(Guid id)
+        public void Excluir(Cliente entidade)
         {
             throw new NotImplementedException();
         }

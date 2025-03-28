@@ -21,7 +21,7 @@ namespace AutenticacaoDoisFatores.Testes.Dominio.Entidades
             var faker = new Faker();
 
             var nome = faker.Person.FullName;
-            var nomeUsuario = faker.Person.UserName;
+            var nomeUsuario = "teste_user_12398";
             var email = faker.Person.Email;
 
             #endregion

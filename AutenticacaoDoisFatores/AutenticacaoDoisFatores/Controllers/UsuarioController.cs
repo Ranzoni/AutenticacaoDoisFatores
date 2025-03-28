@@ -91,5 +91,21 @@ namespace AutenticacaoDoisFatores.Controllers
                 return BadRequest(e.Message);
             }
         }
+
+        [HttpDelete("{idUsuario}")]
+        [Authorize(Policy = "ExclusaoDeUsuario")]
+        public async Task<ActionResult> ExcluirAsync([FromServices] ExcluirUsuario excluirUsuario, Guid idUsuario)
+        {
+            try
+            {
+                await excluirUsuario.ExecutarAsync(idUsuario);
+
+                return Sucesso("Usuário excluído com sucesso");
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
     }
 }
