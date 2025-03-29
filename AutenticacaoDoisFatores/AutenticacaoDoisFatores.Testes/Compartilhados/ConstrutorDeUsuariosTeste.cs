@@ -35,5 +35,12 @@ namespace AutenticacaoDoisFatores.Testes.Compartilhados
                 .ComEmail(email ?? faker.Person.Email)
                 .ComSenha(senha ?? "T3ste.de.Senh@");
         }
+
+        internal static ConstrutorDeNovosDadosUsuario RetornarConstrutorDeNovosDadosUsuario(string? nome = null, string? nomeUsuario = null)
+        {
+            return new ConstrutorDeNovosDadosUsuario()
+                .ComNome(nome)
+                .ComNomeUsuario(nomeUsuario);
+        }
     }
 }

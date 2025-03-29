@@ -8,6 +8,8 @@ namespace AutenticacaoDoisFatores.Testes.Dominio.Entidades
 {
     public class UsuarioTeste
     {
+        private readonly Faker _faker = new();
+
         [Theory]
         [InlineData("Teste.De.Senha_1")]
         [InlineData("2senha@Valida")]
@@ -18,11 +20,9 @@ namespace AutenticacaoDoisFatores.Testes.Dominio.Entidades
         {
             #region Preparação do teste
 
-            var faker = new Faker();
-
-            var nome = faker.Person.FullName;
+            var nome = _faker.Person.FullName;
             var nomeUsuario = "teste_user_12398";
-            var email = faker.Person.Email;
+            var email = _faker.Person.Email;
 
             #endregion
 
@@ -109,6 +109,162 @@ namespace AutenticacaoDoisFatores.Testes.Dominio.Entidades
             Assert.Equal(MensagensValidacaoUsuario.SenhaInvalida.Descricao(), excecao.Message);
         }
 
+        [Fact]
+        internal void DeveAlterarNome()
+        {
+            #region Preparação do teste
+
+            var nomeAtual = "Fulano de Tal";
+            var novoNome = _faker.Person.FullName;
+
+            var usuario = ConstrutorDeUsuariosTeste
+                .RetornarConstrutor(nome: nomeAtual)
+                .ConstruirCadastrado();
+
+            #endregion
+
+            usuario.AlterarNome(novoNome);
+
+            #region Verificação do teste
+
+            Assert.Equal(novoNome, usuario.Nome);
+            Assert.NotNull(usuario.DataAlteracao);
+
+            #endregion
+        }
+
+        [Theory]
+        [InlineData("")]
+        [InlineData("         ")]
+        [InlineData("ab")]
+        [InlineData("Teste de nome grande Teste de nome grande Teste de ")]
+        internal void NaoDeveAlterarParaNomeInvalido(string nomeInvalido)
+        {
+            #region Preparação do teste
+
+            var nomeAtual = "Fulano de Tal";
+
+            var usuario = ConstrutorDeUsuariosTeste
+                .RetornarConstrutor(nome: nomeAtual)
+                .ConstruirCadastrado();
+
+            #endregion
+
+            var excecao = Assert.Throws<ExcecoesUsuario>(() => usuario.AlterarNome(nomeInvalido));
+
+            #region Verificação do teste
+
+            Assert.Equal(MensagensValidacaoUsuario.NomeInvalido.Descricao(), excecao.Message);
+
+            #endregion
+        }
+
+        [Fact]
+        internal void DeveAlterarNomeUsuario()
+        {
+            #region Preparação do teste
+
+            var nomeUsuarioAtual = "user_test_12345";
+            var novoNomeUsuario = "user_test_54321";
+
+            var usuario = ConstrutorDeUsuariosTeste
+                .RetornarConstrutor(nomeUsuario: nomeUsuarioAtual)
+                .ConstruirCadastrado();
+
+            #endregion
+
+            usuario.AlterarNomeUsuario(novoNomeUsuario);
+
+            #region Verificação do teste
+
+            Assert.Equal(novoNomeUsuario, usuario.NomeUsuario);
+            Assert.NotNull(usuario.DataAlteracao);
+
+            #endregion
+        }
+
+        [Theory]
+        [InlineData("")]
+        [InlineData("         ")]
+        [InlineData("abcd")]
+        [InlineData("Teste de nome grande ")]
+        internal void NaoDeveAlterarParaNomeUsuarioInvalido(string nomeUsuarioInvalido)
+        {
+            #region Preparação do teste
+
+            var nomeUsuarioAtual = "user_test_12345";
+
+            var usuario = ConstrutorDeUsuariosTeste
+                .RetornarConstrutor(nomeUsuario: nomeUsuarioAtual)
+                .ConstruirCadastrado();
+
+            #endregion
+
+            var excecao = Assert.Throws<ExcecoesUsuario>(() => usuario.AlterarNomeUsuario(nomeUsuarioInvalido));
+
+            #region Verificação do teste
+
+            Assert.Equal(MensagensValidacaoUsuario.NomeUsuarioInvalido.Descricao(), excecao.Message);
+
+            #endregion
+        }
+
+        [Fact]
+        internal void DeveAlterarEmail()
+        {
+            #region Preparação do teste
+
+            var emailAtual = "fulano@test.com";
+            var novoEmail = _faker.Person.Email;
+
+            var usuario = ConstrutorDeUsuariosTeste
+                .RetornarConstrutor(email: emailAtual)
+                .ConstruirCadastrado();
+
+            #endregion
+
+            usuario.AlterarEmail(novoEmail);
+
+            #region Verificação do teste
+
+            Assert.Equal(novoEmail, usuario.Email);
+            Assert.NotNull(usuario.DataAlteracao);
+
+            #endregion
+        }
+
+        [Theory]
+        [InlineData("")]
+        [InlineData(" ")]
+        [InlineData("@")]
+        [InlineData("a@")]
+        [InlineData("a@.")]
+        [InlineData("a@.com")]
+        [InlineData("@.")]
+        [InlineData("@.com")]
+        [InlineData("@dominio.com")]
+        [InlineData("abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcde")]
+        internal void NaoDeveAlterarParaEmailInvalido(string emailInvalido)
+        {
+            #region Preparação do teste
+
+            var emailAtual = "fulano@test.com";
+
+            var usuario = ConstrutorDeUsuariosTeste
+                .RetornarConstrutor(email: emailAtual)
+                .ConstruirCadastrado();
+
+            #endregion
+
+            var excecao = Assert.Throws<ExcecoesUsuario>(() => usuario.AlterarEmail(emailInvalido));
+
+            #region Verificação do teste
+
+            Assert.Equal(MensagensValidacaoUsuario.EmailInvalido.Descricao(), excecao.Message);
+
+            #endregion
+        }
+
         [Theory]
         [InlineData(false)]
         [InlineData(true)]
@@ -151,6 +307,53 @@ namespace AutenticacaoDoisFatores.Testes.Dominio.Entidades
             #region Verificação do teste
 
             Assert.Equal(novaSenha, usuario.Senha);
+            Assert.NotNull(usuario.DataAlteracao);
+
+            #endregion
+        }
+
+        [Theory]
+        [InlineData("")]
+        [InlineData("       ")]
+        [InlineData("Teste.de.senh@.que.é.muito.grand3.Teste.de.senh@.que.é.muito.grand3.Teste.de.senh@.que.é.muito.grand3.Teste.de.senh@.que.é.muito.grand3.Teste.de.senh@.que.é.muito.grand3.Teste.de.senh@.que.é.muito.grand3.Teste.de.senh@.que.é.muito.grand3.Teste.de.senh@.que.")]
+        internal void NaoDeveAlterarParaSenhaInvalida(string senhaInvalida)
+        {
+            #region Preparação do teste
+
+            var senhaAtual = "Senh4#Atu@al";
+
+            var usuario = ConstrutorDeUsuariosTeste
+                .RetornarConstrutor(senha: senhaAtual)
+                .ConstruirCadastrado();
+
+            #endregion
+
+            var excecao = Assert.Throws<ExcecoesUsuario>(() => usuario.AlterarSenha(senhaInvalida));
+
+            #region Verificação do teste
+
+            Assert.Equal(MensagensValidacaoUsuario.SenhaInvalida.Descricao(), excecao.Message);
+
+            #endregion
+        }
+
+        [Fact]
+        internal void DeveAtualizarDataUltimoAcessoUsuario()
+        {
+            #region Preparação do teste
+
+            var usuario = ConstrutorDeUsuariosTeste
+                .RetornarConstrutor()
+                .ConstruirCadastrado();
+
+            #endregion
+
+            usuario.AtualizarDataUltimoAcesso();
+
+            #region Verificação do teste
+
+            Assert.NotNull(usuario.DataUltimoAcesso);
+            Assert.True(usuario.DataUltimoAcesso <= DateTime.Now);
             Assert.NotNull(usuario.DataAlteracao);
 
             #endregion

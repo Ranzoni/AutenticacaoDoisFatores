@@ -1,6 +1,5 @@
 ﻿using AutenticacaoDoisFatores.Dominio.Compartilhados.Entidades;
 using AutenticacaoDoisFatores.Dominio.Validadores;
-using System.Drawing;
 
 namespace AutenticacaoDoisFatores.Dominio.Entidades
 {
@@ -47,6 +46,33 @@ namespace AutenticacaoDoisFatores.Dominio.Entidades
             this.Validar();
         }
 
+        public void AlterarNome(string nome)
+        {
+            AuditarModificacao("Nome", Nome, nome);
+
+            Nome = nome;
+
+            this.Validar();
+        }
+
+        public void AlterarNomeUsuario(string nomeUsuario)
+        {
+            AuditarModificacao("NomeUsuario", NomeUsuario, nomeUsuario);
+
+            NomeUsuario = nomeUsuario;
+
+            this.Validar();
+        }
+
+        public void AlterarEmail(string email)
+        {
+            AuditarModificacao("Email", Email, email);
+
+            Email = email;
+
+            this.Validar();
+        }
+
         public void Ativar(bool valor)
         {
             AuditarModificacao("Ativo", Ativo.ToString(), valor.ToString());
@@ -59,6 +85,8 @@ namespace AutenticacaoDoisFatores.Dominio.Entidades
             AuditarModificacao("Senha", Senha, senha);
 
             Senha = senha;
+
+            this.Validar();
         }
 
         public void AtualizarDataUltimoAcesso()
