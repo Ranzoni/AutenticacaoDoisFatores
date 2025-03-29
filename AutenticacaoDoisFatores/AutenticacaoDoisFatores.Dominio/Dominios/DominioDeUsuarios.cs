@@ -70,9 +70,9 @@ namespace AutenticacaoDoisFatores.Dominio.Dominios
             return await _repositorio.ExisteNomeUsuarioAsync(nomeUsuario, id);
         }
 
-        public async Task<bool> ExisteEmailAsync(string email)
+        public async Task<bool> ExisteEmailAsync(string email, Guid? id = null)
         {
-            return await _repositorio.ExisteEmailAsync(email);
+            return await _repositorio.ExisteEmailAsync(email, id);
         }
 
         public async Task<bool> EhAdmAsync(Guid idUsuario)

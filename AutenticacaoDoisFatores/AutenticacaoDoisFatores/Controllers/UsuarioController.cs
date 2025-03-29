@@ -1,5 +1,6 @@
 ﻿using AutenticacaoDoisFatores.Compartilhados;
 using AutenticacaoDoisFatores.Servico.CasosDeUso.Usuarios;
+using AutenticacaoDoisFatores.Servico.Compartilhados;
 using AutenticacaoDoisFatores.Servico.DTO.Usuarios;
 using Mensageiro;
 using Microsoft.AspNetCore.Authorization;
@@ -76,22 +77,6 @@ namespace AutenticacaoDoisFatores.Controllers
             }
         }
 
-        [HttpPut("{idUsuario}/gerar-nova-senha")]
-        [Authorize(Policy = "TrocarSenhaDeUsuario")]
-        public async Task<ActionResult> GerarNovaSenhaAsync([FromServices] GerarNovaSenhaUsuario gerarNovaSenhaUsuario, Guid idUsuario, TrocarSenhaUsuario trocarSenhaUsuario)
-        {
-            try
-            {
-                await gerarNovaSenhaUsuario.ExecutarAsync(idUsuario, trocarSenhaUsuario.NovaSenha);
-
-                return Sucesso("A senha foi atualizada com sucesso.");
-            }
-            catch (Exception e)
-            {
-                return BadRequest(e.Message);
-            }
-        }
-
         [HttpDelete("{idUsuario}")]
         [Authorize(Policy = "ExclusaoDeUsuario")]
         public async Task<ActionResult> ExcluirAsync([FromServices] ExcluirUsuario excluirUsuario, Guid idUsuario)
@@ -101,6 +86,24 @@ namespace AutenticacaoDoisFatores.Controllers
                 await excluirUsuario.ExecutarAsync(idUsuario);
 
                 return Sucesso("Usuário excluído com sucesso");
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
+        [HttpPut]
+        public async Task<ActionResult<UsuarioCadastrado?>> AlterarAsync([FromServices] AlterarUsuario alterarUsuario, NovosDadosUsuario novosDadosUsuario)
+        {
+            try
+            {
+                var token = Token(HttpContext.Request);
+                var idUsuario = Seguranca.RetornarIdDoToken(token);
+
+                var retorno = await alterarUsuario.ExecutarAsync(idUsuario, novosDadosUsuario);
+
+                return Sucesso(retorno);
             }
             catch (Exception e)
             {

@@ -76,7 +76,7 @@ namespace AutenticacaoDoisFatores.Testes.Dominio.Dominios
             var idUsuario = Guid.NewGuid();
             var permissoesParaIncluir = new List<TipoDePermissao>()
             {
-                TipoDePermissao.TrocarSenhaUsuario
+                TipoDePermissao.CriarUsuario
             };
             var permissoesInclusas = new List<TipoDePermissao>
             {
@@ -115,7 +115,7 @@ namespace AutenticacaoDoisFatores.Testes.Dominio.Dominios
             };
             var permissoesInclusas = new List<TipoDePermissao>
             {
-                TipoDePermissao.TrocarSenhaUsuario,
+                TipoDePermissao.CriarUsuario,
                 TipoDePermissao.AtivarUsuario,
                 TipoDePermissao.DesativarUsuario
             };

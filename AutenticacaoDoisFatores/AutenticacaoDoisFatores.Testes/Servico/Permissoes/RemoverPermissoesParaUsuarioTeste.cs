@@ -31,7 +31,7 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Permissoes
             };
             var permissoesInclusas = new List<TipoDePermissao>
             {
-                TipoDePermissao.TrocarSenhaUsuario,
+                TipoDePermissao.CriarUsuario,
                 TipoDePermissao.AtivarUsuario,
                 TipoDePermissao.DesativarUsuario
             };

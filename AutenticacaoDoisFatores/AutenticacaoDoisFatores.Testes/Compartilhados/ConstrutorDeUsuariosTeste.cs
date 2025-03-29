@@ -36,11 +36,13 @@ namespace AutenticacaoDoisFatores.Testes.Compartilhados
                 .ComSenha(senha ?? "T3ste.de.Senh@");
         }
 
-        internal static ConstrutorDeNovosDadosUsuario RetornarConstrutorDeNovosDadosUsuario(string? nome = null, string? nomeUsuario = null)
+        internal static ConstrutorDeNovosDadosUsuario RetornarConstrutorDeNovosDados(string? nome = null, string? nomeUsuario = null, string? email = null, string? senha = null)
         {
             return new ConstrutorDeNovosDadosUsuario()
                 .ComNome(nome)
-                .ComNomeUsuario(nomeUsuario);
+                .ComNomeUsuario(nomeUsuario)
+                .ComEmail(email)
+                .ComSenha(senha);
         }
     }
 }

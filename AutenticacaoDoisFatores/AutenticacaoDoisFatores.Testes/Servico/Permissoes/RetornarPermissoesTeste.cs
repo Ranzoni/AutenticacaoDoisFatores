@@ -47,7 +47,7 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Permissoes
             var faker = new Faker();
 
             var idUsuario = Guid.NewGuid();
-            var permissoesUsuario = faker.Random.EnumValues<TipoDePermissao>();
+            var permissoesUsuario = faker.Random.EnumValues<TipoDePermissao>(3);
             var permissoesEsperadas = permissoesUsuario
                 .Select(tipo => new PermissaoDisponivel(tipo.Descricao() ?? "", tipo));
 
