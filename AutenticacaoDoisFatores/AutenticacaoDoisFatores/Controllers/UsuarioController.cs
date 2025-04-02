@@ -77,6 +77,22 @@ namespace AutenticacaoDoisFatores.Controllers
             }
         }
 
+        [HttpPut("{idUsuario}/gerar-nova-senha")]
+        [Authorize(Policy = "TrocarSenhaDeUsuario")]
+        public async Task<ActionResult> GerarNovaSenhaAsync([FromServices] GerarNovaSenhaUsuario gerarNovaSenhaUsuario, Guid idUsuario, TrocarSenhaUsuario trocarSenhaUsuario)
+        {
+            try
+            {
+                await gerarNovaSenhaUsuario.ExecutarAsync(idUsuario, trocarSenhaUsuario.NovaSenha);
+
+                return Sucesso("A senha foi atualizada com sucesso.");
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
         [HttpDelete("{idUsuario}")]
         [Authorize(Policy = "ExclusaoDeUsuario")]
         public async Task<ActionResult> ExcluirAsync([FromServices] ExcluirUsuario excluirUsuario, Guid idUsuario)

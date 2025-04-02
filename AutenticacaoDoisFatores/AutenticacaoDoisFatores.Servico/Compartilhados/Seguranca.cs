@@ -54,6 +54,7 @@ namespace AutenticacaoDoisFatores.Servico.Compartilhados
         private static readonly string _criacaoDeUsuario = "criacaoDeUsuario";
         private static readonly string _ativarUsuario = "ativacaoDeUsuario";
         private static readonly string _desativarUsuario = "desativacaoDeUsuario";
+        private static readonly string _trocarSenhaUsuario = "trocarSenhaDeUsuario";
         private static readonly string _definirPermissoes = "definirPermissoes";
         private static readonly string _exclusaoDeUsuario = "exclusaoDeUsuario";
 
@@ -62,6 +63,7 @@ namespace AutenticacaoDoisFatores.Servico.Compartilhados
             { TipoDePermissao.CriarUsuario, _criacaoDeUsuario },
             { TipoDePermissao.AtivarUsuario, _ativarUsuario },
             { TipoDePermissao.DesativarUsuario, _desativarUsuario },
+            { TipoDePermissao.TrocarSenhaUsuario, _trocarSenhaUsuario },
             { TipoDePermissao.DefinirPermissoes, _definirPermissoes },
             { TipoDePermissao.ExcluirUsuario, _exclusaoDeUsuario },
         };
@@ -103,6 +105,14 @@ namespace AutenticacaoDoisFatores.Servico.Compartilhados
             get
             {
                 return _desativarUsuario;
+            }
+        }
+
+        public static string RegraTrocarSenhaUsuario
+        {
+            get
+            {
+                return _trocarSenhaUsuario;
             }
         }
 

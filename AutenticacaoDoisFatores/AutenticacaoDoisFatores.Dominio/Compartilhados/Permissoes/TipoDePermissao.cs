@@ -5,14 +5,16 @@ namespace AutenticacaoDoisFatores.Dominio.Compartilhados.Permissoes
     public enum TipoDePermissao
     {
         [Description("Criar um usuário")]
-        CriarUsuario = 1,
+        CriarUsuario,
         [Description("Ativar usuário")]
-        AtivarUsuario = 2,
+        AtivarUsuario,
         [Description("Inativar usuário")]
-        DesativarUsuario = 3,
+        DesativarUsuario,
+        [Description("Trocar a senha de um usuário")]
+        TrocarSenhaUsuario,
         [Description("Definir as permissões de um usuário")]
-        DefinirPermissoes = 4,
+        DefinirPermissoes,
         [Description("Excluir usuário")]
-        ExcluirUsuario = 5
+        ExcluirUsuario
     }
 }

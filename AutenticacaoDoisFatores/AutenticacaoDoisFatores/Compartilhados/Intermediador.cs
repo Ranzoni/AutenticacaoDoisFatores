@@ -1,6 +1,9 @@
 ﻿using AutenticacaoDoisFatores.Dominio.Compartilhados;
 using AutenticacaoDoisFatores.Dominio.Dominios;
 using AutenticacaoDoisFatores.Dominio.Repositorios;
+using AutenticacaoDoisFatores.Infra.Contexto;
+using AutenticacaoDoisFatores.Infra.Repositorios;
+using AutenticacaoDoisFatores.Servico.Compartilhados;
 
 namespace AutenticacaoDoisFatores.Compartilhados
 {
@@ -49,6 +52,24 @@ namespace AutenticacaoDoisFatores.Compartilhados
 
             if (nomeDominio.EstaVazio())
                 return false;
+
+            var token = contexto.Request.Headers.Authorization.ToString().Replace("Bearer ", "");
+            if (!token.EstaVazio())
+            {
+                var stringDeConexao = Environment.GetEnvironmentVariable("ADF_CONEXAO_BANCO");
+                if (stringDeConexao is null || stringDeConexao.EstaVazio())
+                    throw new ApplicationException("A string de conexão com o banco de dados não foi encontrada");
+
+                var contextoCliente = new ContextoCliente(stringDeConexao, nomeDominio);
+                var repositorioUsuarios = new RepositorioDeUsuarios(contextoCliente);
+                if (repositorioUsuarios is not null)
+                {
+                    var idUsuario = Seguranca.RetornarIdDoToken(token);
+                    var usuario = await repositorioUsuarios.BuscarUsuarioPorDominioAsync(idUsuario, nomeDominio);
+                    if (usuario is null || !usuario.Ativo)
+                        return false;
+                }
+            }
 
             contexto.Request.Headers.Append("Dominio", nomeDominio);
 

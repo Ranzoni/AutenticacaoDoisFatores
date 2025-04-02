@@ -25,6 +25,7 @@ namespace AutenticacaoDoisFatores
             servicos.AddTransient<CriarUsuario>();
             servicos.AddTransient<AtivarUsuario>();
             servicos.AddTransient<AutenticarUsuario>();
+            servicos.AddTransient<GerarNovaSenhaUsuario>();
             servicos.AddTransient<IncluirPermissoesParaUsuario>();
             servicos.AddTransient<RetornarPermissoes>();
             servicos.AddTransient<RemoverPermissoesParaUsuario>();
@@ -65,15 +66,7 @@ namespace AutenticacaoDoisFatores
 
             servicos.AddScoped(provider =>
             {
-                var stringDeConexao = Environment.GetEnvironmentVariable("ADF_CONEXAO_BANCO");
-                if (stringDeConexao is null || stringDeConexao.EstaVazio())
-                    throw new ApplicationException("A string de conexão com o banco de dados não foi encontrada");
-
-                var httpContextAccessor = provider.GetRequiredService<IHttpContextAccessor>();
-                var httpContext = httpContextAccessor.HttpContext;
-
-                var nomeDominio = httpContext?.Request.Headers["Dominio"].ToString() ?? "public";
-                return new ContextoCliente(stringDeConexao, nomeDominio);
+                return provider.RetornarContextoCliente();
             });
 
             ContextoPermissoes.AplicarConfiguracoes();
@@ -90,6 +83,25 @@ namespace AutenticacaoDoisFatores
                 var nomeDominio = httpContext?.Request.Headers["Dominio"].ToString() ?? "public";
                 return new ContextoPermissoes(stringDeConexao, nomeDominio);
             });
+        }
+
+        internal static ContextoCliente RetornarContextoCliente(this IServiceProvider serviceProvider)
+        {
+            var stringDeConexao = Environment.GetEnvironmentVariable("ADF_CONEXAO_BANCO");
+            if (stringDeConexao is null || stringDeConexao.EstaVazio())
+                throw new ApplicationException("A string de conexão com o banco de dados não foi encontrada");
+
+            var httpContextAccessor = serviceProvider.GetRequiredService<IHttpContextAccessor>();
+            var httpContext = httpContextAccessor.HttpContext;
+
+            var nomeDominio = httpContext?.Request.Headers["Dominio"].ToString() ?? "public";
+            return new ContextoCliente(stringDeConexao, nomeDominio);
+        }
+
+        internal static void RetornarRepositorioUsuario(this IServiceProvider serviceProvider)
+        {
+            var contextoCliente = serviceProvider.RetornarContextoCliente();
+
         }
     }
 }

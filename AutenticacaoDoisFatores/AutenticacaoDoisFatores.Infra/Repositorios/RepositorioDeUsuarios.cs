@@ -262,6 +262,40 @@ namespace AutenticacaoDoisFatores.Infra.Repositorios
             return await _contexto.ConsultaEhVerdadeiraAsync(sql);
         }
 
+        public async Task<Usuario?> BuscarUsuarioPorDominioAsync(Guid id, string dominio)
+        {
+            var sql = $@"
+                SELECT
+                    u.""Id"",
+                    u.""Nome"",
+                    u.""NomeUsuario"",
+                    u.""Email"",
+                    u.""Senha"",
+                    u.""Ativo"",
+                    u.""DataUltimoAcesso"",
+                    u.""DataCadastro"",
+                    u.""DataAlteracao"",
+                    u.""EhAdmin""
+                FROM
+                    {dominio}.""Usuarios"" u
+                WHERE
+                    u.""Id"" = '{id}'";
+
+            return await _contexto.LerUnicoAsync(sql,
+                leitor => new ConstrutorDeUsuario()
+                    .ComId(leitor.GetGuid(0))
+                    .ComNome(leitor.GetString(1))
+                    .ComNomeUsuario(leitor.GetString(2))
+                    .ComEmail(leitor.GetString(3))
+                    .ComSenha(leitor.GetString(4))
+                    .ComAtivo(leitor.GetBoolean(5))
+                    .ComDataUltimoAcesso(leitor.IsDBNull(6) ? null : leitor.GetDateTime(6))
+                    .ComDataCadastro(leitor.GetDateTime(7))
+                    .ComDataAlteracao(leitor.IsDBNull(8) ? null : leitor.GetDateTime(8))
+                    .ComEhAdmin(leitor.GetBoolean(9))
+                    .ConstruirCadastrado());
+        }
+
         #endregion
     }
 }
