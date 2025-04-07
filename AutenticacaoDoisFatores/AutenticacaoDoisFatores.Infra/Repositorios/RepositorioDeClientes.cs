@@ -3,6 +3,8 @@ using AutenticacaoDoisFatores.Dominio.Repositorios;
 using AutenticacaoDoisFatores.Infra.Utilitarios.Migradores;
 using AutenticacaoDoisFatores.Infra.Contexto;
 using Microsoft.EntityFrameworkCore;
+using AutenticacaoDoisFatores.Dominio.Filtros;
+using AutenticacaoDoisFatores.Dominio.Compartilhados;
 
 namespace AutenticacaoDoisFatores.Infra.Repositorios
 {
@@ -68,6 +70,42 @@ namespace AutenticacaoDoisFatores.Infra.Repositorios
         {
             var cliente = await _contexto.Clientes.FirstOrDefaultAsync(c => c.Ativo && c.ChaveAcesso.Equals(chave));
             return cliente?.NomeDominio;
+        }
+
+        public async Task<IEnumerable<Cliente>> BuscarVariosAsync(FiltroDeClientes filtros)
+        {
+            var qtdParaPular = (filtros.Pagina - 1) * filtros.QtdPorPagina;
+
+            IQueryable<Cliente> consulta = _contexto.Clientes;
+
+            if (!filtros.Nome!.EstaVazio())
+                consulta = consulta.Where(c => c.Nome.ToLower().Contains(filtros.Nome!.ToLower()));
+
+            if (!filtros.Email!.EstaVazio())
+                consulta = consulta.Where(c => c.Email.ToLower().Contains(filtros.Email!.ToLower()));
+
+            if (!filtros.NomeDominio!.EstaVazio())
+                consulta = consulta.Where(c => c.NomeDominio.ToLower().Contains(filtros.NomeDominio!.ToLower()));
+
+            if (filtros.Ativo.HasValue)
+                consulta = consulta.Where(c => c.Ativo.Equals(filtros.Ativo));
+
+            if (filtros.DataCadastroDe.HasValue)
+                consulta = consulta.Where(c => c.DataCadastro.Date >= filtros.DataCadastroDe.Value.Date);
+
+            if (filtros.DataCadastroAte.HasValue)
+                consulta = consulta.Where(c => c.DataCadastro.Date <= filtros.DataCadastroAte.Value.Date);
+
+            if (filtros.DataAlteracaoDe.HasValue)
+                consulta = consulta.Where(c => c.DataAlteracao!.Value.Date >= filtros.DataAlteracaoDe.Value.Date);
+
+            if (filtros.DataAlteracaoAte.HasValue)
+                consulta = consulta.Where(c => c.DataAlteracao!.Value.Date <= filtros.DataAlteracaoAte.Value.Date);
+
+            return await consulta
+                .Skip(qtdParaPular)
+                .Take(filtros.QtdPorPagina)
+                .ToListAsync();
         }
 
         #endregion

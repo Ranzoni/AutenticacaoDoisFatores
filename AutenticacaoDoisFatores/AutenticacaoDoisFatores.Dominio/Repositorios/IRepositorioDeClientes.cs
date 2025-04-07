@@ -1,9 +1,10 @@
 ﻿using AutenticacaoDoisFatores.Dominio.Compartilhados.Repositorios;
 using AutenticacaoDoisFatores.Dominio.Entidades;
+using AutenticacaoDoisFatores.Dominio.Filtros;
 
 namespace AutenticacaoDoisFatores.Dominio.Repositorios
 {
-    public interface IRepositorioDeClientes : IRepositorioBase<Cliente>
+    public interface IRepositorioDeClientes : IRepositorioBase<Cliente, FiltroDeClientes>
     {
         Task CriarDominio(string nomeDominio);
         Task<bool> ExisteDominioAsync(string nomeDominio);

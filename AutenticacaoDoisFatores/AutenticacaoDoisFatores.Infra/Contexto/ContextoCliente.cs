@@ -79,6 +79,23 @@ namespace AutenticacaoDoisFatores.Infra.Contexto
             return default;
         }
 
+        public async Task<IEnumerable<T>> LerVariosAsync<T>(string sql, Func<DbDataReader, IEnumerable<T>> acao)
+        {
+            using var conexao = new NpgsqlConnection(_stringDeConexao);
+            await conexao.OpenAsync();
+
+            using var comando = new NpgsqlCommand(sql, conexao);
+            using var leitor = await comando.ExecuteReaderAsync();
+
+            if (leitor is null)
+                return [];
+
+            if (await leitor.ReadAsync())
+                return acao(leitor);
+
+            return [];
+        }
+
         public async Task<bool> ConsultaEhVerdadeiraAsync(string sql)
         {
             using var conexao = new NpgsqlConnection(_stringDeConexao);

@@ -1,5 +1,6 @@
 ﻿using AutenticacaoDoisFatores.Dominio.Entidades;
 using AutenticacaoDoisFatores.Dominio.Excecoes;
+using AutenticacaoDoisFatores.Dominio.Filtros;
 using AutenticacaoDoisFatores.Dominio.Repositorios;
 
 namespace AutenticacaoDoisFatores.Dominio.Dominios
@@ -53,6 +54,11 @@ namespace AutenticacaoDoisFatores.Dominio.Dominios
         public async Task<Usuario?> BuscarUnicoAsync(Guid id)
         {
             return await _repositorio.BuscarUnicoAsync(id);
+        }
+
+        public async Task<IEnumerable<Usuario>> BuscarVariosAsync(FiltroPadrao filtro)
+        {
+            return await _repositorio.BuscarVariosAsync(filtro);
         }
 
         public async Task<Usuario?> BuscarPorNomeUsuarioAsync(string nomeUsuario)

@@ -1,6 +1,7 @@
 ﻿using AutenticacaoDoisFatores.Dominio.Compartilhados.Mensagens;
 using AutenticacaoDoisFatores.Dominio.Entidades;
 using AutenticacaoDoisFatores.Dominio.Excecoes;
+using AutenticacaoDoisFatores.Dominio.Filtros;
 using AutenticacaoDoisFatores.Dominio.Repositorios;
 
 namespace AutenticacaoDoisFatores.Dominio.Dominios
@@ -44,6 +45,11 @@ namespace AutenticacaoDoisFatores.Dominio.Dominios
         public async Task<Cliente?> BuscarClienteAsync(Guid id)
         {
             return await _repositorio.BuscarUnicoAsync(id);
+        }
+
+        public async Task<IEnumerable<Cliente>> BuscarVariosAsync(FiltroDeClientes filtros)
+        {
+            return await _repositorio.BuscarVariosAsync(filtros);
         }
 
         public async Task<bool> EmailEstaCadastradoAsync(string email)

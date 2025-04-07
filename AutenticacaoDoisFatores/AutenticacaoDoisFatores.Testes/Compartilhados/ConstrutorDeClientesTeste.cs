@@ -15,7 +15,7 @@ namespace AutenticacaoDoisFatores.Testes.Compartilhados
                 .ComId(id ?? Guid.NewGuid())
                 .ComNome(nome ?? faker.Company.CompanyName())
                 .ComEmail(email ?? faker.Internet.Email())
-                .ComNomeDominio(nomeDominio ?? faker.Internet.DomainWord())
+                .ComNomeDominio(nomeDominio ?? "dominio_cliente")
                 .ComChaveAcesso(chaveAcesso ?? faker.Random.AlphaNumeric(20))
                 .ComAtivo(ativo ?? faker.Random.Bool())
                 .ComDataCadastro(dataCadastro ?? faker.Date.Past())
@@ -31,7 +31,7 @@ namespace AutenticacaoDoisFatores.Testes.Compartilhados
             return new ConstrutorDeNovoCliente()
                 .ComNome(nome ?? faker.Company.CompanyName())
                 .ComEmail(email ?? faker.Internet.Email())
-                .ComNomeDominio(nomeDominio ?? faker.Internet.DomainWord())
+                .ComNomeDominio(nomeDominio ?? "dominio_cliente")
                 .ComSenhaAdm(senhaAdm ?? "T3ste.de.Senh@");
         }
     }

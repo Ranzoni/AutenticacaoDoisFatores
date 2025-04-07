@@ -1,4 +1,5 @@
-﻿using Mensageiro;
+﻿using AutenticacaoDoisFatores.Dominio.Compartilhados;
+using Mensageiro;
 using Mensageiro.WebApi;
 
 namespace AutenticacaoDoisFatores.Compartilhados
@@ -13,6 +14,22 @@ namespace AutenticacaoDoisFatores.Compartilhados
         protected static string Token(HttpRequest httpRequest)
         {
             return httpRequest.Headers.Authorization.ToString().Replace("Bearer ", "");
+        }
+
+        protected static bool ChaveExclusivaEstaValida(HttpRequest httpRequest)
+        {
+            var chaveExclusividade = Environment.GetEnvironmentVariable("ADF_CHAVE_EXCLUSIVIDADE");
+            if (chaveExclusividade!.EstaVazio())
+                return false;
+
+            var chaveRequisicao = httpRequest.Headers["Chave-Exclusiva"].ToString();
+            if (chaveRequisicao!.EstaVazio())
+                return false;
+
+            if (!chaveRequisicao.Equals(chaveExclusividade))
+                return false;
+
+            return true;
         }
     }
 }

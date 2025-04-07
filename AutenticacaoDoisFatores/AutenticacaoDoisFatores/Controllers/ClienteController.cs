@@ -1,4 +1,5 @@
 ﻿using AutenticacaoDoisFatores.Compartilhados;
+using AutenticacaoDoisFatores.Dominio.Compartilhados;
 using AutenticacaoDoisFatores.Servico.CasosDeUso.Clientes;
 using AutenticacaoDoisFatores.Servico.Compartilhados;
 using AutenticacaoDoisFatores.Servico.DTO.Clientes;
@@ -104,6 +105,44 @@ namespace AutenticacaoDoisFatores.Controllers
                 await gerarNovaChaveAcessoCliente.GerarNovaChaveAsync(idCliente);
 
                 return Sucesso("A nova chave de acesso foi enviada para o e-mail do cliente.");
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
+        [HttpGet("{id}")]
+        [AllowAnonymous]
+        public async Task<ActionResult<ClienteCadastrado?>> BuscarUnicoAsync([FromServices] BuscarClientes buscarClientes, Guid id)
+        {
+            try
+            {
+                if (!ChaveExclusivaEstaValida(HttpContext.Request))
+                    return Unauthorized();
+
+                var resposta = await buscarClientes.BuscarUnicoAsync(id);
+
+                return Sucesso(resposta);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
+        [HttpGet]
+        [AllowAnonymous]
+        public async Task<ActionResult<ClienteCadastrado?>> BuscarVariosAsync([FromServices] BuscarClientes buscarClientes, [FromQuery] FiltrosParaBuscarClientes filtros)
+        {
+            try
+            {
+                if (!ChaveExclusivaEstaValida(HttpContext.Request))
+                    return Unauthorized();
+
+                var resposta = await buscarClientes.BuscarVariosAsync(filtros);
+
+                return Sucesso(resposta);
             }
             catch (Exception e)
             {

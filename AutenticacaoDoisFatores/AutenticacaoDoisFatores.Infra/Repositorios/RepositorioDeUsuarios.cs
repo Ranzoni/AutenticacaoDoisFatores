@@ -1,5 +1,6 @@
 ﻿using AutenticacaoDoisFatores.Dominio.Construtores;
 using AutenticacaoDoisFatores.Dominio.Entidades;
+using AutenticacaoDoisFatores.Dominio.Filtros;
 using AutenticacaoDoisFatores.Dominio.Repositorios;
 using AutenticacaoDoisFatores.Infra.Contexto;
 
@@ -294,6 +295,54 @@ namespace AutenticacaoDoisFatores.Infra.Repositorios
                     .ComDataAlteracao(leitor.IsDBNull(8) ? null : leitor.GetDateTime(8))
                     .ComEhAdmin(leitor.GetBoolean(9))
                     .ConstruirCadastrado());
+        }
+
+        public async Task<IEnumerable<Usuario>> BuscarVariosAsync(FiltroPadrao filtros)
+        {
+            var qtdParaPular = (filtros.Pagina - 1) * filtros.QtdPorPagina;
+
+            var sql = $@"
+                SELECT
+                    u.""Id"",
+                    u.""Nome"",
+                    u.""NomeUsuario"",
+                    u.""Email"",
+                    u.""Senha"",
+                    u.""Ativo"",
+                    u.""DataUltimoAcesso"",
+                    u.""DataCadastro"",
+                    u.""DataAlteracao"",
+                    u.""EhAdmin""
+                FROM
+                    {_contexto.NomeDominio}.""Usuarios"" u
+                LIMIT {filtros.QtdPorPagina}
+                OFFSET {qtdParaPular}";
+
+            return await _contexto.LerVariosAsync(sql,
+                leitor =>
+                {
+                    var listaDeUsuarios = new List<Usuario>();
+
+                    while (leitor.Read())
+                    {
+                        var usuario = new ConstrutorDeUsuario()
+                            .ComId(leitor.GetGuid(0))
+                            .ComNome(leitor.GetString(1))
+                            .ComNomeUsuario(leitor.GetString(2))
+                            .ComEmail(leitor.GetString(3))
+                            .ComSenha(leitor.GetString(4))
+                            .ComAtivo(leitor.GetBoolean(5))
+                            .ComDataUltimoAcesso(leitor.IsDBNull(6) ? null : leitor.GetDateTime(6))
+                            .ComDataCadastro(leitor.GetDateTime(7))
+                            .ComDataAlteracao(leitor.IsDBNull(8) ? null : leitor.GetDateTime(8))
+                            .ComEhAdmin(leitor.GetBoolean(9))
+                            .ConstruirCadastrado();
+
+                        listaDeUsuarios.Add(usuario);
+                    }
+
+                    return listaDeUsuarios;
+                });
         }
 
         #endregion
