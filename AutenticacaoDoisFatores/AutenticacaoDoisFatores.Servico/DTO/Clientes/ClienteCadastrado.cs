@@ -1,4 +1,5 @@
 ﻿using AutenticacaoDoisFatores.Dominio.Compartilhados.Entidades;
+using AutenticacaoDoisFatores.Dominio.Entidades;
 
 namespace AutenticacaoDoisFatores.Servico.DTO.Clientes
 {
@@ -18,6 +19,20 @@ namespace AutenticacaoDoisFatores.Servico.DTO.Clientes
             Ativo = ativo;
             DataCadastro = dataCadastro;
             DataAlteracao = dataAlteracao;
+        }
+
+        public static explicit operator ClienteCadastrado(Cliente cliente)
+        {
+            return new ClienteCadastrado
+            (
+                id: cliente.Id,
+                nome: cliente.Nome,
+                email: cliente.Email,
+                nomeDominio: cliente.NomeDominio,
+                ativo: cliente.Ativo,
+                dataCadastro: cliente.DataCadastro,
+                dataAlteracao: cliente.DataAlteracao
+            );
         }
     }
 }

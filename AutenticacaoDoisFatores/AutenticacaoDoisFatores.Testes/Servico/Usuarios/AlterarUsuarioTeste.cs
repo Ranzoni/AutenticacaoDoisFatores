@@ -3,9 +3,7 @@ using AutenticacaoDoisFatores.Dominio.Dominios;
 using AutenticacaoDoisFatores.Dominio.Entidades;
 using AutenticacaoDoisFatores.Dominio.Repositorios;
 using AutenticacaoDoisFatores.Servico.CasosDeUso.Usuarios;
-using AutenticacaoDoisFatores.Servico.Mapeadores;
 using AutenticacaoDoisFatores.Testes.Compartilhados;
-using AutoMapper;
 using Bogus;
 using Mensageiro;
 using Moq;
@@ -15,17 +13,6 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Usuarios
 {
     public class AlterarUsuarioTeste
     {
-        private readonly IMapper _mapeador;
-
-        public AlterarUsuarioTeste()
-        {
-            var config = new MapperConfiguration(cfg =>
-            {
-                cfg.AddProfile<MapeadorDeUsuario>();
-            });
-            _mapeador = config.CreateMapper();
-        }
-
         [Fact]
         internal async Task DeveAlterarUsuario()
         {
@@ -35,7 +22,6 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Usuarios
             var faker = new Faker();
 
             mocker.CreateInstance<DominioDeUsuarios>();
-            mocker.Use(_mapeador);
 
             var servico = mocker.CreateInstance<AlterarUsuario>();
 

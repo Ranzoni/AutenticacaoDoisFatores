@@ -4,9 +4,7 @@ using AutenticacaoDoisFatores.Dominio.Dominios;
 using AutenticacaoDoisFatores.Dominio.Repositorios;
 using AutenticacaoDoisFatores.Servico.CasosDeUso.Usuarios;
 using AutenticacaoDoisFatores.Servico.DTO.Usuarios;
-using AutenticacaoDoisFatores.Servico.Mapeadores;
 using AutenticacaoDoisFatores.Testes.Compartilhados;
-using AutoMapper;
 using Bogus;
 using Mensageiro;
 using Moq;
@@ -18,16 +16,6 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Usuarios
     {
         private readonly AutoMocker _mocker = new();
         private readonly Faker _faker = new();
-        private readonly IMapper _mapeador;
-
-        public AutenticarUsuarioTeste()
-        {
-            var config = new MapperConfiguration(cfg =>
-            {
-                cfg.AddProfile<MapeadorDeUsuario>();
-            });
-            _mapeador = config.CreateMapper();
-        }
 
         [Fact]
         internal async Task DeveAutenticarComNomeUsuario()
@@ -41,7 +29,6 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Usuarios
                 .RetornarConstrutor(ativo: true, senha: senhaCriptografada)
                 .ConstruirCadastrado();
 
-            _mocker.Use(_mapeador);
             var servico = _mocker.CreateInstance<AutenticarUsuario>();
             _mocker.GetMock<IRepositorioDeUsuarios>().Setup(r => r.BuscarPorNomeUsuarioAsync(usuarioParaTeste.NomeUsuario)).ReturnsAsync(usuarioParaTeste);
 
@@ -77,7 +64,6 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Usuarios
                 .RetornarConstrutor(ativo: true, senha: senhaCriptografada)
                 .ConstruirCadastrado();
 
-            _mocker.Use(_mapeador);
             var servico = _mocker.CreateInstance<AutenticarUsuario>();
             _mocker.GetMock<IRepositorioDeUsuarios>().Setup(r => r.BuscarPorEmailAsync(usuarioParaTeste.Email)).ReturnsAsync(usuarioParaTeste);
 

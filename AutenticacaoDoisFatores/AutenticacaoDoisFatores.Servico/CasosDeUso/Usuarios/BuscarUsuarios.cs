@@ -11,9 +11,7 @@ namespace AutenticacaoDoisFatores.Servico.CasosDeUso.Usuarios
         public async Task<UsuarioCadastrado?> BuscarUnicoAsync(Guid id)
         {
             var usuario = await _dominio.BuscarUnicoAsync(id);
-
-            var usuarioCadastrado = (UsuarioCadastrado?)usuario!;
-            return usuarioCadastrado;
+            return (UsuarioCadastrado?)usuario!;
         }
 
         public async Task<IEnumerable<UsuarioCadastrado>> BuscarVariosAsync(FiltrosParaBuscarUsuario filtrosParaBuscar)

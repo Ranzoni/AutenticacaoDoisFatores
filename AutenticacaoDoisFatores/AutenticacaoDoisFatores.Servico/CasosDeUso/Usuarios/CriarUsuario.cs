@@ -4,14 +4,12 @@ using AutenticacaoDoisFatores.Dominio.Entidades;
 using AutenticacaoDoisFatores.Dominio.Validadores;
 using AutenticacaoDoisFatores.Servico.Compartilhados;
 using AutenticacaoDoisFatores.Servico.DTO.Usuarios;
-using AutoMapper;
 using Mensageiro;
 
 namespace AutenticacaoDoisFatores.Servico.CasosDeUso.Usuarios
 {
-    public class CriarUsuario(IMapper mapeador, INotificador notificador, DominioDeUsuarios dominio)
+    public class CriarUsuario(INotificador notificador, DominioDeUsuarios dominio)
     {
-        private readonly IMapper _mapeador = mapeador;
         private readonly INotificador _notificador = notificador;
         private readonly DominioDeUsuarios _dominio = dominio;
 
@@ -21,13 +19,11 @@ namespace AutenticacaoDoisFatores.Servico.CasosDeUso.Usuarios
             if (!criacaoEhValida)
                 return null;
 
-            var usuario = _mapeador.Map<Usuario>(novoUsuario);
+            var usuario = (Usuario)novoUsuario;
 
             await _dominio.CriarAsync(usuario);
 
-            var usuarioCriado = _mapeador.Map<UsuarioCadastrado>(usuario);
-
-            return usuarioCriado;
+            return (UsuarioCadastrado)usuario;
         }
 
         private async Task<bool> CriacaoEhValida(NovoUsuario novoUsuario)

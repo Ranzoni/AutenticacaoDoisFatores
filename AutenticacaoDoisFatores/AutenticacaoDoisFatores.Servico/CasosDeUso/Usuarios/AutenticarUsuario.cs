@@ -5,17 +5,15 @@ using AutenticacaoDoisFatores.Dominio.Dominios;
 using AutenticacaoDoisFatores.Dominio.Entidades;
 using AutenticacaoDoisFatores.Servico.Compartilhados;
 using AutenticacaoDoisFatores.Servico.DTO.Usuarios;
-using AutoMapper;
 using Mensageiro;
 
 namespace AutenticacaoDoisFatores.Servico.CasosDeUso.Usuarios
 {
-    public class AutenticarUsuario(DominioDeUsuarios dominio, DominioDePermissoes permissoes, INotificador notificador, IMapper mapper)
+    public class AutenticarUsuario(DominioDeUsuarios dominio, DominioDePermissoes permissoes, INotificador notificador)
     {
         private readonly DominioDeUsuarios _dominio = dominio;
         private readonly DominioDePermissoes _permissoes = permissoes;
         private readonly INotificador _notificador = notificador;
-        private readonly IMapper _mapper = mapper;
 
         public async Task<UsuarioAutenticado?> ExecutarAsync(DadosAutenticacao dadosAutenticacao)
         {
@@ -33,10 +31,8 @@ namespace AutenticacaoDoisFatores.Servico.CasosDeUso.Usuarios
             usuario.AtualizarDataUltimoAcesso();
             await _dominio.AlterarAsync(usuario);
 
-            var usuarioCadastrado = _mapper.Map<UsuarioCadastrado>(usuario);
-
-            var resposta = new UsuarioAutenticado(usuario: usuarioCadastrado, token: token);
-            return resposta;
+            var usuarioCadastrado = (UsuarioCadastrado)usuario;
+            return new UsuarioAutenticado(usuario: usuarioCadastrado, token: token);
         }
 
         private bool DadosAutenticaoSaoValidos(DadosAutenticacao dadosAutenticacao)

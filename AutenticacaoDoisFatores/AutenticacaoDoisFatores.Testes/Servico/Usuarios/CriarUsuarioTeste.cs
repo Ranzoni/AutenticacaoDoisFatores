@@ -3,9 +3,7 @@ using AutenticacaoDoisFatores.Dominio.Dominios;
 using AutenticacaoDoisFatores.Dominio.Entidades;
 using AutenticacaoDoisFatores.Dominio.Repositorios;
 using AutenticacaoDoisFatores.Servico.CasosDeUso.Usuarios;
-using AutenticacaoDoisFatores.Servico.Mapeadores;
 using AutenticacaoDoisFatores.Testes.Compartilhados;
-using AutoMapper;
 using Bogus;
 using Mensageiro;
 using Moq;
@@ -15,18 +13,8 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Usuarios
 {
     public class CriarUsuarioTeste
     {
-        private readonly IMapper _mapeador;
         private readonly AutoMocker _mocker = new();
         private readonly Faker _faker = new();
-        
-        public CriarUsuarioTeste()
-        {
-            var config = new MapperConfiguration(cfg =>
-            {
-                cfg.AddProfile<MapeadorDeUsuario>();
-            });
-            _mapeador = config.CreateMapper();
-        }
 
         [Fact]
         internal async Task DeveCriarUsuario()
@@ -42,7 +30,6 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Usuarios
                 .Construir();
 
             _mocker.CreateInstance<DominioDeUsuarios>();
-            _mocker.Use(_mapeador);
 
             var servico = _mocker.CreateInstance<CriarUsuario>();
 
@@ -77,7 +64,6 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Usuarios
                 .Construir();
 
             _mocker.CreateInstance<DominioDeUsuarios>();
-            _mocker.Use(_mapeador);
 
             _mocker.GetMock<INotificador>().Setup(n => n.ExisteMensagem()).Returns(true);
 
@@ -111,7 +97,6 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Usuarios
                 .Construir();
 
             _mocker.CreateInstance<DominioDeUsuarios>();
-            _mocker.Use(_mapeador);
 
             _mocker.GetMock<INotificador>().Setup(n => n.ExisteMensagem()).Returns(true);
 
@@ -151,7 +136,6 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Usuarios
                 .Construir();
 
             _mocker.CreateInstance<DominioDeUsuarios>();
-            _mocker.Use(_mapeador);
 
             _mocker.GetMock<INotificador>().Setup(n => n.ExisteMensagem()).Returns(true);
 
@@ -189,7 +173,6 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Usuarios
                 .Construir();
 
             _mocker.CreateInstance<DominioDeUsuarios>();
-            _mocker.Use(_mapeador);
 
             _mocker.GetMock<INotificador>().Setup(n => n.ExisteMensagem()).Returns(true);
 

@@ -1,4 +1,6 @@
-﻿using AutenticacaoDoisFatores.Dominio.Dominios;
+﻿using AutenticacaoDoisFatores.Dominio.Construtores;
+using AutenticacaoDoisFatores.Dominio.Dominios;
+using AutenticacaoDoisFatores.Dominio.Entidades;
 
 namespace AutenticacaoDoisFatores.Servico.DTO.Usuarios
 {
@@ -14,6 +16,16 @@ namespace AutenticacaoDoisFatores.Servico.DTO.Usuarios
         public string SenhaDescriptografada()
         {
             return _senhaDescriptografada;
+        }
+
+        public static explicit operator Usuario(NovoUsuario novoUsuario)
+        {
+            return new ConstrutorDeUsuario()
+                .ComNome(novoUsuario.Nome)
+                .ComNomeUsuario(novoUsuario.NomeUsuario)
+                .ComEmail(novoUsuario.Email)
+                .ComSenha(novoUsuario.Senha)
+                .ConstruirNovo();
         }
     }
 }

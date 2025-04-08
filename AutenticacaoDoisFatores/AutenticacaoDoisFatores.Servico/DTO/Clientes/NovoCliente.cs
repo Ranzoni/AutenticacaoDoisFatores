@@ -1,4 +1,7 @@
-﻿using AutenticacaoDoisFatores.Servico.Compartilhados;
+﻿using AutenticacaoDoisFatores.Dominio.Construtores;
+using AutenticacaoDoisFatores.Dominio.Dominios;
+using AutenticacaoDoisFatores.Dominio.Entidades;
+using AutenticacaoDoisFatores.Servico.Compartilhados;
 
 namespace AutenticacaoDoisFatores.Servico.DTO.Clientes
 {
@@ -29,6 +32,27 @@ namespace AutenticacaoDoisFatores.Servico.DTO.Clientes
         private static (string chaveDescriptografada, string chaveCriptograda) GerarChaveAcesso()
         {
             return Seguranca.GerarChaveDeAcessoComCriptografia();
+        }
+
+        public static explicit operator Cliente(NovoCliente novoCliente)
+        {
+            return new ConstrutorDeCliente()
+                .ComNome(novoCliente.Nome)
+                .ComEmail(novoCliente.Email)
+                .ComNomeDominio(novoCliente.NomeDominio)
+                .ComChaveAcesso(novoCliente.ChaveAcesso)
+                .ConstruirNovo();
+        }
+
+        public static explicit operator Usuario(NovoCliente novoCliente)
+        {
+            return new ConstrutorDeUsuario()
+                .ComNome(novoCliente.Nome)
+                .ComNomeUsuario("Administrador")
+                .ComEmail(novoCliente.Email)
+                .ComSenha(Criptografia.CriptografarComSha512(novoCliente.SenhaAdm))
+                .ComEhAdmin(true)
+                .ConstruirNovo();
         }
     }
 }

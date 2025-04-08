@@ -6,9 +6,7 @@ using AutenticacaoDoisFatores.Dominio.Repositorios;
 using AutenticacaoDoisFatores.Dominio.Servicos;
 using AutenticacaoDoisFatores.Servico.CasosDeUso.Clientes;
 using AutenticacaoDoisFatores.Servico.Excecoes;
-using AutenticacaoDoisFatores.Servico.Mapeadores;
 using AutenticacaoDoisFatores.Testes.Compartilhados;
-using AutoMapper;
 using Bogus;
 using Mensageiro;
 using Moq;
@@ -20,16 +18,6 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Clientes
     {
         private readonly Faker _faker = new();
         private readonly AutoMocker _mocker = new();
-        private readonly IMapper _mapeador;
-
-        public CriarClienteTeste()
-        {
-            var config = new MapperConfiguration(cfg =>
-            {
-                cfg.AddProfile<MapeadorDeCliente>();
-            });
-            _mapeador = config.CreateMapper();
-        }
 
         [Fact]
         internal async Task DeveExecutar()
@@ -49,7 +37,6 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Clientes
             var cliente = construtorDeCliente.ConstruirNovo();
 
             _mocker.CreateInstance<DominioDeClientes>();
-            _mocker.Use(_mapeador);
             _mocker.GetMock<IRepositorioDeClientes>().Setup(r => r.BuscarUnicoAsync(It.IsAny<Guid>())).ReturnsAsync(cliente);
 
             var linkConfirmacaoCadastroParaTeste = _faker.Internet.UrlWithPath();
@@ -96,7 +83,7 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Clientes
 
             #endregion Preparação do teste
 
-            var cliente = _mapeador.Map<Cliente>(novoCliente);
+            var cliente = (Cliente)(novoCliente);
 
             #region Verificação do teste
 
@@ -120,7 +107,6 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Clientes
             var novoCliente = construtor.Construir();
 
             _mocker.CreateInstance<DominioDeClientes>();
-            _mocker.Use(_mapeador);
             _mocker.GetMock<INotificador>().Setup(n => n.ExisteMensagem()).Returns(true);
 
             var linkConfirmacaoCadastroParaTeste = _faker.Internet.UrlWithPath();
@@ -154,7 +140,6 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Clientes
             var novoCliente = construtor.Construir();
 
             _mocker.CreateInstance<DominioDeClientes>();
-            _mocker.Use(_mapeador);
             _mocker.GetMock<INotificador>().Setup(n => n.ExisteMensagem()).Returns(true);
 
             var linkConfirmacaoCadastroParaTeste = _faker.Internet.UrlWithPath();
@@ -193,7 +178,6 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Clientes
             var novoCliente = construtor.Construir();
 
             _mocker.CreateInstance<DominioDeClientes>();
-            _mocker.Use(_mapeador);
             _mocker.GetMock<INotificador>().Setup(n => n.ExisteMensagem()).Returns(true);
 
             var linkConfirmacaoCadastroParaTeste = _faker.Internet.UrlWithPath();
@@ -231,7 +215,6 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Clientes
             var novoCliente = construtor.Construir();
 
             _mocker.CreateInstance<DominioDeClientes>();
-            _mocker.Use(_mapeador);
             _mocker.GetMock<INotificador>().Setup(n => n.ExisteMensagem()).Returns(true);
 
             var linkConfirmacaoCadastroParaTeste = _faker.Internet.UrlWithPath();
@@ -263,7 +246,6 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Clientes
             var novoCliente = construtor.Construir();
 
             _mocker.CreateInstance<DominioDeClientes>();
-            _mocker.Use(_mapeador);
             _mocker.GetMock<IRepositorioDeClientes>().Setup(r => r.ExisteEmailAsync(emailJaCadastrado)).ReturnsAsync(true);
             _mocker.GetMock<INotificador>().Setup(n => n.ExisteMensagem()).Returns(true);
 
@@ -296,7 +278,6 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Clientes
             var novoCliente = construtor.Construir();
 
             _mocker.CreateInstance<DominioDeClientes>();
-            _mocker.Use(_mapeador);
             _mocker.GetMock<IRepositorioDeClientes>().Setup(r => r.ExisteDominioAsync(nomeDominioJaCadastrado)).ReturnsAsync(true);
             _mocker.GetMock<INotificador>().Setup(n => n.ExisteMensagem()).Returns(true);
 

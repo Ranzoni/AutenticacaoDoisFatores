@@ -5,15 +5,13 @@ using AutenticacaoDoisFatores.Dominio.Entidades;
 using AutenticacaoDoisFatores.Dominio.Validadores;
 using AutenticacaoDoisFatores.Servico.Compartilhados;
 using AutenticacaoDoisFatores.Servico.DTO.Usuarios;
-using AutoMapper;
 using Mensageiro;
 
 namespace AutenticacaoDoisFatores.Servico.CasosDeUso.Usuarios
 {
-    public class AlterarUsuario(DominioDeUsuarios dominio, IMapper mapper, INotificador notificador)
+    public class AlterarUsuario(DominioDeUsuarios dominio, INotificador notificador)
     {
         private readonly DominioDeUsuarios _dominio = dominio;
-        private readonly IMapper _mapper = mapper;
         private readonly INotificador _notificador = notificador;
 
         public async Task<UsuarioCadastrado?> ExecutarAsync(Guid id, NovosDadosUsuario novosDadosUsuario)
@@ -36,9 +34,7 @@ namespace AutenticacaoDoisFatores.Servico.CasosDeUso.Usuarios
 
             await _dominio.AlterarAsync(usuarioParaAlterar);
 
-            var usuarioCadastrado = _mapper.Map<UsuarioCadastrado>(usuarioParaAlterar);
-
-            return usuarioCadastrado;
+            return (UsuarioCadastrado)usuarioParaAlterar;
         }
 
         private async Task<bool> AlteracaoEhValida(Guid id, Usuario? usuarioParaAlterar, NovosDadosUsuario novosDadosUsuario)

@@ -4,7 +4,6 @@ using AutenticacaoDoisFatores.Dominio.Compartilhados;
 using AutenticacaoDoisFatores.Infra.Utilitarios.Migradores;
 using AutenticacaoDoisFatores.Infra.Contexto;
 using AutenticacaoDoisFatores.Servico.Compartilhados;
-using AutenticacaoDoisFatores.Servico.Mapeadores;
 using Mensageiro.WebApi;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
@@ -65,7 +64,6 @@ builder.Services.AddAuthorizationBuilder()
 
 builder.Services.AddHttpContextAccessor();
 
-builder.Services.AddAutoMapper(typeof(MapeadorDeCliente));
 builder.Services.AddMensageiro();
 
 builder.Services.AddServicos();
