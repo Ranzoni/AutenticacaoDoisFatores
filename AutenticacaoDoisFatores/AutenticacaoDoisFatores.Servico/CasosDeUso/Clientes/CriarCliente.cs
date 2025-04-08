@@ -12,12 +12,14 @@ using Mensageiro;
 
 namespace AutenticacaoDoisFatores.Servico.CasosDeUso.Clientes
 {
-    public class CriarCliente(
+    public class CriarCliente
+    (
         IMapper mapper,
         DominioDeClientes dominio,
         DominioDeUsuarios usuarios,
         INotificador notificador,
-        EnvioDeEmail email)
+        EnvioDeEmail email
+    )
     {
         private readonly IMapper _mapper = mapper;
         private readonly DominioDeClientes _dominio = dominio;

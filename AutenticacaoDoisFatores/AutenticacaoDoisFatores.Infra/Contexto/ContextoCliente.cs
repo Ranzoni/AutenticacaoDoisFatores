@@ -90,10 +90,7 @@ namespace AutenticacaoDoisFatores.Infra.Contexto
             if (leitor is null)
                 return [];
 
-            if (await leitor.ReadAsync())
-                return acao(leitor);
-
-            return [];
+            return acao(leitor);
         }
 
         public async Task<bool> ConsultaEhVerdadeiraAsync(string sql)

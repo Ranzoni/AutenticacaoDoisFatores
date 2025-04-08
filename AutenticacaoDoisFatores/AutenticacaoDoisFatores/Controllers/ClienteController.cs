@@ -1,5 +1,4 @@
 ﻿using AutenticacaoDoisFatores.Compartilhados;
-using AutenticacaoDoisFatores.Dominio.Compartilhados;
 using AutenticacaoDoisFatores.Servico.CasosDeUso.Clientes;
 using AutenticacaoDoisFatores.Servico.Compartilhados;
 using AutenticacaoDoisFatores.Servico.DTO.Clientes;
@@ -133,7 +132,7 @@ namespace AutenticacaoDoisFatores.Controllers
 
         [HttpGet]
         [AllowAnonymous]
-        public async Task<ActionResult<ClienteCadastrado?>> BuscarVariosAsync([FromServices] BuscarClientes buscarClientes, [FromQuery] FiltrosParaBuscarClientes filtros)
+        public async Task<ActionResult<IEnumerable<ClienteCadastrado>>> BuscarVariosAsync([FromServices] BuscarClientes buscarClientes, [FromQuery] FiltrosParaBuscarClientes filtros)
         {
             try
             {

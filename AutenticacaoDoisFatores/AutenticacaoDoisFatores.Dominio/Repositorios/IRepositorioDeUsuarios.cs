@@ -4,7 +4,7 @@ using AutenticacaoDoisFatores.Dominio.Filtros;
 
 namespace AutenticacaoDoisFatores.Dominio.Repositorios
 {
-    public interface IRepositorioDeUsuarios : IRepositorioBase<Usuario, FiltroPadrao>
+    public interface IRepositorioDeUsuarios : IRepositorioBase<Usuario, FiltroDeUsuarios>
     {
         Task<bool> ExisteNomeUsuarioAsync(string nomeUsuario, Guid? id = null);
         Task<bool> ExisteEmailAsync(string email, Guid? id = null);

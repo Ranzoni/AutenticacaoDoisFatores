@@ -273,36 +273,7 @@ namespace AutenticacaoDoisFatores.Testes.Dominio.Dominios
         }
 
         [Fact]
-        internal async Task DeveBuscarVariosSemFiltro()
-        {
-            #region Preparação do teste
-
-            var mocker = new AutoMocker();
-
-            var idCliente = Guid.NewGuid();
-            var filtros = new FiltroDeClientes();
-
-            var maximoRegistros = _faker.Random.Int(2, filtros.QtdPorPagina);
-            var listaDeClientes = GerarVarios(maximoRegistros);
-
-            var dominio = mocker.CreateInstance<DominioDeClientes>();
-            mocker.GetMock<IRepositorioDeClientes>().Setup(r => r.BuscarVariosAsync(filtros)).ReturnsAsync(listaDeClientes);
-
-            #endregion
-
-            var resposta = await dominio.BuscarVariosAsync(filtros);
-
-            #region Verificação do teste
-
-            Assert.NotNull(resposta);
-            Assert.Equal(listaDeClientes, resposta);
-            mocker.Verify<IRepositorioDeClientes>(r => r.BuscarVariosAsync(filtros), Times.Once);
-
-            #endregion
-        }
-
-        [Fact]
-        internal async Task DeveBuscarVariosComFiltro()
+        internal async Task DeveBuscarVarios()
         {
             #region Preparação do teste
 
@@ -311,7 +282,6 @@ namespace AutenticacaoDoisFatores.Testes.Dominio.Dominios
             var filtros = new FiltroDeClientes();
             var maximoRegistros = _faker.Random.Int(2, filtros.QtdPorPagina);
 
-            var idCliente = Guid.NewGuid();
             var listaDeClientes = GerarVarios(maximoRegistros, ativo: true);
 
             var maximoPaginacao = _faker.Random.Int(1, maximoRegistros);
@@ -339,7 +309,6 @@ namespace AutenticacaoDoisFatores.Testes.Dominio.Dominios
 
             var mocker = new AutoMocker();
 
-            var idCliente = Guid.NewGuid();
             var filtros = new FiltroDeClientes();
 
             var dominio = mocker.CreateInstance<DominioDeClientes>();

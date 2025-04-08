@@ -32,6 +32,7 @@ namespace AutenticacaoDoisFatores
             servicos.AddTransient<ExcluirUsuario>();
             servicos.AddTransient<AlterarUsuario>();
             servicos.AddTransient<BuscarClientes>();
+            servicos.AddTransient<BuscarUsuarios>();
         }
 
         internal static void AddDominios(this IServiceCollection servicos)

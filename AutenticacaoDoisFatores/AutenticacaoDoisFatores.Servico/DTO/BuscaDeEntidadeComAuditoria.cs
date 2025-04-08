@@ -1,6 +1,6 @@
 ﻿namespace AutenticacaoDoisFatores.Servico.DTO
 {
-    public class BuscaDeEntidadeComAuditoria
+    public class BuscaDeEntidadeComAuditoria : BuscaPadrao
     {
         public DateTime? DataCadastroDe { get; set; }
         public DateTime? DataCadastroAte { get; set; }

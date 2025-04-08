@@ -1,4 +1,5 @@
-﻿using AutenticacaoDoisFatores.Dominio.Construtores;
+﻿using AutenticacaoDoisFatores.Dominio.Compartilhados;
+using AutenticacaoDoisFatores.Dominio.Construtores;
 using AutenticacaoDoisFatores.Dominio.Entidades;
 using AutenticacaoDoisFatores.Dominio.Filtros;
 using AutenticacaoDoisFatores.Dominio.Repositorios;
@@ -297,7 +298,7 @@ namespace AutenticacaoDoisFatores.Infra.Repositorios
                     .ConstruirCadastrado());
         }
 
-        public async Task<IEnumerable<Usuario>> BuscarVariosAsync(FiltroPadrao filtros)
+        public async Task<IEnumerable<Usuario>> BuscarVariosAsync(FiltroDeUsuarios filtros)
         {
             var qtdParaPular = (filtros.Pagina - 1) * filtros.QtdPorPagina;
 
@@ -314,7 +315,42 @@ namespace AutenticacaoDoisFatores.Infra.Repositorios
                     u.""DataAlteracao"",
                     u.""EhAdmin""
                 FROM
-                    {_contexto.NomeDominio}.""Usuarios"" u
+                    {_contexto.NomeDominio}.""Usuarios"" u";
+
+            var filtrosSql = "";
+
+            if (!filtros.Nome!.EstaVazio())
+                filtrosSql = AdicionarCondicaoSql(filtrosSql, $@"LOWER(u.""Nome"") like '%{filtros.Nome!.ToLower()}%'");
+
+            if (!filtros.NomeUsuario!.EstaVazio())
+                filtrosSql = AdicionarCondicaoSql(filtrosSql, $@"LOWER(u.""NomeUsuario"") like '%{filtros.NomeUsuario!.ToLower()}%'");
+
+            if (filtros.Ativo.HasValue)
+                filtrosSql = AdicionarCondicaoSql(filtrosSql, $@"u.""Ativo"" = {filtros.Ativo}");
+
+            if (filtros.DataUltimoAcessoDe.HasValue)
+                filtrosSql = AdicionarCondicaoSql(filtrosSql, $@"u.""DataUltimoAcesso""::DATE >= '%{filtros.DataUltimoAcessoDe:yyyy-MM-dd}%'");
+
+            if (filtros.DataUltimoAcessoAte.HasValue)
+                filtrosSql = AdicionarCondicaoSql(filtrosSql, $@"(u.""DataUltimoAcesso"" IS NULL OR u.""DataUltimoAcesso""::DATE <= '%{filtros.DataUltimoAcessoAte:yyyy-MM-dd}%')");
+
+            if (filtros.DataCadastroDe.HasValue)
+                filtrosSql = AdicionarCondicaoSql(filtrosSql, $@"u.""DataCadastro""::DATE >= '{filtros.DataCadastroDe:yyyy-MM-dd}'");
+
+            if (filtros.DataCadastroAte.HasValue)
+                filtrosSql = AdicionarCondicaoSql(filtrosSql, $@"u.""DataCadastro""::DATE <= '{filtros.DataCadastroAte:yyyy-MM-dd}'");
+
+            if (filtros.DataAlteracaoDe.HasValue)
+                filtrosSql = AdicionarCondicaoSql(filtrosSql, $@"u.""DataAlteracao""::DATE >= '{filtros.DataAlteracaoDe:yyyy-MM-dd}'");
+
+            if (filtros.DataAlteracaoAte.HasValue)
+                filtrosSql = AdicionarCondicaoSql(filtrosSql, $@"(u.""DataAlteracao"" IS NULL OR u.""DataAlteracao""::DATE <= '{filtros.DataAlteracaoAte:yyyy-MM-dd}')");
+
+            if (filtros.EhAdmin.HasValue)
+                filtrosSql = AdicionarCondicaoSql(filtrosSql, $@"u.""EhAdmin"" = {filtros.EhAdmin}");
+
+            sql += $@"{filtrosSql}
+                ORDER BY u.""Id""
                 LIMIT {filtros.QtdPorPagina}
                 OFFSET {qtdParaPular}";
 
@@ -343,6 +379,18 @@ namespace AutenticacaoDoisFatores.Infra.Repositorios
 
                     return listaDeUsuarios;
                 });
+        }
+
+        private static string AdicionarCondicaoSql(string sql, string condicao)
+        {
+            if (sql.EstaVazio())
+                sql += @"
+                    WHERE ";
+            else
+                sql += @"
+                    AND ";
+
+            return sql + condicao;
         }
 
         #endregion

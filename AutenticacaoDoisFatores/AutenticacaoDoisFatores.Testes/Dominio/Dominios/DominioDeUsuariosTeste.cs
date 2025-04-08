@@ -3,6 +3,7 @@ using AutenticacaoDoisFatores.Dominio.Compartilhados.Mensagens;
 using AutenticacaoDoisFatores.Dominio.Dominios;
 using AutenticacaoDoisFatores.Dominio.Entidades;
 using AutenticacaoDoisFatores.Dominio.Excecoes;
+using AutenticacaoDoisFatores.Dominio.Filtros;
 using AutenticacaoDoisFatores.Dominio.Repositorios;
 using AutenticacaoDoisFatores.Testes.Compartilhados;
 using Bogus;
@@ -15,6 +16,8 @@ namespace AutenticacaoDoisFatores.Testes.Dominio.Dominios
     {
         private readonly AutoMocker _mocker = new();
         private readonly Faker _faker = new();
+
+        #region Teste de cadastro
 
         [Fact]
         internal async Task DeveCriarUsuario()
@@ -222,6 +225,35 @@ namespace AutenticacaoDoisFatores.Testes.Dominio.Dominios
             #endregion
         }
 
+        [Theory]
+        [InlineData(true)]
+        [InlineData(false)]
+        internal async Task DeveRetornarSeUsuarioEhAdmin(bool resultadoEsperado)
+        {
+            #region Preparação do teste
+
+            var idUsuario = Guid.NewGuid();
+
+            var dominio = _mocker.CreateInstance<DominioDeUsuarios>();
+
+            _mocker.GetMock<IRepositorioDeUsuarios>().Setup(r => r.EhAdmAsync(idUsuario)).ReturnsAsync(resultadoEsperado);
+
+            #endregion
+
+            var retorno = await dominio.EhAdmAsync(idUsuario);
+
+            #region Verificação do teste
+
+            Assert.Equal(resultadoEsperado, retorno);
+            _mocker.Verify<IRepositorioDeUsuarios>(r => r.EhAdmAsync(idUsuario), Times.Once);
+
+            #endregion
+        }
+
+        #endregion
+
+        #region Teste de alteração
+
         [Fact]
         internal async Task DeveAlterarUsuario()
         {
@@ -299,6 +331,10 @@ namespace AutenticacaoDoisFatores.Testes.Dominio.Dominios
             #endregion
         }
 
+        #endregion
+
+        #region Teste de busca
+
         [Fact]
         internal async Task DeveBuscarUnicoUsuario()
         {
@@ -344,30 +380,164 @@ namespace AutenticacaoDoisFatores.Testes.Dominio.Dominios
             #endregion
         }
 
-        [Theory]
-        [InlineData(true)]
-        [InlineData(false)]
-        internal async Task DeveRetornarSeUsuarioEhAdmin(bool resultadoEsperado)
+        [Fact]
+        internal async Task DeveBuscarVarios()
         {
             #region Preparação do teste
 
-            var idUsuario = Guid.NewGuid();
+            var mocker = new AutoMocker();
 
-            var dominio = _mocker.CreateInstance<DominioDeUsuarios>();
+            var filtros = new FiltroDeUsuarios();
+            var maximoRegistros = _faker.Random.Int(2, filtros.QtdPorPagina);
 
-            _mocker.GetMock<IRepositorioDeUsuarios>().Setup(r => r.EhAdmAsync(idUsuario)).ReturnsAsync(resultadoEsperado);
+            var listaDeUsuarios = GerarVarios(maximoRegistros, ativo: true);
+
+            var maximoPaginacao = _faker.Random.Int(1, maximoRegistros);
+
+            var dominio = mocker.CreateInstance<DominioDeUsuarios>();
+            mocker.GetMock<IRepositorioDeUsuarios>().Setup(r => r.BuscarVariosAsync(filtros)).ReturnsAsync(listaDeUsuarios);
 
             #endregion
 
-            var retorno = await dominio.EhAdmAsync(idUsuario);
+            var resposta = await dominio.BuscarVariosAsync(filtros);
 
             #region Verificação do teste
 
-            Assert.Equal(resultadoEsperado, retorno);
-            _mocker.Verify<IRepositorioDeUsuarios>(r => r.EhAdmAsync(idUsuario), Times.Once);
+            Assert.NotNull(resposta);
+            Assert.Equal(listaDeUsuarios, resposta);
+            mocker.Verify<IRepositorioDeUsuarios>(r => r.BuscarVariosAsync(filtros), Times.Once);
 
             #endregion
         }
+
+        [Fact]
+        internal async Task DeveRetornarListaVaziaAoBuscarVariosQueNaoEncontrou()
+        {
+            #region Preparação do teste
+
+            var mocker = new AutoMocker();
+
+            var filtros = new FiltroDeUsuarios();
+
+            var dominio = mocker.CreateInstance<DominioDeUsuarios>();
+
+            #endregion
+
+            var resposta = await dominio.BuscarVariosAsync(filtros);
+
+            #region Verificação do teste
+
+            Assert.Empty(resposta);
+            mocker.Verify<IRepositorioDeUsuarios>(r => r.BuscarVariosAsync(filtros), Times.Once);
+
+            #endregion
+        }
+
+        [Fact]
+        internal async Task DeveBuscarPorEmail()
+        {
+            #region Preparação do teste
+
+            var mocker = new AutoMocker();
+
+            var email = _faker.Person.Email;
+            var usuario = ConstrutorDeUsuariosTeste
+                .RetornarConstrutor(email: email)
+                .ConstruirCadastrado();
+
+            var dominio = mocker.CreateInstance<DominioDeUsuarios>();
+            mocker.GetMock<IRepositorioDeUsuarios>().Setup(r => r.BuscarPorEmailAsync(email)).ReturnsAsync(usuario);
+
+            #endregion
+
+            var resposta = await dominio.BuscarPorEmailAsync(email);
+
+            #region Verificação do teste
+
+            Assert.NotNull(resposta);
+            Assert.Equal(usuario, resposta);
+            mocker.Verify<IRepositorioDeUsuarios>(r => r.BuscarPorEmailAsync(email), Times.Once);
+
+            #endregion
+        }
+
+        [Fact]
+        internal async Task DeveRetornarNuloBuscarPorEmailClienteInexistente()
+        {
+            #region Preparação do teste
+
+            var mocker = new AutoMocker();
+
+            var email = _faker.Person.Email;
+
+            var dominio = mocker.CreateInstance<DominioDeUsuarios>();
+
+            #endregion
+
+            var resposta = await dominio.BuscarPorEmailAsync(email);
+
+            #region Verificação do teste
+
+            Assert.Null(resposta);
+            mocker.Verify<IRepositorioDeUsuarios>(r => r.BuscarPorEmailAsync(email), Times.Once);
+
+            #endregion
+        }
+
+        [Fact]
+        internal async Task DeveBuscarPorNomeUsuario()
+        {
+            #region Preparação do teste
+
+            var mocker = new AutoMocker();
+
+            var nomeUsuario = "user_12345@";
+            var usuario = ConstrutorDeUsuariosTeste
+                .RetornarConstrutor(nomeUsuario: nomeUsuario)
+                .ConstruirCadastrado();
+
+            var dominio = mocker.CreateInstance<DominioDeUsuarios>();
+            mocker.GetMock<IRepositorioDeUsuarios>().Setup(r => r.BuscarPorNomeUsuarioAsync(nomeUsuario)).ReturnsAsync(usuario);
+
+            #endregion
+
+            var resposta = await dominio.BuscarPorNomeUsuarioAsync(nomeUsuario);
+
+            #region Verificação do teste
+
+            Assert.NotNull(resposta);
+            Assert.Equal(usuario, resposta);
+            mocker.Verify<IRepositorioDeUsuarios>(r => r.BuscarPorNomeUsuarioAsync(nomeUsuario), Times.Once);
+
+            #endregion
+        }
+
+        [Fact]
+        internal async Task DeveRetornarNuloBuscarPorNomeUsuarioInexistente()
+        {
+            #region Preparação do teste
+
+            var mocker = new AutoMocker();
+
+            var nomeUsuario = "user_12345@";
+
+            var dominio = mocker.CreateInstance<DominioDeUsuarios>();
+
+            #endregion
+
+            var resposta = await dominio.BuscarPorNomeUsuarioAsync(nomeUsuario);
+
+            #region Verificação do teste
+
+            Assert.Null(resposta);
+            mocker.Verify<IRepositorioDeUsuarios>(r => r.BuscarPorNomeUsuarioAsync(nomeUsuario), Times.Once);
+
+            #endregion
+        }
+
+        #endregion
+
+        #region Teste de exclusão
 
         [Fact]
         internal async Task DeveExcluirUsuario()
@@ -412,6 +582,24 @@ namespace AutenticacaoDoisFatores.Testes.Dominio.Dominios
             _mocker.Verify<IRepositorioDeUsuarios>(r => r.SalvarAlteracoesAsync(), Times.Never);
 
             #endregion
+        }
+
+        #endregion
+
+        private static List<Usuario> GerarVarios(int qtd, bool? ativo = null)
+        {
+            var listaDeUsuarios = new List<Usuario>();
+
+            for (var i = 1; i <= qtd; i++)
+            {
+                var usuario = ConstrutorDeUsuariosTeste
+                    .RetornarConstrutor(ativo: ativo)
+                    .ConstruirCadastrado();
+
+                listaDeUsuarios.Add(usuario);
+            }
+
+            return listaDeUsuarios;
         }
     }
 }

@@ -126,5 +126,35 @@ namespace AutenticacaoDoisFatores.Controllers
                 return BadRequest(e.Message);
             }
         }
+
+        [HttpGet("{id}")]
+        public async Task<ActionResult<UsuarioCadastrado?>> BuscarUnicoAsync([FromServices] BuscarUsuarios buscarUsuarios, Guid id)
+        {
+            try
+            {
+                var resposta = await buscarUsuarios.BuscarUnicoAsync(id);
+
+                return Sucesso(resposta);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<UsuarioCadastrado>>> BuscarVariosAsync([FromServices] BuscarUsuarios buscarUsuarios, [FromQuery] FiltrosParaBuscarUsuario filtros)
+        {
+            try
+            {
+                var resposta = await buscarUsuarios.BuscarVariosAsync(filtros);
+
+                return Sucesso(resposta);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
     }
 }

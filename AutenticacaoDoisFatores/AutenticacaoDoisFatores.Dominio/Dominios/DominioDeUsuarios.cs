@@ -56,9 +56,9 @@ namespace AutenticacaoDoisFatores.Dominio.Dominios
             return await _repositorio.BuscarUnicoAsync(id);
         }
 
-        public async Task<IEnumerable<Usuario>> BuscarVariosAsync(FiltroPadrao filtro)
+        public async Task<IEnumerable<Usuario>> BuscarVariosAsync(FiltroDeUsuarios filtros)
         {
-            return await _repositorio.BuscarVariosAsync(filtro);
+            return await _repositorio.BuscarVariosAsync(filtros);
         }
 
         public async Task<Usuario?> BuscarPorNomeUsuarioAsync(string nomeUsuario)
