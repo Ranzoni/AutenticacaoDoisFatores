@@ -16,7 +16,9 @@ namespace AutenticacaoDoisFatores.Dominio.Compartilhados.Permissoes
         DefinirPermissoes,
         [Description("Excluir usuário")]
         ExcluirUsuario,
-        [Description("Visualizar usuários")]
-        VisualizacaoDeUsuarios
+        [Description("Visualizar os usuários")]
+        VisualizacaoDeUsuarios,
+        [Description("Trocar o e-mail de um usuário")]
+        TrocarEmailDeUsuario
     }
 }

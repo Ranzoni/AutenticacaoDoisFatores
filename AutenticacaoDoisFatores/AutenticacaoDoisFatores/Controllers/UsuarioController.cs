@@ -176,5 +176,23 @@ namespace AutenticacaoDoisFatores.Controllers
                 return BadRequest(e.Message);
             }
         }
+
+        [HttpPut("{idUsuario}/trocar-email")]
+        [Authorize(Policy = "TrocarEmailDeUsuario")]
+        public async Task<ActionResult> AlterarEmailAsync([FromServices] AlterarUsuario alterarUsuario, Guid idUsuario, TrocarEmailUsuario trocarEmailUsuario)
+        {
+            try
+            {
+                var novosDadosUsuario = (NovosDadosUsuario)trocarEmailUsuario;
+
+                await alterarUsuario.ExecutarAsync(idUsuario, novosDadosUsuario);
+
+                return Sucesso("O e-mail foi alterado com sucesso.");
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
     }
 }

@@ -54,10 +54,13 @@ namespace AutenticacaoDoisFatores.Infra.Repositorios
                     ""Email"" = '{entidade.Email}',
                     ""Senha"" = '{entidade.Senha}',
                     ""Ativo"" = {entidade.Ativo},
-                    ""DataAlteracao"" = '{entidade.DataAlteracao:yyyy-MM-dd HH:mm:ss}',
-                    ""DataUltimoAcesso"" = '{entidade.DataUltimoAcesso:yyyy-MM-dd HH:mm:ss}'
-                WHERE
-                    ""Id"" = '{entidade.Id}';";
+                    ""DataAlteracao"" = '{entidade.DataAlteracao:yyyy-MM-dd HH:mm:ss}'";
+
+            if (entidade.DataUltimoAcesso is not null)
+                sql += $@",""DataUltimoAcesso"" = '{entidade.DataUltimoAcesso:yyyy-MM-dd HH:mm:ss}'";
+
+            sql += $@"WHERE
+                ""Id"" = '{entidade.Id}';";
 
             _contexto.PrepararComando(
                 entidade: entidade,
