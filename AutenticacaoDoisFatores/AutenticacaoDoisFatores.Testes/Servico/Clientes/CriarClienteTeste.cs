@@ -48,7 +48,7 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Clientes
 
             #endregion Preparação do teste
 
-            var clienteCadastrado = await servico.CriarAsync(novoCliente, linkConfirmacaoCadastroParaTeste);
+            var clienteCadastrado = await servico.ExecutarAsync(novoCliente, linkConfirmacaoCadastroParaTeste);
 
             #region Verificação do teste
 
@@ -115,7 +115,7 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Clientes
 
             #endregion Preparação do teste
 
-            var clienteCadastrado = await servico.CriarAsync(novoCliente, linkConfirmacaoCadastroParaTeste);
+            var clienteCadastrado = await servico.ExecutarAsync(novoCliente, linkConfirmacaoCadastroParaTeste);
 
             #region Verificação do teste
 
@@ -148,7 +148,7 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Clientes
 
             #endregion Preparação do teste
 
-            var clienteCadastrado = await servico.CriarAsync(novoCliente, linkConfirmacaoCadastroParaTeste);
+            var clienteCadastrado = await servico.ExecutarAsync(novoCliente, linkConfirmacaoCadastroParaTeste);
 
             #region Verificação do teste
 
@@ -186,7 +186,7 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Clientes
 
             #endregion Preparação do teste
 
-            var clienteCadastrado = await servico.CriarAsync(novoCliente, linkConfirmacaoCadastroParaTeste);
+            var clienteCadastrado = await servico.ExecutarAsync(novoCliente, linkConfirmacaoCadastroParaTeste);
 
             #region Verificação do teste
 
@@ -223,7 +223,7 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Clientes
 
             #endregion Preparação do teste
 
-            var clienteCadastrado = await servico.CriarAsync(novoCliente, linkConfirmacaoCadastroParaTeste);
+            var clienteCadastrado = await servico.ExecutarAsync(novoCliente, linkConfirmacaoCadastroParaTeste);
 
             #region Verificação do teste
 
@@ -255,7 +255,7 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Clientes
 
             #endregion Preparação do teste
 
-            var clienteCadastrado = await servico.CriarAsync(novoCliente, linkConfirmacaoCadastroParaTeste);
+            var clienteCadastrado = await servico.ExecutarAsync(novoCliente, linkConfirmacaoCadastroParaTeste);
 
             #region Verificação do teste
 
@@ -287,7 +287,7 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Clientes
 
             #endregion Preparação do teste
 
-            var clienteCadastrado = await servico.CriarAsync(novoCliente, linkConfirmacaoCadastroParaTeste);
+            var clienteCadastrado = await servico.ExecutarAsync(novoCliente, linkConfirmacaoCadastroParaTeste);
 
             #region Verificação do teste
 
@@ -315,7 +315,7 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Clientes
 
             #endregion Preparação do teste
 
-            var excecao = await Assert.ThrowsAsync<ExcecoesCriacaoCliente>(() => servico.CriarAsync(novoCliente, linkConfirmacaoCadastroVazio));
+            var excecao = await Assert.ThrowsAsync<ExcecoesCriacaoCliente>(() => servico.ExecutarAsync(novoCliente, linkConfirmacaoCadastroVazio));
 
             #region Verificação do teste
 

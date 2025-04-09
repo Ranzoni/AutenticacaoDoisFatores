@@ -128,6 +128,7 @@ namespace AutenticacaoDoisFatores.Controllers
         }
 
         [HttpGet("{id}")]
+        [Authorize(Policy = "VisualizacaoDeUsuarios")]
         public async Task<ActionResult<UsuarioCadastrado?>> BuscarUnicoAsync([FromServices] BuscarUsuarios buscarUsuarios, Guid id)
         {
             try
@@ -143,11 +144,30 @@ namespace AutenticacaoDoisFatores.Controllers
         }
 
         [HttpGet]
+        [Authorize(Policy = "VisualizacaoDeUsuarios")]
         public async Task<ActionResult<IEnumerable<UsuarioCadastrado>>> BuscarVariosAsync([FromServices] BuscarUsuarios buscarUsuarios, [FromQuery] FiltrosParaBuscarUsuario filtros)
         {
             try
             {
                 var resposta = await buscarUsuarios.BuscarVariosAsync(filtros);
+
+                return Sucesso(resposta);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
+        [HttpGet("dados")]
+        public async Task<ActionResult<UsuarioCadastrado?>> RetornarDadosAsync([FromServices] BuscarUsuarios buscarUsuarios)
+        {
+            try
+            {
+                var token = Token(HttpContext.Request);
+                var id = Seguranca.RetornarIdDoToken(token);
+
+                var resposta = await buscarUsuarios.BuscarUnicoAsync(id);
 
                 return Sucesso(resposta);
             }

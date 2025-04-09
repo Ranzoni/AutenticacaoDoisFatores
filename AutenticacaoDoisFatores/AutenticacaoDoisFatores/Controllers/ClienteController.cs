@@ -25,7 +25,7 @@ namespace AutenticacaoDoisFatores.Controllers
                 var urlBase = UrlDaApi(HttpContext);
                 var url = $"{urlBase}/{_caminhoPaginaConfirmarCadastro}";
 
-                var retorno = await criarCliente.CriarAsync(novoCliente, url);
+                var retorno = await criarCliente.ExecutarAsync(novoCliente, url);
                 
                 return CriadoComSucesso(retorno);
             }

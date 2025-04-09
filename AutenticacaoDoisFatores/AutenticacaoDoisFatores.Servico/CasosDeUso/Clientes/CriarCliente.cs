@@ -17,7 +17,7 @@ namespace AutenticacaoDoisFatores.Servico.CasosDeUso.Clientes
         private readonly INotificador _notificador = notificador;
         private readonly EnvioDeEmail _email = email;
 
-        public async Task<ClienteCadastrado?> CriarAsync(NovoCliente novoCliente, string linkBaseConfirmacaoCadastro)
+        public async Task<ClienteCadastrado?> ExecutarAsync(NovoCliente novoCliente, string linkBaseConfirmacaoCadastro)
         {
             var cadastroEhValido = await NovoClienteEhValidoAsync(novoCliente, linkBaseConfirmacaoCadastro);
             if (!cadastroEhValido)
