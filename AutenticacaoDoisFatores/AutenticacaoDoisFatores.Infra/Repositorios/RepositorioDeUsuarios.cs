@@ -1,9 +1,11 @@
 ﻿using AutenticacaoDoisFatores.Dominio.Compartilhados;
+using AutenticacaoDoisFatores.Dominio.Compartilhados.Usuarios;
 using AutenticacaoDoisFatores.Dominio.Construtores;
 using AutenticacaoDoisFatores.Dominio.Entidades;
 using AutenticacaoDoisFatores.Dominio.Filtros;
 using AutenticacaoDoisFatores.Dominio.Repositorios;
 using AutenticacaoDoisFatores.Infra.Contexto;
+using System.Data.Common;
 
 namespace AutenticacaoDoisFatores.Infra.Repositorios
 {
@@ -56,6 +58,11 @@ namespace AutenticacaoDoisFatores.Infra.Repositorios
                     ""Ativo"" = {entidade.Ativo},
                     ""DataAlteracao"" = '{entidade.DataAlteracao:yyyy-MM-dd HH:mm:ss}'";
 
+            if (entidade.TipoDeAutenticacao is null)
+                sql += $@",""TipoDeAutenticacao"" = NULL";
+            else
+                sql += $@",""TipoDeAutenticacao"" = {(int)entidade.TipoDeAutenticacao}";
+
             if (entidade.DataUltimoAcesso is not null)
                 sql += $@",""DataUltimoAcesso"" = '{entidade.DataUltimoAcesso:yyyy-MM-dd HH:mm:ss}'";
 
@@ -97,34 +104,13 @@ namespace AutenticacaoDoisFatores.Infra.Repositorios
         {
             var sql = $@"
                 SELECT
-                    u.""Id"",
-                    u.""Nome"",
-                    u.""NomeUsuario"",
-                    u.""Email"",
-                    u.""Senha"",
-                    u.""Ativo"",
-                    u.""DataUltimoAcesso"",
-                    u.""DataCadastro"",
-                    u.""DataAlteracao"",
-                    u.""EhAdmin""
+                    {MontarCamposDoUsuario()}
                 FROM
                     {_contexto.NomeDominio}.""Usuarios"" u
                 WHERE
                     u.""Id"" = '{id}'";
 
-            return await _contexto.LerUnicoAsync(sql,
-                leitor => new ConstrutorDeUsuario()
-                    .ComId(leitor.GetGuid(0))
-                    .ComNome(leitor.GetString(1))
-                    .ComNomeUsuario(leitor.GetString(2))
-                    .ComEmail(leitor.GetString(3))
-                    .ComSenha(leitor.GetString(4))
-                    .ComAtivo(leitor.GetBoolean(5))
-                    .ComDataUltimoAcesso(leitor.IsDBNull(6) ? null : leitor.GetDateTime(6))
-                    .ComDataCadastro(leitor.GetDateTime(7))
-                    .ComDataAlteracao(leitor.IsDBNull(8) ? null : leitor.GetDateTime(8))
-                    .ComEhAdmin(leitor.GetBoolean(9))
-                    .ConstruirCadastrado());
+            return await _contexto.LerUnicoAsync(sql, ConstruirUsuario);
         }
 
         public async Task<bool> ExisteEmailAsync(string email, Guid? id = null)
@@ -163,68 +149,26 @@ namespace AutenticacaoDoisFatores.Infra.Repositorios
         {
             var sql = $@"
                 SELECT
-                    u.""Id"",
-                    u.""Nome"",
-                    u.""NomeUsuario"",
-                    u.""Email"",
-                    u.""Senha"",
-                    u.""Ativo"",
-                    u.""DataUltimoAcesso"",
-                    u.""DataCadastro"",
-                    u.""DataAlteracao"",
-                    u.""EhAdmin""
+                    {MontarCamposDoUsuario()}
                 FROM
                     {_contexto.NomeDominio}.""Usuarios"" u
                 WHERE
                     u.""NomeUsuario"" = '{nomeUsuario}'";
 
-            return await _contexto.LerUnicoAsync(sql,
-                leitor => new ConstrutorDeUsuario()
-                    .ComId(leitor.GetGuid(0))
-                    .ComNome(leitor.GetString(1))
-                    .ComNomeUsuario(leitor.GetString(2))
-                    .ComEmail(leitor.GetString(3))
-                    .ComSenha(leitor.GetString(4))
-                    .ComAtivo(leitor.GetBoolean(5))
-                    .ComDataUltimoAcesso(leitor.IsDBNull(6) ? null : leitor.GetDateTime(6))
-                    .ComDataCadastro(leitor.GetDateTime(7))
-                    .ComDataAlteracao(leitor.IsDBNull(8) ? null : leitor.GetDateTime(8))
-                    .ComEhAdmin(leitor.GetBoolean(9))
-                    .ConstruirCadastrado());
+            return await _contexto.LerUnicoAsync(sql, ConstruirUsuario);
         }
 
         public async Task<Usuario?> BuscarPorEmailAsync(string email)
         {
             var sql = $@"
                 SELECT
-                    u.""Id"",
-                    u.""Nome"",
-                    u.""NomeUsuario"",
-                    u.""Email"",
-                    u.""Senha"",
-                    u.""Ativo"",
-                    u.""DataUltimoAcesso"",
-                    u.""DataCadastro"",
-                    u.""DataAlteracao"",
-                    u.""EhAdmin""
+                    {MontarCamposDoUsuario()}
                 FROM
                     {_contexto.NomeDominio}.""Usuarios"" u
                 WHERE
                     u.""Email"" = '{email}'";
 
-            return await _contexto.LerUnicoAsync(sql,
-                leitor => new ConstrutorDeUsuario()
-                    .ComId(leitor.GetGuid(0))
-                    .ComNome(leitor.GetString(1))
-                    .ComNomeUsuario(leitor.GetString(2))
-                    .ComEmail(leitor.GetString(3))
-                    .ComSenha(leitor.GetString(4))
-                    .ComAtivo(leitor.GetBoolean(5))
-                    .ComDataUltimoAcesso(leitor.IsDBNull(6) ? null : leitor.GetDateTime(6))
-                    .ComDataCadastro(leitor.GetDateTime(7))
-                    .ComDataAlteracao(leitor.IsDBNull(8) ? null : leitor.GetDateTime(8))
-                    .ComEhAdmin(leitor.GetBoolean(9))
-                    .ConstruirCadastrado());
+            return await _contexto.LerUnicoAsync(sql, ConstruirUsuario);
         }
 
         public async Task<bool> ExisteNomeUsuarioAsync(string nomeUsuario, string dominio)
@@ -271,34 +215,13 @@ namespace AutenticacaoDoisFatores.Infra.Repositorios
         {
             var sql = $@"
                 SELECT
-                    u.""Id"",
-                    u.""Nome"",
-                    u.""NomeUsuario"",
-                    u.""Email"",
-                    u.""Senha"",
-                    u.""Ativo"",
-                    u.""DataUltimoAcesso"",
-                    u.""DataCadastro"",
-                    u.""DataAlteracao"",
-                    u.""EhAdmin""
+                    {MontarCamposDoUsuario()}
                 FROM
                     {dominio}.""Usuarios"" u
                 WHERE
                     u.""Id"" = '{id}'";
 
-            return await _contexto.LerUnicoAsync(sql,
-                leitor => new ConstrutorDeUsuario()
-                    .ComId(leitor.GetGuid(0))
-                    .ComNome(leitor.GetString(1))
-                    .ComNomeUsuario(leitor.GetString(2))
-                    .ComEmail(leitor.GetString(3))
-                    .ComSenha(leitor.GetString(4))
-                    .ComAtivo(leitor.GetBoolean(5))
-                    .ComDataUltimoAcesso(leitor.IsDBNull(6) ? null : leitor.GetDateTime(6))
-                    .ComDataCadastro(leitor.GetDateTime(7))
-                    .ComDataAlteracao(leitor.IsDBNull(8) ? null : leitor.GetDateTime(8))
-                    .ComEhAdmin(leitor.GetBoolean(9))
-                    .ConstruirCadastrado());
+            return await _contexto.LerUnicoAsync(sql, ConstruirUsuario);
         }
 
         public async Task<IEnumerable<Usuario>> BuscarVariosAsync(FiltroDeUsuarios filtros)
@@ -307,16 +230,7 @@ namespace AutenticacaoDoisFatores.Infra.Repositorios
 
             var sql = $@"
                 SELECT
-                    u.""Id"",
-                    u.""Nome"",
-                    u.""NomeUsuario"",
-                    u.""Email"",
-                    u.""Senha"",
-                    u.""Ativo"",
-                    u.""DataUltimoAcesso"",
-                    u.""DataCadastro"",
-                    u.""DataAlteracao"",
-                    u.""EhAdmin""
+                    {MontarCamposDoUsuario()}
                 FROM
                     {_contexto.NomeDominio}.""Usuarios"" u";
 
@@ -364,24 +278,44 @@ namespace AutenticacaoDoisFatores.Infra.Repositorios
 
                     while (leitor.Read())
                     {
-                        var usuario = new ConstrutorDeUsuario()
-                            .ComId(leitor.GetGuid(0))
-                            .ComNome(leitor.GetString(1))
-                            .ComNomeUsuario(leitor.GetString(2))
-                            .ComEmail(leitor.GetString(3))
-                            .ComSenha(leitor.GetString(4))
-                            .ComAtivo(leitor.GetBoolean(5))
-                            .ComDataUltimoAcesso(leitor.IsDBNull(6) ? null : leitor.GetDateTime(6))
-                            .ComDataCadastro(leitor.GetDateTime(7))
-                            .ComDataAlteracao(leitor.IsDBNull(8) ? null : leitor.GetDateTime(8))
-                            .ComEhAdmin(leitor.GetBoolean(9))
-                            .ConstruirCadastrado();
-
+                        var usuario = ConstruirUsuario(leitor);
                         listaDeUsuarios.Add(usuario);
                     }
 
                     return listaDeUsuarios;
                 });
+        }
+
+        private static string MontarCamposDoUsuario()
+        {
+            return @"u.""Id"",
+                u.""Nome"",
+                u.""NomeUsuario"",
+                u.""Email"",
+                u.""Senha"",
+                u.""Ativo"",
+                u.""DataUltimoAcesso"",
+                u.""DataCadastro"",
+                u.""DataAlteracao"",
+                u.""EhAdmin"",
+                u.""TipoDeAutenticacao""";
+        }
+
+        private static Usuario ConstruirUsuario(DbDataReader leitor)
+        {
+            return new ConstrutorDeUsuario()
+                .ComId(leitor.GetGuid(0))
+                .ComNome(leitor.GetString(1))
+                .ComNomeUsuario(leitor.GetString(2))
+                .ComEmail(leitor.GetString(3))
+                .ComSenha(leitor.GetString(4))
+                .ComAtivo(leitor.GetBoolean(5))
+                .ComDataUltimoAcesso(leitor.IsDBNull(6) ? null : leitor.GetDateTime(6))
+                .ComDataCadastro(leitor.GetDateTime(7))
+                .ComDataAlteracao(leitor.IsDBNull(8) ? null : leitor.GetDateTime(8))
+                .ComEhAdmin(leitor.GetBoolean(9))
+                .ComTipoDeAutenticacao(leitor.IsDBNull(10) ? null : (TipoDeAutenticacao)leitor.GetInt16(10))
+                .ConstruirCadastrado();
         }
 
         private static string AdicionarCondicaoSql(string sql, string condicao)

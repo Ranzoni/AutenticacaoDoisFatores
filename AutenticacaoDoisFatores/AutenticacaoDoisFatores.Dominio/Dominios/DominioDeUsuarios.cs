@@ -43,7 +43,7 @@ namespace AutenticacaoDoisFatores.Dominio.Dominios
 
             ValidarExclusaoUsuario(usuario);
 
-            _repositorio.Excluir(usuario);
+            _repositorio.Excluir(usuario!);
             await _repositorio.SalvarAlteracoesAsync();
         }
 

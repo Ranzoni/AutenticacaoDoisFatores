@@ -1,4 +1,5 @@
-﻿using AutenticacaoDoisFatores.Dominio.Entidades;
+﻿using AutenticacaoDoisFatores.Dominio.Compartilhados.Usuarios;
+using AutenticacaoDoisFatores.Dominio.Entidades;
 
 namespace AutenticacaoDoisFatores.Dominio.Construtores
 {
@@ -14,6 +15,7 @@ namespace AutenticacaoDoisFatores.Dominio.Construtores
         private DateTime? _dataUltimoAcesso;
         private DateTime _dataCadastro;
         private DateTime? _dataAlteracao;
+        private TipoDeAutenticacao? _tipoDeAutenticacao;
 
         public ConstrutorDeUsuario ComId(Guid id)
         {
@@ -60,6 +62,13 @@ namespace AutenticacaoDoisFatores.Dominio.Construtores
         public ConstrutorDeUsuario ComEhAdmin(bool ehAdmin)
         {
             _ehAdmin = ehAdmin;
+
+            return this;
+        }
+
+        public ConstrutorDeUsuario ComTipoDeAutenticacao(TipoDeAutenticacao? tipoDeAutenticacao)
+        {
+            _tipoDeAutenticacao = tipoDeAutenticacao;
 
             return this;
         }
@@ -112,7 +121,8 @@ namespace AutenticacaoDoisFatores.Dominio.Construtores
                 dataUltimoAcesso: _dataUltimoAcesso,
                 dataCadastro: _dataCadastro,
                 dataAlteracao: _dataAlteracao,
-                ehAdmin: _ehAdmin
+                ehAdmin: _ehAdmin,
+                tipoDeAutenticacao: _tipoDeAutenticacao
             );
 
             return usuario;

@@ -6,7 +6,7 @@
 
         public static explicit operator NovosDadosUsuario(TrocarEmailUsuario trocarEmailUsuario)
         {
-            return new NovosDadosUsuario(nome: null, nomeUsuario: null, email: trocarEmailUsuario.Email, senha: null);
+            return new NovosDadosUsuario(nome: null, nomeUsuario: null, email: trocarEmailUsuario.Email, senha: null, tipoDeAutenticacao: null);
         }
     }
 }

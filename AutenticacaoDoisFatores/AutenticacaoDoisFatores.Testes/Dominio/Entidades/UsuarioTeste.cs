@@ -1,5 +1,6 @@
 ﻿using AutenticacaoDoisFatores.Dominio.Compartilhados;
 using AutenticacaoDoisFatores.Dominio.Compartilhados.Mensagens;
+using AutenticacaoDoisFatores.Dominio.Compartilhados.Usuarios;
 using AutenticacaoDoisFatores.Dominio.Excecoes;
 using AutenticacaoDoisFatores.Testes.Compartilhados;
 using Bogus;
@@ -354,6 +355,29 @@ namespace AutenticacaoDoisFatores.Testes.Dominio.Entidades
 
             Assert.NotNull(usuario.DataUltimoAcesso);
             Assert.True(usuario.DataUltimoAcesso <= DateTime.Now);
+            Assert.NotNull(usuario.DataAlteracao);
+
+            #endregion
+        }
+
+        [Fact]
+        internal void DeveAlterarTipoDeAutenticacaoAutenticacaoEmDoisFatoresParaUsuario()
+        {
+            #region Preparação do teste
+
+            var tipoDeAutenticacao = _faker.Random.Enum<TipoDeAutenticacao>();
+
+            var usuario = ConstrutorDeUsuariosTeste
+                .RetornarConstrutor()
+                .ConstruirCadastrado();
+
+            #endregion
+
+            usuario.ConfigurarTipoDeAutenticacao(tipoDeAutenticacao);
+
+            #region Verificação do teste
+
+            Assert.Equal(tipoDeAutenticacao, usuario.TipoDeAutenticacao);
             Assert.NotNull(usuario.DataAlteracao);
 
             #endregion

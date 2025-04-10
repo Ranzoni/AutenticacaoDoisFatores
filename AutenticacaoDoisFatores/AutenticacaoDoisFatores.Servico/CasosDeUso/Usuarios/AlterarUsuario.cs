@@ -1,5 +1,4 @@
-﻿using AutenticacaoDoisFatores.Dominio.Compartilhados;
-using AutenticacaoDoisFatores.Dominio.Compartilhados.Mensagens;
+﻿using AutenticacaoDoisFatores.Dominio.Compartilhados.Mensagens;
 using AutenticacaoDoisFatores.Dominio.Dominios;
 using AutenticacaoDoisFatores.Dominio.Entidades;
 using AutenticacaoDoisFatores.Dominio.Validadores;
@@ -20,17 +19,20 @@ namespace AutenticacaoDoisFatores.Servico.CasosDeUso.Usuarios
             if (!await AlteracaoEhValida(id, usuarioParaAlterar, novosDadosUsuario) || usuarioParaAlterar is null)
                 return null;
 
-            if (novosDadosUsuario.Nome is not null && !novosDadosUsuario.Nome.EstaVazio())
+            if (!usuarioParaAlterar.Nome.Equals(novosDadosUsuario.Nome))
                 usuarioParaAlterar.AlterarNome(novosDadosUsuario.Nome);
 
-            if (novosDadosUsuario.NomeUsuario is not null && !novosDadosUsuario.NomeUsuario.EstaVazio())
+            if (!usuarioParaAlterar.NomeUsuario.Equals(novosDadosUsuario.NomeUsuario))
                 usuarioParaAlterar.AlterarNomeUsuario(novosDadosUsuario.NomeUsuario);
 
-            if (novosDadosUsuario.Email is not null && !novosDadosUsuario.Email.EstaVazio())
+            if (!usuarioParaAlterar.Email.Equals(novosDadosUsuario.Email))
                 usuarioParaAlterar.AlterarEmail(novosDadosUsuario.Email);
 
-            if (novosDadosUsuario.Senha is not null && !novosDadosUsuario.Senha.EstaVazio())
+            if (!usuarioParaAlterar.Senha.Equals(novosDadosUsuario.Senha))
                 usuarioParaAlterar.AlterarSenha(novosDadosUsuario.Senha);
+
+            if (!usuarioParaAlterar.TipoDeAutenticacao.Equals(novosDadosUsuario.TipoDeAutenticacao))
+                usuarioParaAlterar.ConfigurarTipoDeAutenticacao(novosDadosUsuario.TipoDeAutenticacao);
 
             await _dominio.AlterarAsync(usuarioParaAlterar);
 
@@ -45,26 +47,20 @@ namespace AutenticacaoDoisFatores.Servico.CasosDeUso.Usuarios
             if (usuarioParaAlterar is null || !usuarioParaAlterar.Ativo || usuarioParaAlterar.EhAdmin)
                 _notificador.AddMensagemNaoEncontrado(MensagensValidacaoUsuario.UsuarioNaoEncontrado);
 
-            if (novosDadosUsuario?.Nome is not null && !ValidadorDeUsuario.NomeEhValido(novosDadosUsuario.Nome))
+            if (!ValidadorDeUsuario.NomeEhValido(novosDadosUsuario.Nome))
                 _notificador.AddMensagem(MensagensValidacaoUsuario.NomeInvalido);
 
-            if (novosDadosUsuario?.NomeUsuario is not null)
-            {
-                if (!ValidadorDeUsuario.NomeUsuarioEhValido(novosDadosUsuario.NomeUsuario))
-                    _notificador.AddMensagem(MensagensValidacaoUsuario.NomeUsuarioInvalido);
-                else 
-                    verificarNomeUsuarioJaCadastrado = _dominio.ExisteNomeUsuarioAsync(novosDadosUsuario.NomeUsuario, id);
-            }
+            if (!ValidadorDeUsuario.NomeUsuarioEhValido(novosDadosUsuario.NomeUsuario))
+                _notificador.AddMensagem(MensagensValidacaoUsuario.NomeUsuarioInvalido);
+            else 
+                verificarNomeUsuarioJaCadastrado = _dominio.ExisteNomeUsuarioAsync(novosDadosUsuario.NomeUsuario, id);
 
-            if (novosDadosUsuario?.Email is not null)
-            {
-                if (!ValidadorDeUsuario.EmailEhValido(novosDadosUsuario.Email))
-                    _notificador.AddMensagem(MensagensValidacaoUsuario.EmailInvalido);
-                else
-                    verificarEmailJaCadastrado = _dominio.ExisteEmailAsync(novosDadosUsuario.Email, id);
-            }
+            if (!ValidadorDeUsuario.EmailEhValido(novosDadosUsuario.Email))
+                _notificador.AddMensagem(MensagensValidacaoUsuario.EmailInvalido);
+            else
+                verificarEmailJaCadastrado = _dominio.ExisteEmailAsync(novosDadosUsuario.Email, id);
 
-            if (novosDadosUsuario?.Senha is not null && !Seguranca.ComposicaoSenhaEhValida(novosDadosUsuario.SenhaDescriptografada()))
+            if (!Seguranca.ComposicaoSenhaEhValida(novosDadosUsuario.SenhaDescriptografada()))
                 _notificador.AddMensagem(MensagensValidacaoUsuario.SenhaInvalida);
 
             if (verificarNomeUsuarioJaCadastrado is not null)
