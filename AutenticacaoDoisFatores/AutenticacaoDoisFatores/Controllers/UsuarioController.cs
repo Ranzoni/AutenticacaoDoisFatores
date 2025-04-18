@@ -77,6 +77,24 @@ namespace AutenticacaoDoisFatores.Controllers
             }
         }
 
+        [HttpPost("autenticar/dois-fatores")]
+        [Authorize(Policy = "CodAutenticaoPorEmail")]
+        public async Task<ActionResult<UsuarioAutenticado?>> AutenticarAsync([FromServices] AutenticarUsuarioEmDoisFatores autenticarUsuario, CodigoAuntenticacaoUsuario codigoAuntenticacaoUsuario)
+        {
+            try
+            {
+                var token = Token(HttpContext.Request);
+                var idUsuario = Seguranca.RetornarIdDoToken(token);
+
+                var retorno = await autenticarUsuario.ExecutarAsync(idUsuario, codigoAuntenticacaoUsuario.Codigo);
+                return Sucesso(retorno);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
         [HttpPut("{idUsuario}/gerar-nova-senha")]
         [Authorize(Policy = "TrocarSenhaDeUsuario")]
         public async Task<ActionResult> GerarNovaSenhaAsync([FromServices] GerarNovaSenhaUsuario gerarNovaSenhaUsuario, Guid idUsuario, TrocarSenhaUsuario trocarSenhaUsuario)

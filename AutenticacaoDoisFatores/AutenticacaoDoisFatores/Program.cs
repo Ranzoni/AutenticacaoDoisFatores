@@ -62,7 +62,8 @@ builder.Services.AddAuthorizationBuilder()
     .AddPolicy("DefinirPermissoes", policy => policy.RequireRole(Seguranca.RegraDefinirPermissoes))
     .AddPolicy("ExclusaoDeUsuario", policy => policy.RequireRole(Seguranca.RegraExclusaoDeUsuario))
     .AddPolicy("VisualizacaoDeUsuarios", policy => policy.RequireRole(Seguranca.RegraVisualizacaoDeUsuarios))
-    .AddPolicy("TrocarEmailDeUsuario", policy => policy.RequireRole(Seguranca.RegraTrocarEmailDeUsuario));
+    .AddPolicy("TrocarEmailDeUsuario", policy => policy.RequireRole(Seguranca.RegraTrocarEmailDeUsuario))
+    .AddPolicy("CodAutenticaoPorEmail", policy => policy.RequireRole(Seguranca.RegraCodAutenticaoPorEmail));
 
 builder.Services.AddHttpContextAccessor();
 

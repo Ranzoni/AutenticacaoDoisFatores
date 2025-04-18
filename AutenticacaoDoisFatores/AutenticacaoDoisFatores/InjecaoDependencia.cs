@@ -27,6 +27,7 @@ namespace AutenticacaoDoisFatores
             servicos.AddTransient<CriarUsuario>();
             servicos.AddTransient<AtivarUsuario>();
             servicos.AddTransient<AutenticarUsuario>();
+            servicos.AddTransient<AutenticarUsuarioEmDoisFatores>();
             servicos.AddTransient<RetornarUsuarioAutenticado>();
             servicos.AddTransient<EnviarCodigoAutenticacaoUsuario>();
             servicos.AddTransient<EnviarCodAutenticacaoUsuarioPorEmail>();

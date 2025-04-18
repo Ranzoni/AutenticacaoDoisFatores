@@ -15,5 +15,10 @@ namespace AutenticacaoDoisFatores.Dominio.Dominios
 
             await _repositorio.SalvarAsync(idUsuario, codigo);
         }
+
+        public async Task<string?> BuscarCodigoAsync(Guid idUsuario)
+        {
+            return await _repositorio.BuscarCodigoAsync(idUsuario);
+        }
     }
 }

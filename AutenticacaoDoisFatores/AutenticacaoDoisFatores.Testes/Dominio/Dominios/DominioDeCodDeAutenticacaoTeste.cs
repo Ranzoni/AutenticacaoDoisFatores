@@ -59,5 +59,55 @@ namespace AutenticacaoDoisFatores.Testes.Dominio.Dominios
 
             #endregion
         }
+
+        [Fact]
+        internal async Task DeveBuscar()
+        {
+            #region Preparação do teste
+
+            var mocker = new AutoMocker();
+
+            var dominio = mocker.CreateInstance<DominioDeCodDeAutenticacao>();
+
+            var idUsuario = Guid.NewGuid();
+            var codigoAutenticacao = Seguranca.GerarCodigoAutenticacao();
+
+            mocker.GetMock<IRepositorioDeCodigoDeAutenticacao>().Setup(r => r.BuscarCodigoAsync(idUsuario)).ReturnsAsync(codigoAutenticacao);
+
+            #endregion
+
+            var retorno = await dominio.BuscarCodigoAsync(idUsuario);
+
+            #region Verificação do teste
+
+            Assert.NotNull(retorno);
+            Assert.Equal(codigoAutenticacao, retorno);
+            mocker.Verify<IRepositorioDeCodigoDeAutenticacao>(r => r.BuscarCodigoAsync(idUsuario), Times.Once);
+
+            #endregion
+        }
+
+        [Fact]
+        internal async Task DeveRetornarNuloAoBuscarCodigoQueNaoExiste()
+        {
+            #region Preparação do teste
+
+            var mocker = new AutoMocker();
+
+            var dominio = mocker.CreateInstance<DominioDeCodDeAutenticacao>();
+
+            var idUsuario = Guid.NewGuid();
+
+            #endregion
+
+            var retorno = await dominio.BuscarCodigoAsync(idUsuario);
+
+            #region Verificação do teste
+
+            Assert.Null(retorno);
+            mocker.Verify<IRepositorioDeCodigoDeAutenticacao>(r => r.BuscarCodigoAsync(idUsuario), Times.Once);
+
+            #endregion
+        }
     }
 }

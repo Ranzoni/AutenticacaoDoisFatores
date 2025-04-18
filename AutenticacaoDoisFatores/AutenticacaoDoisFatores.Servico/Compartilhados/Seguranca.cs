@@ -160,6 +160,14 @@ namespace AutenticacaoDoisFatores.Servico.Compartilhados
             }
         }
 
+        public static string RegraCodAutenticaoPorEmail
+        {
+            get
+            {
+                return _codAutenticaoPorEmail;
+            }
+        }
+
         #endregion
 
         public static string GerarTokenAutenticacaoUsuario(Guid idUsuario, IEnumerable<TipoDePermissao>? permissoes)
