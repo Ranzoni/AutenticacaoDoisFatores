@@ -102,6 +102,11 @@ namespace AutenticacaoDoisFatores.Dominio.Entidades
             DataUltimoAcesso = novaData;
         }
 
+        public bool ExisteTipoDeAutenticacaoConfigurado()
+        {
+            return TipoDeAutenticacao is not null;
+        }
+
         public void ConfigurarTipoDeAutenticacao(TipoDeAutenticacao? tipoDeAutenticacao)
         {
             AuditarModificacao("AutenticacaoDoisFatores", TipoDeAutenticacao.ToString()!, tipoDeAutenticacao.ToString()!);

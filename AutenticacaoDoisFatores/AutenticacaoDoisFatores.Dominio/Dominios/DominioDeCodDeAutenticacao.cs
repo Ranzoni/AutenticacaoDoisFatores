@@ -1,0 +1,19 @@
+﻿using AutenticacaoDoisFatores.Dominio.Compartilhados;
+using AutenticacaoDoisFatores.Dominio.Excecoes;
+using AutenticacaoDoisFatores.Dominio.Repositorios;
+
+namespace AutenticacaoDoisFatores.Dominio.Dominios
+{
+    public class DominioDeCodDeAutenticacao(IRepositorioDeCodigoDeAutenticacao repositorio)
+    {
+        private readonly IRepositorioDeCodigoDeAutenticacao _repositorio = repositorio;
+
+        public async Task SalvarAsync(Guid idUsuario, string codigo)
+        {
+            if (codigo.EstaVazio())
+                ExcecoesCodDeAutenticacao.CodigoAutenticacaoVazio();
+
+            await _repositorio.SalvarAsync(idUsuario, codigo);
+        }
+    }
+}

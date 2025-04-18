@@ -23,6 +23,10 @@ namespace AutenticacaoDoisFatores.Dominio.Compartilhados.Mensagens
         [Description("Confirmação de nova chave de acesso")]
         TituloConfirmacaoNovaChaveCliente,
         [Description("A sua chave de acesso foi alterada.")]
-        MensagemConfirmacaoNovaChaveCliente
+        MensagemConfirmacaoNovaChaveCliente,
+        [Description("Código de acesso ao sistema")]
+        TituloCodAutenticacaoDoisFatores,
+        [Description("Utilize o código abaixo para acessar o sistema.")]
+        MensagemCodAutenticacaoDoisFatores
     }
 }

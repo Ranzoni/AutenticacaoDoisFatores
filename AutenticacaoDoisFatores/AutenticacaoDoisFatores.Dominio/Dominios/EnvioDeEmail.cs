@@ -9,6 +9,25 @@ namespace AutenticacaoDoisFatores.Dominio.Dominios
     {
         private readonly IServicoDeEmail _servico = servico;
 
+        public void EnviarCodigoAutenticacaoDoisFatores(string para, string codigo)
+        {
+            var tituloCodAutenticacaoDoisFatores = MensagensEnvioEmail.TituloCodAutenticacaoDoisFatores.Descricao() ?? "";
+            var msgCodAutenticacaoDoisFatores = MensagensEnvioEmail.MensagemCodAutenticacaoDoisFatores.Descricao() ?? "";
+
+            var mensagemDoEmail = GerarMensagemEmail
+                (
+                    mensagem: msgCodAutenticacaoDoisFatores,
+                    detalhes: @$"
+
+                        <p style='font-size: 18px; color: #666666;'>
+                            {codigo}
+                        </p>
+                    "
+                );
+
+            _servico.Enviar(para: para, titulo: tituloCodAutenticacaoDoisFatores, mensagem: mensagemDoEmail);
+        }
+
         public void EnviarConfirmacaoDeCadastroDeCliente(string para, string chaveAcesso, string linkConfirmacao, string token)
         {
             if (para.EstaVazio() || !para.EhEmail())

@@ -33,6 +33,13 @@ namespace AutenticacaoDoisFatores.Servico.Compartilhados
         {
             return !senha.EstaVazio() && senha.ExistemLetrasMaiusculas() && senha.ExistemLetrasMinusculas() && senha.ExistemNumeros() && senha.ExistemCaracteresEspeciaisAcentosOuPontuacoes() && senha.Length >= 7 && senha.Length <= 50;
         }
+
+        public static string GerarCodigoAutenticacao()
+        {
+            var randomico = new Random();
+            var codigo = randomico.Next(90000, 999999);
+            return codigo.ToString().PadLeft(6, '0');
+        }
     }
 
     #region Geração de tokens
@@ -59,6 +66,7 @@ namespace AutenticacaoDoisFatores.Servico.Compartilhados
         private static readonly string _exclusaoDeUsuario = "exclusaoDeUsuario";
         private static readonly string _visualizacaoDeUsuarios = "visualizacaoDeUsuarios";
         private static readonly string _trocarEmailDeUsuario = "trocarEmailDeUsuario";
+        private static readonly string _codAutenticaoPorEmail = "codAutenticaoPorEmail";
 
         private static readonly Dictionary<TipoDePermissao, string> _perfisPermissoes = new()
         {
@@ -184,6 +192,14 @@ namespace AutenticacaoDoisFatores.Servico.Compartilhados
             return GerarToken([
                 new(type: _perfilIdentificador, idCliente.ToString()),
                 new(type: _perfilSeguranca, _geracaoNovaChaveCliente)
+            ]);
+        }
+
+        public static string GerarTokenCodAutenticacaoUsuario(Guid idUsuario)
+        {
+            return GerarToken([
+                new(type: _perfilIdentificador, idUsuario.ToString()),
+                new(type: _perfilSeguranca, _codAutenticaoPorEmail)
             ]);
         }
 

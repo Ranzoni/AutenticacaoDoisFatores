@@ -10,6 +10,8 @@ using AutenticacaoDoisFatores.Infra.Servicos;
 using AutenticacaoDoisFatores.Servico.CasosDeUso.Clientes;
 using AutenticacaoDoisFatores.Servico.CasosDeUso.Permissoes;
 using AutenticacaoDoisFatores.Servico.CasosDeUso.Usuarios;
+using AutenticacaoDoisFatores.Servico.CasosDeUso.Usuarios.Autenticadores;
+using AutenticacaoDoisFatores.Servico.CasosDeUso.Usuarios.AutenticacoesDoisFatores;
 
 namespace AutenticacaoDoisFatores
 {
@@ -25,6 +27,10 @@ namespace AutenticacaoDoisFatores
             servicos.AddTransient<CriarUsuario>();
             servicos.AddTransient<AtivarUsuario>();
             servicos.AddTransient<AutenticarUsuario>();
+            servicos.AddTransient<RetornarUsuarioAutenticado>();
+            servicos.AddTransient<EnviarCodigoAutenticacaoUsuario>();
+            servicos.AddTransient<EnviarCodAutenticacaoUsuarioPorEmail>();
+            servicos.AddTransient<EnviarCodAutenticacaoUsuarioPorSms>();
             servicos.AddTransient<GerarNovaSenhaUsuario>();
             servicos.AddTransient<IncluirPermissoesParaUsuario>();
             servicos.AddTransient<RetornarPermissoes>();
@@ -41,6 +47,7 @@ namespace AutenticacaoDoisFatores
             servicos.AddTransient<EnvioDeEmail>();
             servicos.AddTransient<DominioDePermissoes>();
             servicos.AddTransient<DominioDeUsuarios>();
+            servicos.AddTransient<DominioDeCodDeAutenticacao>();
         }
 
         internal static void AddServicos(this IServiceCollection servicos)
@@ -53,6 +60,7 @@ namespace AutenticacaoDoisFatores
             servicos.AddTransient<IRepositorioDeClientes, RepositorioDeClientes>();
             servicos.AddTransient<IRepositorioDeUsuarios, RepositorioDeUsuarios>();
             servicos.AddTransient<IRepositorioDePermissoes, RepositorioDePermissoes>();
+            servicos.AddTransient<IRepositorioDeCodigoDeAutenticacao, RepositorioDeCodigoDeAutenticacao>();
         }
 
         internal static void AddContextos(this IServiceCollection servicos)
@@ -75,19 +83,16 @@ namespace AutenticacaoDoisFatores
 
             servicos.AddScoped(provider =>
             {
-                var stringDeConexao = Environment.GetEnvironmentVariable("ADF_PERMISSOES_CONEXAO_BANCO");
-                if (stringDeConexao is null || stringDeConexao.EstaVazio())
-                    throw new ApplicationException("A string de conexão com o banco de dados de permissões não foi encontrada");
+                return provider.RetornarContextoPermissoes();
+            });
 
-                var httpContextAccessor = provider.GetRequiredService<IHttpContextAccessor>();
-                var httpContext = httpContextAccessor.HttpContext;
-
-                var nomeDominio = httpContext?.Request.Headers["Dominio"].ToString() ?? "public";
-                return new ContextoPermissoes(stringDeConexao, nomeDominio);
+            servicos.AddScoped(provider =>
+            {
+                return provider.RetornarContextoDeCodigoDeAutenticacao();
             });
         }
 
-        internal static ContextoCliente RetornarContextoCliente(this IServiceProvider serviceProvider)
+        private static ContextoCliente RetornarContextoCliente(this IServiceProvider serviceProvider)
         {
             var stringDeConexao = Environment.GetEnvironmentVariable("ADF_CONEXAO_BANCO");
             if (stringDeConexao is null || stringDeConexao.EstaVazio())
@@ -100,10 +105,36 @@ namespace AutenticacaoDoisFatores
             return new ContextoCliente(stringDeConexao, nomeDominio);
         }
 
-        internal static void RetornarRepositorioUsuario(this IServiceProvider serviceProvider)
+        private static ContextoPermissoes RetornarContextoPermissoes(this IServiceProvider serviceProvider)
         {
-            var contextoCliente = serviceProvider.RetornarContextoCliente();
+            var stringDeConexao = Environment.GetEnvironmentVariable("ADF_PERMISSOES_CONEXAO_BANCO");
+            if (stringDeConexao is null || stringDeConexao.EstaVazio())
+                throw new ApplicationException("A string de conexão com o banco de dados de permissões não foi encontrada");
 
+            var httpContextAccessor = serviceProvider.GetRequiredService<IHttpContextAccessor>();
+            var httpContext = httpContextAccessor.HttpContext;
+
+            var nomeDominio = httpContext?.Request.Headers["Dominio"].ToString() ?? "public";
+            return new ContextoPermissoes(stringDeConexao, nomeDominio);
+        }
+
+        private static ContextoDeCodigoDeAutenticacao RetornarContextoDeCodigoDeAutenticacao(this IServiceProvider serviceProvider)
+        {
+            var stringDeConexao = Environment.GetEnvironmentVariable("ADF_COD_AUTENTICACAO_CONEXAO_BANCO");
+            if (stringDeConexao is null || stringDeConexao.EstaVazio())
+                throw new ApplicationException("A string de conexão com o banco de dados de permissões não foi encontrada");
+
+            var stringEmArray = stringDeConexao.Split(",");
+            var host = stringEmArray[0];
+            var porta = int.Parse(stringEmArray[1]);
+            var usuario = stringEmArray[2];
+            var senha = stringEmArray[3];
+
+            var httpContextAccessor = serviceProvider.GetRequiredService<IHttpContextAccessor>();
+            var httpContext = httpContextAccessor.HttpContext;
+
+            var nomeDominio = httpContext?.Request.Headers["Dominio"].ToString() ?? "public";
+            return new ContextoDeCodigoDeAutenticacao(host, porta, usuario, senha, nomeDominio);
         }
     }
 }

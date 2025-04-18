@@ -1,41 +1,34 @@
-﻿using AutenticacaoDoisFatores.Dominio.Compartilhados;
-using AutenticacaoDoisFatores.Dominio.Compartilhados.Mensagens;
-using AutenticacaoDoisFatores.Dominio.Compartilhados.Permissoes;
+﻿using AutenticacaoDoisFatores.Dominio.Compartilhados.Mensagens;
+using AutenticacaoDoisFatores.Dominio.Compartilhados;
 using AutenticacaoDoisFatores.Dominio.Dominios;
 using AutenticacaoDoisFatores.Dominio.Entidades;
-using AutenticacaoDoisFatores.Servico.Compartilhados;
 using AutenticacaoDoisFatores.Servico.DTO.Usuarios;
 using Mensageiro;
+using AutenticacaoDoisFatores.Servico.CasosDeUso.Usuarios.Autenticadores;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace AutenticacaoDoisFatores.Servico.CasosDeUso.Usuarios
 {
-    public class AutenticarUsuario(DominioDeUsuarios dominio, DominioDePermissoes permissoes, INotificador notificador)
+    public class AutenticarUsuario(INotificador notificador, DominioDeUsuarios dominio, IServiceProvider provedorDeServicos)
     {
-        private readonly DominioDeUsuarios _dominio = dominio;
-        private readonly DominioDePermissoes _permissoes = permissoes;
         private readonly INotificador _notificador = notificador;
+        private readonly DominioDeUsuarios _dominio = dominio;
+        private readonly IServiceProvider _provedorDeServicos = provedorDeServicos;
 
-        public async Task<UsuarioAutenticado?> ExecutarAsync(DadosAutenticacao dadosAutenticacao)
+        public async Task<object?> ExecutarAsync(DadosAutenticacao dadosAutenticacao)
         {
-            if (!DadosAutenticaoSaoValidos(dadosAutenticacao))
+            if (!DadosAutenticacaoSaoValidos(dadosAutenticacao))
                 return null;
 
             var usuario = await BuscarUsuarioAsync(dadosAutenticacao);
-
-            if (!AutenticacaoEhValida(usuario, dadosAutenticacao.Senha) || usuario is null)
+            if (!AutenticacaoEhValida(usuario, dadosAutenticacao.Senha))
                 return null;
 
-            var permissoesUsuario = await RetornarPermissoesAsync(usuario);
-            var token = Seguranca.GerarTokenAutenticacaoUsuario(usuario.Id, permissoesUsuario);
-
-            usuario.AtualizarDataUltimoAcesso();
-            await _dominio.AlterarAsync(usuario);
-
-            var usuarioCadastrado = (UsuarioCadastrado)usuario;
-            return new UsuarioAutenticado(usuario: usuarioCadastrado, token: token);
+            var autenticador = RetornarTipoDeAutenticador(usuario!);
+            return await autenticador.ExecutarAsync(usuario!);
         }
 
-        private bool DadosAutenticaoSaoValidos(DadosAutenticacao dadosAutenticacao)
+        private bool DadosAutenticacaoSaoValidos(DadosAutenticacao dadosAutenticacao)
         {
             var nomeUsuarioVazio = dadosAutenticacao.NomeUsuario is null || dadosAutenticacao.NomeUsuario.EstaVazio();
             var emailVazio = dadosAutenticacao.Email is null || dadosAutenticacao.Email.EstaVazio();
@@ -77,12 +70,12 @@ namespace AutenticacaoDoisFatores.Servico.CasosDeUso.Usuarios
             return true;
         }
 
-        private async Task<IEnumerable<TipoDePermissao>> RetornarPermissoesAsync(Usuario usuario)
+        private ITipoDeAutenticador RetornarTipoDeAutenticador(Usuario usuario)
         {
-            if (usuario.EhAdmin)
-                return DominioDePermissoes.RetornarTodasPermissoes();
-                
-            return await _permissoes.RetornarPermissoesAsync(usuario.Id);
+            if (usuario.ExisteTipoDeAutenticacaoConfigurado())
+                return _provedorDeServicos.GetRequiredService<EnviarCodigoAutenticacaoUsuario>();
+            else
+                return _provedorDeServicos.GetRequiredService<RetornarUsuarioAutenticado>();
         }
     }
 }

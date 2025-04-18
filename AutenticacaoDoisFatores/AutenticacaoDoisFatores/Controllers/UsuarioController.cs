@@ -63,13 +63,13 @@ namespace AutenticacaoDoisFatores.Controllers
 
         [HttpPost("autenticar")]
         [AllowAnonymous]
-        public async Task<ActionResult<UsuarioAutenticado?>> AutenticarAsync([FromServices] AutenticarUsuario autenticarUsuario, DadosAutenticacao dadosAutenticacao)
+        public async Task<ActionResult<object?>> AutenticarAsync([FromServices] AutenticarUsuario autenticarUsuario, DadosAutenticacao dadosAutenticacao)
         {
             try
             {
-                var token = await autenticarUsuario.ExecutarAsync(dadosAutenticacao);
+                var resposta = await autenticarUsuario.ExecutarAsync(dadosAutenticacao);
 
-                return Sucesso(token);
+                return Sucesso(resposta);
             }
             catch (Exception e)
             {
