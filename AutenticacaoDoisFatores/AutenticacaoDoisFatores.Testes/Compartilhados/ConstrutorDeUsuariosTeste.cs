@@ -16,6 +16,7 @@ namespace AutenticacaoDoisFatores.Testes.Compartilhados
             string? nomeUsuario = null,
             string? email = null,
             string? senha = null,
+            long? celular = null,
             bool? ativo = null,
             DateTime? dataUltimoAcesso = null,
             DateTime? dataCadastro = null,
@@ -32,6 +33,7 @@ namespace AutenticacaoDoisFatores.Testes.Compartilhados
                 .ComNomeUsuario(nomeUsuario ?? "teste_user_2010234")
                 .ComEmail(email ?? faker.Person.Email)
                 .ComSenha(senha ?? _senhaParaTeste)
+                .ComCelular(celular)
                 .ComAtivo(ativo ?? faker.Random.Bool())
                 .ComDataUltimoAcesso(dataUltimoAcesso)
                 .ComDataCadastro(dataCadastro ?? faker.Date.Past())
@@ -40,7 +42,7 @@ namespace AutenticacaoDoisFatores.Testes.Compartilhados
                 .ComTipoDeAutenticacao(tipoDeAutenticacao);
         }
 
-        internal static ConstrutorDeNovoUsuario RetornarConstrutorDeNovo(string? nome = null, string? nomeUsuario = null, string? email = null, string? senha = null)
+        internal static ConstrutorDeNovoUsuario RetornarConstrutorDeNovo(string? nome = null, string? nomeUsuario = null, string? email = null, string? senha = null, long? celular = null)
         {
             var faker = new Faker();
 
@@ -48,10 +50,11 @@ namespace AutenticacaoDoisFatores.Testes.Compartilhados
                 .ComNome(nome ?? faker.Person.FullName)
                 .ComNomeUsuario(nomeUsuario ?? "teste_user_2010234")
                 .ComEmail(email ?? faker.Person.Email)
-                .ComSenha(senha ?? "T3ste.de.Senh@");
+                .ComSenha(senha ?? "T3ste.de.Senh@")
+                .ComCelular(celular);
         }
 
-        internal static ConstrutorDeNovosDadosUsuario RetornarConstrutorDeNovosDados(string? nome = null, string? nomeUsuario = null, string? email = null, string? senha = null)
+        internal static ConstrutorDeNovosDadosUsuario RetornarConstrutorDeNovosDados(string? nome = null, string? nomeUsuario = null, string? email = null, string? senha = null, long? celular = null)
         {
             var faker = new Faker();
 
@@ -59,7 +62,8 @@ namespace AutenticacaoDoisFatores.Testes.Compartilhados
                 .ComNome(nome ?? faker.Person.FullName)
                 .ComNomeUsuario(nomeUsuario ?? "teste_user_2010234")
                 .ComEmail(email ?? faker.Person.Email)
-                .ComSenha(senha ?? _senhaParaTeste);
+                .ComSenha(senha ?? _senhaParaTeste)
+                .ComCelular(celular);
         }
     }
 }

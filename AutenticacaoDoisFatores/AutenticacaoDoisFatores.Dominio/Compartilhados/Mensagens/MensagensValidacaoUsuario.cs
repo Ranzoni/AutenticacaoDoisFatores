@@ -12,6 +12,8 @@ namespace AutenticacaoDoisFatores.Dominio.Compartilhados.Mensagens
         EmailInvalido,
         [Description("A senha do usuário não é válida. Ela deve conter letras maiúsculas e minúsculas, caracteres especiais e números.")]
         SenhaInvalida,
+        [Description("O número de celular do usuário não é válido.")]
+        CelularInvalido,
         [Description("Este nome de usuário já está cadastrado.")]
         NomeUsuarioJaCadastrado,
         [Description("Já existe um usuário com este endereço de e-mail.")]

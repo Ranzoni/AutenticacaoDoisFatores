@@ -8,6 +8,7 @@ namespace AutenticacaoDoisFatores.Servico.Construtores
         private string _email = "";
         private string _nomeUsuario = "";
         private string _senha = "";
+        private long? _celular;
 
         public ConstrutorDeNovoUsuario ComNome(string nome)
         {
@@ -37,6 +38,13 @@ namespace AutenticacaoDoisFatores.Servico.Construtores
             return this;
         }
 
+        public ConstrutorDeNovoUsuario ComCelular(long? celular)
+        {
+            _celular = celular;
+
+            return this;
+        }
+
         public NovoUsuario Construir()
         {
             var novoUsuario = new NovoUsuario
@@ -44,7 +52,8 @@ namespace AutenticacaoDoisFatores.Servico.Construtores
                     nome: _nome,
                     nomeUsuario: _nomeUsuario,
                     email: _email,
-                    senha: _senha
+                    senha: _senha,
+                    celular: _celular
                 );
 
             return novoUsuario;
@@ -57,7 +66,8 @@ namespace AutenticacaoDoisFatores.Servico.Construtores
                     nome: _nome,
                     nomeUsuario: _nomeUsuario,
                     email: _email,
-                    senha: _senha
+                    senha: _senha,
+                    celular: _celular
                 );
 
             return novoUsuario;

@@ -31,6 +31,9 @@ namespace AutenticacaoDoisFatores.Servico.CasosDeUso.Usuarios
             if (!usuarioParaAlterar.Senha.Equals(novosDadosUsuario.Senha))
                 usuarioParaAlterar.AlterarSenha(novosDadosUsuario.Senha);
 
+            if (!usuarioParaAlterar.Celular.Equals(novosDadosUsuario.Celular))
+                usuarioParaAlterar.AlterarCelular(novosDadosUsuario.Celular);
+
             if (!usuarioParaAlterar.TipoDeAutenticacao.Equals(novosDadosUsuario.TipoDeAutenticacao))
                 usuarioParaAlterar.ConfigurarTipoDeAutenticacao(novosDadosUsuario.TipoDeAutenticacao);
 
@@ -62,6 +65,9 @@ namespace AutenticacaoDoisFatores.Servico.CasosDeUso.Usuarios
 
             if (!Seguranca.ComposicaoSenhaEhValida(novosDadosUsuario.SenhaDescriptografada()))
                 _notificador.AddMensagem(MensagensValidacaoUsuario.SenhaInvalida);
+
+            if (!ValidadorDeUsuario.CelularEhValido(novosDadosUsuario.Celular))
+                _notificador.AddMensagem(MensagensValidacaoUsuario.CelularInvalido);
 
             if (verificarNomeUsuarioJaCadastrado is not null)
             {

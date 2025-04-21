@@ -5,6 +5,7 @@
         string? nome = null,
         string? nomeUsuario = null,
         string? email = null,
+        long? celular = null,
         bool? ativo = null,
         DateTime? dataUltimoAcessoDe = null,
         DateTime? dataUltimoAcessoAte = null,
@@ -20,6 +21,7 @@
         public string? Nome { get; } = nome;
         public string? NomeUsuario { get; } = nomeUsuario;
         public string? Email { get; } = email;
+        public long? Celular { get; } = celular;
         public bool? Ativo { get; } = ativo;
         public DateTime? DataUltimoAcessoDe { get; } = dataUltimoAcessoDe;
         public DateTime? DataUltimoAcessoAte { get; } = dataUltimoAcessoAte;

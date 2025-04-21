@@ -7,6 +7,7 @@ namespace AutenticacaoDoisFatores.Servico.DTO.Usuarios
         public string? Nome { get; set; }
         public string? NomeUsuario { get; set; }
         public string? Email { get; set; }
+        public long? Celular { get; set; }
         public bool? Ativo { get; set; }
         public DateTime? DataUltimoAcessoDe { get; set; }
         public DateTime? DataUltimoAcessoAte { get; set; }
@@ -18,6 +19,7 @@ namespace AutenticacaoDoisFatores.Servico.DTO.Usuarios
                 nome: filtro.Nome,
                 nomeUsuario: filtro.NomeUsuario,
                 email: filtro.Email,
+                celular: filtro.Celular,
                 ativo: filtro.Ativo,
                 dataUltimoAcessoDe: filtro.DataUltimoAcessoDe,
                 dataUltimoAcessoAte: filtro.DataUltimoAcessoAte,

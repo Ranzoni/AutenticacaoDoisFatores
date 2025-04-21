@@ -1,5 +1,4 @@
-﻿using AutenticacaoDoisFatores.Dominio.Compartilhados;
-using AutenticacaoDoisFatores.Dominio.Compartilhados.Entidades;
+﻿using AutenticacaoDoisFatores.Dominio.Compartilhados.Entidades;
 using AutenticacaoDoisFatores.Dominio.Compartilhados.Usuarios;
 using AutenticacaoDoisFatores.Dominio.Validadores;
 
@@ -11,17 +10,19 @@ namespace AutenticacaoDoisFatores.Dominio.Entidades
         public string NomeUsuario { get; private set; } = "";
         public string Email { get; private set; } = "";
         public string Senha { get; private set; } = "";
+        public long? Celular { get; private set; }
         public bool Ativo { get; private set; }
         public DateTime? DataUltimoAcesso { get; private set; }
         public bool EhAdmin { get; private set; }
         public TipoDeAutenticacao? TipoDeAutenticacao { get; private set; }
 
-        public Usuario(string nome, string nomeUsuario, string email, string senha, bool ehAdmin = false)
+        public Usuario(string nome, string nomeUsuario, string email, string senha, long? celular, bool ehAdmin = false)
         {
             Nome = nome;
             NomeUsuario = nomeUsuario;
             Email = email;
             Senha = senha;
+            Celular = celular;
 
             if (ehAdmin)
             {
@@ -32,7 +33,7 @@ namespace AutenticacaoDoisFatores.Dominio.Entidades
             this.Validar();
         }
 
-        public Usuario(Guid id, string nome, string nomeUsuario, string email, string senha, bool ativo, DateTime? dataUltimoAcesso, DateTime dataCadastro, DateTime? dataAlteracao, bool ehAdmin, TipoDeAutenticacao? tipoDeAutenticacao)
+        public Usuario(Guid id, string nome, string nomeUsuario, string email, string senha, long? celular, bool ativo, DateTime? dataUltimoAcesso, DateTime dataCadastro, DateTime? dataAlteracao, bool ehAdmin, TipoDeAutenticacao? tipoDeAutenticacao)
             : base(true)
         {
             Id = id;
@@ -40,6 +41,7 @@ namespace AutenticacaoDoisFatores.Dominio.Entidades
             NomeUsuario = nomeUsuario;
             Email = email;
             Senha = senha;
+            Celular = celular;
             Ativo = ativo;
             DataUltimoAcesso = dataUltimoAcesso;
             DataCadastro = dataCadastro;
@@ -93,6 +95,15 @@ namespace AutenticacaoDoisFatores.Dominio.Entidades
             this.Validar();
         }
 
+        public void AlterarCelular(long? celular)
+        {
+            AuditarModificacao("Celular", Celular?.ToString() ?? "", celular?.ToString() ?? "");
+
+            Celular = celular;
+
+            this.Validar();
+        }
+
         public void AtualizarDataUltimoAcesso()
         {
             var novaData = DateTime.Now;
@@ -109,7 +120,7 @@ namespace AutenticacaoDoisFatores.Dominio.Entidades
 
         public void ConfigurarTipoDeAutenticacao(TipoDeAutenticacao? tipoDeAutenticacao)
         {
-            AuditarModificacao("AutenticacaoDoisFatores", TipoDeAutenticacao.ToString()!, tipoDeAutenticacao.ToString()!);
+            AuditarModificacao("AutenticacaoDoisFatores", TipoDeAutenticacao?.ToString() ?? "", tipoDeAutenticacao.ToString() ?? "");
 
             TipoDeAutenticacao = tipoDeAutenticacao;
         }

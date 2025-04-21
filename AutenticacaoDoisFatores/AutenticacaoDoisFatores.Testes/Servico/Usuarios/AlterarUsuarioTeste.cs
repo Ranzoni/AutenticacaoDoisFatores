@@ -28,7 +28,7 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Usuarios
             var idUsuario = Guid.NewGuid();
 
             var usuarioParaAlterar = ConstrutorDeUsuariosTeste
-                .RetornarConstrutor(id: idUsuario, nome: "Fulano de Tal", nomeUsuario: "user_test_12345", ativo: true)
+                .RetornarConstrutor(id: idUsuario, nome: "Fulano de Tal", nomeUsuario: "user_test_12345", celular: 993000333, ativo: true)
                 .ConstruirCadastrado();
 
             mocker.GetMock<IRepositorioDeUsuarios>().Setup(r => r.BuscarUnicoAsync(idUsuario)).ReturnsAsync(usuarioParaAlterar);
@@ -36,9 +36,10 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Usuarios
             var novoNome = faker.Person.FullName;
             var novoNomeUsuario = "user_test_54321";
             var novoEmail = faker.Person.Email;
+            var novoCelular = 992222001;
 
             var novosDados = ConstrutorDeUsuariosTeste
-                .RetornarConstrutorDeNovosDados(nome: novoNome, nomeUsuario: novoNomeUsuario, email: novoEmail)
+                .RetornarConstrutorDeNovosDados(nome: novoNome, nomeUsuario: novoNomeUsuario, email: novoEmail, celular: novoCelular)
                 .Construir();
 
             #endregion
@@ -51,6 +52,7 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Usuarios
             Assert.Equal(novoNome, resposta.Nome);
             Assert.Equal(novoNomeUsuario, resposta.NomeUsuario);
             Assert.Equal(novoEmail, resposta.Email);
+            Assert.Equal(novoCelular, resposta.Celular);
 
             mocker.Verify<IRepositorioDeUsuarios>(r => r.Editar(usuarioParaAlterar), Times.Once);
             mocker.Verify<IRepositorioDeUsuarios>(r => r.SalvarAlteracoesAsync(), Times.Once);
@@ -104,7 +106,7 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Usuarios
             var idUsuario = Guid.NewGuid();
 
             var usuarioParaAlterar = ConstrutorDeUsuariosTeste
-                .RetornarConstrutor(id: idUsuario, nome: "Fulano de Tal", nomeUsuario: "user_test_12345", ativo: false)
+                .RetornarConstrutor(id: idUsuario, nome: "Fulano de Tal", nomeUsuario: "user_test_12345", celular: 993000333, ativo: false)
                 .ConstruirCadastrado();
 
             mocker.GetMock<IRepositorioDeUsuarios>().Setup(r => r.BuscarUnicoAsync(idUsuario)).ReturnsAsync(usuarioParaAlterar);
@@ -112,9 +114,10 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Usuarios
             var novoNome = faker.Person.FullName;
             var novoNomeUsuario = "user_test_54321";
             var novoEmail = faker.Person.Email;
+            var novoCelular = 992222001;
 
             var novosDados = ConstrutorDeUsuariosTeste
-                .RetornarConstrutorDeNovosDados(nome: novoNome, nomeUsuario: novoNomeUsuario, email: novoEmail)
+                .RetornarConstrutorDeNovosDados(nome: novoNome, nomeUsuario: novoNomeUsuario, email: novoEmail, celular: novoCelular)
                 .Construir();
 
             mocker.GetMock<INotificador>().Setup(n => n.ExisteMensagem()).Returns(true);
@@ -129,6 +132,7 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Usuarios
             Assert.NotEqual(novoNome, usuarioParaAlterar.Nome);
             Assert.NotEqual(novoNomeUsuario, usuarioParaAlterar.NomeUsuario);
             Assert.NotEqual(novoEmail, usuarioParaAlterar.Email);
+            Assert.NotEqual(novoCelular, usuarioParaAlterar.Celular);
 
             mocker.Verify<INotificador>(n => n.AddMensagemNaoEncontrado(MensagensValidacaoUsuario.UsuarioNaoEncontrado), Times.Once);
             mocker.Verify<IRepositorioDeUsuarios>(r => r.Editar(It.IsAny<Usuario>()), Times.Never);
@@ -150,7 +154,7 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Usuarios
             var idUsuario = Guid.NewGuid();
 
             var usuarioParaAlterar = ConstrutorDeUsuariosTeste
-                .RetornarConstrutor(id: idUsuario, nome: "Fulano de Tal", nomeUsuario: "user_test_12345", ativo: true, ehAdm: true)
+                .RetornarConstrutor(id: idUsuario, nome: "Fulano de Tal", nomeUsuario: "user_test_12345", ativo: true, celular: 993000333, ehAdm: true)
                 .ConstruirCadastrado();
 
             mocker.GetMock<IRepositorioDeUsuarios>().Setup(r => r.BuscarUnicoAsync(idUsuario)).ReturnsAsync(usuarioParaAlterar);
@@ -159,9 +163,10 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Usuarios
             var novoNomeUsuario = "user_test_54321";
             var novoEmail = faker.Person.Email;
             var novaSenha = "teste_nova_senh@!!4";
+            var novoCelular = 992222001;
 
             var novosDados = ConstrutorDeUsuariosTeste
-                .RetornarConstrutorDeNovosDados(nome: novoNome, nomeUsuario: novoNomeUsuario, email: novoEmail, senha: novaSenha)
+                .RetornarConstrutorDeNovosDados(nome: novoNome, nomeUsuario: novoNomeUsuario, email: novoEmail, senha: novaSenha, celular: novoCelular)
                 .Construir();
 
             mocker.GetMock<INotificador>().Setup(n => n.ExisteMensagem()).Returns(true);
@@ -176,6 +181,7 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Usuarios
             Assert.NotEqual(novoNome, usuarioParaAlterar.Nome);
             Assert.NotEqual(novoNomeUsuario, usuarioParaAlterar.NomeUsuario);
             Assert.NotEqual(novoEmail, usuarioParaAlterar.Email);
+            Assert.NotEqual(novoCelular, usuarioParaAlterar.Celular);
 
             mocker.Verify<INotificador>(n => n.AddMensagemNaoEncontrado(MensagensValidacaoUsuario.UsuarioNaoEncontrado), Times.Once);
             mocker.Verify<IRepositorioDeUsuarios>(r => r.Editar(It.IsAny<Usuario>()), Times.Never);
@@ -385,6 +391,56 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Usuarios
             Assert.NotEqual(novoEmail, usuarioParaAlterar.Email);
 
             mocker.Verify<INotificador>(n => n.AddMensagem(MensagensValidacaoUsuario.SenhaInvalida), Times.Once);
+            mocker.Verify<IRepositorioDeUsuarios>(r => r.Editar(It.IsAny<Usuario>()), Times.Never);
+            mocker.Verify<IRepositorioDeUsuarios>(r => r.SalvarAlteracoesAsync(), Times.Never);
+
+            #endregion
+        }
+
+        [Theory]
+        [InlineData((long)-9999)]
+        [InlineData((long)1)]
+        [InlineData((long)10334)]
+        internal async Task NaoDeveAlterarParaCelularInvalido(long? novoCelular)
+        {
+            #region Preparação do teste
+
+            var mocker = new AutoMocker();
+            var faker = new Faker();
+
+            var servico = mocker.CreateInstance<AlterarUsuario>();
+
+            var idUsuario = Guid.NewGuid();
+
+            var usuarioParaAlterar = ConstrutorDeUsuariosTeste
+                .RetornarConstrutor(id: idUsuario, nome: "Fulano de Tal", celular: 993000333, ativo: true)
+                .ConstruirCadastrado();
+
+            mocker.GetMock<IRepositorioDeUsuarios>().Setup(r => r.BuscarUnicoAsync(idUsuario)).ReturnsAsync(usuarioParaAlterar);
+
+            var novoNome = faker.Person.FullName;
+            var novoNomeUsuario = "user_test_12345";
+            var novoEmail = faker.Person.Email;
+
+            var novosDados = ConstrutorDeUsuariosTeste
+                .RetornarConstrutorDeNovosDados(nome: novoNome, nomeUsuario: novoNomeUsuario, email: novoEmail, celular: novoCelular)
+                .Construir();
+
+            mocker.GetMock<INotificador>().Setup(n => n.ExisteMensagem()).Returns(true);
+
+            #endregion
+
+            var resposta = await servico.ExecutarAsync(idUsuario, novosDados);
+
+            #region Verificação do teste
+
+            Assert.Null(resposta);
+            Assert.NotEqual(novoNome, usuarioParaAlterar.Nome);
+            Assert.NotEqual(novoNomeUsuario, usuarioParaAlterar.NomeUsuario);
+            Assert.NotEqual(novoEmail, usuarioParaAlterar.Email);
+            Assert.NotEqual(novoCelular, usuarioParaAlterar.Celular);
+
+            mocker.Verify<INotificador>(n => n.AddMensagem(MensagensValidacaoUsuario.CelularInvalido), Times.Once);
             mocker.Verify<IRepositorioDeUsuarios>(r => r.Editar(It.IsAny<Usuario>()), Times.Never);
             mocker.Verify<IRepositorioDeUsuarios>(r => r.SalvarAlteracoesAsync(), Times.Never);
 

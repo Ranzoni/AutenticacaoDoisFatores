@@ -8,15 +8,17 @@ namespace AutenticacaoDoisFatores.Servico.DTO.Usuarios
         public string Nome { get; }
         public string NomeUsuario { get; }
         public string Email { get; }
+        public long? Celular { get; }
         public bool Ativo { get; }
         public DateTime? DataUltimoAcesso { get; }
 
-        public UsuarioCadastrado(Guid id, string nome, string nomeUsuario, string email, bool ativo, DateTime? dataUltimoAcesso, DateTime dataCadastro, DateTime? dataAlteracao)
+        public UsuarioCadastrado(Guid id, string nome, string nomeUsuario, string email, long? celular, bool ativo, DateTime? dataUltimoAcesso, DateTime dataCadastro, DateTime? dataAlteracao)
         {
             Id = id;
             Nome = nome;
             NomeUsuario = nomeUsuario;
             Email = email;
+            Celular = celular;
             Ativo = ativo;
             DataUltimoAcesso = dataUltimoAcesso;
             DataCadastro = dataCadastro;
@@ -31,6 +33,7 @@ namespace AutenticacaoDoisFatores.Servico.DTO.Usuarios
                 nome: usuario.Nome,
                 nomeUsuario: usuario.NomeUsuario,
                 email: usuario.Email,
+                celular: usuario.Celular,
                 ativo: usuario.Ativo,
                 dataUltimoAcesso: usuario.DataUltimoAcesso,
                 dataCadastro: usuario.DataCadastro,

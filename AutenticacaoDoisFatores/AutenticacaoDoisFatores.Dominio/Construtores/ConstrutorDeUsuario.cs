@@ -10,6 +10,7 @@ namespace AutenticacaoDoisFatores.Dominio.Construtores
         private string _nomeUsuario = "";
         private string _email = "";
         private string _senha = "";
+        private long? _celular;
         private bool _ativo = false;
         private bool _ehAdmin = false;
         private DateTime? _dataUltimoAcesso;
@@ -48,6 +49,13 @@ namespace AutenticacaoDoisFatores.Dominio.Construtores
         public ConstrutorDeUsuario ComSenha(string senha)
         {
             _senha = senha;
+
+            return this;
+        }
+
+        public ConstrutorDeUsuario ComCelular(long? celular)
+        {
+            _celular = celular;
 
             return this;
         }
@@ -102,6 +110,7 @@ namespace AutenticacaoDoisFatores.Dominio.Construtores
                 nomeUsuario: _nomeUsuario,
                 email: _email,
                 senha: _senha,
+                celular: _celular,
                 ehAdmin: _ehAdmin
             );
 
@@ -117,6 +126,7 @@ namespace AutenticacaoDoisFatores.Dominio.Construtores
                 nomeUsuario: _nomeUsuario,
                 email: _email,
                 senha: _senha,
+                celular: _celular,
                 ativo: _ativo,
                 dataUltimoAcesso: _dataUltimoAcesso,
                 dataCadastro: _dataCadastro,

@@ -19,6 +19,9 @@ namespace AutenticacaoDoisFatores.Dominio.Validadores
 
             if (!SenhaEhValida(usuario.Senha))
                 ExcecoesUsuario.SenhaInvalida();
+
+            if (!CelularEhValido(usuario.Celular))
+                ExcecoesUsuario.CelularInvalido();
         }
 
         public static bool NomeEhValido(string nome)
@@ -39,6 +42,11 @@ namespace AutenticacaoDoisFatores.Dominio.Validadores
         public static bool SenhaEhValida(string senha)
         {
             return !senha.EstaVazio() && senha.Length <= 256;
+        }
+
+        public static bool CelularEhValido(long? celular)
+        {
+            return celular is null || celular > 99999;
         }
     }
 }

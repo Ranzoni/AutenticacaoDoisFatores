@@ -19,9 +19,9 @@ namespace AutenticacaoDoisFatores.Infra.Repositorios
         {
             var sql = $@"
                 INSERT INTO {_contexto.NomeDominio}.""Usuarios""
-                    (""Id"", ""Nome"", ""NomeUsuario"", ""Email"", ""Senha"", ""DataCadastro"")
+                    (""Id"", ""Nome"", ""NomeUsuario"", ""Email"", ""Senha"", ""Celular"", ""DataCadastro"")
                 VALUES
-                    ('{entidade.Id}', '{entidade.Nome}', '{entidade.NomeUsuario}', '{entidade.Email}', '{entidade.Senha}', '{entidade.DataCadastro:yyyy-MM-dd HH:mm:ss}');";
+                    ('{entidade.Id}', '{entidade.Nome}', '{entidade.NomeUsuario}', '{entidade.Email}', '{entidade.Senha}', {(entidade.Celular is null ? "NULL" : entidade.Celular)}, '{entidade.DataCadastro:yyyy-MM-dd HH:mm:ss}');";
 
             _contexto.PrepararComando(
                 entidade: entidade,
@@ -55,6 +55,7 @@ namespace AutenticacaoDoisFatores.Infra.Repositorios
                     ""NomeUsuario"" = '{entidade.NomeUsuario}',
                     ""Email"" = '{entidade.Email}',
                     ""Senha"" = '{entidade.Senha}',
+                    ""Celular"" = {(entidade.Celular is null ? "NULL" : entidade.Celular)},
                     ""Ativo"" = {entidade.Ativo},
                     ""DataAlteracao"" = '{entidade.DataAlteracao:yyyy-MM-dd HH:mm:ss}'";
 
@@ -298,7 +299,8 @@ namespace AutenticacaoDoisFatores.Infra.Repositorios
                 u.""DataCadastro"",
                 u.""DataAlteracao"",
                 u.""EhAdmin"",
-                u.""TipoDeAutenticacao""";
+                u.""TipoDeAutenticacao"",
+                u.""Celular""";
         }
 
         private static Usuario ConstruirUsuario(DbDataReader leitor)
@@ -315,6 +317,7 @@ namespace AutenticacaoDoisFatores.Infra.Repositorios
                 .ComDataAlteracao(leitor.IsDBNull(8) ? null : leitor.GetDateTime(8))
                 .ComEhAdmin(leitor.GetBoolean(9))
                 .ComTipoDeAutenticacao(leitor.IsDBNull(10) ? null : (TipoDeAutenticacao)leitor.GetInt16(10))
+                .ComCelular(leitor.IsDBNull(11) ? null : leitor.GetInt64(11))
                 .ConstruirCadastrado();
         }
 

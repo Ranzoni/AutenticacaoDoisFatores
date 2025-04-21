@@ -24,11 +24,12 @@ namespace AutenticacaoDoisFatores.Testes.Dominio.Entidades
             var nome = _faker.Person.FullName;
             var nomeUsuario = "teste_user_12398";
             var email = _faker.Person.Email;
+            var celular = 5516993388778;
 
             #endregion
 
             var usuario = ConstrutorDeUsuariosTeste
-                .RetornarConstrutor(nome: nome, nomeUsuario: nomeUsuario, email: email, senha: senha)
+                .RetornarConstrutor(nome: nome, nomeUsuario: nomeUsuario, email: email, senha: senha, celular: celular)
                 .ConstruirNovo();
 
             #region Verificação do teste
@@ -37,6 +38,7 @@ namespace AutenticacaoDoisFatores.Testes.Dominio.Entidades
             Assert.Equal(nomeUsuario, usuario.NomeUsuario);
             Assert.Equal(email, usuario.Email);
             Assert.Equal(senha, usuario.Senha);
+            Assert.Equal(celular, usuario.Celular);
 
             #endregion
         }
@@ -339,6 +341,51 @@ namespace AutenticacaoDoisFatores.Testes.Dominio.Entidades
         }
 
         [Fact]
+        internal void DeveAlterarCelularUsuario()
+        {
+            #region Preparação do teste
+
+            var numCelularAtual = 55016990011001;
+            var novoNumCelular = 16990222200;
+
+            var usuario = ConstrutorDeUsuariosTeste
+                .RetornarConstrutor(celular: numCelularAtual)
+                .ConstruirCadastrado();
+
+            #endregion
+
+            usuario.AlterarCelular(novoNumCelular);
+
+            #region Verificação do teste
+
+            Assert.Equal(novoNumCelular, usuario.Celular);
+            Assert.NotNull(usuario.DataAlteracao);
+
+            #endregion
+        }
+
+        [Theory]
+        [InlineData(-99999)]
+        [InlineData(1)]
+        [InlineData(10092)]
+        internal void NaoDeveAlterarCelularQuandoNumeroEhInvalido(long novoNumCelularInvalido)
+        {
+            #region Preparação do teste
+
+            var numCelularAtual = 55016990011001;
+
+            var usuario = ConstrutorDeUsuariosTeste
+                .RetornarConstrutor(celular: numCelularAtual)
+                .ConstruirCadastrado();
+
+            #endregion
+
+            var excecao = Assert.Throws<ExcecoesUsuario>(() => usuario.AlterarCelular(novoNumCelularInvalido));
+
+            Assert.Equal(MensagensValidacaoUsuario.CelularInvalido.Descricao(), excecao.Message);
+        }
+
+        [Fact]
         internal void DeveAtualizarDataUltimoAcessoUsuario()
         {
             #region Preparação do teste
@@ -361,7 +408,7 @@ namespace AutenticacaoDoisFatores.Testes.Dominio.Entidades
         }
 
         [Fact]
-        internal void DeveAlterarTipoDeAutenticacaoAutenticacaoEmDoisFatoresParaUsuario()
+        internal void DeveAlterarTipoDeAutenticacaoEmDoisFatoresParaUsuario()
         {
             #region Preparação do teste
 
@@ -381,6 +428,30 @@ namespace AutenticacaoDoisFatores.Testes.Dominio.Entidades
             Assert.NotNull(usuario.DataAlteracao);
 
             #endregion
+        }
+
+        [Fact]
+        internal void DeveRetornarVerdadeiroQuandoExisteTipoDeAutenticacaoConfigurado()
+        {
+            var usuario = ConstrutorDeUsuariosTeste
+                .RetornarConstrutor(tipoDeAutenticacao: TipoDeAutenticacao.Email)
+                .ConstruirCadastrado();
+
+            var valor = usuario.ExisteTipoDeAutenticacaoConfigurado();
+
+            Assert.True(valor);
+        }
+
+        [Fact]
+        internal void DeveRetornarFalsoQuandoNaoExisteTipoDeAutenticacaoConfigurado()
+        {
+            var usuario = ConstrutorDeUsuariosTeste
+                .RetornarConstrutor()
+                .ConstruirCadastrado();
+
+            var valor = usuario.ExisteTipoDeAutenticacaoConfigurado();
+
+            Assert.False(valor);
         }
     }
 }

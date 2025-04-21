@@ -24,9 +24,10 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Usuarios
             var nome = _faker.Person.FullName;
             var nomeUsuario = _faker.Person.UserName;
             var email = _faker.Person.Email;
+            var celular = 55016993880077;
 
             var novoUsuario = ConstrutorDeUsuariosTeste
-                .RetornarConstrutorDeNovo(nome: nome, nomeUsuario: nomeUsuario, email: email)
+                .RetornarConstrutorDeNovo(nome: nome, nomeUsuario: nomeUsuario, email: email, celular: celular)
                 .Construir();
 
             _mocker.CreateInstance<DominioDeUsuarios>();
@@ -44,6 +45,8 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Usuarios
             Assert.Equal(nomeUsuario, usuarioCadastrado.NomeUsuario);
             Assert.Equal(email, usuarioCadastrado.Email);
             Assert.False(usuarioCadastrado.Ativo);
+            Assert.Equal(celular, usuarioCadastrado.Celular);
+
             _mocker.Verify<IRepositorioDeUsuarios>(r => r.Adicionar(It.IsAny<Usuario>()), Times.Once);
             _mocker.Verify<IRepositorioDeUsuarios>(r => r.SalvarAlteracoesAsync(), Times.Once);
 

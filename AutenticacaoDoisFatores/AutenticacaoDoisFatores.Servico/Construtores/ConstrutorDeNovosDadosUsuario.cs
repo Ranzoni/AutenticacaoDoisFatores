@@ -9,6 +9,7 @@ namespace AutenticacaoDoisFatores.Servico.Construtores
         private string _email = "";
         private string _nomeUsuario = "";
         private string _senha = "";
+        private long? _celular;
         private TipoDeAutenticacao? _tipoDeAutenticacao;
 
         public ConstrutorDeNovosDadosUsuario ComNome(string nome)
@@ -39,6 +40,13 @@ namespace AutenticacaoDoisFatores.Servico.Construtores
             return this;
         }
 
+        public ConstrutorDeNovosDadosUsuario ComCelular(long? celular)
+        {
+            _celular = celular;
+
+            return this;
+        }
+
         public ConstrutorDeNovosDadosUsuario ComTipoDeAutenticacao(TipoDeAutenticacao? tipoDeAutenticacao)
         {
             _tipoDeAutenticacao = tipoDeAutenticacao;
@@ -53,6 +61,7 @@ namespace AutenticacaoDoisFatores.Servico.Construtores
                     nome: _nome,
                     nomeUsuario: _nomeUsuario,
                     email: _email,
+                    celular: _celular,
                     senha: _senha,
                     tipoDeAutenticacao: _tipoDeAutenticacao
                 );
