@@ -52,7 +52,7 @@ namespace AutenticacaoDoisFatores.Servico.CasosDeUso.Usuarios
         {
             if (!_appAutenticador.CodigoEhValido(codigo))
             {
-                _notificador.AddMensagemNaoAutorizado(MensagensValidacaoUsuario.UsuarioNaoEncontrado);
+                _notificador.AddMensagemNaoAutorizado(MensagensValidacaoUsuario.NaoAutenticado);
                 return false;
             }
 
@@ -65,7 +65,7 @@ namespace AutenticacaoDoisFatores.Servico.CasosDeUso.Usuarios
             var codigoDigitadoCriptografado = Criptografia.CriptografarComSha512(codigo);
             if (!codigoDigitadoCriptografado.Equals(codigoSalvo))
             {
-                _notificador.AddMensagemNaoAutorizado(MensagensValidacaoUsuario.UsuarioNaoEncontrado);
+                _notificador.AddMensagemNaoAutorizado(MensagensValidacaoUsuario.NaoAutenticado);
                 return false;
             }
 
