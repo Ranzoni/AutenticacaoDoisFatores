@@ -1,5 +1,6 @@
 ﻿using AutenticacaoDoisFatores.Dominio.Compartilhados.Usuarios;
 using AutenticacaoDoisFatores.Dominio.Repositorios;
+using AutenticacaoDoisFatores.Dominio.Servicos;
 using AutenticacaoDoisFatores.Servico.CasosDeUso.Usuarios.AutenticacoesDoisFatores;
 using AutenticacaoDoisFatores.Servico.CasosDeUso.Usuarios.Autenticadores;
 using AutenticacaoDoisFatores.Servico.DTO.Usuarios;
@@ -36,32 +37,6 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Usuarios
             Assert.NotNull(retorno);
             Assert.NotEmpty((retorno as RespostaAutenticacaoDoisFatores)!.Token);
             mocker.Verify<IRepositorioDeCodigoDeAutenticacao>(r => r.SalvarAsync(usuario.Id, It.IsAny<string>()), Times.Once);
-
-            #endregion
-        }
-
-        [Fact]
-        internal async Task DeveEnviarCodPorSms()
-        {
-            #region Preparação do teste
-
-            var mocker = new AutoMocker();
-
-            var servico = mocker.CreateInstance<EnviarCodigoAutenticacaoUsuario>();
-
-            var enviarCodAutenticacaoUsuarioPorSms = mocker.CreateInstance<EnviarCodAutenticacaoUsuarioPorSms>();
-            mocker.GetMock<IServiceProvider>().Setup(s => s.GetService(typeof(EnviarCodAutenticacaoUsuarioPorSms))).Returns(enviarCodAutenticacaoUsuarioPorSms);
-
-            var usuario = ConstrutorDeUsuariosTeste
-                .RetornarConstrutor(ativo: true, tipoDeAutenticacao: TipoDeAutenticacao.SMS)
-                .ConstruirCadastrado();
-
-            #endregion
-
-            var excecao = await Assert.ThrowsAsync<NotImplementedException>(() => servico.ExecutarAsync(usuario));
-
-            #region Verificação do teste
-
 
             #endregion
         }

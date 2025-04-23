@@ -3,6 +3,6 @@
     public enum TipoDeAutenticacao
     {
         Email,
-        SMS
+        AppAutenticador
     }
 }

@@ -31,7 +31,7 @@ namespace AutenticacaoDoisFatores
             servicos.AddTransient<RetornarUsuarioAutenticado>();
             servicos.AddTransient<EnviarCodigoAutenticacaoUsuario>();
             servicos.AddTransient<EnviarCodAutenticacaoUsuarioPorEmail>();
-            servicos.AddTransient<EnviarCodAutenticacaoUsuarioPorSms>();
+            servicos.AddTransient<EnviarCodAutenticacoUsuarioPorApp>();
             servicos.AddTransient<GerarNovaSenhaUsuario>();
             servicos.AddTransient<IncluirPermissoesParaUsuario>();
             servicos.AddTransient<RetornarPermissoes>();
@@ -49,11 +49,13 @@ namespace AutenticacaoDoisFatores
             servicos.AddTransient<DominioDePermissoes>();
             servicos.AddTransient<DominioDeUsuarios>();
             servicos.AddTransient<DominioDeCodDeAutenticacao>();
+            servicos.AddTransient<DominioAppAutenticador>();
         }
 
         internal static void AddServicos(this IServiceCollection servicos)
         {
             servicos.AddTransient<IServicoDeEmail, ServicoDeEmail>();
+            servicos.AddTransient<IServicoDeAutenticador, ServicoDeAutenticador>();
         }
 
         internal static void AddRepositorios(this IServiceCollection servicos)

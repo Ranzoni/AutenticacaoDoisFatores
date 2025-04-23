@@ -14,7 +14,7 @@ namespace AutenticacaoDoisFatores.Servico.CasosDeUso.Usuarios.Autenticadores
             ITipoDeEnvioDeCodAutenticacaoUsuario codAutenticacaoDoisFatores = usuario.TipoDeAutenticacao switch
             {
                 TipoDeAutenticacao.Email => _provedorDeServicos.GetRequiredService<EnviarCodAutenticacaoUsuarioPorEmail>(),
-                TipoDeAutenticacao.SMS => _provedorDeServicos.GetRequiredService<EnviarCodAutenticacaoUsuarioPorSms>(),
+                TipoDeAutenticacao.AppAutenticador => _provedorDeServicos.GetRequiredService<EnviarCodAutenticacoUsuarioPorApp>(),
                 _ => throw new ApplicationException($"O tipo de autenticação de usuário é inválido. Tipo: {usuario.TipoDeAutenticacao}.")
             };
 
