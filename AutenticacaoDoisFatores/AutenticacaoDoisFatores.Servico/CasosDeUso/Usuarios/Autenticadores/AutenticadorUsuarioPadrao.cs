@@ -8,7 +8,7 @@ using Mensageiro;
 
 namespace AutenticacaoDoisFatores.Servico.CasosDeUso.Usuarios.Autenticadores
 {
-    public class RetornarUsuarioAutenticado(DominioDeUsuarios dominio, DominioDePermissoes permissoes, INotificador notificador) : ITipoDeAutenticador
+    public class AutenticadorUsuarioPadrao(DominioDeUsuarios dominio, DominioDePermissoes permissoes, INotificador notificador) : ITipoDeAutenticador
     {
         private readonly DominioDeUsuarios _dominio = dominio;
         private readonly DominioDePermissoes _permissoes = permissoes;

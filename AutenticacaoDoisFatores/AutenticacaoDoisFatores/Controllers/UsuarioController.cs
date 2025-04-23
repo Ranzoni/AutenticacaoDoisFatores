@@ -79,7 +79,7 @@ namespace AutenticacaoDoisFatores.Controllers
 
         [HttpPost("autenticar/dois-fatores")]
         [Authorize(Policy = "CodAutenticaoPorEmail")]
-        public async Task<ActionResult<UsuarioAutenticado?>> AutenticarAsync([FromServices] AutenticarUsuarioEmDoisFatores autenticarUsuario, CodigoAuntenticacaoUsuario codigoAuntenticacaoUsuario)
+        public async Task<ActionResult<UsuarioAutenticado?>> AutenticarAsync([FromServices] AutenticarUsuarioPorCodigo autenticarUsuario, CodigoAuntenticacaoUsuario codigoAuntenticacaoUsuario)
         {
             try
             {

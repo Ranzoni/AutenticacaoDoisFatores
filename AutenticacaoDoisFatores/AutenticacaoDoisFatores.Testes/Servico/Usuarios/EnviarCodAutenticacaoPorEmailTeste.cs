@@ -2,7 +2,7 @@
 using AutenticacaoDoisFatores.Dominio.Compartilhados.Mensagens;
 using AutenticacaoDoisFatores.Dominio.Repositorios;
 using AutenticacaoDoisFatores.Dominio.Servicos;
-using AutenticacaoDoisFatores.Servico.CasosDeUso.Usuarios.AutenticacoesDoisFatores;
+using AutenticacaoDoisFatores.Servico.CasosDeUso.Usuarios.Autenticadores.AutenticacoesDoisFatores;
 using AutenticacaoDoisFatores.Testes.Compartilhados;
 using Mensageiro;
 using Moq;
@@ -19,7 +19,7 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Usuarios
 
             var mocker = new AutoMocker();
 
-            var servico = mocker.CreateInstance<EnviarCodAutenticacaoUsuarioPorEmail>();
+            var servico = mocker.CreateInstance<AutenticadorUsuarioEmDoisFatoresPorEmail>();
 
             var usuario = ConstrutorDeUsuariosTeste
                 .RetornarConstrutor(ativo: true)
@@ -46,7 +46,7 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Usuarios
 
             var mocker = new AutoMocker();
 
-            var servico = mocker.CreateInstance<EnviarCodAutenticacaoUsuarioPorEmail>();
+            var servico = mocker.CreateInstance<AutenticadorUsuarioEmDoisFatoresPorEmail>();
 
             var usuario = ConstrutorDeUsuariosTeste
                 .RetornarConstrutor(ativo: false)

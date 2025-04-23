@@ -5,11 +5,11 @@ using AutenticacaoDoisFatores.Servico.Compartilhados;
 using AutenticacaoDoisFatores.Servico.DTO.Usuarios;
 using Mensageiro;
 
-namespace AutenticacaoDoisFatores.Servico.CasosDeUso.Usuarios.AutenticacoesDoisFatores
+namespace AutenticacaoDoisFatores.Servico.CasosDeUso.Usuarios.Autenticadores.AutenticacoesDoisFatores
 {
-    public class EnviarCodAutenticacoUsuarioPorApp(DominioAppAutenticador appAutenticador, INotificador notificador) : ITipoDeEnvioDeCodAutenticacaoUsuario
+    public class AutenticadorUsuarioEmDoisFatoresPorApp(DominioAppAutenticador autenticadorPorApp, INotificador notificador) : ITipoDeAutentidorUsuarioEmDoisFatores
     {
-        private readonly DominioAppAutenticador _appAutenticador = appAutenticador;
+        private readonly DominioAppAutenticador _appAutenticador = autenticadorPorApp;
         private readonly INotificador _notificador = notificador;
 
         public Task<RespostaAutenticacaoDoisFatores?> EnviarAsync(Usuario usuario)

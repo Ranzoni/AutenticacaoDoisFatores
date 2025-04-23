@@ -4,7 +4,7 @@ using AutenticacaoDoisFatores.Dominio.Repositorios;
 
 namespace AutenticacaoDoisFatores.Dominio.Dominios
 {
-    public class DominioDeCodDeAutenticacao(IRepositorioDeCodigoDeAutenticacao repositorio)
+    public class GerenciadorDeCodAutenticacao(IRepositorioDeCodigoDeAutenticacao repositorio)
     {
         private readonly IRepositorioDeCodigoDeAutenticacao _repositorio = repositorio;
 

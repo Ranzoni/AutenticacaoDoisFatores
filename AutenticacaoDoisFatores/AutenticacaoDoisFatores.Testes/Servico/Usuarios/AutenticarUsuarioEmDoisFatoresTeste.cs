@@ -21,7 +21,7 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Usuarios
 
             var mocker = new AutoMocker();
 
-            var servico = mocker.CreateInstance<AutenticarUsuarioEmDoisFatores>();
+            var servico = mocker.CreateInstance<AutenticarUsuarioPorCodigo>();
 
             var idUsuario = Guid.NewGuid();
             var codigo = Seguranca.GerarCodigoAutenticacao();
@@ -54,7 +54,7 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Usuarios
 
             var mocker = new AutoMocker();
 
-            var servico = mocker.CreateInstance<AutenticarUsuarioEmDoisFatores>();
+            var servico = mocker.CreateInstance<AutenticarUsuarioPorCodigo>();
 
             var idUsuario = Guid.NewGuid();
             var codigo = Seguranca.GerarCodigoAutenticacao();
@@ -87,7 +87,7 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Usuarios
 
             var mocker = new AutoMocker();
 
-            var servico = mocker.CreateInstance<AutenticarUsuarioEmDoisFatores>();
+            var servico = mocker.CreateInstance<AutenticarUsuarioPorCodigo>();
 
             var idUsuario = Guid.NewGuid();
             var codigo = Seguranca.GerarCodigoAutenticacao();
@@ -111,7 +111,7 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Usuarios
 
             var mocker = new AutoMocker();
 
-            var servico = mocker.CreateInstance<AutenticarUsuarioEmDoisFatores>();
+            var servico = mocker.CreateInstance<AutenticarUsuarioPorCodigo>();
 
             var idUsuario = Guid.NewGuid();
             var codigo = Seguranca.GerarCodigoAutenticacao();
@@ -143,7 +143,7 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Usuarios
 
             var mocker = new AutoMocker();
 
-            var servico = mocker.CreateInstance<AutenticarUsuarioEmDoisFatores>();
+            var servico = mocker.CreateInstance<AutenticarUsuarioPorCodigo>();
 
             var idUsuario = Guid.NewGuid();
             var codigo = Seguranca.GerarCodigoAutenticacao();
@@ -173,7 +173,7 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Usuarios
 
             var mocker = new AutoMocker();
 
-            var servico = mocker.CreateInstance<AutenticarUsuarioEmDoisFatores>();
+            var servico = mocker.CreateInstance<AutenticarUsuarioPorCodigo>();
 
             var idUsuario = Guid.NewGuid();
             var codigo = Seguranca.GerarCodigoAutenticacao();
@@ -205,7 +205,7 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Usuarios
 
             var mocker = new AutoMocker();
 
-            var servico = mocker.CreateInstance<AutenticarUsuarioEmDoisFatores>();
+            var servico = mocker.CreateInstance<AutenticarUsuarioPorCodigo>();
 
             var idUsuario = Guid.NewGuid();
             var codigo = Seguranca.GerarCodigoAutenticacao();

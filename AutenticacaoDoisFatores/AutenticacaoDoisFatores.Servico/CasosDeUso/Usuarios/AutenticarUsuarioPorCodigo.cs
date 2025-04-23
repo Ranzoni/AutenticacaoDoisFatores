@@ -8,12 +8,12 @@ using Mensageiro;
 
 namespace AutenticacaoDoisFatores.Servico.CasosDeUso.Usuarios
 {
-    public class AutenticarUsuarioEmDoisFatores(DominioDeCodDeAutenticacao dominio, DominioDeUsuarios usuarios, RetornarUsuarioAutenticado autenticador, DominioAppAutenticador appAutenticador, INotificador notificador)
+    public class AutenticarUsuarioPorCodigo(GerenciadorDeCodAutenticacao gerenciadorCodAutenticacao, DominioDeUsuarios usuarios, AutenticadorUsuarioPadrao autenticadorPadrao, DominioAppAutenticador autenticadorPorApp, INotificador notificador)
     {
-        private readonly DominioDeCodDeAutenticacao _dominio = dominio;
+        private readonly GerenciadorDeCodAutenticacao _gerenciadorCodAutenticacao = gerenciadorCodAutenticacao;
         private readonly DominioDeUsuarios _usuarios = usuarios;
-        private readonly RetornarUsuarioAutenticado _autenticador = autenticador;
-        private readonly DominioAppAutenticador _appAutenticador = appAutenticador;
+        private readonly AutenticadorUsuarioPadrao _autenticadorPadrao = autenticadorPadrao;
+        private readonly DominioAppAutenticador _autenticadorPorApp = autenticadorPorApp;
         private readonly INotificador _notificador = notificador;
 
         public async Task<UsuarioAutenticado?> ExecutarAsync(Guid idUsuario, string codigo)
@@ -25,7 +25,7 @@ namespace AutenticacaoDoisFatores.Servico.CasosDeUso.Usuarios
             if (!await CodigoEhValidoAsync(usuario!, codigo))
                 return null;
 
-            var usuarioAutenticado = await _autenticador.ExecutarAsync(usuario!);
+            var usuarioAutenticado = await _autenticadorPadrao.ExecutarAsync(usuario!);
             return (UsuarioAutenticado?)usuarioAutenticado;
         }
 
@@ -50,7 +50,7 @@ namespace AutenticacaoDoisFatores.Servico.CasosDeUso.Usuarios
 
         private bool ValidarCodigoPorApp(string codigo, Usuario usuario)
         {
-            if (!_appAutenticador.CodigoEhValido(codigo, usuario))
+            if (!_autenticadorPorApp.CodigoEhValido(codigo, usuario))
             {
                 _notificador.AddMensagemNaoAutorizado(MensagensValidacaoUsuario.NaoAutenticado);
                 return false;
@@ -61,7 +61,7 @@ namespace AutenticacaoDoisFatores.Servico.CasosDeUso.Usuarios
 
         private async Task<bool> ValidarCodigoPorCriptografiaAsync(Guid idUsuario, string codigo)
         {
-            var codigoSalvo = await _dominio.BuscarCodigoAsync(idUsuario);
+            var codigoSalvo = await _gerenciadorCodAutenticacao.BuscarCodigoAsync(idUsuario);
             var codigoDigitadoCriptografado = Criptografia.CriptografarComSha512(codigo);
             if (!codigoDigitadoCriptografado.Equals(codigoSalvo))
             {

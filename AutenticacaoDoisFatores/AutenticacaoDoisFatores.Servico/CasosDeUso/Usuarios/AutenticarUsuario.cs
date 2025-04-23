@@ -73,9 +73,9 @@ namespace AutenticacaoDoisFatores.Servico.CasosDeUso.Usuarios
         private ITipoDeAutenticador RetornarTipoDeAutenticador(Usuario usuario)
         {
             if (usuario.ExisteTipoDeAutenticacaoConfigurado())
-                return _provedorDeServicos.GetRequiredService<EnviarCodigoAutenticacaoUsuario>();
+                return _provedorDeServicos.GetRequiredService<AutenticadorUsuarioEmDoisFatores>();
             else
-                return _provedorDeServicos.GetRequiredService<RetornarUsuarioAutenticado>();
+                return _provedorDeServicos.GetRequiredService<AutenticadorUsuarioPadrao>();
         }
     }
 }

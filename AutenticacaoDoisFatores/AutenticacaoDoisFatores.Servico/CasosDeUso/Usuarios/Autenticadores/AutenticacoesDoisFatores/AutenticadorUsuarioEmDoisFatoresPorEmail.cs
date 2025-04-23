@@ -5,13 +5,13 @@ using AutenticacaoDoisFatores.Servico.Compartilhados;
 using AutenticacaoDoisFatores.Servico.DTO.Usuarios;
 using Mensageiro;
 
-namespace AutenticacaoDoisFatores.Servico.CasosDeUso.Usuarios.AutenticacoesDoisFatores
+namespace AutenticacaoDoisFatores.Servico.CasosDeUso.Usuarios.Autenticadores.AutenticacoesDoisFatores
 {
-    public class EnviarCodAutenticacaoUsuarioPorEmail(EnvioDeEmail email, DominioDeCodDeAutenticacao dominio, INotificador notificador) : ITipoDeEnvioDeCodAutenticacaoUsuario
+    public class AutenticadorUsuarioEmDoisFatoresPorEmail(EnvioDeEmail email, GerenciadorDeCodAutenticacao gerenciadorCodAutenticacao, INotificador notificador) : ITipoDeAutentidorUsuarioEmDoisFatores
     {
         private readonly EnvioDeEmail _email = email;
         private readonly INotificador _notificador = notificador;
-        private readonly DominioDeCodDeAutenticacao _dominio = dominio;
+        private readonly GerenciadorDeCodAutenticacao _gerenciadorCodAutenticacao = gerenciadorCodAutenticacao;
 
         public async Task<RespostaAutenticacaoDoisFatores?> EnviarAsync(Usuario usuario)
         {
@@ -21,7 +21,7 @@ namespace AutenticacaoDoisFatores.Servico.CasosDeUso.Usuarios.AutenticacoesDoisF
             var codigoAutenticacao = Seguranca.GerarCodigoAutenticacao();
             var codigoCriptografado = Criptografia.CriptografarComSha512(codigoAutenticacao);
             
-            await _dominio.SalvarAsync(usuario.Id, codigoCriptografado);
+            await _gerenciadorCodAutenticacao.SalvarAsync(usuario.Id, codigoCriptografado);
             _email.EnviarCodigoAutenticacaoDoisFatores(usuario.Email, codigoAutenticacao);
 
             var token = Seguranca.GerarTokenCodAutenticacaoUsuario(usuario.Id);

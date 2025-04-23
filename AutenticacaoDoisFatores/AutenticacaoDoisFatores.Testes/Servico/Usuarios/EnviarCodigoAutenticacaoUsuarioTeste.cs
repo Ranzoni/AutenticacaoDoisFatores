@@ -1,8 +1,8 @@
 ﻿using AutenticacaoDoisFatores.Dominio.Compartilhados.Usuarios;
 using AutenticacaoDoisFatores.Dominio.Repositorios;
 using AutenticacaoDoisFatores.Dominio.Servicos;
-using AutenticacaoDoisFatores.Servico.CasosDeUso.Usuarios.AutenticacoesDoisFatores;
 using AutenticacaoDoisFatores.Servico.CasosDeUso.Usuarios.Autenticadores;
+using AutenticacaoDoisFatores.Servico.CasosDeUso.Usuarios.Autenticadores.AutenticacoesDoisFatores;
 using AutenticacaoDoisFatores.Servico.DTO.Usuarios;
 using AutenticacaoDoisFatores.Testes.Compartilhados;
 using Moq;
@@ -19,10 +19,10 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Usuarios
 
             var mocker = new AutoMocker();
 
-            var servico = mocker.CreateInstance<EnviarCodigoAutenticacaoUsuario>();
+            var servico = mocker.CreateInstance<AutenticadorUsuarioEmDoisFatores>();
 
-            var enviarCodAutenticacaoUsuarioPorEmail= mocker.CreateInstance<EnviarCodAutenticacaoUsuarioPorEmail>();
-            mocker.GetMock<IServiceProvider>().Setup(s => s.GetService(typeof(EnviarCodAutenticacaoUsuarioPorEmail))).Returns(enviarCodAutenticacaoUsuarioPorEmail);
+            var enviarCodAutenticacaoUsuarioPorEmail= mocker.CreateInstance<AutenticadorUsuarioEmDoisFatoresPorEmail>();
+            mocker.GetMock<IServiceProvider>().Setup(s => s.GetService(typeof(AutenticadorUsuarioEmDoisFatoresPorEmail))).Returns(enviarCodAutenticacaoUsuarioPorEmail);
 
             var usuario = ConstrutorDeUsuariosTeste
                 .RetornarConstrutor(ativo: true, tipoDeAutenticacao: TipoDeAutenticacao.Email)

@@ -18,7 +18,7 @@ namespace AutenticacaoDoisFatores.Testes.Dominio.Dominios
 
             var mocker = new AutoMocker();
 
-            var dominio = mocker.CreateInstance<DominioDeCodDeAutenticacao>();
+            var dominio = mocker.CreateInstance<GerenciadorDeCodAutenticacao>();
 
             var idUsuario = Guid.NewGuid();
             var codigoAutenticacao = Seguranca.GerarCodigoAutenticacao();
@@ -43,7 +43,7 @@ namespace AutenticacaoDoisFatores.Testes.Dominio.Dominios
 
             var mocker = new AutoMocker();
 
-            var dominio = mocker.CreateInstance<DominioDeCodDeAutenticacao>();
+            var dominio = mocker.CreateInstance<GerenciadorDeCodAutenticacao>();
 
             var idUsuario = Guid.NewGuid();
 
@@ -67,7 +67,7 @@ namespace AutenticacaoDoisFatores.Testes.Dominio.Dominios
 
             var mocker = new AutoMocker();
 
-            var dominio = mocker.CreateInstance<DominioDeCodDeAutenticacao>();
+            var dominio = mocker.CreateInstance<GerenciadorDeCodAutenticacao>();
 
             var idUsuario = Guid.NewGuid();
             var codigoAutenticacao = Seguranca.GerarCodigoAutenticacao();
@@ -94,7 +94,7 @@ namespace AutenticacaoDoisFatores.Testes.Dominio.Dominios
 
             var mocker = new AutoMocker();
 
-            var dominio = mocker.CreateInstance<DominioDeCodDeAutenticacao>();
+            var dominio = mocker.CreateInstance<GerenciadorDeCodAutenticacao>();
 
             var idUsuario = Guid.NewGuid();
 

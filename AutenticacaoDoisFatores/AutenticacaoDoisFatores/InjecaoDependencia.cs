@@ -11,7 +11,7 @@ using AutenticacaoDoisFatores.Servico.CasosDeUso.Clientes;
 using AutenticacaoDoisFatores.Servico.CasosDeUso.Permissoes;
 using AutenticacaoDoisFatores.Servico.CasosDeUso.Usuarios;
 using AutenticacaoDoisFatores.Servico.CasosDeUso.Usuarios.Autenticadores;
-using AutenticacaoDoisFatores.Servico.CasosDeUso.Usuarios.AutenticacoesDoisFatores;
+using AutenticacaoDoisFatores.Servico.CasosDeUso.Usuarios.Autenticadores.AutenticacoesDoisFatores;
 
 namespace AutenticacaoDoisFatores
 {
@@ -27,11 +27,11 @@ namespace AutenticacaoDoisFatores
             servicos.AddTransient<CriarUsuario>();
             servicos.AddTransient<AtivarUsuario>();
             servicos.AddTransient<AutenticarUsuario>();
-            servicos.AddTransient<AutenticarUsuarioEmDoisFatores>();
-            servicos.AddTransient<RetornarUsuarioAutenticado>();
-            servicos.AddTransient<EnviarCodigoAutenticacaoUsuario>();
-            servicos.AddTransient<EnviarCodAutenticacaoUsuarioPorEmail>();
-            servicos.AddTransient<EnviarCodAutenticacoUsuarioPorApp>();
+            servicos.AddTransient<AutenticarUsuarioPorCodigo>();
+            servicos.AddTransient<AutenticadorUsuarioPadrao>();
+            servicos.AddTransient<AutenticadorUsuarioEmDoisFatores>();
+            servicos.AddTransient<AutenticadorUsuarioEmDoisFatoresPorEmail>();
+            servicos.AddTransient<AutenticadorUsuarioEmDoisFatoresPorApp>();
             servicos.AddTransient<GerarNovaSenhaUsuario>();
             servicos.AddTransient<IncluirPermissoesParaUsuario>();
             servicos.AddTransient<RetornarPermissoes>();
@@ -48,7 +48,7 @@ namespace AutenticacaoDoisFatores
             servicos.AddTransient<EnvioDeEmail>();
             servicos.AddTransient<DominioDePermissoes>();
             servicos.AddTransient<DominioDeUsuarios>();
-            servicos.AddTransient<DominioDeCodDeAutenticacao>();
+            servicos.AddTransient<GerenciadorDeCodAutenticacao>();
             servicos.AddTransient<DominioAppAutenticador>();
         }
 

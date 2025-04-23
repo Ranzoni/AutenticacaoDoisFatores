@@ -1,6 +1,6 @@
 ﻿using AutenticacaoDoisFatores.Dominio.Compartilhados.Mensagens;
 using AutenticacaoDoisFatores.Dominio.Servicos;
-using AutenticacaoDoisFatores.Servico.CasosDeUso.Usuarios.AutenticacoesDoisFatores;
+using AutenticacaoDoisFatores.Servico.CasosDeUso.Usuarios.Autenticadores.AutenticacoesDoisFatores;
 using AutenticacaoDoisFatores.Testes.Compartilhados;
 using Bogus;
 using Mensageiro;
@@ -18,7 +18,7 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Usuarios
 
             var mocker = new AutoMocker();
 
-            var servico = mocker.CreateInstance<EnviarCodAutenticacoUsuarioPorApp>();
+            var servico = mocker.CreateInstance<AutenticadorUsuarioEmDoisFatoresPorApp>();
 
             var usuario = ConstrutorDeUsuariosTeste
                 .RetornarConstrutor(ativo: true)
@@ -53,7 +53,7 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Usuarios
 
             var mocker = new AutoMocker();
 
-            var servico = mocker.CreateInstance<EnviarCodAutenticacoUsuarioPorApp>();
+            var servico = mocker.CreateInstance<AutenticadorUsuarioEmDoisFatoresPorApp>();
 
             var usuario = ConstrutorDeUsuariosTeste
                 .RetornarConstrutor(ativo: false)

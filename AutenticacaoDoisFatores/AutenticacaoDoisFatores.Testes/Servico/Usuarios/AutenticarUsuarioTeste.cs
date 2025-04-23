@@ -4,8 +4,8 @@ using AutenticacaoDoisFatores.Dominio.Compartilhados.Usuarios;
 using AutenticacaoDoisFatores.Dominio.Dominios;
 using AutenticacaoDoisFatores.Dominio.Repositorios;
 using AutenticacaoDoisFatores.Servico.CasosDeUso.Usuarios;
-using AutenticacaoDoisFatores.Servico.CasosDeUso.Usuarios.AutenticacoesDoisFatores;
 using AutenticacaoDoisFatores.Servico.CasosDeUso.Usuarios.Autenticadores;
+using AutenticacaoDoisFatores.Servico.CasosDeUso.Usuarios.Autenticadores.AutenticacoesDoisFatores;
 using AutenticacaoDoisFatores.Servico.DTO.Usuarios;
 using AutenticacaoDoisFatores.Testes.Compartilhados;
 using Bogus;
@@ -33,9 +33,9 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Usuarios
                 .ConstruirCadastrado();
 
             var servico = _mocker.CreateInstance<AutenticarUsuario>();
-            var retornarUsuarioAutenticado = _mocker.CreateInstance<RetornarUsuarioAutenticado>();
+            var retornarUsuarioAutenticado = _mocker.CreateInstance<AutenticadorUsuarioPadrao>();
             _mocker.GetMock<IRepositorioDeUsuarios>().Setup(r => r.BuscarPorNomeUsuarioAsync(usuarioParaTeste.NomeUsuario)).ReturnsAsync(usuarioParaTeste);
-            _mocker.GetMock<IServiceProvider>().Setup(s => s.GetService(typeof(RetornarUsuarioAutenticado))).Returns(retornarUsuarioAutenticado);
+            _mocker.GetMock<IServiceProvider>().Setup(s => s.GetService(typeof(AutenticadorUsuarioPadrao))).Returns(retornarUsuarioAutenticado);
 
             var dadosAutenticacao = new DadosAutenticacao(
                 nomeUsuario: usuarioParaTeste.NomeUsuario,
@@ -71,9 +71,9 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Usuarios
                 .ConstruirCadastrado();
 
             var servico = _mocker.CreateInstance<AutenticarUsuario>();
-            var retornarUsuarioAutenticado = _mocker.CreateInstance<RetornarUsuarioAutenticado>();
+            var retornarUsuarioAutenticado = _mocker.CreateInstance<AutenticadorUsuarioPadrao>();
             _mocker.GetMock<IRepositorioDeUsuarios>().Setup(r => r.BuscarPorEmailAsync(usuarioParaTeste.Email)).ReturnsAsync(usuarioParaTeste);
-            _mocker.GetMock<IServiceProvider>().Setup(s => s.GetService(typeof(RetornarUsuarioAutenticado))).Returns(retornarUsuarioAutenticado);
+            _mocker.GetMock<IServiceProvider>().Setup(s => s.GetService(typeof(AutenticadorUsuarioPadrao))).Returns(retornarUsuarioAutenticado);
 
             var dadosAutenticacao = new DadosAutenticacao(
                 nomeUsuario: null,
@@ -308,11 +308,11 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Usuarios
                 .ConstruirCadastrado();
 
             var servico = _mocker.CreateInstance<AutenticarUsuario>();
-            var enviarCodigoAutenticacaoUsuario = _mocker.CreateInstance<EnviarCodigoAutenticacaoUsuario>();
-            var enviarCodAutenticacaoUsuarioPorEmail = _mocker.CreateInstance<EnviarCodAutenticacaoUsuarioPorEmail>();
+            var enviarCodigoAutenticacaoUsuario = _mocker.CreateInstance<AutenticadorUsuarioEmDoisFatores>();
+            var enviarCodAutenticacaoUsuarioPorEmail = _mocker.CreateInstance<AutenticadorUsuarioEmDoisFatoresPorEmail>();
             _mocker.GetMock<IRepositorioDeUsuarios>().Setup(r => r.BuscarPorEmailAsync(usuarioParaTeste.Email)).ReturnsAsync(usuarioParaTeste);
-            _mocker.GetMock<IServiceProvider>().Setup(s => s.GetService(typeof(EnviarCodigoAutenticacaoUsuario))).Returns(enviarCodigoAutenticacaoUsuario);
-            _mocker.GetMock<IServiceProvider>().Setup(s => s.GetService(typeof(EnviarCodAutenticacaoUsuarioPorEmail))).Returns(enviarCodAutenticacaoUsuarioPorEmail);
+            _mocker.GetMock<IServiceProvider>().Setup(s => s.GetService(typeof(AutenticadorUsuarioEmDoisFatores))).Returns(enviarCodigoAutenticacaoUsuario);
+            _mocker.GetMock<IServiceProvider>().Setup(s => s.GetService(typeof(AutenticadorUsuarioEmDoisFatoresPorEmail))).Returns(enviarCodAutenticacaoUsuarioPorEmail);
 
             var dadosAutenticacao = new DadosAutenticacao(
                 nomeUsuario: null,
