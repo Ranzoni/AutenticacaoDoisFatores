@@ -14,5 +14,10 @@ namespace AutenticacaoDoisFatores.Dominio.Excecoes
         {
             throw new ExcecoesAppAutenticador(MensagensValidacaoAppAutenticacao.CodigoNaoInformado);
         }
+
+        public static void QrCodeNaoGerado()
+        {
+            throw new ExcecoesAppAutenticador(MensagensValidacaoAppAutenticacao.QrCodeNaoGerado);
+        }
     }
 }

@@ -12,11 +12,14 @@ using AutenticacaoDoisFatores.Servico.CasosDeUso.Permissoes;
 using AutenticacaoDoisFatores.Servico.CasosDeUso.Usuarios;
 using AutenticacaoDoisFatores.Servico.CasosDeUso.Usuarios.Autenticadores;
 using AutenticacaoDoisFatores.Servico.CasosDeUso.Usuarios.Autenticadores.AutenticacoesDoisFatores;
+using Mensageiro;
 
 namespace AutenticacaoDoisFatores
 {
     internal static class InjecaoDependencia
     {
+        private static readonly string _caminhoParaQrCode = "autenticacao/gerar-qr-code.html";
+
         internal static void AddCasosDeUso(this IServiceCollection servicos)
         {
             servicos.AddTransient<CriarCliente>();
@@ -31,7 +34,13 @@ namespace AutenticacaoDoisFatores
             servicos.AddTransient<AutenticadorUsuarioPadrao>();
             servicos.AddTransient<AutenticadorUsuarioEmDoisFatores>();
             servicos.AddTransient<AutenticadorUsuarioEmDoisFatoresPorEmail>();
-            servicos.AddTransient<AutenticadorUsuarioEmDoisFatoresPorApp>();
+
+            //servicos.AddTransient<AutenticadorUsuarioEmDoisFatoresPorApp>();
+            servicos.AddTransient(provider =>
+            {
+                return provider.RetornarAutenticadorUsuarioEmDoisFatoresPorApp();
+            });
+
             servicos.AddTransient<GerarNovaSenhaUsuario>();
             servicos.AddTransient<IncluirPermissoesParaUsuario>();
             servicos.AddTransient<RetornarPermissoes>();
@@ -138,6 +147,19 @@ namespace AutenticacaoDoisFatores
 
             var nomeDominio = httpContext?.Request.Headers["Dominio"].ToString() ?? "public";
             return new ContextoDeCodigoDeAutenticacao(host, porta, usuario, senha, nomeDominio);
+        }
+
+        private static AutenticadorUsuarioEmDoisFatoresPorApp RetornarAutenticadorUsuarioEmDoisFatoresPorApp(this IServiceProvider serviceProvider)
+        {
+            var dominioAppAutenticador = serviceProvider.GetRequiredService<DominioAppAutenticador>();
+            var envioDeEmail = serviceProvider.GetRequiredService<EnvioDeEmail>();
+            var notificador = serviceProvider.GetRequiredService<INotificador>();
+
+            var httpContextAccessor = serviceProvider.GetRequiredService<IHttpContextAccessor>();
+            var httpContext = httpContextAccessor.HttpContext;
+            var linkBaseParaQrCode = $"{httpContext?.Request.Scheme}://{httpContext?.Request.Host}/{_caminhoParaQrCode}";
+
+            return new AutenticadorUsuarioEmDoisFatoresPorApp(dominioAppAutenticador, envioDeEmail, notificador, linkBaseParaQrCode);
         }
     }
 }

@@ -27,6 +27,12 @@ namespace AutenticacaoDoisFatores.Dominio.Compartilhados.Mensagens
         [Description("Código de acesso ao sistema")]
         TituloCodAutenticacaoDoisFatores,
         [Description("Utilize o código abaixo para acessar o sistema.")]
-        MensagemCodAutenticacaoDoisFatores
+        MensagemCodAutenticacaoDoisFatores,
+        [Description("Confirmação de Login")]
+        TituloQrCodeAutenticacaoDoisFatores,
+        [Description("Clique no link abaixo para gerar o QR Code e use um aplicativo de autenticação de sua preferência para escanea-lo.")]
+        MensagemQrCodeAutenticacaoDoisFatores,
+        [Description("Gerar QR Code")]
+        TextoLinkParaQrCode
     }
 }

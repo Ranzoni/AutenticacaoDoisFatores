@@ -36,6 +36,9 @@ namespace AutenticacaoDoisFatores.Compartilhados
             if (contexto.Request.Path.StartsWithSegments("/clientes"))
                 return true;
 
+            if (contexto.Request.Path.StartsWithSegments("/autenticacao"))
+                return true;
+
             return false;
         }
 

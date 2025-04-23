@@ -38,8 +38,6 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Usuarios
 
             Assert.NotNull(retorno);
             Assert.NotEmpty(retorno.Token);
-            Assert.NotNull(retorno.QrCode);
-            Assert.NotEmpty(retorno.QrCode);
 
             mocker.Verify<IServicoDeAutenticador>(s => s.GerarQrCode(usuario.Email, usuario.ChaveSecreta), Times.Once);
 

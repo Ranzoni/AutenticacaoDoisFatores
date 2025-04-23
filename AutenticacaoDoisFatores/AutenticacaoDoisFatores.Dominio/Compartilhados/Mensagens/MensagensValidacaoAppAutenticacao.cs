@@ -7,6 +7,8 @@ namespace AutenticacaoDoisFatores.Dominio.Compartilhados.Mensagens
         [Description("A chave secreta para geração de QR Code não foi encontrada.")]
         ChaveSecretaNaoEncontrada,
         [Description("O código para autenticação não foi informado.")]
-        CodigoNaoInformado
+        CodigoNaoInformado,
+        [Description("Não foi possível gerar o QR Code.")]
+        QrCodeNaoGerado
     }
 }

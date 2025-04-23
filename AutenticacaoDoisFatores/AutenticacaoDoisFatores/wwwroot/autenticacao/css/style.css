@@ -1,0 +1,41 @@
+﻿body {
+    margin: 0;
+    padding: 0;
+}
+
+#container {
+    width: 100%;
+    max-width: 600px;
+    margin: 20px auto;
+    background-color: #ffffff;
+    box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.1);
+    padding: 20px;
+    border-radius: 8px;
+}
+
+main {
+    text-align: center;
+    padding: 20px 0;
+}
+
+#form-principal p {
+    font-size: 18px;
+    color: #666666;
+}
+
+#form-principal button {
+    text-decoration: none;
+    background-color: #1e87f0;
+    color: #ffffff;
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+footer {
+    text-align: center;
+    margin-top: 30px;
+    font-size: 12px;
+    color: #999999
+}

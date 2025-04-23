@@ -9,6 +9,25 @@ namespace AutenticacaoDoisFatores.Dominio.Dominios
     {
         private readonly IServicoDeEmail _servico = servico;
 
+        public void EnviarQrCodeAutenticacaoDoisFatores(string para, string linkParaQrCode, string qrCode)
+        {
+            var tituloQrCodeAutenticacaoDoisFatores = MensagensEnvioEmail.TituloQrCodeAutenticacaoDoisFatores.Descricao() ?? "";
+            var msgQrCodeAutenticacaoDoisFatores = MensagensEnvioEmail.MensagemQrCodeAutenticacaoDoisFatores.Descricao() ?? "";
+            var textoLinkParaQrCode = MensagensEnvioEmail.TextoLinkParaQrCode.Descricao() ?? "";
+
+            var mensagemDoEmail = GerarMensagemEmail
+                (
+                    mensagem: msgQrCodeAutenticacaoDoisFatores,
+                    detalhes: @$"
+                        <a href='{linkParaQrCode}?qrCode={qrCode}'>
+                            {textoLinkParaQrCode}
+                        </a>
+                    "
+                );
+
+            _servico.Enviar(para: para, titulo: tituloQrCodeAutenticacaoDoisFatores, mensagem: mensagemDoEmail);
+        }
+
         public void EnviarCodigoAutenticacaoDoisFatores(string para, string codigo)
         {
             var tituloCodAutenticacaoDoisFatores = MensagensEnvioEmail.TituloCodAutenticacaoDoisFatores.Descricao() ?? "";
