@@ -22,7 +22,8 @@ namespace AutenticacaoDoisFatores.Testes.Compartilhados
             DateTime? dataCadastro = null,
             DateTime? dataAlteracao = null,
             bool? ehAdm = null,
-            TipoDeAutenticacao? tipoDeAutenticacao = null
+            TipoDeAutenticacao? tipoDeAutenticacao = null,
+            string? chaveSecreta = null
         )
         {
             var faker = new Faker();
@@ -39,7 +40,8 @@ namespace AutenticacaoDoisFatores.Testes.Compartilhados
                 .ComDataCadastro(dataCadastro ?? faker.Date.Past())
                 .ComDataAlteracao(dataAlteracao)
                 .ComEhAdmin(ehAdm ?? false)
-                .ComTipoDeAutenticacao(tipoDeAutenticacao);
+                .ComTipoDeAutenticacao(tipoDeAutenticacao)
+                .ComChaveSecreta(chaveSecreta ?? "01234567890123456789");
         }
 
         internal static ConstrutorDeNovoUsuario RetornarConstrutorDeNovo(string? nome = null, string? nomeUsuario = null, string? email = null, string? senha = null, long? celular = null)

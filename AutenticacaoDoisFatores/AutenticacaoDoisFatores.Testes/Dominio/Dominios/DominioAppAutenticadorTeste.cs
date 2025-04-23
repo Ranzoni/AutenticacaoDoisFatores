@@ -29,7 +29,7 @@ namespace AutenticacaoDoisFatores.Testes.Dominio.Dominios
 
             var qrCode = faker.Commerce.Ean13();
 
-            mocker.GetMock<IServicoDeAutenticador>().Setup(s => s.GerarQrCode(usuario.Email)).Returns(qrCode);
+            mocker.GetMock<IServicoDeAutenticador>().Setup(s => s.GerarQrCode(usuario.Email, usuario.ChaveSecreta)).Returns(qrCode);
 
             #endregion
 
@@ -39,7 +39,7 @@ namespace AutenticacaoDoisFatores.Testes.Dominio.Dominios
 
             Assert.NotNull(retorno);
             Assert.Equal(qrCode, retorno);
-            mocker.Verify<IServicoDeAutenticador>(s => s.GerarQrCode(usuario.Email), Times.Once);
+            mocker.Verify<IServicoDeAutenticador>(s => s.GerarQrCode(usuario.Email, usuario.ChaveSecreta), Times.Once);
 
             #endregion
         }
@@ -60,7 +60,7 @@ namespace AutenticacaoDoisFatores.Testes.Dominio.Dominios
             #region Verificação do teste
 
             Assert.Equal(MensagensValidacaoUsuario.UsuarioNaoEncontrado.Descricao(), excecao.Message);
-            mocker.Verify<IServicoDeAutenticador>(s => s.GerarQrCode(It.IsAny<string>()), Times.Never);
+            mocker.Verify<IServicoDeAutenticador>(s => s.GerarQrCode(It.IsAny<string>(), It.IsAny<string>()), Times.Never);
 
             #endregion
         }
@@ -76,17 +76,21 @@ namespace AutenticacaoDoisFatores.Testes.Dominio.Dominios
 
             var dominio = mocker.CreateInstance<DominioAppAutenticador>();
 
+            var usuario = ConstrutorDeUsuariosTeste
+                .RetornarConstrutor()
+                .ConstruirCadastrado();
+
             var codigo = "123456";
-            mocker.GetMock<IServicoDeAutenticador>().Setup(s => s.CodigoEhValido(codigo)).Returns(valorEsperado);
+            mocker.GetMock<IServicoDeAutenticador>().Setup(s => s.CodigoEhValido(codigo, usuario.ChaveSecreta)).Returns(valorEsperado);
 
             #endregion
 
-            var retorno = dominio.CodigoEhValido(codigo);
+            var retorno = dominio.CodigoEhValido(codigo, usuario);
 
             #region Verificação do teste
 
             Assert.Equal(valorEsperado, retorno);
-            mocker.Verify<IServicoDeAutenticador, bool>(s => s.CodigoEhValido(codigo), Times.Once);
+            mocker.Verify<IServicoDeAutenticador, bool>(s => s.CodigoEhValido(codigo, usuario.ChaveSecreta), Times.Once);
 
             #endregion
         }
@@ -103,14 +107,18 @@ namespace AutenticacaoDoisFatores.Testes.Dominio.Dominios
 
             var dominio = mocker.CreateInstance<DominioAppAutenticador>();
 
+            var usuario = ConstrutorDeUsuariosTeste
+                .RetornarConstrutor()
+                .ConstruirCadastrado();
+
             #endregion
 
-            var excecao = Assert.Throws<ExcecoesAppAutenticador>(() => dominio.CodigoEhValido(codigo));
+            var excecao = Assert.Throws<ExcecoesAppAutenticador>(() => dominio.CodigoEhValido(codigo, usuario));
 
             #region Verificação do teste
 
             Assert.Equal(MensagensValidacaoAppAutenticacao.CodigoNaoInformado.Descricao(), excecao.Message);
-            mocker.Verify<IServicoDeAutenticador, bool>(s => s.CodigoEhValido(It.IsAny<string>()), Times.Never);
+            mocker.Verify<IServicoDeAutenticador, bool>(s => s.CodigoEhValido(It.IsAny<string>(), It.IsAny<string>()), Times.Never);
 
             #endregion
         }

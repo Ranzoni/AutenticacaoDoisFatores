@@ -14,15 +14,15 @@ namespace AutenticacaoDoisFatores.Dominio.Dominios
             if (usuario is null)
                 ExcecoesUsuario.UsuarioNaoEncontrado();
 
-            return _servico.GerarQrCode(usuario!.Email);
+            return _servico.GerarQrCode(usuario!.Email, usuario!.ChaveSecreta);
         }
 
-        public bool CodigoEhValido(string codigo)
+        public bool CodigoEhValido(string codigo, Usuario usuario)
         {
             if (codigo.EstaVazio())
                 ExcecoesAppAutenticador.CodigoNaoInformado();
 
-            return _servico.CodigoEhValido(codigo);
+            return _servico.CodigoEhValido(codigo, usuario!.ChaveSecreta);
         }
     }
 }

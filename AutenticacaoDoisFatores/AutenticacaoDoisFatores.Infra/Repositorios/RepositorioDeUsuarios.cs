@@ -1,6 +1,7 @@
 ﻿using AutenticacaoDoisFatores.Dominio.Compartilhados;
 using AutenticacaoDoisFatores.Dominio.Compartilhados.Usuarios;
 using AutenticacaoDoisFatores.Dominio.Construtores;
+using AutenticacaoDoisFatores.Dominio.Dominios;
 using AutenticacaoDoisFatores.Dominio.Entidades;
 using AutenticacaoDoisFatores.Dominio.Filtros;
 using AutenticacaoDoisFatores.Dominio.Repositorios;
@@ -19,9 +20,9 @@ namespace AutenticacaoDoisFatores.Infra.Repositorios
         {
             var sql = $@"
                 INSERT INTO {_contexto.NomeDominio}.""Usuarios""
-                    (""Id"", ""Nome"", ""NomeUsuario"", ""Email"", ""Senha"", ""Celular"", ""DataCadastro"")
+                    (""Id"", ""Nome"", ""NomeUsuario"", ""Email"", ""Senha"", ""Celular"", ""ChaveSecreta"", ""DataCadastro"")
                 VALUES
-                    ('{entidade.Id}', '{entidade.Nome}', '{entidade.NomeUsuario}', '{entidade.Email}', '{entidade.Senha}', {(entidade.Celular is null ? "NULL" : entidade.Celular)}, '{entidade.DataCadastro:yyyy-MM-dd HH:mm:ss}');";
+                    ('{entidade.Id}', '{entidade.Nome}', '{entidade.NomeUsuario}', '{entidade.Email}', '{entidade.Senha}', {(entidade.Celular is null ? "NULL" : entidade.Celular)}, '{Criptografia.CriptografarEmAes(entidade.ChaveSecreta)}', '{entidade.DataCadastro:yyyy-MM-dd HH:mm:ss}');";
 
             _contexto.PrepararComando(
                 entidade: entidade,
@@ -34,9 +35,9 @@ namespace AutenticacaoDoisFatores.Infra.Repositorios
         {
             var sql = $@"
                 INSERT INTO {dominio}.""Usuarios""
-                    (""Id"", ""Nome"", ""NomeUsuario"", ""Email"", ""Senha"", ""DataCadastro"", ""Ativo"", ""EhAdmin"")
+                    (""Id"", ""Nome"", ""NomeUsuario"", ""Email"", ""Senha"", ""DataCadastro"", ""Ativo"", ""EhAdmin"", ""ChaveSecreta"")
                 VALUES
-                    ('{entidade.Id}', '{entidade.Nome}', '{entidade.NomeUsuario}', '{entidade.Email}', '{entidade.Senha}', '{entidade.DataCadastro:yyyy-MM-dd HH:mm:ss}', {entidade.Ativo}, {entidade.EhAdmin});";
+                    ('{entidade.Id}', '{entidade.Nome}', '{entidade.NomeUsuario}', '{entidade.Email}', '{entidade.Senha}', '{entidade.DataCadastro:yyyy-MM-dd HH:mm:ss}', {entidade.Ativo}, {entidade.EhAdmin}, '{Criptografia.CriptografarEmAes(entidade.ChaveSecreta)}');";
 
             _contexto.PrepararComando(
                 entidade: entidade,
@@ -67,7 +68,7 @@ namespace AutenticacaoDoisFatores.Infra.Repositorios
             if (entidade.DataUltimoAcesso is not null)
                 sql += $@",""DataUltimoAcesso"" = '{entidade.DataUltimoAcesso:yyyy-MM-dd HH:mm:ss}'";
 
-            sql += $@"WHERE
+            sql += $@" WHERE
                 ""Id"" = '{entidade.Id}';";
 
             _contexto.PrepararComando(
@@ -300,7 +301,8 @@ namespace AutenticacaoDoisFatores.Infra.Repositorios
                 u.""DataAlteracao"",
                 u.""EhAdmin"",
                 u.""TipoDeAutenticacao"",
-                u.""Celular""";
+                u.""Celular"",
+                u.""ChaveSecreta""";
         }
 
         private static Usuario ConstruirUsuario(DbDataReader leitor)
@@ -318,6 +320,7 @@ namespace AutenticacaoDoisFatores.Infra.Repositorios
                 .ComEhAdmin(leitor.GetBoolean(9))
                 .ComTipoDeAutenticacao(leitor.IsDBNull(10) ? null : (TipoDeAutenticacao)leitor.GetInt16(10))
                 .ComCelular(leitor.IsDBNull(11) ? null : leitor.GetInt64(11))
+                .ComChaveSecreta(Criptografia.DescriptografarEmAes(leitor.GetString(12)))
                 .ConstruirCadastrado();
         }
 

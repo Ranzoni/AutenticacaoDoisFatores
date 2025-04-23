@@ -44,5 +44,10 @@ namespace AutenticacaoDoisFatores.Dominio.Excecoes
         {
             throw new ExcecoesUsuario(MensagensValidacaoUsuario.UsuarioNaoEncontrado);
         }
+
+        internal static void ChaveSecretaInvalida()
+        {
+            throw new ExcecoesUsuario(MensagensValidacaoUsuario.ChaveSecretaInvalida);
+        }
     }
 }

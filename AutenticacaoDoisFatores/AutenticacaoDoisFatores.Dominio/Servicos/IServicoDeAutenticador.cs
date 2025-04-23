@@ -2,7 +2,7 @@
 {
     public interface IServicoDeAutenticador
     {
-        string GerarQrCode(string email);
-        bool CodigoEhValido(string codigo);
+        string GerarQrCode(string email, string chaveSecreta);
+        bool CodigoEhValido(string codigo, string chaveSecreta);
     }
 }

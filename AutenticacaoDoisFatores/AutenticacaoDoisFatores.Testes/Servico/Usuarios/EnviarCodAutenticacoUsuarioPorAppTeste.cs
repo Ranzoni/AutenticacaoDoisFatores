@@ -28,7 +28,7 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Usuarios
 
             var qrCode = faker.Commerce.Ean13();
 
-            mocker.GetMock<IServicoDeAutenticador>().Setup(s => s.GerarQrCode(usuario.Email)).Returns(qrCode);
+            mocker.GetMock<IServicoDeAutenticador>().Setup(s => s.GerarQrCode(usuario.Email, usuario.ChaveSecreta)).Returns(qrCode);
 
             #endregion
 
@@ -41,7 +41,7 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Usuarios
             Assert.NotNull(retorno.QrCode);
             Assert.NotEmpty(retorno.QrCode);
 
-            mocker.Verify<IServicoDeAutenticador>(s => s.GerarQrCode(usuario.Email), Times.Once);
+            mocker.Verify<IServicoDeAutenticador>(s => s.GerarQrCode(usuario.Email, usuario.ChaveSecreta), Times.Once);
 
             #endregion
         }
@@ -68,7 +68,7 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Usuarios
             #region Verificação do teste
 
             Assert.Null(retorno);
-            mocker.Verify<IServicoDeAutenticador>(s => s.GerarQrCode(It.IsAny<string>()), Times.Never);
+            mocker.Verify<IServicoDeAutenticador>(s => s.GerarQrCode(It.IsAny<string>(), It.IsAny<string>()), Times.Never);
             mocker.Verify<INotificador>(n => n.AddMensagemNaoEncontrado(MensagensValidacaoUsuario.UsuarioNaoEncontrado), Times.Once);
 
             #endregion

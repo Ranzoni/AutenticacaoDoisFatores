@@ -1,4 +1,5 @@
-﻿using AutenticacaoDoisFatores.Dominio.Compartilhados.Entidades;
+﻿using AutenticacaoDoisFatores.Dominio.Compartilhados;
+using AutenticacaoDoisFatores.Dominio.Compartilhados.Entidades;
 using AutenticacaoDoisFatores.Dominio.Compartilhados.Usuarios;
 using AutenticacaoDoisFatores.Dominio.Validadores;
 
@@ -15,6 +16,7 @@ namespace AutenticacaoDoisFatores.Dominio.Entidades
         public DateTime? DataUltimoAcesso { get; private set; }
         public bool EhAdmin { get; private set; }
         public TipoDeAutenticacao? TipoDeAutenticacao { get; private set; }
+        public string ChaveSecreta { get; }
 
         public Usuario(string nome, string nomeUsuario, string email, string senha, long? celular, bool ehAdmin = false)
         {
@@ -23,6 +25,7 @@ namespace AutenticacaoDoisFatores.Dominio.Entidades
             Email = email;
             Senha = senha;
             Celular = celular;
+            ChaveSecreta = Segredos.Gerar();
 
             if (ehAdmin)
             {
@@ -33,7 +36,7 @@ namespace AutenticacaoDoisFatores.Dominio.Entidades
             this.Validar();
         }
 
-        public Usuario(Guid id, string nome, string nomeUsuario, string email, string senha, long? celular, bool ativo, DateTime? dataUltimoAcesso, DateTime dataCadastro, DateTime? dataAlteracao, bool ehAdmin, TipoDeAutenticacao? tipoDeAutenticacao)
+        public Usuario(Guid id, string nome, string nomeUsuario, string email, string senha, long? celular, bool ativo, DateTime? dataUltimoAcesso, DateTime dataCadastro, DateTime? dataAlteracao, bool ehAdmin, TipoDeAutenticacao? tipoDeAutenticacao, string chaveSecreta)
             : base(true)
         {
             Id = id;
@@ -48,6 +51,7 @@ namespace AutenticacaoDoisFatores.Dominio.Entidades
             DataAlteracao = dataAlteracao;
             EhAdmin = ehAdmin;
             TipoDeAutenticacao = tipoDeAutenticacao;
+            ChaveSecreta = chaveSecreta;
 
             this.Validar();
         }

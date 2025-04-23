@@ -1,0 +1,1 @@
+ALTER TABLE "Usuarios" ADD "ChaveSecreta" VARCHAR(256) NOT NULL;

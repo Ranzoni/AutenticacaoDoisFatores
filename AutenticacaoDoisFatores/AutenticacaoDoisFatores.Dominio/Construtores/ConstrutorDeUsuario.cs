@@ -17,6 +17,7 @@ namespace AutenticacaoDoisFatores.Dominio.Construtores
         private DateTime _dataCadastro;
         private DateTime? _dataAlteracao;
         private TipoDeAutenticacao? _tipoDeAutenticacao;
+        private string _chaveSecreta = "01234567890123456789";
 
         public ConstrutorDeUsuario ComId(Guid id)
         {
@@ -102,6 +103,13 @@ namespace AutenticacaoDoisFatores.Dominio.Construtores
             return this;
         }
 
+        public ConstrutorDeUsuario ComChaveSecreta(string chaveSecreta)
+        {
+            _chaveSecreta = chaveSecreta;
+
+            return this;
+        }
+
         public Usuario ConstruirNovo()
         {
             var usuario = new Usuario
@@ -132,7 +140,8 @@ namespace AutenticacaoDoisFatores.Dominio.Construtores
                 dataCadastro: _dataCadastro,
                 dataAlteracao: _dataAlteracao,
                 ehAdmin: _ehAdmin,
-                tipoDeAutenticacao: _tipoDeAutenticacao
+                tipoDeAutenticacao: _tipoDeAutenticacao,
+                chaveSecreta: _chaveSecreta
             );
 
             return usuario;

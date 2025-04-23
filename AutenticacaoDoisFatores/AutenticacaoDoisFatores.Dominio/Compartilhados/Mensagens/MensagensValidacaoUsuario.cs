@@ -23,6 +23,8 @@ namespace AutenticacaoDoisFatores.Dominio.Compartilhados.Mensagens
         [Description("É necessário informar o nome de usuário ou o e-mail para realizar o acesso.")]
         NomeUsuarioOuEmailObrigatorio,
         [Description("Nome de usuário, e-mail ou senha são inválidos.")]
-        NaoAutenticado
+        NaoAutenticado,
+        [Description("A chave secreta do usuário é inválida.")]
+        ChaveSecretaInvalida
     }
 }

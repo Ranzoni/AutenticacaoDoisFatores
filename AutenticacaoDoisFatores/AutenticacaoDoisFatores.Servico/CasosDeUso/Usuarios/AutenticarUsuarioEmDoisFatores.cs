@@ -43,14 +43,14 @@ namespace AutenticacaoDoisFatores.Servico.CasosDeUso.Usuarios
         private async Task<bool> CodigoEhValidoAsync(Usuario usuario, string codigo)
         {
             if (usuario.TipoDeAutenticacao.Equals(TipoDeAutenticacao.AppAutenticador))
-                return ValidarCodigoPorApp(codigo);
+                return ValidarCodigoPorApp(codigo, usuario);
             else
                 return await ValidarCodigoPorCriptografiaAsync(usuario.Id, codigo);
         }
 
-        private bool ValidarCodigoPorApp(string codigo)
+        private bool ValidarCodigoPorApp(string codigo, Usuario usuario)
         {
-            if (!_appAutenticador.CodigoEhValido(codigo))
+            if (!_appAutenticador.CodigoEhValido(codigo, usuario))
             {
                 _notificador.AddMensagemNaoAutorizado(MensagensValidacaoUsuario.NaoAutenticado);
                 return false;

@@ -65,7 +65,7 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Usuarios
                 .ConstruirCadastrado();
 
             mocker.GetMock<IRepositorioDeUsuarios>().Setup(r => r.BuscarUnicoAsync(idUsuario)).ReturnsAsync(usuario);
-            mocker.GetMock<IServicoDeAutenticador>().Setup(s => s.CodigoEhValido(codigo)).Returns(true);
+            mocker.GetMock<IServicoDeAutenticador>().Setup(s => s.CodigoEhValido(codigo, usuario.ChaveSecreta)).Returns(true);
 
             #endregion
 
@@ -216,7 +216,7 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Usuarios
                 .ConstruirCadastrado();
 
             mocker.GetMock<IRepositorioDeUsuarios>().Setup(r => r.BuscarUnicoAsync(idUsuario)).ReturnsAsync(usuario);
-            mocker.GetMock<IServicoDeAutenticador>().Setup(s => s.CodigoEhValido(codigo)).Returns(true);
+            mocker.GetMock<IServicoDeAutenticador>().Setup(s => s.CodigoEhValido(codigo, usuario.ChaveSecreta)).Returns(true);
 
             #endregion
 

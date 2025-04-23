@@ -453,5 +453,20 @@ namespace AutenticacaoDoisFatores.Testes.Dominio.Entidades
 
             Assert.False(valor);
         }
+
+        [Theory]
+        [InlineData("")]
+        [InlineData("       ")]
+        [InlineData("012345678901")]
+        [InlineData("0123456789012345678")]
+        internal void NaoDeveInstanciarUsuarioiCadastradoParaChaveSecretaInvalida(string chaveSecretaInvalida)
+        {
+            var usuario = ConstrutorDeUsuariosTeste
+                .RetornarConstrutor(chaveSecreta: chaveSecretaInvalida);
+            
+            var excecao = Assert.Throws<ExcecoesUsuario>(usuario.ConstruirCadastrado);
+
+            Assert.Equal(MensagensValidacaoUsuario.ChaveSecretaInvalida.Descricao(), excecao.Message);
+        }
     }
 }
