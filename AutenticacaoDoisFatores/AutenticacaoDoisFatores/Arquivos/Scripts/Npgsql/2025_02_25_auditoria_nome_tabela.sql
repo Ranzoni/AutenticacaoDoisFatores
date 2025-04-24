@@ -1,0 +1,1 @@
+ALTER TABLE "Auditorias" ADD "Tabela" VARCHAR(100) NOT NULL DEFAULT '';

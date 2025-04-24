@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace AutenticacaoDoisFatores.Infra.Configuracoes
 {
-    public class ClienteConfiguracao : IEntityTypeConfiguration<Cliente>
+    internal class ClienteConfiguracao : IEntityTypeConfiguration<Cliente>
     {
         public void Configure(EntityTypeBuilder<Cliente> builder)
         {
@@ -13,7 +13,7 @@ namespace AutenticacaoDoisFatores.Infra.Configuracoes
             builder
                 .Property(p => p.Nome)
                 .HasMaxLength(50)
-                .IsRequired(true);
+                .IsRequired();
 
             builder
                 .Property(p => p.NomeDominio)

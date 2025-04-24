@@ -69,14 +69,14 @@ namespace AutenticacaoDoisFatores.Dominio.Construtores
             return this;
         }
 
-        public Cliente ConstruirNovoCliente()
+        public Cliente ConstruirNovo()
         {
             var cliente = new Cliente(nome: _nome, email: _email, nomeDominio: _nomeDominio, chaveAcesso: _chaveAcesso);
 
             return cliente;
         }
 
-        public Cliente ConstruirClienteCadastrado()
+        public Cliente ConstruirCadastrado()
         {
             var cliente = new Cliente
             (

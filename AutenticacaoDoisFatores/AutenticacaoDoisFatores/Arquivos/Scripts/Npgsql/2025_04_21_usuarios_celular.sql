@@ -1,0 +1,1 @@
+ALTER TABLE "Usuarios" ADD "Celular" BIGINT NULL;

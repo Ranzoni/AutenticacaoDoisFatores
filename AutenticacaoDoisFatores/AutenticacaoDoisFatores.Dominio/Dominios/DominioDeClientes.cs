@@ -1,6 +1,7 @@
 ﻿using AutenticacaoDoisFatores.Dominio.Compartilhados.Mensagens;
 using AutenticacaoDoisFatores.Dominio.Entidades;
 using AutenticacaoDoisFatores.Dominio.Excecoes;
+using AutenticacaoDoisFatores.Dominio.Filtros;
 using AutenticacaoDoisFatores.Dominio.Repositorios;
 
 namespace AutenticacaoDoisFatores.Dominio.Dominios
@@ -46,14 +47,19 @@ namespace AutenticacaoDoisFatores.Dominio.Dominios
             return await _repositorio.BuscarUnicoAsync(id);
         }
 
+        public async Task<IEnumerable<Cliente>> BuscarVariosAsync(FiltroDeClientes filtros)
+        {
+            return await _repositorio.BuscarVariosAsync(filtros);
+        }
+
         public async Task<bool> EmailEstaCadastradoAsync(string email)
         {
-            return await _repositorio.ExisteEmail(email);
+            return await _repositorio.ExisteEmailAsync(email);
         }
 
         public async Task<bool> NomeDominioEstaCadastradoAsync(string nomeDominio)
         {
-            return await _repositorio.ExisteDominio(nomeDominio);
+            return await _repositorio.ExisteDominioAsync(nomeDominio);
         }
 
         public async Task<Cliente?> BuscarPorEmailAsync(string email)
@@ -70,11 +76,11 @@ namespace AutenticacaoDoisFatores.Dominio.Dominios
     {
         private async Task ValidarCriacaoClienteAsync(Cliente cliente)
         {
-            var existeEmail = await _repositorio.ExisteEmail(cliente.Email);
+            var existeEmail = await _repositorio.ExisteEmailAsync(cliente.Email);
             if (existeEmail)
                 ExcecoesCliente.EmailJaCadastrado();
 
-            var existeDominio = await _repositorio.ExisteDominio(cliente.NomeDominio);
+            var existeDominio = await _repositorio.ExisteDominioAsync(cliente.NomeDominio);
             if (existeDominio)
                 ExcecoesCliente.NomeDominioJaCadastrado();
         }

@@ -11,9 +11,7 @@ namespace AutenticacaoDoisFatores.Dominio.Entidades
         public string ChaveAcesso { get; private set; } = "";
         public bool Ativo { get; private set; } = false;
 
-        private Cliente() : base(true)
-        {
-        }
+        private Cliente() : base(true) { }
 
         public Cliente(string nome, string email, string nomeDominio, string chaveAcesso)
         {
@@ -22,7 +20,7 @@ namespace AutenticacaoDoisFatores.Dominio.Entidades
             NomeDominio = nomeDominio;
             ChaveAcesso = chaveAcesso;
 
-            this.ValidarCriacao();
+            this.Validar();
         }
 
         public Cliente(Guid id, string nome, string email, string nomeDominio, string chaveAcesso, bool ativo, DateTime dataCadastro, DateTime? dataAlteracao)
@@ -36,20 +34,22 @@ namespace AutenticacaoDoisFatores.Dominio.Entidades
             Ativo = ativo;
             DataCadastro = dataCadastro;
             DataAlteracao = dataAlteracao;
+
+            this.Validar();
         }
 
         public void AlterarChaveAcesso(string chaveAcesso)
         {
-            ChaveAcesso = chaveAcesso;
+            AuditarModificacao("ChaveAcesso", ChaveAcesso, chaveAcesso);
 
-            AtualizarDataAlteracao();
+            ChaveAcesso = chaveAcesso;
         }
 
         public void Ativar(bool valor)
         {
-            Ativo = valor;
+            AuditarModificacao("Ativo", Ativo.ToString(), valor.ToString());
 
-            AtualizarDataAlteracao();
+            Ativo = valor;
         }
     }
 }

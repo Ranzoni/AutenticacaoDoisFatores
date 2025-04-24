@@ -23,6 +23,16 @@ namespace AutenticacaoDoisFatores.Dominio.Compartilhados.Mensagens
         [Description("Confirmação de nova chave de acesso")]
         TituloConfirmacaoNovaChaveCliente,
         [Description("A sua chave de acesso foi alterada.")]
-        MensagemConfirmacaoNovaChaveCliente
+        MensagemConfirmacaoNovaChaveCliente,
+        [Description("Código de acesso ao sistema")]
+        TituloCodAutenticacaoDoisFatores,
+        [Description("Utilize o código abaixo para acessar o sistema.")]
+        MensagemCodAutenticacaoDoisFatores,
+        [Description("Confirmação de Login")]
+        TituloQrCodeAutenticacaoDoisFatores,
+        [Description("Clique no link abaixo para gerar o QR Code e use um aplicativo de autenticação de sua preferência para escanea-lo.")]
+        MensagemQrCodeAutenticacaoDoisFatores,
+        [Description("Gerar QR Code")]
+        TextoLinkParaQrCode
     }
 }

@@ -1,7 +1,7 @@
 ﻿using AutenticacaoDoisFatores.Compartilhados;
 using AutenticacaoDoisFatores.Servico.CasosDeUso.Clientes;
 using AutenticacaoDoisFatores.Servico.Compartilhados;
-using AutenticacaoDoisFatores.Servico.DTO;
+using AutenticacaoDoisFatores.Servico.DTO.Clientes;
 using Mensageiro;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -25,7 +25,7 @@ namespace AutenticacaoDoisFatores.Controllers
                 var urlBase = UrlDaApi(HttpContext);
                 var url = $"{urlBase}/{_caminhoPaginaConfirmarCadastro}";
 
-                var retorno = await criarCliente.CriarAsync(novoCliente, url);
+                var retorno = await criarCliente.ExecutarAsync(novoCliente, url);
                 
                 return CriadoComSucesso(retorno);
             }
@@ -42,7 +42,7 @@ namespace AutenticacaoDoisFatores.Controllers
             try
             {
                 var token = Token(HttpContext.Request);
-                var idCliente = Seguranca.RetornarIdClienteDoToken(token);
+                var idCliente = Seguranca.RetornarIdDoToken(token);
 
                 await ativarCliente.AtivarAsync(idCliente);
 
@@ -99,11 +99,49 @@ namespace AutenticacaoDoisFatores.Controllers
             try
             {
                 var token = Token(HttpContext.Request);
-                var idCliente = Seguranca.RetornarIdClienteDoToken(token);
+                var idCliente = Seguranca.RetornarIdDoToken(token);
 
                 await gerarNovaChaveAcessoCliente.GerarNovaChaveAsync(idCliente);
 
                 return Sucesso("A nova chave de acesso foi enviada para o e-mail do cliente.");
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
+        [HttpGet("{id}")]
+        [AllowAnonymous]
+        public async Task<ActionResult<ClienteCadastrado?>> BuscarUnicoAsync([FromServices] BuscarClientes buscarClientes, Guid id)
+        {
+            try
+            {
+                if (!ChaveExclusivaEstaValida(HttpContext.Request))
+                    return Unauthorized();
+
+                var resposta = await buscarClientes.BuscarUnicoAsync(id);
+
+                return Sucesso(resposta);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
+        [HttpGet]
+        [AllowAnonymous]
+        public async Task<ActionResult<IEnumerable<ClienteCadastrado>>> BuscarVariosAsync([FromServices] BuscarClientes buscarClientes, [FromQuery] FiltrosParaBuscarClientes filtros)
+        {
+            try
+            {
+                if (!ChaveExclusivaEstaValida(HttpContext.Request))
+                    return Unauthorized();
+
+                var resposta = await buscarClientes.BuscarVariosAsync(filtros);
+
+                return Sucesso(resposta);
             }
             catch (Exception e)
             {

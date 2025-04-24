@@ -1,4 +1,4 @@
-﻿using AutenticacaoDoisFatores.Servico.DTO;
+﻿using AutenticacaoDoisFatores.Servico.DTO.Clientes;
 
 namespace AutenticacaoDoisFatores.Servico.Construtores
 {
@@ -7,6 +7,7 @@ namespace AutenticacaoDoisFatores.Servico.Construtores
         private string _nome = "";
         private string _email = "";
         private string _nomeDominio = "";
+        private string _senhaAdm = "";
 
         public ConstrutorDeNovoCliente ComNome(string nome)
         {
@@ -29,13 +30,21 @@ namespace AutenticacaoDoisFatores.Servico.Construtores
             return this;
         }
 
+        public ConstrutorDeNovoCliente ComSenhaAdm(string senhaAdm)
+        {
+            _senhaAdm = senhaAdm;
+
+            return this;
+        }
+
         public NovoCliente Construir()
         {
             var novoCliente = new NovoCliente
                 (
                     nome: _nome,
                     email: _email,
-                    nomeDominio: _nomeDominio
+                    nomeDominio: _nomeDominio,
+                    senhaAdm: _senhaAdm
                 );
 
             return novoCliente;

@@ -1,4 +1,5 @@
 ﻿using AutenticacaoDoisFatores.Dominio.Compartilhados;
+using AutenticacaoDoisFatores.Dominio.Compartilhados.Permissoes;
 using AutenticacaoDoisFatores.Dominio.Dominios;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
@@ -27,6 +28,18 @@ namespace AutenticacaoDoisFatores.Servico.Compartilhados
 
             return (chave, chaveCriptografada);
         }
+
+        public static bool ComposicaoSenhaEhValida(string senha)
+        {
+            return !senha.EstaVazio() && senha.ExistemLetrasMaiusculas() && senha.ExistemLetrasMinusculas() && senha.ExistemNumeros() && senha.ExistemCaracteresEspeciaisAcentosOuPontuacoes() && senha.Length >= 7 && senha.Length <= 50;
+        }
+
+        public static string GerarCodigoAutenticacao()
+        {
+            var randomico = new Random();
+            var codigo = randomico.Next(90000, 999999);
+            return codigo.ToString().PadLeft(6, '0');
+        }
     }
 
     #region Geração de tokens
@@ -44,6 +57,28 @@ namespace AutenticacaoDoisFatores.Servico.Compartilhados
 
         private static readonly string _confirmacaoDeCliente = "confirmacaoCliente";
         private static readonly string _geracaoNovaChaveCliente = "geracaoNovaChaveCliente";
+        private static readonly string _usuarioAutenticado = "usuarioAutenticado";
+        private static readonly string _criacaoDeUsuario = "criacaoDeUsuario";
+        private static readonly string _ativarUsuario = "ativacaoDeUsuario";
+        private static readonly string _desativarUsuario = "desativacaoDeUsuario";
+        private static readonly string _trocarSenhaUsuario = "trocarSenhaDeUsuario";
+        private static readonly string _definirPermissoes = "definirPermissoes";
+        private static readonly string _exclusaoDeUsuario = "exclusaoDeUsuario";
+        private static readonly string _visualizacaoDeUsuarios = "visualizacaoDeUsuarios";
+        private static readonly string _trocarEmailDeUsuario = "trocarEmailDeUsuario";
+        private static readonly string _codAutenticaoPorEmail = "codAutenticaoPorEmail";
+
+        private static readonly Dictionary<TipoDePermissao, string> _perfisPermissoes = new()
+        {
+            { TipoDePermissao.CriarUsuario, _criacaoDeUsuario },
+            { TipoDePermissao.AtivarUsuario, _ativarUsuario },
+            { TipoDePermissao.DesativarUsuario, _desativarUsuario },
+            { TipoDePermissao.TrocarSenhaUsuario, _trocarSenhaUsuario },
+            { TipoDePermissao.DefinirPermissoes, _definirPermissoes },
+            { TipoDePermissao.ExcluirUsuario, _exclusaoDeUsuario },
+            { TipoDePermissao.VisualizacaoDeUsuarios, _visualizacaoDeUsuarios },
+            { TipoDePermissao.TrocarEmailDeUsuario, _trocarEmailDeUsuario },
+        };
 
         public static string RegraConfirmacaoDeCliente
         {
@@ -61,7 +96,96 @@ namespace AutenticacaoDoisFatores.Servico.Compartilhados
             }
         }
 
+        public static string RegraCriacaoDeUsuario
+        {
+            get
+            {
+                return _criacaoDeUsuario;
+            }
+        }
+
+        public static string RegraAtivacaoUsuario
+        {
+            get
+            {
+                return _ativarUsuario;
+            }
+        }
+
+        public static string RegraDesativacaoUsuario
+        {
+            get
+            {
+                return _desativarUsuario;
+            }
+        }
+
+        public static string RegraTrocarSenhaUsuario
+        {
+            get
+            {
+                return _trocarSenhaUsuario;
+            }
+        }
+
+        public static string RegraDefinirPermissoes
+        {
+            get
+            {
+                return _definirPermissoes;
+            }
+        }
+
+        public static string RegraExclusaoDeUsuario
+        {
+            get
+            {
+                return _exclusaoDeUsuario;
+            }
+        }
+
+        public static string RegraVisualizacaoDeUsuarios
+        {
+            get
+            {
+                return _visualizacaoDeUsuarios;
+            }
+        }
+
+        public static string RegraTrocarEmailDeUsuario
+        {
+            get
+            {
+                return _trocarEmailDeUsuario;
+            }
+        }
+
+        public static string RegraCodAutenticaoPorEmail
+        {
+            get
+            {
+                return _codAutenticaoPorEmail;
+            }
+        }
+
         #endregion
+
+        public static string GerarTokenAutenticacaoUsuario(Guid idUsuario, IEnumerable<TipoDePermissao>? permissoes)
+        {
+            var perfis = new List<Claim>()
+            {
+                new(type: _perfilIdentificador, idUsuario.ToString()),
+                new(type: _perfilSeguranca, _usuarioAutenticado)
+            };
+
+            foreach (var permissao in permissoes ?? [])
+            {
+                var perfilPermissao = _perfisPermissoes[permissao];
+                perfis.Add(new(type: _perfilSeguranca, perfilPermissao));
+            }
+
+            return GerarToken(perfis);
+        }
 
         public static string GerarTokenDeConfirmacaoDeCliente(Guid idCliente)
         {
@@ -76,6 +200,14 @@ namespace AutenticacaoDoisFatores.Servico.Compartilhados
             return GerarToken([
                 new(type: _perfilIdentificador, idCliente.ToString()),
                 new(type: _perfilSeguranca, _geracaoNovaChaveCliente)
+            ]);
+        }
+
+        public static string GerarTokenCodAutenticacaoUsuario(Guid idUsuario)
+        {
+            return GerarToken([
+                new(type: _perfilIdentificador, idUsuario.ToString()),
+                new(type: _perfilSeguranca, _codAutenticaoPorEmail)
             ]);
         }
 
@@ -109,7 +241,7 @@ namespace AutenticacaoDoisFatores.Servico.Compartilhados
 
     public static partial class Seguranca
     {
-        public static Guid RetornarIdClienteDoToken(string token)
+        public static Guid RetornarIdDoToken(string token)
         {
             var geradorDeToken = new JwtSecurityTokenHandler();
             var perfisDoToken = LerToken(token);

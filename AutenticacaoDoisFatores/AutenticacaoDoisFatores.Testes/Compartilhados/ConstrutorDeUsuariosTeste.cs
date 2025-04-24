@@ -1,0 +1,71 @@
+﻿using AutenticacaoDoisFatores.Dominio.Compartilhados.Usuarios;
+using AutenticacaoDoisFatores.Dominio.Construtores;
+using AutenticacaoDoisFatores.Servico.Construtores;
+using Bogus;
+
+namespace AutenticacaoDoisFatores.Testes.Compartilhados
+{
+    internal static class ConstrutorDeUsuariosTeste
+    {
+        private static readonly string _senhaParaTeste = "Teste.De.Senha_1";
+
+        internal static ConstrutorDeUsuario RetornarConstrutor
+        (
+            Guid? id = null,
+            string? nome = null,
+            string? nomeUsuario = null,
+            string? email = null,
+            string? senha = null,
+            long? celular = null,
+            bool? ativo = null,
+            DateTime? dataUltimoAcesso = null,
+            DateTime? dataCadastro = null,
+            DateTime? dataAlteracao = null,
+            bool? ehAdm = null,
+            TipoDeAutenticacao? tipoDeAutenticacao = null,
+            string? chaveSecreta = null
+        )
+        {
+            var faker = new Faker();
+
+            return new ConstrutorDeUsuario()
+                .ComId(id ?? Guid.NewGuid())
+                .ComNome(nome ?? faker.Person.FullName)
+                .ComNomeUsuario(nomeUsuario ?? "teste_user_2010234")
+                .ComEmail(email ?? faker.Person.Email)
+                .ComSenha(senha ?? _senhaParaTeste)
+                .ComCelular(celular)
+                .ComAtivo(ativo ?? faker.Random.Bool())
+                .ComDataUltimoAcesso(dataUltimoAcesso)
+                .ComDataCadastro(dataCadastro ?? faker.Date.Past())
+                .ComDataAlteracao(dataAlteracao)
+                .ComEhAdmin(ehAdm ?? false)
+                .ComTipoDeAutenticacao(tipoDeAutenticacao)
+                .ComChaveSecreta(chaveSecreta ?? "01234567890123456789");
+        }
+
+        internal static ConstrutorDeNovoUsuario RetornarConstrutorDeNovo(string? nome = null, string? nomeUsuario = null, string? email = null, string? senha = null, long? celular = null)
+        {
+            var faker = new Faker();
+
+            return new ConstrutorDeNovoUsuario()
+                .ComNome(nome ?? faker.Person.FullName)
+                .ComNomeUsuario(nomeUsuario ?? "teste_user_2010234")
+                .ComEmail(email ?? faker.Person.Email)
+                .ComSenha(senha ?? "T3ste.de.Senh@")
+                .ComCelular(celular);
+        }
+
+        internal static ConstrutorDeNovosDadosUsuario RetornarConstrutorDeNovosDados(string? nome = null, string? nomeUsuario = null, string? email = null, string? senha = null, long? celular = null)
+        {
+            var faker = new Faker();
+
+            return new ConstrutorDeNovosDadosUsuario()
+                .ComNome(nome ?? faker.Person.FullName)
+                .ComNomeUsuario(nomeUsuario ?? "teste_user_2010234")
+                .ComEmail(email ?? faker.Person.Email)
+                .ComSenha(senha ?? _senhaParaTeste)
+                .ComCelular(celular);
+        }
+    }
+}

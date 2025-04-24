@@ -6,7 +6,7 @@ namespace AutenticacaoDoisFatores.Dominio.Validadores
 {
     public static class ValidadorDeCliente
     {
-        internal static void ValidarCriacao(this Cliente cliente)
+        internal static void Validar(this Cliente cliente)
         {
             if (!NomeEhValido(cliente.Nome))
                 ExcecoesCliente.NomeInvalido();

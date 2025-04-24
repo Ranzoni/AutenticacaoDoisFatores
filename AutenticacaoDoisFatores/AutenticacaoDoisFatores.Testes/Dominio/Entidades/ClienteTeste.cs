@@ -18,10 +18,10 @@ namespace AutenticacaoDoisFatores.Testes.Dominio.Entidades
 
             var nomeParaTeste = _faker.Company.CompanyName();
             var emailParaTeste = _faker.Internet.Email();
-            var nomeDominioParaTeste = _faker.Internet.DomainWord();
+            var nomeDominioParaTeste = "dominio_cliente";
             var chaveAcessoParaTeste = _faker.Random.AlphaNumeric(20);
 
-            var construtor = ConstrutorDeClientesTeste.RetornarConstrutorDeCliente
+            var construtor = ConstrutorDeClientesTeste.RetornarConstrutor
                 (
                     nome: nomeParaTeste,
                     email: emailParaTeste,
@@ -31,7 +31,7 @@ namespace AutenticacaoDoisFatores.Testes.Dominio.Entidades
 
             #endregion
 
-            var cliente = construtor.ConstruirNovoCliente();
+            var cliente = construtor.ConstruirNovo();
 
             #region Verificação do teste
 
@@ -59,13 +59,13 @@ namespace AutenticacaoDoisFatores.Testes.Dominio.Entidades
 
             var nomeParaTeste = _faker.Company.CompanyName();
             var emailParaTeste = _faker.Internet.Email();
-            var nomeDominioParaTeste = _faker.Internet.DomainWord();
+            var nomeDominioParaTeste = "dominio_cliente";
             var chaveAcessoParaTeste = _faker.Random.AlphaNumeric(20);
             var ativoParaTeste = _faker.Random.Bool();
             var dataCadastroParaTeste = _faker.Date.Past(1);
             var dataAlteracaoParaTeste = _faker.Date.Past(1, dataCadastroParaTeste);
 
-            var construtor = ConstrutorDeClientesTeste.RetornarConstrutorDeCliente
+            var construtor = ConstrutorDeClientesTeste.RetornarConstrutor
                 (
                     nome: nomeParaTeste,
                     email: emailParaTeste,
@@ -78,7 +78,7 @@ namespace AutenticacaoDoisFatores.Testes.Dominio.Entidades
 
             #endregion
 
-            var cliente = construtor.ConstruirClienteCadastrado();
+            var cliente = construtor.ConstruirCadastrado();
 
             #region Verificação do teste
 
@@ -112,9 +112,9 @@ namespace AutenticacaoDoisFatores.Testes.Dominio.Entidades
         [InlineData("abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmno")]
         internal void NaoDeveInstanciarNovoClienteComNomeInvalido(string nomeInvalido)
         {
-            var construtor = ConstrutorDeClientesTeste.RetornarConstrutorDeCliente(nome: nomeInvalido);
+            var construtor = ConstrutorDeClientesTeste.RetornarConstrutor(nome: nomeInvalido);
 
-            var excecao = Assert.Throws<ExcecoesCliente>(construtor.ConstruirNovoCliente);
+            var excecao = Assert.Throws<ExcecoesCliente>(construtor.ConstruirNovo);
 
             Assert.Equal(MensagensValidacaoCliente.NomeInvalido.Descricao(), excecao.Message);
         }
@@ -132,9 +132,9 @@ namespace AutenticacaoDoisFatores.Testes.Dominio.Entidades
         [InlineData("abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcde")]
         internal void NaoDeveInstanciarNovoClienteComEmailInvalido(string emailInvalido)
         {
-            var construtor = ConstrutorDeClientesTeste.RetornarConstrutorDeCliente(email: emailInvalido);
+            var construtor = ConstrutorDeClientesTeste.RetornarConstrutor(email: emailInvalido);
 
-            var excecao = Assert.Throws<ExcecoesCliente>(construtor.ConstruirNovoCliente);
+            var excecao = Assert.Throws<ExcecoesCliente>(construtor.ConstruirNovo);
 
             Assert.Equal(MensagensValidacaoCliente.EmailInvalido.Descricao(), excecao.Message);
         }
@@ -151,9 +151,9 @@ namespace AutenticacaoDoisFatores.Testes.Dominio.Entidades
         [InlineData("dominio!")]
         internal void NaoDeveInstanciarNovoClienteComNomeDominioInvalido(string nomeDominioInvalido)
         {
-            var construtor = ConstrutorDeClientesTeste.RetornarConstrutorDeCliente(nomeDominio: nomeDominioInvalido);
+            var construtor = ConstrutorDeClientesTeste.RetornarConstrutor(nomeDominio: nomeDominioInvalido);
 
-            var excecao = Assert.Throws<ExcecoesCliente>(construtor.ConstruirNovoCliente);
+            var excecao = Assert.Throws<ExcecoesCliente>(construtor.ConstruirNovo);
 
             Assert.Equal(MensagensValidacaoCliente.NomeDominioInvalido.Descricao(), excecao.Message);
         }
@@ -165,9 +165,9 @@ namespace AutenticacaoDoisFatores.Testes.Dominio.Entidades
         [InlineData("abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstu")]
         internal void NaoDeveInstanciarNovoClienteComChaveAcessoInvalida(string chaveAcessoInvalida)
         {
-            var construtor = ConstrutorDeClientesTeste.RetornarConstrutorDeCliente(chaveAcesso: chaveAcessoInvalida);
+            var construtor = ConstrutorDeClientesTeste.RetornarConstrutor(chaveAcesso: chaveAcessoInvalida);
 
-            var excecao = Assert.Throws<ExcecoesCliente>(construtor.ConstruirNovoCliente);
+            var excecao = Assert.Throws<ExcecoesCliente>(construtor.ConstruirNovo);
 
             Assert.Equal(MensagensValidacaoCliente.ChaveAcessoInvalida.Descricao(), excecao.Message);
         }
@@ -179,9 +179,9 @@ namespace AutenticacaoDoisFatores.Testes.Dominio.Entidades
         {
             #region Preparação do Teste
 
-            var construtor = ConstrutorDeClientesTeste.RetornarConstrutorDeCliente();
+            var construtor = ConstrutorDeClientesTeste.RetornarConstrutor();
 
-            var cliente = construtor.ConstruirNovoCliente();
+            var cliente = construtor.ConstruirNovo();
 
             #endregion
 
@@ -204,13 +204,13 @@ namespace AutenticacaoDoisFatores.Testes.Dominio.Entidades
 
             var dataAlteracaoParaTeste = _faker.Date.Past();
 
-            var construtor = ConstrutorDeClientesTeste.RetornarConstrutorDeCliente
+            var construtor = ConstrutorDeClientesTeste.RetornarConstrutor
                 (
                     ativo: !valor,
                     dataAlteracao: dataAlteracaoParaTeste
                 );
 
-            var cliente = construtor.ConstruirClienteCadastrado();
+            var cliente = construtor.ConstruirCadastrado();
 
             #endregion
 
@@ -230,11 +230,11 @@ namespace AutenticacaoDoisFatores.Testes.Dominio.Entidades
         {
             #region Preparação do Teste
 
-            var construtor = ConstrutorDeClientesTeste.RetornarConstrutorDeCliente();
+            var construtor = ConstrutorDeClientesTeste.RetornarConstrutor();
 
             var novaChave = _faker.Random.AlphaNumeric(32);
 
-            var cliente = construtor.ConstruirNovoCliente();
+            var cliente = construtor.ConstruirNovo();
 
             #endregion
 
@@ -255,14 +255,14 @@ namespace AutenticacaoDoisFatores.Testes.Dominio.Entidades
 
             var dataAlteracaoParaTeste = _faker.Date.Past();
 
-            var construtor = ConstrutorDeClientesTeste.RetornarConstrutorDeCliente
+            var construtor = ConstrutorDeClientesTeste.RetornarConstrutor
                 (
                     dataAlteracao: dataAlteracaoParaTeste
                 );
 
             var novaChave = _faker.Random.AlphaNumeric(32);
 
-            var cliente = construtor.ConstruirClienteCadastrado();
+            var cliente = construtor.ConstruirCadastrado();
 
             #endregion
 

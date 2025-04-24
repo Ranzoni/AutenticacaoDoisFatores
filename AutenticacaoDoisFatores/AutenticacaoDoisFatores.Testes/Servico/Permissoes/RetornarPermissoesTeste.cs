@@ -1,0 +1,113 @@
+﻿using AutenticacaoDoisFatores.Dominio.Compartilhados;
+using AutenticacaoDoisFatores.Dominio.Compartilhados.Permissoes;
+using AutenticacaoDoisFatores.Dominio.Repositorios;
+using AutenticacaoDoisFatores.Servico.CasosDeUso.Permissoes;
+using AutenticacaoDoisFatores.Servico.DTO.Permissoes;
+using Bogus;
+using Moq;
+using Moq.AutoMock;
+
+namespace AutenticacaoDoisFatores.Testes.Servico.Permissoes
+{
+    public class RetornarPermissoesTeste
+    {
+        [Fact]
+        internal void DeveRetornarTodasPermissoes()
+        {
+            #region Preparação do teste
+
+            var permissoesEsperadas = Enum.GetValues<TipoDePermissao>()
+                .Select(tipo => new PermissaoDisponivel(tipo.Descricao() ?? "", tipo));
+
+            #endregion
+
+            var retorno = RetornarPermissoes.RetornarTodas();
+
+            #region Verificação do teste
+
+            Assert.Equal(permissoesEsperadas.Count(), retorno.Count());
+            for (var i = 0; i <= permissoesEsperadas.Count() - 1; i++)
+            {
+                var permissaoEsperada = permissoesEsperadas.ToArray()[i];
+                var itemDoRetorno = retorno.ToArray()[i];
+
+                Assert.Equal(permissaoEsperada.Nome, itemDoRetorno.Nome);
+                Assert.Equal(permissaoEsperada.Valor, itemDoRetorno.Valor);
+            }
+
+            #endregion
+        }
+
+        [Fact]
+        internal async Task DeveRetornarPermissoesPorUsuario()
+        {
+            #region Preparação do teste
+
+            var mocker = new AutoMocker();
+            var faker = new Faker();
+
+            var idUsuario = Guid.NewGuid();
+            var permissoesUsuario = faker.Random.EnumValues<TipoDePermissao>(3);
+            var permissoesEsperadas = permissoesUsuario
+                .Select(tipo => new PermissaoDisponivel(tipo.Descricao() ?? "", tipo));
+
+            var servico = mocker.CreateInstance<RetornarPermissoes>();
+
+            mocker.GetMock<IRepositorioDePermissoes>().Setup(r => r.RetornarPorUsuarioAsync(idUsuario)).ReturnsAsync(permissoesUsuario);
+
+            #endregion
+
+            var retorno = await servico.RetornarPorUsuarioAsync(idUsuario);
+
+            #region Verificação do teste
+
+            Assert.NotEmpty(retorno);
+            Assert.Equal(permissoesEsperadas.Count(), retorno.Count());
+            for (var i = 0; i <= permissoesEsperadas.Count() - 1; i++)
+            {
+                var permissaoEsperada = permissoesEsperadas.ToArray()[i];
+                var itemDoRetorno = retorno.ToArray()[i];
+
+                Assert.Equal(permissaoEsperada.Nome, itemDoRetorno.Nome);
+                Assert.Equal(permissaoEsperada.Valor, itemDoRetorno.Valor);
+            }
+
+            #endregion
+        }
+
+        [Fact]
+        internal async Task DeveRetornarTodasPermissoesParaUsuarioAdm()
+        {
+            #region Preparação do teste
+
+            var mocker = new AutoMocker();
+
+            var idUsuario = Guid.NewGuid();
+            var permissoesEsperadas = Enum.GetValues<TipoDePermissao>()
+                .Select(tipo => new PermissaoDisponivel(tipo.Descricao() ?? "", tipo));
+
+            var servico = mocker.CreateInstance<RetornarPermissoes>();
+
+            mocker.GetMock<IRepositorioDeUsuarios>().Setup(r => r.EhAdmAsync(idUsuario)).ReturnsAsync(true);
+
+            #endregion
+
+            var retorno = await servico.RetornarPorUsuarioAsync(idUsuario);
+
+            #region Verificação do teste
+
+            Assert.NotEmpty(retorno);
+            Assert.Equal(permissoesEsperadas.Count(), retorno.Count());
+            for (var i = 0; i <= permissoesEsperadas.Count() - 1; i++)
+            {
+                var permissaoEsperada = permissoesEsperadas.ToArray()[i];
+                var itemDoRetorno = retorno.ToArray()[i];
+
+                Assert.Equal(permissaoEsperada.Nome, itemDoRetorno.Nome);
+                Assert.Equal(permissaoEsperada.Valor, itemDoRetorno.Valor);
+            }
+
+            #endregion
+        }
+    }
+}
