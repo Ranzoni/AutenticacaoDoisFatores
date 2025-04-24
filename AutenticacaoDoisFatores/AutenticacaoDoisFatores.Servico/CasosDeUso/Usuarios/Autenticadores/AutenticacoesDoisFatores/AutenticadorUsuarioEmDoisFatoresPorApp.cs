@@ -9,9 +9,9 @@ using Mensageiro;
 
 namespace AutenticacaoDoisFatores.Servico.CasosDeUso.Usuarios.Autenticadores.AutenticacoesDoisFatores
 {
-    public class AutenticadorUsuarioEmDoisFatoresPorApp(DominioAppAutenticador autenticadorPorApp, EnvioDeEmail email, INotificador notificador, string linkBaseParaQrCode) : ITipoDeAutentidorUsuarioEmDoisFatores
+    public class AutenticadorUsuarioEmDoisFatoresPorApp(AppAutenticador autenticadorPorApp, EnvioDeEmail email, INotificador notificador, string linkBaseParaQrCode) : ITipoDeAutentidorUsuarioEmDoisFatores
     {
-        private readonly DominioAppAutenticador _appAutenticador = autenticadorPorApp;
+        private readonly AppAutenticador _appAutenticador = autenticadorPorApp;
         private readonly EnvioDeEmail _email = email;
         private readonly INotificador _notificador = notificador;
 

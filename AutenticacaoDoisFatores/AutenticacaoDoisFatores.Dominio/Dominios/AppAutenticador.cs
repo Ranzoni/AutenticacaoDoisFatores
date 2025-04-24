@@ -5,7 +5,7 @@ using AutenticacaoDoisFatores.Dominio.Servicos;
 
 namespace AutenticacaoDoisFatores.Dominio.Dominios
 {
-    public partial class DominioAppAutenticador(IServicoDeAutenticador servico)
+    public partial class AppAutenticador(IServicoDeAutenticador servico)
     {
         private readonly IServicoDeAutenticador _servico = servico;
 

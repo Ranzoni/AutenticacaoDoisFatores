@@ -19,7 +19,7 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Usuarios
 
             var mocker = new AutoMocker();
 
-            var autenticadorPorApp = mocker.GetMock<DominioAppAutenticador>().Object;
+            var autenticadorPorApp = mocker.GetMock<AppAutenticador>().Object;
             var email = mocker.GetMock<EnvioDeEmail>().Object;
             var notificador = mocker.GetMock<INotificador>().Object;
             var linkBaseParaQrCode = "https://example.com/qrcode";
@@ -58,7 +58,7 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Usuarios
 
             var mocker = new AutoMocker();
 
-            var autenticadorPorApp = mocker.GetMock<DominioAppAutenticador>().Object;
+            var autenticadorPorApp = mocker.GetMock<AppAutenticador>().Object;
             var email = mocker.GetMock<EnvioDeEmail>().Object;
             var notificador = mocker.GetMock<INotificador>().Object;
             var linkBaseParaQrCode = "https://example.com/qrcode";

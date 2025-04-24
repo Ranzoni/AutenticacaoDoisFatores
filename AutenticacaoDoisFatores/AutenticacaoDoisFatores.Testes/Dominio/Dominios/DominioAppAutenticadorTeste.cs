@@ -19,7 +19,7 @@ namespace AutenticacaoDoisFatores.Testes.Dominio.Dominios
 
             var mocker = new AutoMocker();
 
-            var dominio = mocker.CreateInstance<DominioAppAutenticador>();
+            var dominio = mocker.CreateInstance<AppAutenticador>();
 
             var usuario = ConstrutorDeUsuariosTeste
                 .RetornarConstrutor()
@@ -51,7 +51,7 @@ namespace AutenticacaoDoisFatores.Testes.Dominio.Dominios
 
             var mocker = new AutoMocker();
 
-            var dominio = mocker.CreateInstance<DominioAppAutenticador>();
+            var dominio = mocker.CreateInstance<AppAutenticador>();
 
             #endregion
 
@@ -74,7 +74,7 @@ namespace AutenticacaoDoisFatores.Testes.Dominio.Dominios
 
             var mocker = new AutoMocker();
 
-            var dominio = mocker.CreateInstance<DominioAppAutenticador>();
+            var dominio = mocker.CreateInstance<AppAutenticador>();
 
             var usuario = ConstrutorDeUsuariosTeste
                 .RetornarConstrutor()
@@ -105,7 +105,7 @@ namespace AutenticacaoDoisFatores.Testes.Dominio.Dominios
 
             var mocker = new AutoMocker();
 
-            var dominio = mocker.CreateInstance<DominioAppAutenticador>();
+            var dominio = mocker.CreateInstance<AppAutenticador>();
 
             var usuario = ConstrutorDeUsuariosTeste
                 .RetornarConstrutor()

@@ -18,7 +18,7 @@ namespace AutenticacaoDoisFatores.Testes.Dominio.Entidades
 
             var nomeParaTeste = _faker.Company.CompanyName();
             var emailParaTeste = _faker.Internet.Email();
-            var nomeDominioParaTeste = _faker.Internet.DomainWord();
+            var nomeDominioParaTeste = "dominio_cliente";
             var chaveAcessoParaTeste = _faker.Random.AlphaNumeric(20);
 
             var construtor = ConstrutorDeClientesTeste.RetornarConstrutor
@@ -59,7 +59,7 @@ namespace AutenticacaoDoisFatores.Testes.Dominio.Entidades
 
             var nomeParaTeste = _faker.Company.CompanyName();
             var emailParaTeste = _faker.Internet.Email();
-            var nomeDominioParaTeste = _faker.Internet.DomainWord();
+            var nomeDominioParaTeste = "dominio_cliente";
             var chaveAcessoParaTeste = _faker.Random.AlphaNumeric(20);
             var ativoParaTeste = _faker.Random.Bool();
             var dataCadastroParaTeste = _faker.Date.Past(1);

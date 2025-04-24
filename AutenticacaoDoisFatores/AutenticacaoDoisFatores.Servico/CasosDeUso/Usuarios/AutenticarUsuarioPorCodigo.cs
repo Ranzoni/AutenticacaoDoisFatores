@@ -8,12 +8,12 @@ using Mensageiro;
 
 namespace AutenticacaoDoisFatores.Servico.CasosDeUso.Usuarios
 {
-    public class AutenticarUsuarioPorCodigo(GerenciadorDeCodAutenticacao gerenciadorCodAutenticacao, DominioDeUsuarios usuarios, AutenticadorUsuarioPadrao autenticadorPadrao, DominioAppAutenticador autenticadorPorApp, INotificador notificador)
+    public class AutenticarUsuarioPorCodigo(GerenciadorDeCodAutenticacao gerenciadorCodAutenticacao, DominioDeUsuarios usuarios, AutenticadorUsuarioPadrao autenticadorPadrao, AppAutenticador autenticadorPorApp, INotificador notificador)
     {
         private readonly GerenciadorDeCodAutenticacao _gerenciadorCodAutenticacao = gerenciadorCodAutenticacao;
         private readonly DominioDeUsuarios _usuarios = usuarios;
         private readonly AutenticadorUsuarioPadrao _autenticadorPadrao = autenticadorPadrao;
-        private readonly DominioAppAutenticador _autenticadorPorApp = autenticadorPorApp;
+        private readonly AppAutenticador _autenticadorPorApp = autenticadorPorApp;
         private readonly INotificador _notificador = notificador;
 
         public async Task<UsuarioAutenticado?> ExecutarAsync(Guid idUsuario, string codigo)

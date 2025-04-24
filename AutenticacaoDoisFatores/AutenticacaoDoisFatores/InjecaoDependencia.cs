@@ -58,7 +58,7 @@ namespace AutenticacaoDoisFatores
             servicos.AddTransient<DominioDePermissoes>();
             servicos.AddTransient<DominioDeUsuarios>();
             servicos.AddTransient<GerenciadorDeCodAutenticacao>();
-            servicos.AddTransient<DominioAppAutenticador>();
+            servicos.AddTransient<AppAutenticador>();
         }
 
         internal static void AddServicos(this IServiceCollection servicos)
@@ -151,7 +151,7 @@ namespace AutenticacaoDoisFatores
 
         private static AutenticadorUsuarioEmDoisFatoresPorApp RetornarAutenticadorUsuarioEmDoisFatoresPorApp(this IServiceProvider serviceProvider)
         {
-            var dominioAppAutenticador = serviceProvider.GetRequiredService<DominioAppAutenticador>();
+            var dominioAppAutenticador = serviceProvider.GetRequiredService<AppAutenticador>();
             var envioDeEmail = serviceProvider.GetRequiredService<EnvioDeEmail>();
             var notificador = serviceProvider.GetRequiredService<INotificador>();
 
