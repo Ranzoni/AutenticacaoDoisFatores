@@ -4,7 +4,9 @@
     const parametros = new URLSearchParams(document.location.search);
     const token = parametros.get("token");
 
-    fetch('https://localhost:7053/api/cliente/confirmar-cadastro', {
+    const host = window.location.host;
+
+    fetch(`${host}/cliente/confirmar-cadastro`, {
         method: 'PUT',
         headers: {
             'Content-Type': 'application/json',

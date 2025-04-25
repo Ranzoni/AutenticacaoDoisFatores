@@ -4,7 +4,9 @@
     const parametros = new URLSearchParams(document.location.search);
     const token = parametros.get("token");
 
-    fetch('https://localhost:7053/api/cliente/gerar-nova-chave', {
+    const host = window.location.host;
+
+    fetch(`${host}/cliente/gerar-nova-chave`, {
         method: 'PUT',
         headers: {
             'Content-Type': 'application/json',
