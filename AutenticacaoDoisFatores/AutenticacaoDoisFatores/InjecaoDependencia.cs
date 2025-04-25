@@ -34,11 +34,11 @@ namespace AutenticacaoDoisFatores
             servicos.AddTransient<AutenticadorUsuarioPadrao>();
             servicos.AddTransient<AutenticadorUsuarioEmDoisFatores>();
             servicos.AddTransient<AutenticadorUsuarioEmDoisFatoresPorEmail>();
+            servicos.AddTransient<AutenticadorUsuarioEmDoisFatoresPorApp>();
 
-            //servicos.AddTransient<AutenticadorUsuarioEmDoisFatoresPorApp>();
             servicos.AddTransient(provider =>
             {
-                return provider.RetornarAutenticadorUsuarioEmDoisFatoresPorApp();
+                return provider.RetornarGerarQrCodeAppAutenticacao();
             });
 
             servicos.AddTransient<GerarNovaSenhaUsuario>();
@@ -149,9 +149,10 @@ namespace AutenticacaoDoisFatores
             return new ContextoDeCodigoDeAutenticacao(host, porta, usuario, senha, nomeDominio);
         }
 
-        private static AutenticadorUsuarioEmDoisFatoresPorApp RetornarAutenticadorUsuarioEmDoisFatoresPorApp(this IServiceProvider serviceProvider)
+        private static GerarQrCodeAppAutenticacao RetornarGerarQrCodeAppAutenticacao(this IServiceProvider serviceProvider)
         {
             var dominioAppAutenticador = serviceProvider.GetRequiredService<AppAutenticador>();
+            var dominioDeUsuarios = serviceProvider.GetRequiredService<DominioDeUsuarios>();
             var envioDeEmail = serviceProvider.GetRequiredService<EnvioDeEmail>();
             var notificador = serviceProvider.GetRequiredService<INotificador>();
 
@@ -159,7 +160,7 @@ namespace AutenticacaoDoisFatores
             var httpContext = httpContextAccessor.HttpContext;
             var linkBaseParaQrCode = $"{httpContext?.Request.Scheme}://{httpContext?.Request.Host}/{_caminhoParaQrCode}";
 
-            return new AutenticadorUsuarioEmDoisFatoresPorApp(dominioAppAutenticador, envioDeEmail, notificador, linkBaseParaQrCode);
+            return new GerarQrCodeAppAutenticacao(dominioAppAutenticador, dominioDeUsuarios, envioDeEmail, notificador, linkBaseParaQrCode);
         }
     }
 }
