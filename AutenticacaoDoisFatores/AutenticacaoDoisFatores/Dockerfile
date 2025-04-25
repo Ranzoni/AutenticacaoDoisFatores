@@ -26,7 +26,7 @@ FROM build AS publish
 ARG BUILD_CONFIGURATION=Release
 RUN dotnet publish "./AutenticacaoDoisFatores.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
 
-COPY ./Arquivos /app/publish/Arquivos
+COPY AutenticacaoDoisFatores/Arquivos /app/publish/Arquivos
 
 # This stage is used in production or when running from VS in regular mode (Default when not using the Debug configuration)
 FROM base AS final
