@@ -1,5 +1,6 @@
 ﻿using AutenticacaoDoisFatores.Compartilhados;
 using AutenticacaoDoisFatores.Servico.CasosDeUso.Usuarios;
+using AutenticacaoDoisFatores.Servico.CasosDeUso.Usuarios.Autenticadores;
 using AutenticacaoDoisFatores.Servico.Compartilhados;
 using AutenticacaoDoisFatores.Servico.DTO.Usuarios;
 using Mensageiro;
@@ -206,6 +207,24 @@ namespace AutenticacaoDoisFatores.Controllers
                 await alterarUsuario.ExecutarAsync(idUsuario, novosDadosUsuario);
 
                 return Sucesso("O e-mail foi alterado com sucesso.");
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
+        [HttpPost("gerar-qr-code")]
+        public async Task<ActionResult> GerarQrCodeAppAutenticacaoAsync([FromServices] GerarQrCodeAppAutenticacao gerarQrCodeAppAutenticacao)
+        {
+            try
+            {
+                var token = Token(HttpContext.Request);
+                var id = Seguranca.RetornarIdDoToken(token);
+
+                await gerarQrCodeAppAutenticacao.ExecutarAsync(id);
+
+                return Sucesso("O QrCode foi gerado com sucesso e enviado ao e-mail do usuário.");
             }
             catch (Exception e)
             {

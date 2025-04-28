@@ -1,4 +1,6 @@
 ﻿document.getElementById('form-principal').addEventListener('submit', function (event) {
+    apresentarMsgAguardando();
+
     event.preventDefault();
 
     const parametros = new URLSearchParams(document.location.search);
@@ -41,6 +43,10 @@ function apresentarMsgSucesso() {
 
 function apresentarMsgAlerta(msg) {
     apresentarMsg(msg, 'orange');
+}
+
+function apresentarMsgAguardando() {
+    apresentarMsg('Processando... Por favor, aguarde!', 'black');
 }
 
 function apresentarMsgErro(msg) {

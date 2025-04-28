@@ -29,8 +29,12 @@ namespace AutenticacaoDoisFatores.Infra.Servicos
 
         public bool CodigoEhValido(string codigo, string chaveSecreta)
         {
-            var totp = new Totp(Encoding.UTF8.GetBytes(chaveSecreta));
+            var chaveBytes = Base32Encoding.ToBytes(chaveSecreta);
+
+            var totp = new Totp(chaveBytes);
+
             return totp.VerifyTotp(codigo, out _);
         }
+
     }
 }
