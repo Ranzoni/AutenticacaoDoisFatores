@@ -15,6 +15,18 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Configuration.AddEnvironmentVariables();
 
+var CORS_POLICY_ALLOW_ALL = "AllowAll";
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(CORS_POLICY_ALLOW_ALL, policy =>
+    {
+        policy.AllowAnyOrigin()
+              .AllowAnyMethod()
+              .AllowAnyHeader();
+    });
+});
+
 var stringDeConexao = Environment.GetEnvironmentVariable("ADF_CONEXAO_BANCO");
 if (stringDeConexao is null || stringDeConexao.EstaVazio())
     throw new ApplicationException("A string de conexão com o banco de dados não foi encontrada");
@@ -95,6 +107,8 @@ if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
 }
+
+app.UseCors(CORS_POLICY_ALLOW_ALL);
 
 app.UseMiddleware<Intermediador>();
 
