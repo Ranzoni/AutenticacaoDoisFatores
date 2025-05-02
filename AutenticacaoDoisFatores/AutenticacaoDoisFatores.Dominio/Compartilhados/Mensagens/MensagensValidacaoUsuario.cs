@@ -25,6 +25,8 @@ namespace AutenticacaoDoisFatores.Dominio.Compartilhados.Mensagens
         [Description("Nome de usuário, e-mail ou senha são inválidos.")]
         NaoAutenticado,
         [Description("A chave secreta do usuário é inválida.")]
-        ChaveSecretaInvalida
+        ChaveSecretaInvalida,
+        [Description("Este usuário já está ativo.")]
+        UsuarioJaAtivo
     }
 }
