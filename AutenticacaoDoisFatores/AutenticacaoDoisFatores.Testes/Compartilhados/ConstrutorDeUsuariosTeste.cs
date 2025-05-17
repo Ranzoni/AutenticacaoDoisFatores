@@ -56,15 +56,13 @@ namespace AutenticacaoDoisFatores.Testes.Compartilhados
                 .ComCelular(celular);
         }
 
-        internal static ConstrutorDeNovosDadosUsuario RetornarConstrutorDeNovosDados(string? nome = null, string? nomeUsuario = null, string? email = null, string? senha = null, long? celular = null)
+        internal static ConstrutorDeNovosDadosUsuario RetornarConstrutorDeNovosDados(string? nome = null, string? nomeUsuario = null, long? celular = null)
         {
             var faker = new Faker();
 
             return new ConstrutorDeNovosDadosUsuario()
                 .ComNome(nome ?? faker.Person.FullName)
                 .ComNomeUsuario(nomeUsuario ?? "teste_user_2010234")
-                .ComEmail(email ?? faker.Person.Email)
-                .ComSenha(senha ?? _senhaParaTeste)
                 .ComCelular(celular);
         }
     }

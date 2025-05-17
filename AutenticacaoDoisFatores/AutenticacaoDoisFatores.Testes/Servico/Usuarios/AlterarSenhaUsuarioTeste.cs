@@ -9,7 +9,7 @@ using Moq.AutoMock;
 
 namespace AutenticacaoDoisFatores.Testes.Servico.Usuarios
 {
-    public class GerarNovaSenhaUsuarioTeste
+    public class AlterarSenhaUsuarioTeste
     {
         private readonly AutoMocker _mocker = new();
 
@@ -26,7 +26,7 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Usuarios
                 .RetornarConstrutor(id: idUsuario, senha: senhaAtual, ativo: true)
                 .ConstruirCadastrado();
 
-            var servico = _mocker.CreateInstance<GerarNovaSenhaUsuario>();
+            var servico = _mocker.CreateInstance<AlterarSenhaUsuario>();
 
             _mocker.GetMock<IRepositorioDeUsuarios>().Setup(r => r.BuscarUnicoAsync(idUsuario)).ReturnsAsync(usuario);
 
@@ -59,7 +59,7 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Usuarios
 
             var idUsuario = Guid.NewGuid();
 
-            var servico = _mocker.CreateInstance<GerarNovaSenhaUsuario>();
+            var servico = _mocker.CreateInstance<AlterarSenhaUsuario>();
 
             #endregion
 
@@ -82,7 +82,7 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Usuarios
             var idUsuario = Guid.NewGuid();
             var novaSenha = "Teste.De_N0v@!!Senha";
 
-            var servico = _mocker.CreateInstance<GerarNovaSenhaUsuario>();
+            var servico = _mocker.CreateInstance<AlterarSenhaUsuario>();
 
             #endregion
 
@@ -110,7 +110,7 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Usuarios
                 .RetornarConstrutor(id: idUsuario, senha: senhaAtual, ativo: false)
                 .ConstruirCadastrado();
 
-            var servico = _mocker.CreateInstance<GerarNovaSenhaUsuario>();
+            var servico = _mocker.CreateInstance<AlterarSenhaUsuario>();
 
             _mocker.GetMock<IRepositorioDeUsuarios>().Setup(r => r.BuscarUnicoAsync(idUsuario)).ReturnsAsync(usuario);
 
@@ -140,7 +140,7 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Usuarios
                 .RetornarConstrutor(id: idUsuario, senha: senhaAtual, ativo: true, ehAdm: true)
                 .ConstruirCadastrado();
 
-            var servico = _mocker.CreateInstance<GerarNovaSenhaUsuario>();
+            var servico = _mocker.CreateInstance<AlterarSenhaUsuario>();
 
             _mocker.GetMock<IRepositorioDeUsuarios>().Setup(r => r.BuscarUnicoAsync(idUsuario)).ReturnsAsync(usuario);
 

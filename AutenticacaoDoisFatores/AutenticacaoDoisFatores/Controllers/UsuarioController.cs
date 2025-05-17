@@ -96,12 +96,30 @@ namespace AutenticacaoDoisFatores.Controllers
             }
         }
 
-        [HttpPut("{idUsuario}/gerar-nova-senha")]
+        [HttpPut("{idUsuario}/alterar-senha")]
         [Authorize(Policy = "TrocarSenhaDeUsuario")]
-        public async Task<ActionResult> GerarNovaSenhaAsync([FromServices] GerarNovaSenhaUsuario gerarNovaSenhaUsuario, Guid idUsuario, TrocarSenhaUsuario trocarSenhaUsuario)
+        public async Task<ActionResult> GerarNovaSenhaAsync([FromServices] AlterarSenhaUsuario gerarNovaSenhaUsuario, Guid idUsuario, TrocarSenhaUsuario trocarSenhaUsuario)
         {
             try
             {
+                await gerarNovaSenhaUsuario.ExecutarAsync(idUsuario, trocarSenhaUsuario.NovaSenha);
+
+                return Sucesso("A senha foi atualizada com sucesso.");
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
+        [HttpPut("alterar-senha")]
+        public async Task<ActionResult> GerarNovaSenhaAsync([FromServices] AlterarSenhaUsuario gerarNovaSenhaUsuario, TrocarSenhaUsuario trocarSenhaUsuario)
+        {
+            try
+            {
+                var token = Token(HttpContext.Request);
+                var idUsuario = Seguranca.RetornarIdDoToken(token);
+
                 await gerarNovaSenhaUsuario.ExecutarAsync(idUsuario, trocarSenhaUsuario.NovaSenha);
 
                 return Sucesso("A senha foi atualizada com sucesso.");
@@ -198,13 +216,29 @@ namespace AutenticacaoDoisFatores.Controllers
 
         [HttpPut("{idUsuario}/trocar-email")]
         [Authorize(Policy = "TrocarEmailDeUsuario")]
-        public async Task<ActionResult> AlterarEmailAsync([FromServices] AlterarUsuario alterarUsuario, Guid idUsuario, TrocarEmailUsuario trocarEmailUsuario)
+        public async Task<ActionResult> AlterarEmailAsync([FromServices] AlterarEmailUsuario alterarEmailUsuario, Guid idUsuario, TrocarEmailUsuario trocarEmailUsuario)
         {
             try
             {
-                var novosDadosUsuario = (NovosDadosUsuario)trocarEmailUsuario;
+                await alterarEmailUsuario.ExecutarAsync(idUsuario, trocarEmailUsuario);
 
-                await alterarUsuario.ExecutarAsync(idUsuario, novosDadosUsuario);
+                return Sucesso("O e-mail foi alterado com sucesso.");
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
+        [HttpPut("trocar-email")]
+        public async Task<ActionResult> AlterarEmailAsync([FromServices] AlterarEmailUsuario alterarEmailUsuario, TrocarEmailUsuario trocarEmailUsuario)
+        {
+            try
+            {
+                var token = Token(HttpContext.Request);
+                var idUsuario = Seguranca.RetornarIdDoToken(token);
+
+                await alterarEmailUsuario.ExecutarAsync(idUsuario, trocarEmailUsuario);
 
                 return Sucesso("O e-mail foi alterado com sucesso.");
             }

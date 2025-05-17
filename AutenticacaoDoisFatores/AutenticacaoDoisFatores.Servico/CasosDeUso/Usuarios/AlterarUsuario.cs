@@ -2,7 +2,6 @@
 using AutenticacaoDoisFatores.Dominio.Dominios;
 using AutenticacaoDoisFatores.Dominio.Entidades;
 using AutenticacaoDoisFatores.Dominio.Validadores;
-using AutenticacaoDoisFatores.Servico.Compartilhados;
 using AutenticacaoDoisFatores.Servico.DTO.Usuarios;
 using Mensageiro;
 
@@ -24,12 +23,6 @@ namespace AutenticacaoDoisFatores.Servico.CasosDeUso.Usuarios
 
             if (!usuarioParaAlterar.NomeUsuario.Equals(novosDadosUsuario.NomeUsuario))
                 usuarioParaAlterar.AlterarNomeUsuario(novosDadosUsuario.NomeUsuario);
-
-            if (!usuarioParaAlterar.Email.Equals(novosDadosUsuario.Email))
-                usuarioParaAlterar.AlterarEmail(novosDadosUsuario.Email);
-
-            if (!usuarioParaAlterar.Senha.Equals(novosDadosUsuario.Senha))
-                usuarioParaAlterar.AlterarSenha(novosDadosUsuario.Senha);
 
             if (!usuarioParaAlterar.Celular.Equals(novosDadosUsuario.Celular))
                 usuarioParaAlterar.AlterarCelular(novosDadosUsuario.Celular);
@@ -57,14 +50,6 @@ namespace AutenticacaoDoisFatores.Servico.CasosDeUso.Usuarios
                 _notificador.AddMensagem(MensagensValidacaoUsuario.NomeUsuarioInvalido);
             else 
                 verificarNomeUsuarioJaCadastrado = _dominio.ExisteNomeUsuarioAsync(novosDadosUsuario.NomeUsuario, id);
-
-            if (!ValidadorDeUsuario.EmailEhValido(novosDadosUsuario.Email))
-                _notificador.AddMensagem(MensagensValidacaoUsuario.EmailInvalido);
-            else
-                verificarEmailJaCadastrado = _dominio.ExisteEmailAsync(novosDadosUsuario.Email, id);
-
-            if (!Seguranca.ComposicaoSenhaEhValida(novosDadosUsuario.SenhaDescriptografada()))
-                _notificador.AddMensagem(MensagensValidacaoUsuario.SenhaInvalida);
 
             if (!ValidadorDeUsuario.CelularEhValido(novosDadosUsuario.Celular))
                 _notificador.AddMensagem(MensagensValidacaoUsuario.CelularInvalido);

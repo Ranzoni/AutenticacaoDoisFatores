@@ -38,8 +38,7 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Usuarios
             _mocker.GetMock<IServiceProvider>().Setup(s => s.GetService(typeof(AutenticadorUsuarioPadrao))).Returns(retornarUsuarioAutenticado);
 
             var dadosAutenticacao = new DadosAutenticacao(
-                nomeUsuario: usuarioParaTeste.NomeUsuario,
-                email: null,
+                nomeUsuarioOuEmail: usuarioParaTeste.NomeUsuario,
                 senha: senha);
 
             #endregion
@@ -76,8 +75,7 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Usuarios
             _mocker.GetMock<IServiceProvider>().Setup(s => s.GetService(typeof(AutenticadorUsuarioPadrao))).Returns(retornarUsuarioAutenticado);
 
             var dadosAutenticacao = new DadosAutenticacao(
-                nomeUsuario: null,
-                email: usuarioParaTeste.Email,
+                nomeUsuarioOuEmail: usuarioParaTeste.Email,
                 senha: senha);
 
             #endregion
@@ -96,16 +94,18 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Usuarios
             #endregion
         }
 
-        [Fact]
-        internal async Task NaoDeveAutenticarQuandoNomeUsuarioEEmailNaoPreenchidos()
+        [Theory]
+        [InlineData(null)]
+        [InlineData("")]
+        [InlineData("  ")]
+        internal async Task NaoDeveAutenticarQuandoNomeUsuarioEEmailNaoPreenchidos(string? nomeUsuarioOuEmailNaoPreenchido)
         {
             #region Preparação do teste
 
             var servico = _mocker.CreateInstance<AutenticarUsuario>();
 
             var dadosAutenticacao = new DadosAutenticacao(
-                nomeUsuario: null,
-                email: null,
+                nomeUsuarioOuEmail: nomeUsuarioOuEmailNaoPreenchido,
                 senha: "teste.de_senh4@@");
 
             #endregion
@@ -128,8 +128,7 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Usuarios
             var servico = _mocker.CreateInstance<AutenticarUsuario>();
 
             var dadosAutenticacao = new DadosAutenticacao(
-                nomeUsuario: _faker.Person.UserName,
-                email: null,
+                nomeUsuarioOuEmail: _faker.Person.UserName,
                 senha: "teste.de_senh4@@");
 
             #endregion
@@ -152,8 +151,7 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Usuarios
             var servico = _mocker.CreateInstance<AutenticarUsuario>();
 
             var dadosAutenticacao = new DadosAutenticacao(
-                nomeUsuario: null,
-                email: _faker.Person.Email,
+                nomeUsuarioOuEmail: _faker.Person.Email,
                 senha: "teste.de_senh4@@");
 
             #endregion
@@ -184,8 +182,7 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Usuarios
             _mocker.GetMock<IRepositorioDeUsuarios>().Setup(r => r.BuscarPorNomeUsuarioAsync(usuarioParaTeste.NomeUsuario)).ReturnsAsync(usuarioParaTeste);
 
             var dadosAutenticacao = new DadosAutenticacao(
-                nomeUsuario: usuarioParaTeste.NomeUsuario,
-                email: null,
+                nomeUsuarioOuEmail: usuarioParaTeste.NomeUsuario,
                 senha: "teste.de_senh4@@");
 
             #endregion
@@ -214,8 +211,7 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Usuarios
             _mocker.GetMock<IRepositorioDeUsuarios>().Setup(r => r.BuscarPorEmailAsync(usuarioParaTeste.Email)).ReturnsAsync(usuarioParaTeste);
 
             var dadosAutenticacao = new DadosAutenticacao(
-                nomeUsuario: null,
-                email: usuarioParaTeste.Email,
+                nomeUsuarioOuEmail: usuarioParaTeste.Email,
                 senha: "teste.de_senh4@@");
 
             #endregion
@@ -246,8 +242,7 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Usuarios
             _mocker.GetMock<IRepositorioDeUsuarios>().Setup(r => r.BuscarPorNomeUsuarioAsync(usuarioParaTeste.NomeUsuario)).ReturnsAsync(usuarioParaTeste);
 
             var dadosAutenticacao = new DadosAutenticacao(
-                nomeUsuario: usuarioParaTeste.NomeUsuario,
-                email: null,
+                nomeUsuarioOuEmail: usuarioParaTeste.NomeUsuario,
                 senha: "teste.de_senh4@@");
 
             #endregion
@@ -278,8 +273,7 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Usuarios
             _mocker.GetMock<IRepositorioDeUsuarios>().Setup(r => r.BuscarPorEmailAsync(usuarioParaTeste.Email)).ReturnsAsync(usuarioParaTeste);
 
             var dadosAutenticacao = new DadosAutenticacao(
-                nomeUsuario: null,
-                email: usuarioParaTeste.Email,
+                nomeUsuarioOuEmail: usuarioParaTeste.Email,
                 senha: "teste.de_senh4@@");
 
             #endregion
@@ -315,8 +309,7 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Usuarios
             _mocker.GetMock<IServiceProvider>().Setup(s => s.GetService(typeof(AutenticadorUsuarioEmDoisFatoresPorEmail))).Returns(enviarCodAutenticacaoUsuarioPorEmail);
 
             var dadosAutenticacao = new DadosAutenticacao(
-                nomeUsuario: null,
-                email: usuarioParaTeste.Email,
+                nomeUsuarioOuEmail: usuarioParaTeste.Email,
                 senha: senha);
 
             #endregion

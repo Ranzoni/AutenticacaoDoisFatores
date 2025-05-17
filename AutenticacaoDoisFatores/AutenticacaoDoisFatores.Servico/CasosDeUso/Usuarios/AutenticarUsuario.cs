@@ -6,6 +6,7 @@ using AutenticacaoDoisFatores.Servico.DTO.Usuarios;
 using Mensageiro;
 using AutenticacaoDoisFatores.Servico.CasosDeUso.Usuarios.Autenticadores;
 using Microsoft.Extensions.DependencyInjection;
+using AutenticacaoDoisFatores.Dominio.Validadores;
 
 namespace AutenticacaoDoisFatores.Servico.CasosDeUso.Usuarios
 {
@@ -30,10 +31,9 @@ namespace AutenticacaoDoisFatores.Servico.CasosDeUso.Usuarios
 
         private bool DadosAutenticacaoSaoValidos(DadosAutenticacao dadosAutenticacao)
         {
-            var nomeUsuarioVazio = dadosAutenticacao.NomeUsuario is null || dadosAutenticacao.NomeUsuario.EstaVazio();
-            var emailVazio = dadosAutenticacao.Email is null || dadosAutenticacao.Email.EstaVazio();
+            var nomeUsuarioVazio = dadosAutenticacao.NomeUsuarioOuEmail is null || dadosAutenticacao.NomeUsuarioOuEmail.EstaVazio();
 
-            if (nomeUsuarioVazio && emailVazio)
+            if (nomeUsuarioVazio)
             {
                 _notificador.AddMensagem(MensagensValidacaoUsuario.NomeUsuarioOuEmailObrigatorio);
                 return false;
@@ -44,12 +44,10 @@ namespace AutenticacaoDoisFatores.Servico.CasosDeUso.Usuarios
 
         private async Task<Usuario?> BuscarUsuarioAsync(DadosAutenticacao dadosAutenticacao)
         {
-            if (dadosAutenticacao.NomeUsuario is not null && !dadosAutenticacao.NomeUsuario.EstaVazio())
-                return await _dominio.BuscarPorNomeUsuarioAsync(dadosAutenticacao.NomeUsuario);
-            else if (dadosAutenticacao.Email is not null && !dadosAutenticacao.Email.EstaVazio())
-                return await _dominio.BuscarPorEmailAsync(dadosAutenticacao.Email);
-
-            return null;
+            if (ValidadorDeUsuario.EmailEhValido(dadosAutenticacao.NomeUsuarioOuEmail))
+                return await _dominio.BuscarPorEmailAsync(dadosAutenticacao.NomeUsuarioOuEmail);
+            else 
+                return await _dominio.BuscarPorNomeUsuarioAsync(dadosAutenticacao.NomeUsuarioOuEmail);
         }
 
         private bool AutenticacaoEhValida(Usuario? usuario, string senha)

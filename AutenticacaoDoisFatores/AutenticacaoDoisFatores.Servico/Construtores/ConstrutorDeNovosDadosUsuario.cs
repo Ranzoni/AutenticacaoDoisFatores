@@ -6,9 +6,7 @@ namespace AutenticacaoDoisFatores.Servico.Construtores
     public class ConstrutorDeNovosDadosUsuario
     {
         private string _nome = "";
-        private string _email = "";
         private string _nomeUsuario = "";
-        private string _senha = "";
         private long? _celular;
         private TipoDeAutenticacao? _tipoDeAutenticacao;
 
@@ -22,20 +20,6 @@ namespace AutenticacaoDoisFatores.Servico.Construtores
         public ConstrutorDeNovosDadosUsuario ComNomeUsuario(string nomeUsuario)
         {
             _nomeUsuario = nomeUsuario;
-
-            return this;
-        }
-
-        public ConstrutorDeNovosDadosUsuario ComEmail(string email)
-        {
-            _email = email;
-
-            return this;
-        }
-
-        public ConstrutorDeNovosDadosUsuario ComSenha(string senha)
-        {
-            _senha = senha;
 
             return this;
         }
@@ -60,9 +44,7 @@ namespace AutenticacaoDoisFatores.Servico.Construtores
                 (
                     nome: _nome,
                     nomeUsuario: _nomeUsuario,
-                    email: _email,
                     celular: _celular,
-                    senha: _senha,
                     tipoDeAutenticacao: _tipoDeAutenticacao
                 );
 

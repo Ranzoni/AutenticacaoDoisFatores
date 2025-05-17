@@ -1,9 +1,8 @@
 ﻿namespace AutenticacaoDoisFatores.Servico.DTO.Usuarios
 {
-    public class DadosAutenticacao(string? nomeUsuario, string? email, string senha)
+    public class DadosAutenticacao(string nomeUsuarioOuEmail, string senha)
     {
-        public string? NomeUsuario { get; } = nomeUsuario;
-        public string? Email { get; } = email;
+        public string NomeUsuarioOuEmail { get; } = nomeUsuarioOuEmail;
         public string Senha { get; } = senha;
     }
 }

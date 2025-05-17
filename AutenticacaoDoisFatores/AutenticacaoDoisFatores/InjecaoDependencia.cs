@@ -41,7 +41,7 @@ namespace AutenticacaoDoisFatores
                 return provider.RetornarGerarQrCodeAppAutenticacao();
             });
 
-            servicos.AddTransient<GerarNovaSenhaUsuario>();
+            servicos.AddTransient<AlterarSenhaUsuario>();
             servicos.AddTransient<IncluirPermissoesParaUsuario>();
             servicos.AddTransient<RetornarPermissoes>();
             servicos.AddTransient<RemoverPermissoesParaUsuario>();
@@ -50,6 +50,7 @@ namespace AutenticacaoDoisFatores
             servicos.AddTransient<BuscarClientes>();
             servicos.AddTransient<BuscarUsuarios>();
             servicos.AddTransient<EnviarEmailAtivacao>();
+            servicos.AddTransient<AlterarEmailUsuario>();
         }
 
         internal static void AddDominios(this IServiceCollection servicos)

@@ -6,7 +6,7 @@ using Mensageiro;
 
 namespace AutenticacaoDoisFatores.Servico.CasosDeUso.Usuarios
 {
-    public class GerarNovaSenhaUsuario(DominioDeUsuarios dominio, INotificador notificador)
+    public class AlterarSenhaUsuario(DominioDeUsuarios dominio, INotificador notificador)
     {
         private readonly DominioDeUsuarios _dominio = dominio;
         private readonly INotificador _notificador = notificador;
