@@ -266,14 +266,14 @@ namespace AutenticacaoDoisFatores.Controllers
             }
         }
 
-        [HttpPost("{idUsuario}/enviar-email-ativacao")]
-        public async Task<ActionResult> EnviarEmailAtivacaoAsync([FromServices] EnviarEmailAtivacao enviarEmailAtivacao, Guid idUsuario, EnvioEmailAtivacaoUsuario envioEmailAtivacaoUsuario)
+        [HttpPost("{idUsuario}/enviar-email")]
+        public async Task<ActionResult> EnviarEmailParaUsuarioAsync([FromServices] EnviarEmailParaUsuario enviarEmailAtivacao, Guid idUsuario, EnvioEmailParaUsuario envioEmailAtivacaoUsuario)
         {
             try
             {
-                await enviarEmailAtivacao.ExecutarAsync(idUsuario, envioEmailAtivacaoUsuario.Link);
+                await enviarEmailAtivacao.ExecutarAsync(idUsuario, envioEmailAtivacaoUsuario);
 
-                return Sucesso("O e-mail de ativação foi enviado com sucesso!");
+                return Sucesso("O e-mail foi enviado com sucesso!");
             }
             catch (Exception e)
             {

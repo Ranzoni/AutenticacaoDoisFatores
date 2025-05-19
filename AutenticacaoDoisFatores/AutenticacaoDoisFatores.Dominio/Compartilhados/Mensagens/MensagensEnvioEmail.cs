@@ -33,14 +33,6 @@ namespace AutenticacaoDoisFatores.Dominio.Compartilhados.Mensagens
         [Description("Clique no link abaixo para gerar o QR Code e use um aplicativo de autenticação de sua preferência para escanea-lo.")]
         MensagemQrCodeAutenticacaoDoisFatores,
         [Description("Gerar QR Code")]
-        TextoLinkParaQrCode,
-        [Description("Ativação de cadastro de usuário")]
-        TituloAtivacaoCadastroUsuario,
-        [Description("O seu cadastro no sistema foi realizado!")]
-        MensagemAtivacaoCadastroUsuario,
-        [Description("Para ativar o seu cadastro, clique neste link:")]
-        ParaAtivacaoCadastroUsuario,
-        [Description("Ativar cadastro!")]
-        TextoDoLinkDeAtivacaoCadastroUsuario
+        TextoLinkParaQrCode
     }
 }

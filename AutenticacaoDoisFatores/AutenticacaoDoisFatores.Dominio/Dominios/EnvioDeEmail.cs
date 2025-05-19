@@ -9,34 +9,18 @@ namespace AutenticacaoDoisFatores.Dominio.Dominios
     {
         private readonly IServicoDeEmail _servico = servico;
 
-        public void EnviarAtivacaoDeUsuario(string para, string linkAtivacao)
+        public void EnviarPersonalizadoParaUsuario(string para, string titulo, string mensagem, string html)
         {
             if (para.EstaVazio() || !para.EhEmail())
                 ExcecoesEmail.EmailDestinoInvalido();
 
-            var tituloAtivacaoUsuario = MensagensEnvioEmail.TituloConfirmacaoCadastroCliente.Descricao() ?? "";
-            var msgAtivacaoUsuario = MensagensEnvioEmail.MensagemConfirmacaoCadastroCliente.Descricao() ?? "";
-            var textoAtivacaoUsuario = MensagensEnvioEmail.ParaAtivacaoCadastroUsuario.Descricao() ?? "";
-            var textoLinkAtivacaoUsuario = MensagensEnvioEmail.TextoDoLinkDeAtivacaoCadastroUsuario.Descricao() ?? "";
-
             var mensagemDoEmail = GerarMensagemEmail
                 (
-                    mensagem: msgAtivacaoUsuario,
-                    detalhes: @$"
-                        <form id='form-confirmar-cadastro'>
-
-                            <p style='font-size: 18px; color: #666666;'>
-                                {textoAtivacaoUsuario}
-                            </p>
-
-                            <a href='{linkAtivacao}'>
-                                {textoLinkAtivacaoUsuario}
-                            </a>
-
-                        </form>"
+                    mensagem: mensagem,
+                    detalhes: html
                 );
 
-            _servico.Enviar(para: para, titulo: tituloAtivacaoUsuario, mensagem: mensagemDoEmail);
+            _servico.Enviar(para: para, titulo: titulo, mensagem: mensagemDoEmail);
         }
 
         public void EnviarQrCodeAutenticacaoDoisFatores(string para, string linkParaQrCode, string qrCode)

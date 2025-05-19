@@ -10,31 +10,34 @@ using Moq.AutoMock;
 
 namespace AutenticacaoDoisFatores.Testes.Servico.Usuarios
 {
-    public class EnviarEmailAtivacaoTeste
+    public class EnviarEmailParaUsuarioTeste
     {
         [Fact]
-        internal async Task DeveEnviarEmailAtivacao()
+        internal async Task DeveEnviarEmail()
         {
             #region Preparação do teste
 
             var mocker = new AutoMocker();
 
-            var servico = mocker.CreateInstance<EnviarEmailAtivacao>();
+            var servico = mocker.CreateInstance<EnviarEmailParaUsuario>();
 
             var faker = new Faker();
 
             var idUsuario = Guid.NewGuid();
-            var linkAtivacao = faker.Internet.Url();
 
             var usuario = ConstrutorDeUsuariosTeste
                 .RetornarConstrutor(id: idUsuario, ativo: false)
                 .ConstruirCadastrado();
 
+            var envioEmailParaUsuario = ConstrutorDeEnvioEmailParaUsuarioTeste
+                .RetornarConstrutor()
+                .Construir();
+
             mocker.GetMock<IRepositorioDeUsuarios>().Setup(r => r.BuscarUnicoAsync(idUsuario)).ReturnsAsync(usuario);
 
             #endregion
 
-            await servico.ExecutarAsync(idUsuario, linkAtivacao);
+            await servico.ExecutarAsync(idUsuario, envioEmailParaUsuario);
 
             #region Verificação do teste
 
@@ -44,22 +47,25 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Usuarios
         }
 
         [Fact]
-        internal async Task NaoDeveEnviarEmailAtivacaoParaUsuarioInexistente()
+        internal async Task NaoDeveEnviarEmailParaUsuarioInexistente()
         {
             #region Preparação do teste
 
             var mocker = new AutoMocker();
 
-            var servico = mocker.CreateInstance<EnviarEmailAtivacao>();
+            var servico = mocker.CreateInstance<EnviarEmailParaUsuario>();
 
             var faker = new Faker();
 
             var idUsuario = Guid.NewGuid();
-            var linkAtivacao = faker.Internet.Url();
+
+            var envioEmailParaUsuario = ConstrutorDeEnvioEmailParaUsuarioTeste
+                .RetornarConstrutor()
+                .Construir();
 
             #endregion
 
-            await servico.ExecutarAsync(idUsuario, linkAtivacao);
+            await servico.ExecutarAsync(idUsuario, envioEmailParaUsuario);
 
             #region Verificação do teste
 
@@ -70,18 +76,21 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Usuarios
         }
 
         [Fact]
-        internal async Task NaoDeveEnviarEmailAtivacaoParaUsuarioAdmin()
+        internal async Task NaoDeveEnviarEmailParaUsuarioAdmin()
         {
             #region Preparação do teste
 
             var mocker = new AutoMocker();
 
-            var servico = mocker.CreateInstance<EnviarEmailAtivacao>();
+            var servico = mocker.CreateInstance<EnviarEmailParaUsuario>();
 
             var faker = new Faker();
 
             var idUsuario = Guid.NewGuid();
-            var linkAtivacao = faker.Internet.Url();
+
+            var envioEmailParaUsuario = ConstrutorDeEnvioEmailParaUsuarioTeste
+                .RetornarConstrutor()
+                .Construir();
 
             var usuario = ConstrutorDeUsuariosTeste
                 .RetornarConstrutor(id: idUsuario, ehAdm: true)
@@ -91,44 +100,12 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Usuarios
 
             #endregion
 
-            await servico.ExecutarAsync(idUsuario, linkAtivacao);
+            await servico.ExecutarAsync(idUsuario, envioEmailParaUsuario);
 
             #region Verificação do teste
 
             mocker.Verify<IServicoDeEmail>(s => s.Enviar(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()), Times.Never);
             mocker.Verify<INotificador>(n => n.AddMensagemNaoEncontrado(MensagensValidacaoUsuario.UsuarioNaoEncontrado), Times.Once);
-
-            #endregion
-        }
-
-        [Fact]
-        internal async Task NaoDeveEnviarEmailAtivacaoParaUsuarioAtivo()
-        {
-            #region Preparação do teste
-
-            var mocker = new AutoMocker();
-
-            var servico = mocker.CreateInstance<EnviarEmailAtivacao>();
-
-            var faker = new Faker();
-
-            var idUsuario = Guid.NewGuid();
-            var linkAtivacao = faker.Internet.Url();
-
-            var usuario = ConstrutorDeUsuariosTeste
-                .RetornarConstrutor(id: idUsuario, ativo: true)
-                .ConstruirCadastrado();
-
-            mocker.GetMock<IRepositorioDeUsuarios>().Setup(r => r.BuscarUnicoAsync(idUsuario)).ReturnsAsync(usuario);
-
-            #endregion
-
-            await servico.ExecutarAsync(idUsuario, linkAtivacao);
-
-            #region Verificação do teste
-
-            mocker.Verify<IServicoDeEmail>(s => s.Enviar(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()), Times.Never);
-            mocker.Verify<INotificador>(n => n.AddMensagem(MensagensValidacaoUsuario.UsuarioJaAtivo), Times.Once);
 
             #endregion
         }

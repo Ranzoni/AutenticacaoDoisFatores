@@ -49,7 +49,7 @@ namespace AutenticacaoDoisFatores
             servicos.AddTransient<AlterarUsuario>();
             servicos.AddTransient<BuscarClientes>();
             servicos.AddTransient<BuscarUsuarios>();
-            servicos.AddTransient<EnviarEmailAtivacao>();
+            servicos.AddTransient<EnviarEmailParaUsuario>();
             servicos.AddTransient<AlterarEmailUsuario>();
         }
 
