@@ -1,4 +1,5 @@
 ﻿using AutenticacaoDoisFatores.Dominio.Compartilhados.Entidades;
+using AutenticacaoDoisFatores.Dominio.Compartilhados.Usuarios;
 using AutenticacaoDoisFatores.Dominio.Entidades;
 
 namespace AutenticacaoDoisFatores.Servico.DTO.Usuarios
@@ -11,8 +12,9 @@ namespace AutenticacaoDoisFatores.Servico.DTO.Usuarios
         public long? Celular { get; }
         public bool Ativo { get; }
         public DateTime? DataUltimoAcesso { get; }
+        public TipoDeAutenticacao? TipoDeAutenticacao { get; }
 
-        public UsuarioCadastrado(Guid id, string nome, string nomeUsuario, string email, long? celular, bool ativo, DateTime? dataUltimoAcesso, DateTime dataCadastro, DateTime? dataAlteracao)
+        public UsuarioCadastrado(Guid id, string nome, string nomeUsuario, string email, long? celular, bool ativo, DateTime? dataUltimoAcesso, TipoDeAutenticacao? tipoDeAutenticacao, DateTime dataCadastro, DateTime? dataAlteracao)
         {
             Id = id;
             Nome = nome;
@@ -21,6 +23,7 @@ namespace AutenticacaoDoisFatores.Servico.DTO.Usuarios
             Celular = celular;
             Ativo = ativo;
             DataUltimoAcesso = dataUltimoAcesso;
+            TipoDeAutenticacao = tipoDeAutenticacao;
             DataCadastro = dataCadastro;
             DataAlteracao = dataAlteracao;
         }
@@ -36,6 +39,7 @@ namespace AutenticacaoDoisFatores.Servico.DTO.Usuarios
                 celular: usuario.Celular,
                 ativo: usuario.Ativo,
                 dataUltimoAcesso: usuario.DataUltimoAcesso,
+                tipoDeAutenticacao: usuario.TipoDeAutenticacao,
                 dataCadastro: usuario.DataCadastro,
                 dataAlteracao: usuario.DataAlteracao
             );
