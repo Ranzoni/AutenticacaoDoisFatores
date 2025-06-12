@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Npgsql;
+using AutenticacaoDoisFatores.Infra.Repositorios;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -59,8 +60,45 @@ builder.Services.AddAuthentication(opt =>
         ValidateIssuerSigningKey = true,
         IssuerSigningKey = new SymmetricSecurityKey(chaveJwt),
         
-        ValidateIssuer = false,
-        ValidateAudience = false
+        ValidateIssuer = true,
+        ValidIssuer = Seguranca.RetornarEmissor(),
+        ValidateAudience = true,
+        ValidAudience = Seguranca.RetornarDestinatario(),
+        ValidateLifetime = true
+    };
+
+    opt.Events = new JwtBearerEvents()
+    {
+        OnTokenValidated = async (TokenValidatedContext contexto) =>
+        {
+            var nomeDominio = contexto.Request.Headers["Dominio"].ToString();
+            if (nomeDominio.EstaVazio())
+            {
+                contexto.Fail("O domínio do cliente não foi encontrado");
+                return;
+            }
+
+            var token = contexto.Request.Headers.Authorization.ToString().Replace("Bearer ", "");
+            if (!token.EstaVazio())
+            {
+                var stringDeConexao = Environment.GetEnvironmentVariable("ADF_CONEXAO_BANCO");
+                if (stringDeConexao is null || stringDeConexao.EstaVazio())
+                    throw new ApplicationException("A string de conexão com o banco de dados não foi encontrada");
+
+                var contextoCliente = new ContextoCliente(stringDeConexao, nomeDominio);
+                var repositorioUsuarios = new RepositorioDeUsuarios(contextoCliente);
+                if (repositorioUsuarios is not null)
+                {
+                    var idUsuario = Seguranca.RetornarIdDoToken(token);
+                    var usuario = await repositorioUsuarios.BuscarUsuarioPorDominioAsync(idUsuario, nomeDominio);
+                    if (usuario is null || !usuario.Ativo)
+                    {
+                        contexto.Fail("Usuário não encontrado");
+                        return;
+                    }
+                }
+            }
+        }
     };
 });
 

@@ -1,9 +1,6 @@
 ﻿using AutenticacaoDoisFatores.Dominio.Compartilhados;
 using AutenticacaoDoisFatores.Dominio.Dominios;
 using AutenticacaoDoisFatores.Dominio.Repositorios;
-using AutenticacaoDoisFatores.Infra.Contexto;
-using AutenticacaoDoisFatores.Infra.Repositorios;
-using AutenticacaoDoisFatores.Servico.Compartilhados;
 
 namespace AutenticacaoDoisFatores.Compartilhados
 {
@@ -19,7 +16,7 @@ namespace AutenticacaoDoisFatores.Compartilhados
                 return;
             }
 
-            if (!await ChaveApiEhValidaAsync(contexto))
+            if (!await RetornarDominioUsuario(contexto))
             {
                 contexto.Response.StatusCode = StatusCodes.Status401Unauthorized;
                 return;
@@ -42,7 +39,7 @@ namespace AutenticacaoDoisFatores.Compartilhados
             return false;
         }
 
-        private static async Task<bool> ChaveApiEhValidaAsync(HttpContext contexto)
+        private static async Task<bool> RetornarDominioUsuario(HttpContext contexto)
         {
             var chaveCliente = contexto.Request.Headers["Chave-API"].ToString();
             if (chaveCliente.EstaVazio())
@@ -56,27 +53,9 @@ namespace AutenticacaoDoisFatores.Compartilhados
             if (nomeDominio.EstaVazio())
                 return false;
 
-            var token = contexto.Request.Headers.Authorization.ToString().Replace("Bearer ", "");
-            if (!token.EstaVazio())
-            {
-                var stringDeConexao = Environment.GetEnvironmentVariable("ADF_CONEXAO_BANCO");
-                if (stringDeConexao is null || stringDeConexao.EstaVazio())
-                    throw new ApplicationException("A string de conexão com o banco de dados não foi encontrada");
-
-                var contextoCliente = new ContextoCliente(stringDeConexao, nomeDominio);
-                var repositorioUsuarios = new RepositorioDeUsuarios(contextoCliente);
-                if (repositorioUsuarios is not null)
-                {
-                    var idUsuario = Seguranca.RetornarIdDoToken(token);
-                    var usuario = await repositorioUsuarios.BuscarUsuarioPorDominioAsync(idUsuario, nomeDominio);
-                    if (usuario is null || !usuario.Ativo)
-                        return false;
-                }
-            }
-
             contexto.Request.Headers.Append("Dominio", nomeDominio);
 
-            return !nomeDominio.EstaVazio();
+            return true;
         }
     }
 }

@@ -3,6 +3,7 @@ using AutenticacaoDoisFatores.Dominio.Compartilhados.Permissoes;
 using AutenticacaoDoisFatores.Dominio.Dominios;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
+using System.Security;
 using System.Security.Claims;
 using System.Text;
 
@@ -39,6 +40,24 @@ namespace AutenticacaoDoisFatores.Servico.Compartilhados
             var randomico = new Random();
             var codigo = randomico.Next(90000, 999999);
             return codigo.ToString().PadLeft(6, '0');
+        }
+
+        public static string RetornarEmissor()
+        {
+            var emissor = Environment.GetEnvironmentVariable("ADF_EMISSOR_TOKEN");
+            if (string.IsNullOrEmpty(emissor))
+                throw new ApplicationException("O emissor do token não foi encontrado");
+
+            return emissor;
+        }
+
+        public static string RetornarDestinatario()
+        {
+            var audience = Environment.GetEnvironmentVariable("ADF_DESTINATARIO_TOKEN");
+            if (string.IsNullOrEmpty(audience))
+                throw new SecurityException("O destinatário do token não foi encontrado");
+
+            return audience;
         }
     }
 
@@ -227,7 +246,9 @@ namespace AutenticacaoDoisFatores.Servico.Compartilhados
                 Subject = perfilDoToken,
                 SigningCredentials = credenciais,
                 NotBefore = DateTime.Now,
-                Expires = DateTime.Now.AddHours(2)
+                Expires = DateTime.Now.AddHours(2),
+                Issuer = RetornarEmissor(),
+                Audience = RetornarDestinatario()
             };
 
             var token = geradorDeToken.CreateToken(descritorDoToken);
@@ -256,9 +277,23 @@ namespace AutenticacaoDoisFatores.Servico.Compartilhados
         private static IEnumerable<Claim> LerToken(string token)
         {
             var geradorDeToken = new JwtSecurityTokenHandler();
-            var tokenEmObjeto = geradorDeToken.ReadJwtToken(token);
 
-            return tokenEmObjeto.Claims;
+            var chave = ChaveDeAutenticacao();
+            var chaveSimetrica = new SymmetricSecurityKey(chave);
+            var parametrosDeValidacao = new TokenValidationParameters
+            {
+                ValidateIssuerSigningKey = true,
+                IssuerSigningKey = chaveSimetrica,
+                ValidateIssuer = true,
+                ValidIssuer = RetornarEmissor(),
+                ValidateAudience = true,
+                ValidAudience = RetornarDestinatario(),
+                ValidateLifetime = true,
+                ClockSkew = TimeSpan.Zero
+            };
+
+            var principal = geradorDeToken.ValidateToken(token, parametrosDeValidacao, out _);
+            return principal.Claims;
         }
     }
 
