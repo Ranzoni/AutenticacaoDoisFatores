@@ -25,9 +25,9 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Clientes
             var urlParaTeste = _faker.Internet.UrlWithPath();
             var cliente = ConstrutorDeClientesTeste
                 .RetornarConstrutor(email: emailParaTeste, ativo: true)
-                .ConstruirCadastrado();
+                .Build();
 
-            _mocker.GetMock<IRepositorioDeClientes>().Setup(r => r.BuscarPorEmailAsync(emailParaTeste)).ReturnsAsync(cliente);
+            _mocker.GetMock<IClientRepository>().Setup(r => r.GetByEmailAsync(emailParaTeste)).ReturnsAsync(cliente);
 
             #endregion
 
@@ -35,7 +35,7 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Clientes
 
             #region Verificação do teste
 
-            _mocker.Verify<IServicoDeEmail>(e => e.Enviar(emailParaTeste, It.IsAny<string>(), It.IsAny<string>()), Times.Once);
+            _mocker.Verify<IEmailService>(e => e.Send(emailParaTeste, It.IsAny<string>(), It.IsAny<string>()), Times.Once);
 
             #endregion
         }
@@ -57,8 +57,8 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Clientes
 
             #region Verificação do teste
 
-            _mocker.Verify<IServicoDeEmail>(e => e.Enviar(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()), Times.Never);
-            _mocker.Verify<INotificador>(n => n.AddMensagemNaoEncontrado(MensagensValidacaoCliente.ClienteNaoEncontrado), Times.Once);
+            _mocker.Verify<IEmailService>(e => e.Send(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()), Times.Never);
+            _mocker.Verify<INotificador>(n => n.AddMensagemNaoEncontrado(ClientValidationMessages.ClientNotFound), Times.Once);
 
             #endregion
         }
@@ -73,9 +73,9 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Clientes
             var urlParaTeste = _faker.Internet.UrlWithPath();
             var cliente = ConstrutorDeClientesTeste
                 .RetornarConstrutor(email: emailParaTeste, ativo: false)
-                .ConstruirCadastrado();
+                .Build();
 
-            _mocker.GetMock<IRepositorioDeClientes>().Setup(r => r.BuscarPorEmailAsync(emailParaTeste)).ReturnsAsync(cliente);
+            _mocker.GetMock<IClientRepository>().Setup(r => r.GetByEmailAsync(emailParaTeste)).ReturnsAsync(cliente);
             _mocker.GetMock<INotificador>().Setup(n => n.ExisteMensagem()).Returns(true);
 
             #endregion
@@ -84,8 +84,8 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Clientes
 
             #region Verificação do teste
 
-            _mocker.Verify<IServicoDeEmail>(e => e.Enviar(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()), Times.Never);
-            _mocker.Verify<INotificador>(n => n.AddMensagem(MensagensValidacaoCliente.ClienteNaoAtivo), Times.Once);
+            _mocker.Verify<IEmailService>(e => e.Send(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()), Times.Never);
+            _mocker.Verify<INotificador>(n => n.AddMensagem(ClientValidationMessages.ClientNotActive), Times.Once);
 
             #endregion
         }

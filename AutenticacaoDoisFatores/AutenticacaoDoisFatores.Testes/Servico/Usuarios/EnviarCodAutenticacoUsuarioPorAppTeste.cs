@@ -20,7 +20,7 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Usuarios
 
             var usuario = ConstrutorDeUsuariosTeste
                 .RetornarConstrutor(ativo: true)
-                .ConstruirCadastrado();
+                .Build();
 
             #endregion
 
@@ -47,7 +47,7 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Usuarios
 
             var usuario = ConstrutorDeUsuariosTeste
                 .RetornarConstrutor(ativo: false)
-                .ConstruirCadastrado();
+                .Build();
 
             mocker.GetMock<INotificador>().Setup(n => n.ExisteMensagem()).Returns(true);
 

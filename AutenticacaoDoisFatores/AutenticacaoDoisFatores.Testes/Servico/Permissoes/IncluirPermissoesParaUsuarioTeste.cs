@@ -21,21 +21,21 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Permissoes
             #region Preparação do teste
 
             var idUsuario = Guid.NewGuid();
-            var permissoesParaIncluir = _faker.Random.EnumValues<TipoDePermissao>();
+            var permissoesParaIncluir = _faker.Random.EnumValues<PermissionType>();
 
             var usuario = ConstrutorDeUsuariosTeste
                 .RetornarConstrutor(id: idUsuario, ativo: true)
-                .ConstruirCadastrado();
+                .Build();
 
             var servico = _mocker.CreateInstance<IncluirPermissoesParaUsuario>();
 
-            _mocker.GetMock<IRepositorioDeUsuarios>().Setup(r => r.BuscarUnicoAsync(idUsuario)).ReturnsAsync(usuario);
+            _mocker.GetMock<IUserRepository>().Setup(r => r.GetByIdAsync(idUsuario)).ReturnsAsync(usuario);
 
             #endregion
 
             await servico.ExecutarAsync(idUsuario, permissoesParaIncluir);
 
-            _mocker.Verify<IRepositorioDePermissoes>(r => r.AdicionarAsync(idUsuario, permissoesParaIncluir), Times.Once);
+            _mocker.Verify<IPermissionsRepository>(r => r.AddAsync(idUsuario, permissoesParaIncluir), Times.Once);
         }
 
         [Fact]
@@ -44,7 +44,7 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Permissoes
             #region Preparação do teste
 
             var idUsuario = Guid.NewGuid();
-            var permissoesParaIncluir = _faker.Random.EnumValues<TipoDePermissao>();
+            var permissoesParaIncluir = _faker.Random.EnumValues<PermissionType>();
 
             var servico = _mocker.CreateInstance<IncluirPermissoesParaUsuario>();
 
@@ -54,9 +54,9 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Permissoes
 
             #region Verificação do teste
 
-            _mocker.Verify<IRepositorioDePermissoes>(r => r.AdicionarAsync(It.IsAny<Guid>(), It.IsAny<IEnumerable<TipoDePermissao>>()), Times.Never);
-            _mocker.Verify<IRepositorioDePermissoes>(r => r.EditarAsync(It.IsAny<Guid>(), It.IsAny<IEnumerable<TipoDePermissao>>()), Times.Never);
-            _mocker.Verify<INotificador>(n => n.AddMensagemNaoEncontrado(MensagensValidacaoUsuario.UsuarioNaoEncontrado), Times.Once);
+            _mocker.Verify<IPermissionsRepository>(r => r.AddAsync(It.IsAny<Guid>(), It.IsAny<IEnumerable<PermissionType>>()), Times.Never);
+            _mocker.Verify<IPermissionsRepository>(r => r.UpdateAsync(It.IsAny<Guid>(), It.IsAny<IEnumerable<PermissionType>>()), Times.Never);
+            _mocker.Verify<INotificador>(n => n.AddMensagemNaoEncontrado(UserValidationMessages.UserNotFound), Times.Once);
 
             #endregion
         }
@@ -67,15 +67,15 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Permissoes
             #region Preparação do teste
 
             var idUsuario = Guid.NewGuid();
-            var permissoesParaIncluir = _faker.Random.EnumValues<TipoDePermissao>();
+            var permissoesParaIncluir = _faker.Random.EnumValues<PermissionType>();
 
             var usuario = ConstrutorDeUsuariosTeste
                 .RetornarConstrutor(id: idUsuario, ativo: false)
-                .ConstruirCadastrado();
+                .Build();
 
             var servico = _mocker.CreateInstance<IncluirPermissoesParaUsuario>();
 
-            _mocker.GetMock<IRepositorioDeUsuarios>().Setup(r => r.BuscarUnicoAsync(idUsuario)).ReturnsAsync(usuario);
+            _mocker.GetMock<IUserRepository>().Setup(r => r.GetByIdAsync(idUsuario)).ReturnsAsync(usuario);
 
             #endregion
 
@@ -83,9 +83,9 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Permissoes
 
             #region Verificação do teste
 
-            _mocker.Verify<IRepositorioDePermissoes>(r => r.AdicionarAsync(It.IsAny<Guid>(), It.IsAny<IEnumerable<TipoDePermissao>>()), Times.Never);
-            _mocker.Verify<IRepositorioDePermissoes>(r => r.EditarAsync(It.IsAny<Guid>(), It.IsAny<IEnumerable<TipoDePermissao>>()), Times.Never);
-            _mocker.Verify<INotificador>(n => n.AddMensagemNaoEncontrado(MensagensValidacaoUsuario.UsuarioNaoEncontrado), Times.Once);
+            _mocker.Verify<IPermissionsRepository>(r => r.AddAsync(It.IsAny<Guid>(), It.IsAny<IEnumerable<PermissionType>>()), Times.Never);
+            _mocker.Verify<IPermissionsRepository>(r => r.UpdateAsync(It.IsAny<Guid>(), It.IsAny<IEnumerable<PermissionType>>()), Times.Never);
+            _mocker.Verify<INotificador>(n => n.AddMensagemNaoEncontrado(UserValidationMessages.UserNotFound), Times.Once);
 
             #endregion
         }
@@ -96,15 +96,15 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Permissoes
             #region Preparação do teste
 
             var idUsuario = Guid.NewGuid();
-            var permissoesParaIncluir = _faker.Random.EnumValues<TipoDePermissao>();
+            var permissoesParaIncluir = _faker.Random.EnumValues<PermissionType>();
 
             var usuario = ConstrutorDeUsuariosTeste
                 .RetornarConstrutor(id: idUsuario, ativo: true, ehAdm: true)
-                .ConstruirCadastrado();
+                .Build();
 
             var servico = _mocker.CreateInstance<IncluirPermissoesParaUsuario>();
 
-            _mocker.GetMock<IRepositorioDeUsuarios>().Setup(r => r.BuscarUnicoAsync(idUsuario)).ReturnsAsync(usuario);
+            _mocker.GetMock<IUserRepository>().Setup(r => r.GetByIdAsync(idUsuario)).ReturnsAsync(usuario);
 
             #endregion
 
@@ -112,8 +112,8 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Permissoes
 
             #region Verificação do teste
 
-            _mocker.Verify<IRepositorioDePermissoes>(r => r.AdicionarAsync(It.IsAny<Guid>(), It.IsAny<IEnumerable<TipoDePermissao>>()), Times.Never);
-            _mocker.Verify<INotificador>(n => n.AddMensagemNaoEncontrado(MensagensValidacaoUsuario.UsuarioNaoEncontrado), Times.Once);
+            _mocker.Verify<IPermissionsRepository>(r => r.AddAsync(It.IsAny<Guid>(), It.IsAny<IEnumerable<PermissionType>>()), Times.Never);
+            _mocker.Verify<INotificador>(n => n.AddMensagemNaoEncontrado(UserValidationMessages.UserNotFound), Times.Once);
 
             #endregion
         }

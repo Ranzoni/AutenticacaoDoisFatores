@@ -18,18 +18,18 @@ namespace AutenticacaoDoisFatores.Testes.Dominio.Dominios
 
             var mocker = new AutoMocker();
 
-            var dominio = mocker.CreateInstance<GerenciadorDeCodAutenticacao>();
+            var dominio = mocker.CreateInstance<AuthCodeManager>();
 
             var idUsuario = Guid.NewGuid();
             var codigoAutenticacao = Seguranca.GerarCodigoAutenticacao();
 
             #endregion
 
-            await dominio.SalvarAsync(idUsuario, codigoAutenticacao);
+            await dominio.SaveAsync(idUsuario, codigoAutenticacao);
 
             #region Verificação do teste
 
-            mocker.Verify<IRepositorioDeCodigoDeAutenticacao>(r => r.SalvarAsync(idUsuario, codigoAutenticacao), Times.Once);
+            mocker.Verify<IAuthCodeRepository>(r => r.SaveAsync(idUsuario, codigoAutenticacao), Times.Once);
 
             #endregion
         }
@@ -43,19 +43,19 @@ namespace AutenticacaoDoisFatores.Testes.Dominio.Dominios
 
             var mocker = new AutoMocker();
 
-            var dominio = mocker.CreateInstance<GerenciadorDeCodAutenticacao>();
+            var dominio = mocker.CreateInstance<AuthCodeManager>();
 
             var idUsuario = Guid.NewGuid();
 
             #endregion
 
-            var excecao = await Assert.ThrowsAsync<ExcecoesCodDeAutenticacao>(() => dominio.SalvarAsync(idUsuario, codigoAutenticacaoVazio));
+            var excecao = await Assert.ThrowsAsync<AuthCodeException>(() => dominio.SaveAsync(idUsuario, codigoAutenticacaoVazio));
 
             #region Verificação do teste
 
             Assert.NotNull(excecao);
-            Assert.Equal(MensagensValidacaoCodDeAutenticacao.CodAutenticacaoVazio.Descricao(), excecao.Message);
-            mocker.Verify<IRepositorioDeCodigoDeAutenticacao>(r => r.SalvarAsync(It.IsAny<Guid>(), It.IsAny<string>()), Times.Never);
+            Assert.Equal(AuthCodeValidationMessages.EmptyAuthCode.Description(), excecao.Message);
+            mocker.Verify<IAuthCodeRepository>(r => r.SaveAsync(It.IsAny<Guid>(), It.IsAny<string>()), Times.Never);
 
             #endregion
         }
@@ -67,22 +67,22 @@ namespace AutenticacaoDoisFatores.Testes.Dominio.Dominios
 
             var mocker = new AutoMocker();
 
-            var dominio = mocker.CreateInstance<GerenciadorDeCodAutenticacao>();
+            var dominio = mocker.CreateInstance<AuthCodeManager>();
 
             var idUsuario = Guid.NewGuid();
             var codigoAutenticacao = Seguranca.GerarCodigoAutenticacao();
 
-            mocker.GetMock<IRepositorioDeCodigoDeAutenticacao>().Setup(r => r.BuscarCodigoAsync(idUsuario)).ReturnsAsync(codigoAutenticacao);
+            mocker.GetMock<IAuthCodeRepository>().Setup(r => r.GetByCodeAsync(idUsuario)).ReturnsAsync(codigoAutenticacao);
 
             #endregion
 
-            var retorno = await dominio.BuscarCodigoAsync(idUsuario);
+            var retorno = await dominio.GetCodeAsync(idUsuario);
 
             #region Verificação do teste
 
             Assert.NotNull(retorno);
             Assert.Equal(codigoAutenticacao, retorno);
-            mocker.Verify<IRepositorioDeCodigoDeAutenticacao>(r => r.BuscarCodigoAsync(idUsuario), Times.Once);
+            mocker.Verify<IAuthCodeRepository>(r => r.GetByCodeAsync(idUsuario), Times.Once);
 
             #endregion
         }
@@ -94,18 +94,18 @@ namespace AutenticacaoDoisFatores.Testes.Dominio.Dominios
 
             var mocker = new AutoMocker();
 
-            var dominio = mocker.CreateInstance<GerenciadorDeCodAutenticacao>();
+            var dominio = mocker.CreateInstance<AuthCodeManager>();
 
             var idUsuario = Guid.NewGuid();
 
             #endregion
 
-            var retorno = await dominio.BuscarCodigoAsync(idUsuario);
+            var retorno = await dominio.GetCodeAsync(idUsuario);
 
             #region Verificação do teste
 
             Assert.Null(retorno);
-            mocker.Verify<IRepositorioDeCodigoDeAutenticacao>(r => r.BuscarCodigoAsync(idUsuario), Times.Once);
+            mocker.Verify<IAuthCodeRepository>(r => r.GetByCodeAsync(idUsuario), Times.Once);
 
             #endregion
         }

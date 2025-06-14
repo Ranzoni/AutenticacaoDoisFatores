@@ -17,10 +17,10 @@ namespace AutenticacaoDoisFatores.Testes.Dominio.Dominios
         {
             #region Preparação do teste
 
-            var dominio = _mocker.CreateInstance<DominioDePermissoes>();
+            var dominio = _mocker.CreateInstance<PermissionsDomain>();
 
             var idUsuario = Guid.NewGuid();
-            var permissoes = _faker.Random.EnumValues<TipoDePermissao>();
+            var permissoes = _faker.Random.EnumValues<PermissionType>();
 
             #endregion
 
@@ -28,7 +28,7 @@ namespace AutenticacaoDoisFatores.Testes.Dominio.Dominios
 
             #region Verificação do teste
 
-            _mocker.Verify<IRepositorioDePermissoes>(r => r.AdicionarAsync(idUsuario, permissoes), Times.Once);
+            _mocker.Verify<IPermissionsRepository>(r => r.AddAsync(idUsuario, permissoes), Times.Once);
 
             #endregion
         }
@@ -39,19 +39,19 @@ namespace AutenticacaoDoisFatores.Testes.Dominio.Dominios
             #region Preparação do teste
 
             var idUsuario = Guid.NewGuid();
-            var permissoes = _faker.Random.EnumValues<TipoDePermissao>();
+            var permissoes = _faker.Random.EnumValues<PermissionType>();
 
-            var dominio = _mocker.CreateInstance<DominioDePermissoes>();
-            _mocker.GetMock<IRepositorioDePermissoes>().Setup(r => r.RetornarPorUsuarioAsync(idUsuario)).ReturnsAsync(permissoes);
+            var dominio = _mocker.CreateInstance<PermissionsDomain>();
+            _mocker.GetMock<IPermissionsRepository>().Setup(r => r.GetByUserIdAsync(idUsuario)).ReturnsAsync(permissoes);
 
             #endregion
 
-            var retorno = await dominio.RetornarPermissoesAsync(idUsuario);
+            var retorno = await dominio.GetByIdAsync(idUsuario);
 
             #region Verificação do teste
 
             Assert.Equal(permissoes, retorno);
-            _mocker.Verify<IRepositorioDePermissoes>(r => r.RetornarPorUsuarioAsync(idUsuario), Times.Once);
+            _mocker.Verify<IPermissionsRepository>(r => r.GetByUserIdAsync(idUsuario), Times.Once);
 
             #endregion
         }
@@ -59,9 +59,9 @@ namespace AutenticacaoDoisFatores.Testes.Dominio.Dominios
         [Fact]
         internal void DeveRetornarTodasPermissoesDoUsuario()
         {
-            var permissoesEsperadas = Enum.GetValues<TipoDePermissao>();
+            var permissoesEsperadas = Enum.GetValues<PermissionType>();
 
-            var retorno = DominioDePermissoes.RetornarTodasPermissoes();
+            var retorno = PermissionsDomain.GetAll();
 
             Assert.Equal(permissoesEsperadas, retorno);
         }
@@ -71,22 +71,22 @@ namespace AutenticacaoDoisFatores.Testes.Dominio.Dominios
         {
             #region Preparação do teste
 
-            var dominio = _mocker.CreateInstance<DominioDePermissoes>();
+            var dominio = _mocker.CreateInstance<PermissionsDomain>();
 
             var idUsuario = Guid.NewGuid();
-            var permissoesParaIncluir = new List<TipoDePermissao>()
+            var permissoesParaIncluir = new List<PermissionType>()
             {
-                TipoDePermissao.CriarUsuario
+                PermissionType.CreateUser
             };
-            var permissoesInclusas = new List<TipoDePermissao>
+            var permissoesInclusas = new List<PermissionType>
             {
-                TipoDePermissao.AtivarUsuario,
-                TipoDePermissao.DesativarUsuario
+                PermissionType.ActivateUser,
+                PermissionType.InactivateUser
             };
 
             var permissoesEsperadas = permissoesInclusas.Concat(permissoesParaIncluir);
 
-            _mocker.GetMock<IRepositorioDePermissoes>().Setup(r => r.RetornarPorUsuarioAsync(idUsuario)).ReturnsAsync(permissoesInclusas);
+            _mocker.GetMock<IPermissionsRepository>().Setup(r => r.GetByUserIdAsync(idUsuario)).ReturnsAsync(permissoesInclusas);
 
             #endregion
 
@@ -94,7 +94,7 @@ namespace AutenticacaoDoisFatores.Testes.Dominio.Dominios
 
             #region Verificação do teste
 
-            _mocker.Verify<IRepositorioDePermissoes>(r => r.EditarAsync(idUsuario, permissoesEsperadas), Times.Once);
+            _mocker.Verify<IPermissionsRepository>(r => r.UpdateAsync(idUsuario, permissoesEsperadas), Times.Once);
 
             #endregion
         }
@@ -105,23 +105,23 @@ namespace AutenticacaoDoisFatores.Testes.Dominio.Dominios
             #region Preparação do teste
 
             var mocker = new AutoMocker();
-            var dominio = mocker.CreateInstance<DominioDePermissoes>();
+            var dominio = mocker.CreateInstance<PermissionsDomain>();
 
             var idUsuario = Guid.NewGuid();
-            var permissoesParaExcluir = new List<TipoDePermissao>()
+            var permissoesParaExcluir = new List<PermissionType>()
             {
-                TipoDePermissao.AtivarUsuario,
-                TipoDePermissao.DesativarUsuario
+                PermissionType.ActivateUser,
+                PermissionType.InactivateUser
             };
-            var permissoesInclusas = new List<TipoDePermissao>
+            var permissoesInclusas = new List<PermissionType>
             {
-                TipoDePermissao.CriarUsuario,
-                TipoDePermissao.AtivarUsuario,
-                TipoDePermissao.DesativarUsuario
+                PermissionType.CreateUser,
+                PermissionType.ActivateUser,
+                PermissionType.InactivateUser
             };
             var permissoesEsperadas = permissoesInclusas.Except(permissoesParaExcluir);
 
-            mocker.GetMock<IRepositorioDePermissoes>().Setup(r => r.RetornarPorUsuarioAsync(idUsuario)).ReturnsAsync(permissoesInclusas);
+            mocker.GetMock<IPermissionsRepository>().Setup(r => r.GetByUserIdAsync(idUsuario)).ReturnsAsync(permissoesInclusas);
 
             #endregion
 
@@ -129,7 +129,7 @@ namespace AutenticacaoDoisFatores.Testes.Dominio.Dominios
 
             #region Verificação do teste
 
-            mocker.Verify<IRepositorioDePermissoes>(r => r.EditarAsync(idUsuario, permissoesEsperadas), Times.Once);
+            mocker.Verify<IPermissionsRepository>(r => r.UpdateAsync(idUsuario, permissoesEsperadas), Times.Once);
 
             #endregion
         }
@@ -139,13 +139,13 @@ namespace AutenticacaoDoisFatores.Testes.Dominio.Dominios
         {
             #region Preparação do teste
 
-            var dominio = _mocker.CreateInstance<DominioDePermissoes>();
+            var dominio = _mocker.CreateInstance<PermissionsDomain>();
 
             var idUsuario = Guid.NewGuid();
-            var permissoesParaExcluir = new List<TipoDePermissao>()
+            var permissoesParaExcluir = new List<PermissionType>()
             {
-                TipoDePermissao.AtivarUsuario,
-                TipoDePermissao.DesativarUsuario
+                PermissionType.ActivateUser,
+                PermissionType.InactivateUser
             };
 
             #endregion
@@ -154,7 +154,7 @@ namespace AutenticacaoDoisFatores.Testes.Dominio.Dominios
 
             #region Verificação do teste
 
-            _mocker.Verify<IRepositorioDePermissoes>(r => r.EditarAsync(It.IsAny<Guid>(), It.IsAny<IEnumerable<TipoDePermissao>>()), Times.Never);
+            _mocker.Verify<IPermissionsRepository>(r => r.UpdateAsync(It.IsAny<Guid>(), It.IsAny<IEnumerable<PermissionType>>()), Times.Never);
 
             #endregion
         }

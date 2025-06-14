@@ -6,20 +6,20 @@ namespace AutenticacaoDoisFatores.Testes.Compartilhados
 {
     internal static class ConstrutorDeClientesTeste
     {
-        internal static ConstrutorDeCliente RetornarConstrutor(Guid? id = null, string? nome = null, string? email = null, string? nomeDominio = null, string? chaveAcesso = null, bool? ativo = null, DateTime? dataCadastro = null, DateTime? dataAlteracao = null)
+        internal static ClientBuilder RetornarConstrutor(Guid? id = null, string? nome = null, string? email = null, string? nomeDominio = null, string? chaveAcesso = null, bool? ativo = null, DateTime? dataCadastro = null, DateTime? dataAlteracao = null)
         {
             var faker = new Faker();
 
-            var construtor = new ConstrutorDeCliente();
+            var construtor = new ClientBuilder();
             construtor
-                .ComId(id ?? Guid.NewGuid())
-                .ComNome(nome ?? faker.Company.CompanyName())
-                .ComEmail(email ?? faker.Internet.Email())
-                .ComNomeDominio(nomeDominio ?? "dominio_cliente")
-                .ComChaveAcesso(chaveAcesso ?? faker.Random.AlphaNumeric(20))
-                .ComAtivo(ativo ?? faker.Random.Bool())
-                .ComDataCadastro(dataCadastro ?? faker.Date.Past())
-                .ComDataAlteracao(dataAlteracao);
+                .WithId(id ?? Guid.NewGuid())
+                .WithName(nome ?? faker.Company.CompanyName())
+                .WithEmail(email ?? faker.Internet.Email())
+                .WithDomainName(nomeDominio ?? "dominio_cliente")
+                .WithAccessKey(chaveAcesso ?? faker.Random.AlphaNumeric(20))
+                .WithActive(ativo ?? faker.Random.Bool())
+                .WithCreatedAt(dataCadastro ?? faker.Date.Past())
+                .WithUpdatedAt(dataAlteracao);
 
             return construtor;
         }

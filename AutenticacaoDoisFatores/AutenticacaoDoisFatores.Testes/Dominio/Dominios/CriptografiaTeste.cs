@@ -12,7 +12,7 @@ namespace AutenticacaoDoisFatores.Testes.Dominio.Dominios
 
             var valor = faker.Internet.Password();
 
-            var valorCriptografado = Criptografia.CriptografarComSha512(valor);
+            var valorCriptografado = Encrypt.EncryptWithSha512(valor);
 
             Assert.NotEqual(valor, valorCriptografado);
         }

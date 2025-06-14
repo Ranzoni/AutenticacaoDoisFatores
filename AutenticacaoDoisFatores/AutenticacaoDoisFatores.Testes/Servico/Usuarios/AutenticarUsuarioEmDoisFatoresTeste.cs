@@ -25,14 +25,14 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Usuarios
 
             var idUsuario = Guid.NewGuid();
             var codigo = Seguranca.GerarCodigoAutenticacao();
-            var codigoCriptografado = Criptografia.CriptografarComSha512(codigo);
+            var codigoCriptografado = Encrypt.EncryptWithSha512(codigo);
 
             var usuario = ConstrutorDeUsuariosTeste
                 .RetornarConstrutor(ativo: true, id: idUsuario)
-                .ConstruirCadastrado();
+                .Build();
 
-            mocker.GetMock<IRepositorioDeUsuarios>().Setup(r => r.BuscarUnicoAsync(idUsuario)).ReturnsAsync(usuario);
-            mocker.GetMock<IRepositorioDeCodigoDeAutenticacao>().Setup(r => r.BuscarCodigoAsync(idUsuario)).ReturnsAsync(codigoCriptografado);
+            mocker.GetMock<IUserRepository>().Setup(r => r.GetByIdAsync(idUsuario)).ReturnsAsync(usuario);
+            mocker.GetMock<IAuthCodeRepository>().Setup(r => r.GetByCodeAsync(idUsuario)).ReturnsAsync(codigoCriptografado);
 
             #endregion
 
@@ -58,14 +58,14 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Usuarios
 
             var idUsuario = Guid.NewGuid();
             var codigo = Seguranca.GerarCodigoAutenticacao();
-            var codigoCriptografado = Criptografia.CriptografarComSha512(codigo);
+            var codigoCriptografado = Encrypt.EncryptWithSha512(codigo);
 
             var usuario = ConstrutorDeUsuariosTeste
-                .RetornarConstrutor(ativo: true, id: idUsuario, tipoDeAutenticacao: TipoDeAutenticacao.AppAutenticador)
-                .ConstruirCadastrado();
+                .RetornarConstrutor(ativo: true, id: idUsuario, tipoDeAutenticacao: AuthType.AppAutenticador)
+                .Build();
 
-            mocker.GetMock<IRepositorioDeUsuarios>().Setup(r => r.BuscarUnicoAsync(idUsuario)).ReturnsAsync(usuario);
-            mocker.GetMock<IServicoDeAutenticador>().Setup(s => s.CodigoEhValido(codigo, usuario.ChaveSecreta)).Returns(true);
+            mocker.GetMock<IUserRepository>().Setup(r => r.GetByIdAsync(idUsuario)).ReturnsAsync(usuario);
+            mocker.GetMock<IAuthService>().Setup(s => s.CodigoEhValido(codigo, usuario.ChaveSecreta)).Returns(true);
 
             #endregion
 
@@ -99,7 +99,7 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Usuarios
             #region Verificação do teste
 
             Assert.Null(resposta);
-            mocker.Verify<INotificador>(n => n.AddMensagemNaoAutorizado(MensagensValidacaoUsuario.UsuarioNaoEncontrado));
+            mocker.Verify<INotificador>(n => n.AddMensagemNaoAutorizado(UserValidationMessages.UserNotFound));
 
             #endregion
         }
@@ -115,14 +115,14 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Usuarios
 
             var idUsuario = Guid.NewGuid();
             var codigo = Seguranca.GerarCodigoAutenticacao();
-            var codigoCriptografado = Criptografia.CriptografarComSha512(codigo);
+            var codigoCriptografado = Encrypt.EncryptWithSha512(codigo);
 
             var usuario = ConstrutorDeUsuariosTeste
                 .RetornarConstrutor(ativo: false, id: idUsuario)
-                .ConstruirCadastrado();
+                .Build();
 
-            mocker.GetMock<IRepositorioDeUsuarios>().Setup(r => r.BuscarUnicoAsync(idUsuario)).ReturnsAsync(usuario);
-            mocker.GetMock<IRepositorioDeCodigoDeAutenticacao>().Setup(r => r.BuscarCodigoAsync(idUsuario)).ReturnsAsync(codigoCriptografado);
+            mocker.GetMock<IUserRepository>().Setup(r => r.GetByIdAsync(idUsuario)).ReturnsAsync(usuario);
+            mocker.GetMock<IAuthCodeRepository>().Setup(r => r.GetByCodeAsync(idUsuario)).ReturnsAsync(codigoCriptografado);
 
             #endregion
 
@@ -131,7 +131,7 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Usuarios
             #region Verificação do teste
 
             Assert.Null(resposta);
-            mocker.Verify<INotificador>(n => n.AddMensagemNaoAutorizado(MensagensValidacaoUsuario.UsuarioNaoEncontrado));
+            mocker.Verify<INotificador>(n => n.AddMensagemNaoAutorizado(UserValidationMessages.UserNotFound));
 
             #endregion
         }
@@ -150,9 +150,9 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Usuarios
 
             var usuario = ConstrutorDeUsuariosTeste
                 .RetornarConstrutor(ativo: true, id: idUsuario)
-                .ConstruirCadastrado();
+                .Build();
 
-            mocker.GetMock<IRepositorioDeUsuarios>().Setup(r => r.BuscarUnicoAsync(idUsuario)).ReturnsAsync(usuario);
+            mocker.GetMock<IUserRepository>().Setup(r => r.GetByIdAsync(idUsuario)).ReturnsAsync(usuario);
 
             #endregion
 
@@ -161,7 +161,7 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Usuarios
             #region Verificação do teste
 
             Assert.Null(resposta);
-            mocker.Verify<INotificador>(n => n.AddMensagemNaoAutorizado(MensagensValidacaoUsuario.NaoAutenticado));
+            mocker.Verify<INotificador>(n => n.AddMensagemNaoAutorizado(UserValidationMessages.Unauthorized));
 
             #endregion
         }
@@ -177,14 +177,14 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Usuarios
 
             var idUsuario = Guid.NewGuid();
             var codigo = Seguranca.GerarCodigoAutenticacao();
-            var codigoCriptografado = Criptografia.CriptografarComSha512(codigo);
+            var codigoCriptografado = Encrypt.EncryptWithSha512(codigo);
 
             var usuario = ConstrutorDeUsuariosTeste
                 .RetornarConstrutor(ativo: true, id: idUsuario)
-                .ConstruirCadastrado();
+                .Build();
 
-            mocker.GetMock<IRepositorioDeUsuarios>().Setup(r => r.BuscarUnicoAsync(idUsuario)).ReturnsAsync(usuario);
-            mocker.GetMock<IRepositorioDeCodigoDeAutenticacao>().Setup(r => r.BuscarCodigoAsync(idUsuario)).ReturnsAsync(codigoCriptografado);
+            mocker.GetMock<IUserRepository>().Setup(r => r.GetByIdAsync(idUsuario)).ReturnsAsync(usuario);
+            mocker.GetMock<IAuthCodeRepository>().Setup(r => r.GetByCodeAsync(idUsuario)).ReturnsAsync(codigoCriptografado);
 
             #endregion
 
@@ -193,7 +193,7 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Usuarios
             #region Verificação do teste
 
             Assert.Null(resposta);
-            mocker.Verify<INotificador>(n => n.AddMensagemNaoAutorizado(MensagensValidacaoUsuario.NaoAutenticado));
+            mocker.Verify<INotificador>(n => n.AddMensagemNaoAutorizado(UserValidationMessages.Unauthorized));
 
             #endregion
         }
@@ -209,14 +209,14 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Usuarios
 
             var idUsuario = Guid.NewGuid();
             var codigo = Seguranca.GerarCodigoAutenticacao();
-            var codigoCriptografado = Criptografia.CriptografarComSha512(codigo);
+            var codigoCriptografado = Encrypt.EncryptWithSha512(codigo);
 
             var usuario = ConstrutorDeUsuariosTeste
-                .RetornarConstrutor(ativo: true, id: idUsuario, tipoDeAutenticacao: TipoDeAutenticacao.AppAutenticador)
-                .ConstruirCadastrado();
+                .RetornarConstrutor(ativo: true, id: idUsuario, tipoDeAutenticacao: AuthType.AppAutenticador)
+                .Build();
 
-            mocker.GetMock<IRepositorioDeUsuarios>().Setup(r => r.BuscarUnicoAsync(idUsuario)).ReturnsAsync(usuario);
-            mocker.GetMock<IServicoDeAutenticador>().Setup(s => s.CodigoEhValido(codigo, usuario.ChaveSecreta)).Returns(true);
+            mocker.GetMock<IUserRepository>().Setup(r => r.GetByIdAsync(idUsuario)).ReturnsAsync(usuario);
+            mocker.GetMock<IAuthService>().Setup(s => s.CodigoEhValido(codigo, usuario.ChaveSecreta)).Returns(true);
 
             #endregion
 
@@ -225,7 +225,7 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Usuarios
             #region Verificação do teste
 
             Assert.Null(resposta);
-            mocker.Verify<INotificador>(n => n.AddMensagemNaoAutorizado(MensagensValidacaoUsuario.NaoAutenticado));
+            mocker.Verify<INotificador>(n => n.AddMensagemNaoAutorizado(UserValidationMessages.Unauthorized));
 
             #endregion
         }

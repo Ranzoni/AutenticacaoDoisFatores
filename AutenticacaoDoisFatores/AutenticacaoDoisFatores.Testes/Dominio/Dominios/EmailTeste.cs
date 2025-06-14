@@ -24,19 +24,19 @@ namespace AutenticacaoDoisFatores.Testes.Dominio.Dominios
             var linkDeConfirmacaoParaTeste = _faker.Internet.UrlWithPath();
             var token = _faker.Random.AlphaNumeric(32);
 
-            var email = _mocker.CreateInstance<EnvioDeEmail>();
+            var email = _mocker.CreateInstance<EmailSender>();
 
             #endregion
 
-            email.EnviarConfirmacaoDeCadastroDeCliente(emailDestinoParaTeste, chaveAcessoParaTeste, linkDeConfirmacaoParaTeste, token);
+            email.SendClientConfirmation(emailDestinoParaTeste, chaveAcessoParaTeste, linkDeConfirmacaoParaTeste, token);
 
             #region Verificação do teste
 
-            _mocker.Verify<IServicoDeEmail>(s =>
-                s.Enviar
+            _mocker.Verify<IEmailService>(s =>
+                s.Send
                     (
                         emailDestinoParaTeste,
-                        MensagensEnvioEmail.TituloConfirmacaoCadastroCliente.Descricao() ?? "",
+                        EmailMessages.ClientConfirmationSubject.Description() ?? "",
                         It.IsAny<string>()
                     ), Times.Once);
 
@@ -58,19 +58,19 @@ namespace AutenticacaoDoisFatores.Testes.Dominio.Dominios
         {
             #region Preparação do teste
 
-            var email = _mocker.CreateInstance<EnvioDeEmail>();
+            var email = _mocker.CreateInstance<EmailSender>();
             var chaveAcessoParaTeste = _faker.Random.AlphaNumeric(20);
             var linkDeConfirmacaoParaTeste = _faker.Internet.UrlWithPath();
             var token = _faker.Random.AlphaNumeric(32);
 
             #endregion
 
-            var excecao = Assert.Throws<ExcecoesEmail>(() => email.EnviarConfirmacaoDeCadastroDeCliente(emailInvalido, chaveAcessoParaTeste, linkDeConfirmacaoParaTeste, token));
+            var excecao = Assert.Throws<EmailException>(() => email.SendClientConfirmation(emailInvalido, chaveAcessoParaTeste, linkDeConfirmacaoParaTeste, token));
 
             #region Verificação do teste
 
-            Assert.Equal(MensagensValidacaoEmail.EmailDestinoNaoInvalido.Descricao(), excecao.Message);
-            _mocker.Verify<IServicoDeEmail>(s => s.Enviar(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()), Times.Never);
+            Assert.Equal(EmailValidationMessages.InvalidDestinationEmail.Description(), excecao.Message);
+            _mocker.Verify<IEmailService>(s => s.Send(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()), Times.Never);
 
             #endregion
         }

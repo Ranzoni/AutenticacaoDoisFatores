@@ -24,11 +24,11 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Usuarios
 
             var usuario = ConstrutorDeUsuariosTeste
                 .RetornarConstrutor(id: idUsuario, senha: senhaAtual, ativo: true)
-                .ConstruirCadastrado();
+                .Build();
 
             var servico = _mocker.CreateInstance<AlterarSenhaUsuario>();
 
-            _mocker.GetMock<IRepositorioDeUsuarios>().Setup(r => r.BuscarUnicoAsync(idUsuario)).ReturnsAsync(usuario);
+            _mocker.GetMock<IUserRepository>().Setup(r => r.GetByIdAsync(idUsuario)).ReturnsAsync(usuario);
 
             #endregion
 
@@ -38,8 +38,8 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Usuarios
 
             Assert.NotEqual(senhaAtual, usuario.Senha);
             Assert.NotNull(usuario.DataAlteracao);
-            _mocker.Verify<IRepositorioDeUsuarios>(r => r.Editar(usuario), Times.Once);
-            _mocker.Verify<IRepositorioDeUsuarios>(r => r.SalvarAlteracoesAsync(), Times.Once);
+            _mocker.Verify<IUserRepository>(r => r.Editar(usuario), Times.Once);
+            _mocker.Verify<IUserRepository>(r => r.SaveChangesAsync(), Times.Once);
 
             #endregion
         }
@@ -67,9 +67,9 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Usuarios
 
             #region Verificação de senha
 
-            _mocker.Verify<IRepositorioDeUsuarios>(r => r.Editar(It.IsAny<Usuario>()), Times.Never);
-            _mocker.Verify<IRepositorioDeUsuarios>(r => r.SalvarAlteracoesAsync(), Times.Never);
-            _mocker.Verify<INotificador>(n => n.AddMensagem(MensagensValidacaoUsuario.SenhaInvalida), Times.Once);
+            _mocker.Verify<IUserRepository>(r => r.Update(It.IsAny<User>()), Times.Never);
+            _mocker.Verify<IUserRepository>(r => r.SaveChangesAsync(), Times.Never);
+            _mocker.Verify<INotificador>(n => n.AddMensagem(UserValidationMessages.InvalidPassword), Times.Once);
 
             #endregion
         }
@@ -90,9 +90,9 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Usuarios
 
             #region Verificação de senha
 
-            _mocker.Verify<IRepositorioDeUsuarios>(r => r.Editar(It.IsAny<Usuario>()), Times.Never);
-            _mocker.Verify<IRepositorioDeUsuarios>(r => r.SalvarAlteracoesAsync(), Times.Never);
-            _mocker.Verify<INotificador>(n => n.AddMensagemNaoEncontrado(MensagensValidacaoUsuario.UsuarioNaoEncontrado), Times.Once);
+            _mocker.Verify<IUserRepository>(r => r.Update(It.IsAny<User>()), Times.Never);
+            _mocker.Verify<IUserRepository>(r => r.SaveChangesAsync(), Times.Never);
+            _mocker.Verify<INotificador>(n => n.AddMensagemNaoEncontrado(UserValidationMessages.UserNotFound), Times.Once);
 
             #endregion
         }
@@ -108,11 +108,11 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Usuarios
 
             var usuario = ConstrutorDeUsuariosTeste
                 .RetornarConstrutor(id: idUsuario, senha: senhaAtual, ativo: false)
-                .ConstruirCadastrado();
+                .Build();
 
             var servico = _mocker.CreateInstance<AlterarSenhaUsuario>();
 
-            _mocker.GetMock<IRepositorioDeUsuarios>().Setup(r => r.BuscarUnicoAsync(idUsuario)).ReturnsAsync(usuario);
+            _mocker.GetMock<IUserRepository>().Setup(r => r.GetByIdAsync(idUsuario)).ReturnsAsync(usuario);
 
             #endregion
 
@@ -120,9 +120,9 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Usuarios
 
             #region Verificação de senha
 
-            _mocker.Verify<IRepositorioDeUsuarios>(r => r.Editar(It.IsAny<Usuario>()), Times.Never);
-            _mocker.Verify<IRepositorioDeUsuarios>(r => r.SalvarAlteracoesAsync(), Times.Never);
-            _mocker.Verify<INotificador>(n => n.AddMensagemNaoEncontrado(MensagensValidacaoUsuario.UsuarioNaoEncontrado), Times.Once);
+            _mocker.Verify<IUserRepository>(r => r.Update(It.IsAny<User>()), Times.Never);
+            _mocker.Verify<IUserRepository>(r => r.SaveChangesAsync(), Times.Never);
+            _mocker.Verify<INotificador>(n => n.AddMensagemNaoEncontrado(UserValidationMessages.UserNotFound), Times.Once);
 
             #endregion
         }
@@ -138,11 +138,11 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Usuarios
 
             var usuario = ConstrutorDeUsuariosTeste
                 .RetornarConstrutor(id: idUsuario, senha: senhaAtual, ativo: true, ehAdm: true)
-                .ConstruirCadastrado();
+                .Build();
 
             var servico = _mocker.CreateInstance<AlterarSenhaUsuario>();
 
-            _mocker.GetMock<IRepositorioDeUsuarios>().Setup(r => r.BuscarUnicoAsync(idUsuario)).ReturnsAsync(usuario);
+            _mocker.GetMock<IUserRepository>().Setup(r => r.GetByIdAsync(idUsuario)).ReturnsAsync(usuario);
 
             #endregion
 
@@ -150,9 +150,9 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Usuarios
 
             #region Verificação de senha
 
-            _mocker.Verify<IRepositorioDeUsuarios>(r => r.Editar(It.IsAny<Usuario>()), Times.Never);
-            _mocker.Verify<IRepositorioDeUsuarios>(r => r.SalvarAlteracoesAsync(), Times.Never);
-            _mocker.Verify<INotificador>(n => n.AddMensagemNaoEncontrado(MensagensValidacaoUsuario.UsuarioNaoEncontrado), Times.Once);
+            _mocker.Verify<IUserRepository>(r => r.Update(It.IsAny<User>()), Times.Never);
+            _mocker.Verify<IUserRepository>(r => r.SaveChangesAsync(), Times.Never);
+            _mocker.Verify<INotificador>(n => n.AddMensagemNaoEncontrado(UserValidationMessages.UserNotFound), Times.Once);
 
             #endregion
         }

@@ -30,7 +30,7 @@ namespace AutenticacaoDoisFatores.Testes.Dominio.Entidades
 
             var usuario = ConstrutorDeUsuariosTeste
                 .RetornarConstrutor(nome: nome, nomeUsuario: nomeUsuario, email: email, senha: senha, celular: celular)
-                .ConstruirNovo();
+                .BuildNew();
 
             #region Verificação do teste
 
@@ -50,13 +50,13 @@ namespace AutenticacaoDoisFatores.Testes.Dominio.Entidades
         [InlineData("Teste de nome grande Teste de nome grande Teste de ")]
         internal void NaoDeveInstanciarNovoUsuarioQuandoNomeEhInvalido(string nomeInvalido)
         {
-            var excecao = Assert.Throws<ExcecoesUsuario>
+            var excecao = Assert.Throws<UserException>
                 (() => ConstrutorDeUsuariosTeste
                     .RetornarConstrutor(nome: nomeInvalido)
-                    .ConstruirNovo()
+                    .BuildNew()
                 );
 
-            Assert.Equal(MensagensValidacaoUsuario.NomeInvalido.Descricao(), excecao.Message);
+            Assert.Equal(UserValidationMessages.InvalidName.Description(), excecao.Message);
         }
 
         [Theory]
@@ -66,13 +66,13 @@ namespace AutenticacaoDoisFatores.Testes.Dominio.Entidades
         [InlineData("Teste de nome grande ")]
         internal void NaoDeveInstanciarNovoUsuarioQuandoNomeUsuarioEhInvalido(string nomeUsuarioInvalido)
         {
-            var excecao = Assert.Throws<ExcecoesUsuario>
+            var excecao = Assert.Throws<UserException>
                 (() => ConstrutorDeUsuariosTeste
                     .RetornarConstrutor(nomeUsuario: nomeUsuarioInvalido)
-                    .ConstruirNovo()
+                    .BuildNew()
                 );
 
-            Assert.Equal(MensagensValidacaoUsuario.NomeUsuarioInvalido.Descricao(), excecao.Message);
+            Assert.Equal(UserValidationMessages.InvalidUsername.Description(), excecao.Message);
         }
 
         [Theory]
@@ -88,13 +88,13 @@ namespace AutenticacaoDoisFatores.Testes.Dominio.Entidades
         [InlineData("abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcde")]
         internal void NaoDeveInstanciarNovoUsuarioQuandoEmailEhInvalido(string emailInvalido)
         {
-            var excecao = Assert.Throws<ExcecoesUsuario>
+            var excecao = Assert.Throws<UserException>
                 (() => ConstrutorDeUsuariosTeste
                     .RetornarConstrutor(email: emailInvalido)
-                    .ConstruirNovo()
+                    .BuildNew()
                 );
 
-            Assert.Equal(MensagensValidacaoUsuario.EmailInvalido.Descricao(), excecao.Message);
+            Assert.Equal(UserValidationMessages.InvalidEmail.Description(), excecao.Message);
         }
 
         [Theory]
@@ -103,13 +103,13 @@ namespace AutenticacaoDoisFatores.Testes.Dominio.Entidades
         [InlineData("Teste.de.senh@.que.é.muito.grand3.Teste.de.senh@.que.é.muito.grand3.Teste.de.senh@.que.é.muito.grand3.Teste.de.senh@.que.é.muito.grand3.Teste.de.senh@.que.é.muito.grand3.Teste.de.senh@.que.é.muito.grand3.Teste.de.senh@.que.é.muito.grand3.Teste.de.senh@.que.")]
         internal void NaoDeveInstanciarNovoUsuarioQuandoSenhaEhInvalida(string senhaInvalida)
         {
-            var excecao = Assert.Throws<ExcecoesUsuario>
+            var excecao = Assert.Throws<UserException>
                 (() => ConstrutorDeUsuariosTeste
                     .RetornarConstrutor(senha: senhaInvalida)
-                    .ConstruirNovo()
+                    .BuildNew()
                 );
 
-            Assert.Equal(MensagensValidacaoUsuario.SenhaInvalida.Descricao(), excecao.Message);
+            Assert.Equal(UserValidationMessages.InvalidPassword.Description(), excecao.Message);
         }
 
         [Fact]
@@ -122,7 +122,7 @@ namespace AutenticacaoDoisFatores.Testes.Dominio.Entidades
 
             var usuario = ConstrutorDeUsuariosTeste
                 .RetornarConstrutor(nome: nomeAtual)
-                .ConstruirCadastrado();
+                .Build();
 
             #endregion
 
@@ -149,15 +149,15 @@ namespace AutenticacaoDoisFatores.Testes.Dominio.Entidades
 
             var usuario = ConstrutorDeUsuariosTeste
                 .RetornarConstrutor(nome: nomeAtual)
-                .ConstruirCadastrado();
+                .Build();
 
             #endregion
 
-            var excecao = Assert.Throws<ExcecoesUsuario>(() => usuario.AlterarNome(nomeInvalido));
+            var excecao = Assert.Throws<UserException>(() => usuario.AlterarNome(nomeInvalido));
 
             #region Verificação do teste
 
-            Assert.Equal(MensagensValidacaoUsuario.NomeInvalido.Descricao(), excecao.Message);
+            Assert.Equal(UserValidationMessages.InvalidName.Description(), excecao.Message);
 
             #endregion
         }
@@ -172,7 +172,7 @@ namespace AutenticacaoDoisFatores.Testes.Dominio.Entidades
 
             var usuario = ConstrutorDeUsuariosTeste
                 .RetornarConstrutor(nomeUsuario: nomeUsuarioAtual)
-                .ConstruirCadastrado();
+                .Build();
 
             #endregion
 
@@ -199,15 +199,15 @@ namespace AutenticacaoDoisFatores.Testes.Dominio.Entidades
 
             var usuario = ConstrutorDeUsuariosTeste
                 .RetornarConstrutor(nomeUsuario: nomeUsuarioAtual)
-                .ConstruirCadastrado();
+                .Build();
 
             #endregion
 
-            var excecao = Assert.Throws<ExcecoesUsuario>(() => usuario.AlterarNomeUsuario(nomeUsuarioInvalido));
+            var excecao = Assert.Throws<UserException>(() => usuario.AlterarNomeUsuario(nomeUsuarioInvalido));
 
             #region Verificação do teste
 
-            Assert.Equal(MensagensValidacaoUsuario.NomeUsuarioInvalido.Descricao(), excecao.Message);
+            Assert.Equal(UserValidationMessages.InvalidUsername.Description(), excecao.Message);
 
             #endregion
         }
@@ -222,7 +222,7 @@ namespace AutenticacaoDoisFatores.Testes.Dominio.Entidades
 
             var usuario = ConstrutorDeUsuariosTeste
                 .RetornarConstrutor(email: emailAtual)
-                .ConstruirCadastrado();
+                .Build();
 
             #endregion
 
@@ -255,15 +255,15 @@ namespace AutenticacaoDoisFatores.Testes.Dominio.Entidades
 
             var usuario = ConstrutorDeUsuariosTeste
                 .RetornarConstrutor(email: emailAtual)
-                .ConstruirCadastrado();
+                .Build();
 
             #endregion
 
-            var excecao = Assert.Throws<ExcecoesUsuario>(() => usuario.AlterarEmail(emailInvalido));
+            var excecao = Assert.Throws<UserException>(() => usuario.AlterarEmail(emailInvalido));
 
             #region Verificação do teste
 
-            Assert.Equal(MensagensValidacaoUsuario.EmailInvalido.Descricao(), excecao.Message);
+            Assert.Equal(UserValidationMessages.InvalidEmail.Description(), excecao.Message);
 
             #endregion
         }
@@ -277,7 +277,7 @@ namespace AutenticacaoDoisFatores.Testes.Dominio.Entidades
 
             var usuario = ConstrutorDeUsuariosTeste
                 .RetornarConstrutor(ativo: !ativar)
-                .ConstruirCadastrado();
+                .Build();
 
             #endregion
 
@@ -301,7 +301,7 @@ namespace AutenticacaoDoisFatores.Testes.Dominio.Entidades
 
             var usuario = ConstrutorDeUsuariosTeste
                 .RetornarConstrutor(senha: senhaAtual)
-                .ConstruirCadastrado();
+                .Build();
 
             #endregion
 
@@ -327,15 +327,15 @@ namespace AutenticacaoDoisFatores.Testes.Dominio.Entidades
 
             var usuario = ConstrutorDeUsuariosTeste
                 .RetornarConstrutor(senha: senhaAtual)
-                .ConstruirCadastrado();
+                .Build();
 
             #endregion
 
-            var excecao = Assert.Throws<ExcecoesUsuario>(() => usuario.AlterarSenha(senhaInvalida));
+            var excecao = Assert.Throws<UserException>(() => usuario.AlterarSenha(senhaInvalida));
 
             #region Verificação do teste
 
-            Assert.Equal(MensagensValidacaoUsuario.SenhaInvalida.Descricao(), excecao.Message);
+            Assert.Equal(UserValidationMessages.InvalidPassword.Description(), excecao.Message);
 
             #endregion
         }
@@ -350,7 +350,7 @@ namespace AutenticacaoDoisFatores.Testes.Dominio.Entidades
 
             var usuario = ConstrutorDeUsuariosTeste
                 .RetornarConstrutor(celular: numCelularAtual)
-                .ConstruirCadastrado();
+                .Build();
 
             #endregion
 
@@ -376,13 +376,13 @@ namespace AutenticacaoDoisFatores.Testes.Dominio.Entidades
 
             var usuario = ConstrutorDeUsuariosTeste
                 .RetornarConstrutor(celular: numCelularAtual)
-                .ConstruirCadastrado();
+                .Build();
 
             #endregion
 
-            var excecao = Assert.Throws<ExcecoesUsuario>(() => usuario.AlterarCelular(novoNumCelularInvalido));
+            var excecao = Assert.Throws<UserException>(() => usuario.AlterarCelular(novoNumCelularInvalido));
 
-            Assert.Equal(MensagensValidacaoUsuario.CelularInvalido.Descricao(), excecao.Message);
+            Assert.Equal(UserValidationMessages.InvalidPhone.Description(), excecao.Message);
         }
 
         [Fact]
@@ -392,7 +392,7 @@ namespace AutenticacaoDoisFatores.Testes.Dominio.Entidades
 
             var usuario = ConstrutorDeUsuariosTeste
                 .RetornarConstrutor()
-                .ConstruirCadastrado();
+                .Build();
 
             #endregion
 
@@ -412,11 +412,11 @@ namespace AutenticacaoDoisFatores.Testes.Dominio.Entidades
         {
             #region Preparação do teste
 
-            var tipoDeAutenticacao = _faker.Random.Enum<TipoDeAutenticacao>();
+            var tipoDeAutenticacao = _faker.Random.Enum<AuthType>();
 
             var usuario = ConstrutorDeUsuariosTeste
                 .RetornarConstrutor()
-                .ConstruirCadastrado();
+                .Build();
 
             #endregion
 
@@ -434,8 +434,8 @@ namespace AutenticacaoDoisFatores.Testes.Dominio.Entidades
         internal void DeveRetornarVerdadeiroQuandoExisteTipoDeAutenticacaoConfigurado()
         {
             var usuario = ConstrutorDeUsuariosTeste
-                .RetornarConstrutor(tipoDeAutenticacao: TipoDeAutenticacao.Email)
-                .ConstruirCadastrado();
+                .RetornarConstrutor(tipoDeAutenticacao: AuthType.Email)
+                .Build();
 
             var valor = usuario.ExisteTipoDeAutenticacaoConfigurado();
 
@@ -447,7 +447,7 @@ namespace AutenticacaoDoisFatores.Testes.Dominio.Entidades
         {
             var usuario = ConstrutorDeUsuariosTeste
                 .RetornarConstrutor()
-                .ConstruirCadastrado();
+                .Build();
 
             var valor = usuario.ExisteTipoDeAutenticacaoConfigurado();
 
@@ -464,9 +464,9 @@ namespace AutenticacaoDoisFatores.Testes.Dominio.Entidades
             var usuario = ConstrutorDeUsuariosTeste
                 .RetornarConstrutor(chaveSecreta: chaveSecretaInvalida);
             
-            var excecao = Assert.Throws<ExcecoesUsuario>(usuario.ConstruirCadastrado);
+            var excecao = Assert.Throws<UserException>(usuario.Build);
 
-            Assert.Equal(MensagensValidacaoUsuario.ChaveSecretaInvalida.Descricao(), excecao.Message);
+            Assert.Equal(UserValidationMessages.InvalidSecretKey.Description(), excecao.Message);
         }
     }
 }

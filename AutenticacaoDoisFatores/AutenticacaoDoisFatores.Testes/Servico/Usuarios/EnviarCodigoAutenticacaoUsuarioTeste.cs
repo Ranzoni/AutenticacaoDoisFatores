@@ -25,8 +25,8 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Usuarios
             mocker.GetMock<IServiceProvider>().Setup(s => s.GetService(typeof(AutenticadorUsuarioEmDoisFatoresPorEmail))).Returns(enviarCodAutenticacaoUsuarioPorEmail);
 
             var usuario = ConstrutorDeUsuariosTeste
-                .RetornarConstrutor(ativo: true, tipoDeAutenticacao: TipoDeAutenticacao.Email)
-                .ConstruirCadastrado();
+                .RetornarConstrutor(ativo: true, tipoDeAutenticacao: AuthType.Email)
+                .Build();
 
             #endregion
 
@@ -36,7 +36,7 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Usuarios
 
             Assert.NotNull(retorno);
             Assert.NotEmpty((retorno as RespostaAutenticacaoDoisFatores)!.Token);
-            mocker.Verify<IRepositorioDeCodigoDeAutenticacao>(r => r.SalvarAsync(usuario.Id, It.IsAny<string>()), Times.Once);
+            mocker.Verify<IAuthCodeRepository>(r => r.SalvarAsync(usuario.Id, It.IsAny<string>()), Times.Once);
 
             #endregion
         }

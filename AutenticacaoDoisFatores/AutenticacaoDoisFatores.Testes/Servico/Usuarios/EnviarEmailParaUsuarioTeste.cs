@@ -27,13 +27,13 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Usuarios
 
             var usuario = ConstrutorDeUsuariosTeste
                 .RetornarConstrutor(id: idUsuario, ativo: false)
-                .ConstruirCadastrado();
+                .Build();
 
             var envioEmailParaUsuario = ConstrutorDeEnvioEmailParaUsuarioTeste
                 .RetornarConstrutor()
                 .Construir();
 
-            mocker.GetMock<IRepositorioDeUsuarios>().Setup(r => r.BuscarUnicoAsync(idUsuario)).ReturnsAsync(usuario);
+            mocker.GetMock<IUserRepository>().Setup(r => r.GetByIdAsync(idUsuario)).ReturnsAsync(usuario);
 
             #endregion
 
@@ -41,7 +41,7 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Usuarios
 
             #region Verificação do teste
 
-            mocker.Verify<IServicoDeEmail>(s => s.Enviar(usuario.Email, It.IsAny<string>(), It.IsAny<string>()), Times.Once);
+            mocker.Verify<IEmailService>(s => s.Enviar(usuario.Email, It.IsAny<string>(), It.IsAny<string>()), Times.Once);
 
             #endregion
         }
@@ -69,8 +69,8 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Usuarios
 
             #region Verificação do teste
 
-            mocker.Verify<IServicoDeEmail>(s => s.Enviar(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()), Times.Never);
-            mocker.Verify<INotificador>(n => n.AddMensagemNaoEncontrado(MensagensValidacaoUsuario.UsuarioNaoEncontrado), Times.Once);
+            mocker.Verify<IEmailService>(s => s.Send(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()), Times.Never);
+            mocker.Verify<INotificador>(n => n.AddMensagemNaoEncontrado(UserValidationMessages.UserNotFound), Times.Once);
 
             #endregion
         }
@@ -94,9 +94,9 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Usuarios
 
             var usuario = ConstrutorDeUsuariosTeste
                 .RetornarConstrutor(id: idUsuario, ehAdm: true)
-                .ConstruirCadastrado();
+                .Build();
 
-            mocker.GetMock<IRepositorioDeUsuarios>().Setup(r => r.BuscarUnicoAsync(idUsuario)).ReturnsAsync(usuario);
+            mocker.GetMock<IUserRepository>().Setup(r => r.GetByIdAsync(idUsuario)).ReturnsAsync(usuario);
 
             #endregion
 
@@ -104,8 +104,8 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Usuarios
 
             #region Verificação do teste
 
-            mocker.Verify<IServicoDeEmail>(s => s.Enviar(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()), Times.Never);
-            mocker.Verify<INotificador>(n => n.AddMensagemNaoEncontrado(MensagensValidacaoUsuario.UsuarioNaoEncontrado), Times.Once);
+            mocker.Verify<IEmailService>(s => s.Send(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()), Times.Never);
+            mocker.Verify<INotificador>(n => n.AddMensagemNaoEncontrado(UserValidationMessages.UserNotFound), Times.Once);
 
             #endregion
         }

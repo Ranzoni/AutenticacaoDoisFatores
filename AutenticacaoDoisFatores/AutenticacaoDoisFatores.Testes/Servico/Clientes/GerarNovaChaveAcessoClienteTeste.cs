@@ -23,9 +23,9 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Clientes
             var idClienteParaTeste = Guid.NewGuid();
             var cliente = ConstrutorDeClientesTeste
                 .RetornarConstrutor(id: idClienteParaTeste, ativo: true)
-                .ConstruirCadastrado();
+                .Build();
 
-            _mocker.GetMock<IRepositorioDeClientes>().Setup(r => r.BuscarUnicoAsync(idClienteParaTeste)).ReturnsAsync(cliente);
+            _mocker.GetMock<IClientRepository>().Setup(r => r.GetByIdAsync(idClienteParaTeste)).ReturnsAsync(cliente);
 
             #endregion
 
@@ -33,9 +33,9 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Clientes
 
             #region Verificação do teste
 
-            _mocker.Verify<IRepositorioDeClientes>(r => r.Editar(cliente), Times.Once);
-            _mocker.Verify<IRepositorioDeClientes>(r => r.SalvarAlteracoesAsync(), Times.Once);
-            _mocker.Verify<IServicoDeEmail>(e => e.Enviar(cliente.Email, It.IsAny<string>(), It.IsAny<string>()), Times.Once);
+            _mocker.Verify<IClientRepository>(r => r.Editar(cliente), Times.Once);
+            _mocker.Verify<IClientRepository>(r => r.SaveChangesAsync(), Times.Once);
+            _mocker.Verify<IEmailService>(e => e.Enviar(cliente.Email, It.IsAny<string>(), It.IsAny<string>()), Times.Once);
 
             #endregion
         }
@@ -54,10 +54,10 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Clientes
 
             #region Verificação do teste
 
-            _mocker.Verify<IRepositorioDeClientes>(r => r.Editar(It.IsAny<Cliente>()), Times.Never);
-            _mocker.Verify<IRepositorioDeClientes>(r => r.SalvarAlteracoesAsync(), Times.Never);
-            _mocker.Verify<IServicoDeEmail>(e => e.Enviar(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()), Times.Never);
-            _mocker.Verify<INotificador>(n => n.AddMensagemNaoEncontrado(MensagensValidacaoCliente.ClienteNaoEncontrado), Times.Once);
+            _mocker.Verify<IClientRepository>(r => r.Update(It.IsAny<Client>()), Times.Never);
+            _mocker.Verify<IClientRepository>(r => r.SaveChangesAsync(), Times.Never);
+            _mocker.Verify<IEmailService>(e => e.Send(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()), Times.Never);
+            _mocker.Verify<INotificador>(n => n.AddMensagemNaoEncontrado(ClientValidationMessages.ClientNotFound), Times.Once);
 
             #endregion
         }
@@ -71,9 +71,9 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Clientes
             var idClienteParaTeste = Guid.NewGuid();
             var cliente = ConstrutorDeClientesTeste
                 .RetornarConstrutor(id: idClienteParaTeste, ativo: false)
-                .ConstruirCadastrado();
+                .Build();
 
-            _mocker.GetMock<IRepositorioDeClientes>().Setup(r => r.BuscarUnicoAsync(idClienteParaTeste)).ReturnsAsync(cliente);
+            _mocker.GetMock<IClientRepository>().Setup(r => r.GetByIdAsync(idClienteParaTeste)).ReturnsAsync(cliente);
             _mocker.GetMock<INotificador>().Setup(n => n.ExisteMensagem()).Returns(true);
 
             #endregion
@@ -82,10 +82,10 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Clientes
 
             #region Verificação do teste
 
-            _mocker.Verify<IRepositorioDeClientes>(r => r.Editar(It.IsAny<Cliente>()), Times.Never);
-            _mocker.Verify<IRepositorioDeClientes>(r => r.SalvarAlteracoesAsync(), Times.Never);
-            _mocker.Verify<IServicoDeEmail>(e => e.Enviar(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()), Times.Never);
-            _mocker.Verify<INotificador>(n => n.AddMensagem(MensagensValidacaoCliente.ClienteNaoAtivo), Times.Once);
+            _mocker.Verify<IClientRepository>(r => r.Update(It.IsAny<Client>()), Times.Never);
+            _mocker.Verify<IClientRepository>(r => r.SaveChangesAsync(), Times.Never);
+            _mocker.Verify<IEmailService>(e => e.Send(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()), Times.Never);
+            _mocker.Verify<INotificador>(n => n.AddMensagem(ClientValidationMessages.ClientNotActive), Times.Once);
 
             #endregion
         }

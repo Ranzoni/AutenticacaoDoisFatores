@@ -20,9 +20,9 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Usuarios
 
             var mocker = new AutoMocker();
 
-            var autenticadorPorApp = mocker.GetMock<AppAutenticador>().Object;
-            var dominioDeUsuarios = mocker.GetMock<DominioDeUsuarios>().Object;
-            var email = mocker.GetMock<EnvioDeEmail>().Object;
+            var autenticadorPorApp = mocker.GetMock<AuthApp>().Object;
+            var dominioDeUsuarios = mocker.GetMock<UserDomain>().Object;
+            var email = mocker.GetMock<EmailSender>().Object;
             var notificador = mocker.GetMock<INotificador>().Object;
             var linkBaseParaQrCode = "https://example.com/qrcode";
 
@@ -30,14 +30,14 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Usuarios
 
             var usuario = ConstrutorDeUsuariosTeste
                 .RetornarConstrutor(ativo: true)
-                .ConstruirCadastrado();
+                .Build();
 
             var faker = new Faker();
 
             var qrCode = faker.Commerce.Ean13();
 
-            mocker.GetMock<IRepositorioDeUsuarios>().Setup(r => r.BuscarUnicoAsync(usuario.Id)).ReturnsAsync(usuario);
-            mocker.GetMock<IServicoDeAutenticador>().Setup(s => s.GerarQrCode(usuario.Email, usuario.ChaveSecreta)).Returns(qrCode);
+            mocker.GetMock<IUserRepository>().Setup(r => r.BuscarUnicoAsync(usuario.Id)).ReturnsAsync(usuario);
+            mocker.GetMock<IAuthService>().Setup(s => s.GerarQrCode(usuario.Email, usuario.ChaveSecreta)).Returns(qrCode);
 
             #endregion
 
@@ -45,8 +45,8 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Usuarios
 
             #region Verificação do teste
 
-            mocker.Verify<IServicoDeEmail>(s => s.Enviar(usuario.Email, It.IsAny<string>(), It.IsAny<string>()), Times.Once);
-            mocker.Verify<IServicoDeAutenticador>(s => s.GerarQrCode(usuario.Email, usuario.ChaveSecreta), Times.Once);
+            mocker.Verify<IEmailService>(s => s.Enviar(usuario.Email, It.IsAny<string>(), It.IsAny<string>()), Times.Once);
+            mocker.Verify<IAuthService>(s => s.GerarQrCode(usuario.Email, usuario.ChaveSecreta), Times.Once);
 
             #endregion
         }
@@ -58,9 +58,9 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Usuarios
 
             var mocker = new AutoMocker();
 
-            var autenticadorPorApp = mocker.GetMock<AppAutenticador>().Object;
-            var dominioDeUsuarios = mocker.GetMock<DominioDeUsuarios>().Object;
-            var email = mocker.GetMock<EnvioDeEmail>().Object;
+            var autenticadorPorApp = mocker.GetMock<AuthApp>().Object;
+            var dominioDeUsuarios = mocker.GetMock<UserDomain>().Object;
+            var email = mocker.GetMock<EmailSender>().Object;
             var notificador = mocker.GetMock<INotificador>().Object;
             var linkBaseParaQrCode = "https://example.com/qrcode";
 
@@ -74,9 +74,9 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Usuarios
 
             #region Verificação do teste
 
-            mocker.Verify<IServicoDeAutenticador>(s => s.GerarQrCode(It.IsAny<string>(), It.IsAny<string>()), Times.Never);
-            mocker.Verify<IServicoDeEmail>(s => s.Enviar(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()), Times.Never);
-            mocker.Verify<INotificador>(n => n.AddMensagemNaoEncontrado(MensagensValidacaoUsuario.UsuarioNaoEncontrado), Times.Once);
+            mocker.Verify<IAuthService>(s => s.GenerateQrCode(It.IsAny<string>(), It.IsAny<string>()), Times.Never);
+            mocker.Verify<IEmailService>(s => s.Send(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()), Times.Never);
+            mocker.Verify<INotificador>(n => n.AddMensagemNaoEncontrado(UserValidationMessages.UserNotFound), Times.Once);
 
             #endregion
         }
@@ -88,9 +88,9 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Usuarios
 
             var mocker = new AutoMocker();
 
-            var autenticadorPorApp = mocker.GetMock<AppAutenticador>().Object;
-            var dominioDeUsuarios = mocker.GetMock<DominioDeUsuarios>().Object;
-            var email = mocker.GetMock<EnvioDeEmail>().Object;
+            var autenticadorPorApp = mocker.GetMock<AuthApp>().Object;
+            var dominioDeUsuarios = mocker.GetMock<UserDomain>().Object;
+            var email = mocker.GetMock<EmailSender>().Object;
             var notificador = mocker.GetMock<INotificador>().Object;
             var linkBaseParaQrCode = "https://example.com/qrcode";
 
@@ -98,9 +98,9 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Usuarios
 
             var usuario = ConstrutorDeUsuariosTeste
                 .RetornarConstrutor(ativo: false)
-                .ConstruirCadastrado();
+                .Build();
 
-            mocker.GetMock<IRepositorioDeUsuarios>().Setup(r => r.BuscarUnicoAsync(usuario.Id)).ReturnsAsync(usuario);
+            mocker.GetMock<IUserRepository>().Setup(r => r.BuscarUnicoAsync(usuario.Id)).ReturnsAsync(usuario);
             mocker.GetMock<INotificador>().Setup(n => n.ExisteMensagem()).Returns(true);
 
             #endregion
@@ -109,9 +109,9 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Usuarios
 
             #region Verificação do teste
 
-            mocker.Verify<IServicoDeAutenticador>(s => s.GerarQrCode(It.IsAny<string>(), It.IsAny<string>()), Times.Never);
-            mocker.Verify<IServicoDeEmail>(s => s.Enviar(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()), Times.Never);
-            mocker.Verify<INotificador>(n => n.AddMensagemNaoEncontrado(MensagensValidacaoUsuario.UsuarioNaoEncontrado), Times.Once);
+            mocker.Verify<IAuthService>(s => s.GenerateQrCode(It.IsAny<string>(), It.IsAny<string>()), Times.Never);
+            mocker.Verify<IEmailService>(s => s.Send(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()), Times.Never);
+            mocker.Verify<INotificador>(n => n.AddMensagemNaoEncontrado(UserValidationMessages.UserNotFound), Times.Once);
 
             #endregion
         }

@@ -34,10 +34,10 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Clientes
                     nomeDominio: novoCliente.NomeDominio,
                     chaveAcesso: novoCliente.ChaveDescriptografada()
                 );
-            var cliente = construtorDeCliente.ConstruirNovo();
+            var cliente = construtorDeCliente.BuildNew();
 
-            _mocker.CreateInstance<DominioDeClientes>();
-            _mocker.GetMock<IRepositorioDeClientes>().Setup(r => r.BuscarUnicoAsync(It.IsAny<Guid>())).ReturnsAsync(cliente);
+            _mocker.CreateInstance<ClientDomain>();
+            _mocker.GetMock<IClientRepository>().Setup(r => r.GetByIdAsync(It.IsAny<Guid>())).ReturnsAsync(cliente);
 
             var linkConfirmacaoCadastroParaTeste = _faker.Internet.UrlWithPath();
 
@@ -57,18 +57,18 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Clientes
             Assert.Equal(novoCliente.Email, clienteCadastrado.Email);
             Assert.Equal(novoCliente.NomeDominio, clienteCadastrado.NomeDominio);
             Assert.NotEqual(novoCliente.ChaveAcesso, novoCliente.ChaveDescriptografada());
-            _mocker.Verify<IRepositorioDeClientes>(r => r.CriarDominio(cliente.NomeDominio), Times.Once);
-            _mocker.Verify<IRepositorioDeClientes>(r => r.Adicionar(It.IsAny<Cliente>()), Times.Once);
-            _mocker.Verify<IRepositorioDeUsuarios>(r => r.Adicionar(It.IsAny<Usuario>(), cliente.NomeDominio), Times.Once);
-            _mocker.Verify<IServicoDeEmail>(s =>
+            _mocker.Verify<IClientRepository>(r => r.CriarDominio(cliente.NomeDominio), Times.Once);
+            _mocker.Verify<IClientRepository>(r => r.Add(It.IsAny<Client>()), Times.Once);
+            _mocker.Verify<IUserRepository>(r => r.Adicionar(It.IsAny<User>(), cliente.NomeDominio), Times.Once);
+            _mocker.Verify<IEmailService>(s =>
                 s.Enviar
                     (
                         cliente.Email,
-                        MensagensEnvioEmail.TituloConfirmacaoCadastroCliente.Descricao() ?? "",
+                        EmailMessages.ClientConfirmationSubject.Description() ?? "",
                         It.IsAny<string>()
                     ),
                 Times.Once);
-            _mocker.Verify<INotificador>(n => n.AddMensagem(It.IsAny<MensagensValidacaoCliente>()), Times.Never);
+            _mocker.Verify<INotificador>(n => n.AddMensagem(It.IsAny<ClientValidationMessages>()), Times.Never);
 
             #endregion Preparação do teste
         }
@@ -83,13 +83,13 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Clientes
 
             #endregion Preparação do teste
 
-            var cliente = (Cliente)(novoCliente);
+            var cliente = (Client)(novoCliente);
 
             #region Verificação do teste
 
             Assert.NotNull(cliente);
-            Assert.NotEqual(novoCliente.ChaveDescriptografada(), cliente.ChaveAcesso);
-            Assert.Equal(novoCliente.ChaveAcesso, cliente.ChaveAcesso);
+            Assert.NotEqual(novoCliente.ChaveDescriptografada(), cliente.AccessKey);
+            Assert.Equal(novoCliente.ChaveAcesso, cliente.AccessKey);
 
             #endregion Preparação do teste
         }
@@ -106,7 +106,7 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Clientes
             var construtor = ConstrutorDeClientesTeste.RetornarConstrutorDeNovo(nome: nomeInvalido);
             var novoCliente = construtor.Construir();
 
-            _mocker.CreateInstance<DominioDeClientes>();
+            _mocker.CreateInstance<ClientDomain>();
             _mocker.GetMock<INotificador>().Setup(n => n.ExisteMensagem()).Returns(true);
 
             var linkConfirmacaoCadastroParaTeste = _faker.Internet.UrlWithPath();
@@ -120,9 +120,9 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Clientes
             #region Verificação do teste
 
             Assert.Null(clienteCadastrado);
-            _mocker.Verify<IRepositorioDeClientes>(r => r.Adicionar(It.IsAny<Cliente>()), Times.Never);
-            _mocker.Verify<IServicoDeEmail>(s => s.Enviar(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()), Times.Never);
-            _mocker.Verify<INotificador>(n => n.AddMensagem(MensagensValidacaoCliente.NomeInvalido), Times.Once);
+            _mocker.Verify<IClientRepository>(r => r.Add(It.IsAny<Client>()), Times.Never);
+            _mocker.Verify<IEmailService>(s => s.Send(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()), Times.Never);
+            _mocker.Verify<INotificador>(n => n.AddMensagem(ClientValidationMessages.InvalidName), Times.Once);
 
             #endregion Preparação do teste
         }
@@ -139,7 +139,7 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Clientes
             var construtor = ConstrutorDeClientesTeste.RetornarConstrutorDeNovo(email: emailInvalido);
             var novoCliente = construtor.Construir();
 
-            _mocker.CreateInstance<DominioDeClientes>();
+            _mocker.CreateInstance<ClientDomain>();
             _mocker.GetMock<INotificador>().Setup(n => n.ExisteMensagem()).Returns(true);
 
             var linkConfirmacaoCadastroParaTeste = _faker.Internet.UrlWithPath();
@@ -153,9 +153,9 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Clientes
             #region Verificação do teste
 
             Assert.Null(clienteCadastrado);
-            _mocker.Verify<IRepositorioDeClientes>(r => r.Adicionar(It.IsAny<Cliente>()), Times.Never);
-            _mocker.Verify<IServicoDeEmail>(s => s.Enviar(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()), Times.Never);
-            _mocker.Verify<INotificador>(n => n.AddMensagem(MensagensValidacaoCliente.EmailInvalido), Times.Once);
+            _mocker.Verify<IClientRepository>(r => r.Add(It.IsAny<Client>()), Times.Never);
+            _mocker.Verify<IEmailService>(s => s.Send(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()), Times.Never);
+            _mocker.Verify<INotificador>(n => n.AddMensagem(ClientValidationMessages.InvalidEmail), Times.Once);
 
             #endregion Preparação do teste
         }
@@ -177,7 +177,7 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Clientes
             var construtor = ConstrutorDeClientesTeste.RetornarConstrutorDeNovo(nomeDominio: nomeDominioInvalido);
             var novoCliente = construtor.Construir();
 
-            _mocker.CreateInstance<DominioDeClientes>();
+            _mocker.CreateInstance<ClientDomain>();
             _mocker.GetMock<INotificador>().Setup(n => n.ExisteMensagem()).Returns(true);
 
             var linkConfirmacaoCadastroParaTeste = _faker.Internet.UrlWithPath();
@@ -191,9 +191,9 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Clientes
             #region Verificação do teste
 
             Assert.Null(clienteCadastrado);
-            _mocker.Verify<IRepositorioDeClientes>(r => r.Adicionar(It.IsAny<Cliente>()), Times.Never);
-            _mocker.Verify<IServicoDeEmail>(s => s.Enviar(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()), Times.Never);
-            _mocker.Verify<INotificador>(n => n.AddMensagem(MensagensValidacaoCliente.NomeDominioInvalido), Times.Once);
+            _mocker.Verify<IClientRepository>(r => r.Add(It.IsAny<Client>()), Times.Never);
+            _mocker.Verify<IEmailService>(s => s.Send(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()), Times.Never);
+            _mocker.Verify<INotificador>(n => n.AddMensagem(ClientValidationMessages.InvalidDomainName), Times.Once);
 
             #endregion Preparação do teste
         }
@@ -214,7 +214,7 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Clientes
             var construtor = ConstrutorDeClientesTeste.RetornarConstrutorDeNovo(senhaAdm: senha);
             var novoCliente = construtor.Construir();
 
-            _mocker.CreateInstance<DominioDeClientes>();
+            _mocker.CreateInstance<ClientDomain>();
             _mocker.GetMock<INotificador>().Setup(n => n.ExisteMensagem()).Returns(true);
 
             var linkConfirmacaoCadastroParaTeste = _faker.Internet.UrlWithPath();
@@ -228,9 +228,9 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Clientes
             #region Verificação do teste
 
             Assert.Null(clienteCadastrado);
-            _mocker.Verify<IRepositorioDeClientes>(r => r.Adicionar(It.IsAny<Cliente>()), Times.Never);
-            _mocker.Verify<IServicoDeEmail>(s => s.Enviar(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()), Times.Never);
-            _mocker.Verify<INotificador>(n => n.AddMensagem(MensagensValidacaoUsuario.SenhaInvalida), Times.Once);
+            _mocker.Verify<IClientRepository>(r => r.Add(It.IsAny<Client>()), Times.Never);
+            _mocker.Verify<IEmailService>(s => s.Send(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()), Times.Never);
+            _mocker.Verify<INotificador>(n => n.AddMensagem(UserValidationMessages.InvalidPassword), Times.Once);
 
             #endregion Preparação do teste
         }
@@ -245,8 +245,8 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Clientes
             var construtor = ConstrutorDeClientesTeste.RetornarConstrutorDeNovo(email: emailJaCadastrado);
             var novoCliente = construtor.Construir();
 
-            _mocker.CreateInstance<DominioDeClientes>();
-            _mocker.GetMock<IRepositorioDeClientes>().Setup(r => r.ExisteEmailAsync(emailJaCadastrado)).ReturnsAsync(true);
+            _mocker.CreateInstance<ClientDomain>();
+            _mocker.GetMock<IClientRepository>().Setup(r => r.EmailExistsAsync(emailJaCadastrado)).ReturnsAsync(true);
             _mocker.GetMock<INotificador>().Setup(n => n.ExisteMensagem()).Returns(true);
 
             var linkConfirmacaoCadastroParaTeste = _faker.Internet.UrlWithPath();
@@ -260,9 +260,9 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Clientes
             #region Verificação do teste
 
             Assert.Null(clienteCadastrado);
-            _mocker.Verify<IRepositorioDeClientes>(r => r.Adicionar(It.IsAny<Cliente>()), Times.Never);
-            _mocker.Verify<IServicoDeEmail>(s => s.Enviar(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()), Times.Never);
-            _mocker.Verify<INotificador>(n => n.AddMensagem(MensagensValidacaoCliente.EmailJaCadastrado), Times.Once);
+            _mocker.Verify<IClientRepository>(r => r.Add(It.IsAny<Client>()), Times.Never);
+            _mocker.Verify<IEmailService>(s => s.Send(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()), Times.Never);
+            _mocker.Verify<INotificador>(n => n.AddMensagem(ClientValidationMessages.EmailAlreadyRegistered), Times.Once);
 
             #endregion Preparação do teste
         }
@@ -277,8 +277,8 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Clientes
             var construtor = ConstrutorDeClientesTeste.RetornarConstrutorDeNovo(nomeDominio: nomeDominioJaCadastrado);
             var novoCliente = construtor.Construir();
 
-            _mocker.CreateInstance<DominioDeClientes>();
-            _mocker.GetMock<IRepositorioDeClientes>().Setup(r => r.ExisteDominioAsync(nomeDominioJaCadastrado)).ReturnsAsync(true);
+            _mocker.CreateInstance<ClientDomain>();
+            _mocker.GetMock<IClientRepository>().Setup(r => r.DomainExistsAsync(nomeDominioJaCadastrado)).ReturnsAsync(true);
             _mocker.GetMock<INotificador>().Setup(n => n.ExisteMensagem()).Returns(true);
 
             var linkConfirmacaoCadastroParaTeste = _faker.Internet.UrlWithPath();
@@ -292,9 +292,9 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Clientes
             #region Verificação do teste
 
             Assert.Null(clienteCadastrado);
-            _mocker.Verify<IRepositorioDeClientes>(r => r.Adicionar(It.IsAny<Cliente>()), Times.Never);
-            _mocker.Verify<IServicoDeEmail>(s => s.Enviar(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()), Times.Never);
-            _mocker.Verify<INotificador>(n => n.AddMensagem(MensagensValidacaoCliente.NomeDominioJaCadastrado), Times.Once);
+            _mocker.Verify<IClientRepository>(r => r.Add(It.IsAny<Client>()), Times.Never);
+            _mocker.Verify<IEmailService>(s => s.Send(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()), Times.Never);
+            _mocker.Verify<INotificador>(n => n.AddMensagem(ClientValidationMessages.DomainNameAlreadyRegistered), Times.Once);
 
             #endregion Preparação do teste
         }
@@ -309,7 +309,7 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Clientes
             var construtor = ConstrutorDeClientesTeste.RetornarConstrutorDeNovo();
             var novoCliente = construtor.Construir();
 
-            _mocker.CreateInstance<DominioDeClientes>();
+            _mocker.CreateInstance<ClientDomain>();
 
             var servico = _mocker.CreateInstance<CriarCliente>();
 
@@ -319,9 +319,9 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Clientes
 
             #region Verificação do teste
 
-            Assert.Equal(MensagensValidacaoCliente.LinkConfirmacaoCadastroNaoInformado.Descricao(), excecao.Message);
-            _mocker.Verify<IRepositorioDeClientes>(r => r.Adicionar(It.IsAny<Cliente>()), Times.Never);
-            _mocker.Verify<IServicoDeEmail>(s => s.Enviar(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()), Times.Never);
+            Assert.Equal(ClientValidationMessages.ConfirmationLinkNotInformed.Description(), excecao.Message);
+            _mocker.Verify<IClientRepository>(r => r.Add(It.IsAny<Client>()), Times.Never);
+            _mocker.Verify<IEmailService>(s => s.Send(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()), Times.Never);
 
             #endregion Preparação do teste
         }

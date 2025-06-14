@@ -25,9 +25,9 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Clientes
             var urlParaTeste = _faker.Internet.UrlRootedPath();
             var cliente = ConstrutorDeClientesTeste
                 .RetornarConstrutor(email: emailParaTeste, ativo: false)
-                .ConstruirCadastrado();
+                .Build();
 
-            _mock.GetMock<IRepositorioDeClientes>().Setup(r => r.BuscarPorEmailAsync(emailParaTeste)).ReturnsAsync(cliente);
+            _mock.GetMock<IClientRepository>().Setup(r => r.GetByEmailAsync(emailParaTeste)).ReturnsAsync(cliente);
 
             var servico = _mock.CreateInstance<ReenviarChaveCliente>();
 
@@ -37,9 +37,9 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Clientes
 
             #region Verificação do teste
 
-            _mock.Verify<IRepositorioDeClientes>(r => r.Editar(cliente), Times.Once);
-            _mock.Verify<IRepositorioDeClientes>(r => r.SalvarAlteracoesAsync(), Times.Once);
-            _mock.Verify<IServicoDeEmail>(s => s.Enviar(cliente.Email, It.IsAny<string>(), It.IsAny<string>()), Times.Once);
+            _mock.Verify<IClientRepository>(r => r.Editar(cliente), Times.Once);
+            _mock.Verify<IClientRepository>(r => r.SaveChangesAsync(), Times.Once);
+            _mock.Verify<IEmailService>(s => s.Enviar(cliente.Email, It.IsAny<string>(), It.IsAny<string>()), Times.Once);
 
             #endregion
         }
@@ -59,10 +59,10 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Clientes
 
             #region Verificação do teste
 
-            _mock.Verify<IRepositorioDeClientes>(r => r.Editar(It.IsAny<Cliente>()), Times.Never);
-            _mock.Verify<IRepositorioDeClientes>(r => r.SalvarAlteracoesAsync(), Times.Never);
-            _mock.Verify<IServicoDeEmail>(s => s.Enviar(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()), Times.Never);
-            _mock.Verify<INotificador>(n => n.AddMensagemNaoEncontrado(MensagensValidacaoCliente.ClienteNaoEncontrado), Times.Once);
+            _mock.Verify<IClientRepository>(r => r.Update(It.IsAny<Client>()), Times.Never);
+            _mock.Verify<IClientRepository>(r => r.SaveChangesAsync(), Times.Never);
+            _mock.Verify<IEmailService>(s => s.Send(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()), Times.Never);
+            _mock.Verify<INotificador>(n => n.AddMensagemNaoEncontrado(ClientValidationMessages.ClientNotFound), Times.Once);
 
             #endregion
         }
@@ -76,9 +76,9 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Clientes
             var urlParaTeste = _faker.Internet.UrlRootedPath();
             var cliente = ConstrutorDeClientesTeste
                 .RetornarConstrutor(email: emailParaTeste, ativo: true)
-                .ConstruirCadastrado();
+                .Build();
 
-            _mock.GetMock<IRepositorioDeClientes>().Setup(r => r.BuscarPorEmailAsync(emailParaTeste)).ReturnsAsync(cliente);
+            _mock.GetMock<IClientRepository>().Setup(r => r.GetByEmailAsync(emailParaTeste)).ReturnsAsync(cliente);
             _mock.GetMock<INotificador>().Setup(n => n.ExisteMensagem()).Returns(true);
 
             var servico = _mock.CreateInstance<ReenviarChaveCliente>();
@@ -89,10 +89,10 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Clientes
 
             #region Verificação do teste
 
-            _mock.Verify<IRepositorioDeClientes>(r => r.Editar(It.IsAny<Cliente>()), Times.Never);
-            _mock.Verify<IRepositorioDeClientes>(r => r.SalvarAlteracoesAsync(), Times.Never);
-            _mock.Verify<IServicoDeEmail>(s => s.Enviar(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()), Times.Never);
-            _mock.Verify<INotificador>(n => n.AddMensagem(MensagensValidacaoCliente.ClienteJaAtivado), Times.Once);
+            _mock.Verify<IClientRepository>(r => r.Update(It.IsAny<Client>()), Times.Never);
+            _mock.Verify<IClientRepository>(r => r.SaveChangesAsync(), Times.Never);
+            _mock.Verify<IEmailService>(s => s.Send(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()), Times.Never);
+            _mock.Verify<INotificador>(n => n.AddMensagem(ClientValidationMessages.ClientAlreadyActivated), Times.Once);
 
             #endregion
         }

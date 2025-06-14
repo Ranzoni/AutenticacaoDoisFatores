@@ -16,8 +16,8 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Permissoes
         {
             #region Preparação do teste
 
-            var permissoesEsperadas = Enum.GetValues<TipoDePermissao>()
-                .Select(tipo => new PermissaoDisponivel(tipo.Descricao() ?? "", tipo));
+            var permissoesEsperadas = Enum.GetValues<PermissionType>()
+                .Select(tipo => new PermissaoDisponivel(tipo.Description() ?? "", tipo));
 
             #endregion
 
@@ -47,13 +47,13 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Permissoes
             var faker = new Faker();
 
             var idUsuario = Guid.NewGuid();
-            var permissoesUsuario = faker.Random.EnumValues<TipoDePermissao>(3);
+            var permissoesUsuario = faker.Random.EnumValues<PermissionType>(3);
             var permissoesEsperadas = permissoesUsuario
-                .Select(tipo => new PermissaoDisponivel(tipo.Descricao() ?? "", tipo));
+                .Select(tipo => new PermissaoDisponivel(tipo.Description() ?? "", tipo));
 
             var servico = mocker.CreateInstance<RetornarPermissoes>();
 
-            mocker.GetMock<IRepositorioDePermissoes>().Setup(r => r.RetornarPorUsuarioAsync(idUsuario)).ReturnsAsync(permissoesUsuario);
+            mocker.GetMock<IPermissionsRepository>().Setup(r => r.GetByUserIdAsync(idUsuario)).ReturnsAsync(permissoesUsuario);
 
             #endregion
 
@@ -83,12 +83,12 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Permissoes
             var mocker = new AutoMocker();
 
             var idUsuario = Guid.NewGuid();
-            var permissoesEsperadas = Enum.GetValues<TipoDePermissao>()
-                .Select(tipo => new PermissaoDisponivel(tipo.Descricao() ?? "", tipo));
+            var permissoesEsperadas = Enum.GetValues<PermissionType>()
+                .Select(tipo => new PermissaoDisponivel(tipo.Description() ?? "", tipo));
 
             var servico = mocker.CreateInstance<RetornarPermissoes>();
 
-            mocker.GetMock<IRepositorioDeUsuarios>().Setup(r => r.EhAdmAsync(idUsuario)).ReturnsAsync(true);
+            mocker.GetMock<IUserRepository>().Setup(r => r.IsAdminAsync(idUsuario)).ReturnsAsync(true);
 
             #endregion
 

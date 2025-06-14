@@ -23,22 +23,22 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Permissoes
             var idUsuario = Guid.NewGuid();
             var usuario = ConstrutorDeUsuariosTeste
                 .RetornarConstrutor(ativo: true, id: idUsuario)
-                .ConstruirCadastrado();
-            var permissoesParaExcluir = new List<TipoDePermissao>()
+                .Build();
+            var permissoesParaExcluir = new List<PermissionType>()
             {
-                TipoDePermissao.AtivarUsuario,
-                TipoDePermissao.DesativarUsuario
+                PermissionType.ActivateUser,
+                PermissionType.InactivateUser
             };
-            var permissoesInclusas = new List<TipoDePermissao>
+            var permissoesInclusas = new List<PermissionType>
             {
-                TipoDePermissao.CriarUsuario,
-                TipoDePermissao.AtivarUsuario,
-                TipoDePermissao.DesativarUsuario
+                PermissionType.CreateUser,
+                PermissionType.ActivateUser,
+                PermissionType.InactivateUser
             };
             var permissoesEsperadas = permissoesInclusas.Except(permissoesParaExcluir);
 
-            _mocker.GetMock<IRepositorioDeUsuarios>().Setup(r => r.BuscarUnicoAsync(idUsuario)).ReturnsAsync(usuario);
-            _mocker.GetMock<IRepositorioDePermissoes>().Setup(r => r.RetornarPorUsuarioAsync(idUsuario)).ReturnsAsync(permissoesInclusas);
+            _mocker.GetMock<IUserRepository>().Setup(r => r.GetByIdAsync(idUsuario)).ReturnsAsync(usuario);
+            _mocker.GetMock<IPermissionsRepository>().Setup(r => r.GetByUserIdAsync(idUsuario)).ReturnsAsync(permissoesInclusas);
 
             #endregion
 
@@ -46,7 +46,7 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Permissoes
 
             #region Verificação do teste
 
-            _mocker.Verify<IRepositorioDePermissoes>(r => r.EditarAsync(idUsuario, permissoesEsperadas), Times.Once);
+            _mocker.Verify<IPermissionsRepository>(r => r.UpdateAsync(idUsuario, permissoesEsperadas), Times.Once);
 
             #endregion
         }
@@ -61,14 +61,14 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Permissoes
             var idUsuario = Guid.NewGuid();
             var usuario = ConstrutorDeUsuariosTeste
                 .RetornarConstrutor(ativo: true, ehAdm: true, id: idUsuario)
-                .ConstruirCadastrado();
-            var permissoesParaExcluir = new List<TipoDePermissao>()
+                .Build();
+            var permissoesParaExcluir = new List<PermissionType>()
             {
-                TipoDePermissao.AtivarUsuario,
-                TipoDePermissao.DesativarUsuario
+                PermissionType.ActivateUser,
+                PermissionType.InactivateUser
             };
 
-            _mocker.GetMock<IRepositorioDeUsuarios>().Setup(r => r.BuscarUnicoAsync(idUsuario)).ReturnsAsync(usuario);
+            _mocker.GetMock<IUserRepository>().Setup(r => r.GetByIdAsync(idUsuario)).ReturnsAsync(usuario);
 
             #endregion
 
@@ -76,8 +76,8 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Permissoes
 
             #region Verificação do teste
 
-            _mocker.Verify<IRepositorioDePermissoes>(r => r.EditarAsync(It.IsAny<Guid>(), It.IsAny<IEnumerable<TipoDePermissao>>()), Times.Never);
-            _mocker.Verify<INotificador>(n => n.AddMensagemNaoEncontrado(MensagensValidacaoUsuario.UsuarioNaoEncontrado), Times.Once);
+            _mocker.Verify<IPermissionsRepository>(r => r.UpdateAsync(It.IsAny<Guid>(), It.IsAny<IEnumerable<PermissionType>>()), Times.Never);
+            _mocker.Verify<INotificador>(n => n.AddMensagemNaoEncontrado(UserValidationMessages.UserNotFound), Times.Once);
 
             #endregion
         }
@@ -92,14 +92,14 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Permissoes
             var idUsuario = Guid.NewGuid();
             var usuario = ConstrutorDeUsuariosTeste
                 .RetornarConstrutor(ativo: false, id: idUsuario)
-                .ConstruirCadastrado();
-            var permissoesParaExcluir = new List<TipoDePermissao>()
+                .Build();
+            var permissoesParaExcluir = new List<PermissionType>()
             {
-                TipoDePermissao.AtivarUsuario,
-                TipoDePermissao.DesativarUsuario
+                PermissionType.ActivateUser,
+                PermissionType.InactivateUser
             };
 
-            _mocker.GetMock<IRepositorioDeUsuarios>().Setup(r => r.BuscarUnicoAsync(idUsuario)).ReturnsAsync(usuario);
+            _mocker.GetMock<IUserRepository>().Setup(r => r.GetByIdAsync(idUsuario)).ReturnsAsync(usuario);
 
             #endregion
 
@@ -107,8 +107,8 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Permissoes
 
             #region Verificação do teste
 
-            _mocker.Verify<IRepositorioDePermissoes>(r => r.EditarAsync(It.IsAny<Guid>(), It.IsAny<IEnumerable<TipoDePermissao>>()), Times.Never);
-            _mocker.Verify<INotificador>(n => n.AddMensagemNaoEncontrado(MensagensValidacaoUsuario.UsuarioNaoEncontrado), Times.Once);
+            _mocker.Verify<IPermissionsRepository>(r => r.UpdateAsync(It.IsAny<Guid>(), It.IsAny<IEnumerable<PermissionType>>()), Times.Never);
+            _mocker.Verify<INotificador>(n => n.AddMensagemNaoEncontrado(UserValidationMessages.UserNotFound), Times.Once);
 
             #endregion
         }
@@ -121,10 +121,10 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Permissoes
             var servico = _mocker.CreateInstance<RemoverPermissoesParaUsuario>();
 
             var idUsuario = Guid.NewGuid();
-            var permissoesParaExcluir = new List<TipoDePermissao>()
+            var permissoesParaExcluir = new List<PermissionType>()
             {
-                TipoDePermissao.AtivarUsuario,
-                TipoDePermissao.DesativarUsuario
+                PermissionType.ActivateUser,
+                PermissionType.InactivateUser
             };
 
             #endregion
@@ -133,8 +133,8 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Permissoes
 
             #region Verificação do teste
 
-            _mocker.Verify<IRepositorioDePermissoes>(r => r.EditarAsync(It.IsAny<Guid>(), It.IsAny<IEnumerable<TipoDePermissao>>()), Times.Never);
-            _mocker.Verify<INotificador>(n => n.AddMensagemNaoEncontrado(MensagensValidacaoUsuario.UsuarioNaoEncontrado), Times.Once);
+            _mocker.Verify<IPermissionsRepository>(r => r.UpdateAsync(It.IsAny<Guid>(), It.IsAny<IEnumerable<PermissionType>>()), Times.Never);
+            _mocker.Verify<INotificador>(n => n.AddMensagemNaoEncontrado(UserValidationMessages.UserNotFound), Times.Once);
 
             #endregion
         }

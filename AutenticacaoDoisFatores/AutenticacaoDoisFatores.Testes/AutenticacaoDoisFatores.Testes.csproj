@@ -23,7 +23,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\AutenticacaoDoisFatores.Dominio\AutenticacaoDoisFatores.Dominio.csproj" />
+    <ProjectReference Include="..\AutenticacaoDoisFatores.Dominio\AutenticacaoDoisFatores.Domain.csproj" />
     <ProjectReference Include="..\AutenticacaoDoisFatores.Servico\AutenticacaoDoisFatores.Servico.csproj" />
   </ItemGroup>
 

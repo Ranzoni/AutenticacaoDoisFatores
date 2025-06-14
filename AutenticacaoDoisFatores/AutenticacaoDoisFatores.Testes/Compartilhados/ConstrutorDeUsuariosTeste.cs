@@ -9,7 +9,7 @@ namespace AutenticacaoDoisFatores.Testes.Compartilhados
     {
         private static readonly string _senhaParaTeste = "Teste.De.Senha_1";
 
-        internal static ConstrutorDeUsuario RetornarConstrutor
+        internal static UserBuilder RetornarConstrutor
         (
             Guid? id = null,
             string? nome = null,
@@ -22,26 +22,26 @@ namespace AutenticacaoDoisFatores.Testes.Compartilhados
             DateTime? dataCadastro = null,
             DateTime? dataAlteracao = null,
             bool? ehAdm = null,
-            TipoDeAutenticacao? tipoDeAutenticacao = null,
+            AuthType? tipoDeAutenticacao = null,
             string? chaveSecreta = null
         )
         {
             var faker = new Faker();
 
-            return new ConstrutorDeUsuario()
-                .ComId(id ?? Guid.NewGuid())
-                .ComNome(nome ?? faker.Person.FullName)
-                .ComNomeUsuario(nomeUsuario ?? "teste_user_2010234")
-                .ComEmail(email ?? faker.Person.Email)
-                .ComSenha(senha ?? _senhaParaTeste)
-                .ComCelular(celular)
-                .ComAtivo(ativo ?? faker.Random.Bool())
-                .ComDataUltimoAcesso(dataUltimoAcesso)
-                .ComDataCadastro(dataCadastro ?? faker.Date.Past())
-                .ComDataAlteracao(dataAlteracao)
-                .ComEhAdmin(ehAdm ?? false)
-                .ComTipoDeAutenticacao(tipoDeAutenticacao)
-                .ComChaveSecreta(chaveSecreta ?? "01234567890123456789");
+            return new UserBuilder()
+                .WithId(id ?? Guid.NewGuid())
+                .WithName(nome ?? faker.Person.FullName)
+                .WithUserName(nomeUsuario ?? "teste_user_2010234")
+                .WithEmail(email ?? faker.Person.Email)
+                .WithPassword(senha ?? _senhaParaTeste)
+                .WithPhone(celular)
+                .WithActive(ativo ?? faker.Random.Bool())
+                .WithLastAccess(dataUltimoAcesso)
+                .WithCreatedAt(dataCadastro ?? faker.Date.Past())
+                .WithUpdatedAt(dataAlteracao)
+                .WithIsAdminFlag(ehAdm ?? false)
+                .WithAuthType(tipoDeAutenticacao)
+                .WithSecretKey(chaveSecreta ?? "01234567890123456789");
         }
 
         internal static ConstrutorDeNovoUsuario RetornarConstrutorDeNovo(string? nome = null, string? nomeUsuario = null, string? email = null, string? senha = null, long? celular = null)

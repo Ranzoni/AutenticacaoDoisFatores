@@ -5,17 +5,17 @@ VisualStudioVersion = 17.12.35527.113
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AutenticacaoDoisFatores", "AutenticacaoDoisFatores\AutenticacaoDoisFatores.csproj", "{D9DDE010-5AEC-4B39-9735-C0C2D9B27803}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "1-Aplicacao", "1-Aplicacao", "{90C9446D-776D-4717-9F99-2FCC5BD0B9A9}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "1-API", "1-API", "{90C9446D-776D-4717-9F99-2FCC5BD0B9A9}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "2-Servico", "2-Servico", "{8D404EAF-0537-40E7-AB61-D133814938FF}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "2-Services", "2-Services", "{8D404EAF-0537-40E7-AB61-D133814938FF}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AutenticacaoDoisFatores.Servico", "AutenticacaoDoisFatores.Servico\AutenticacaoDoisFatores.Servico.csproj", "{767C79B2-9F62-426F-A75E-479E70901996}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "3-Dominio", "3-Dominio", "{02DBFCAE-45F7-4D8D-B5C8-D0F7D0A87EED}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "3-Domain", "3-Domain", "{02DBFCAE-45F7-4D8D-B5C8-D0F7D0A87EED}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AutenticacaoDoisFatores.Dominio", "AutenticacaoDoisFatores.Dominio\AutenticacaoDoisFatores.Dominio.csproj", "{D55B5AB3-A928-4FD0-AB43-86736B07A9C1}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AutenticacaoDoisFatores.Domain", "AutenticacaoDoisFatores.Domain\AutenticacaoDoisFatores.Domain.csproj", "{D55B5AB3-A928-4FD0-AB43-86736B07A9C1}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "5-Testes", "5-Testes", "{C3C7307D-2F5D-4189-A9D4-3958FEBE5CD7}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "5-Tests", "5-Tests", "{C3C7307D-2F5D-4189-A9D4-3958FEBE5CD7}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AutenticacaoDoisFatores.Testes", "AutenticacaoDoisFatores.Testes\AutenticacaoDoisFatores.Testes.csproj", "{0BAE11A3-4464-4AB1-BAC9-D7EB7F320B45}"
 EndProject

@@ -23,7 +23,7 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Usuarios
 
             var usuario = ConstrutorDeUsuariosTeste
                 .RetornarConstrutor(ativo: true)
-                .ConstruirCadastrado();
+                .Build();
 
             #endregion
 
@@ -33,8 +33,8 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Usuarios
 
             Assert.NotNull(resposta);
             Assert.False(resposta.Token.EstaVazio());
-            mocker.Verify<IRepositorioDeCodigoDeAutenticacao>(r => r.SalvarAsync(usuario.Id, It.IsAny<string>()), Times.Once);
-            mocker.Verify<IServicoDeEmail>(s => s.Enviar(usuario.Email, It.IsAny<string>(), It.IsAny<string>()), Times.Once);
+            mocker.Verify<IAuthCodeRepository>(r => r.SalvarAsync(usuario.Id, It.IsAny<string>()), Times.Once);
+            mocker.Verify<IEmailService>(s => s.Enviar(usuario.Email, It.IsAny<string>(), It.IsAny<string>()), Times.Once);
 
             #endregion
         }
@@ -50,7 +50,7 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Usuarios
 
             var usuario = ConstrutorDeUsuariosTeste
                 .RetornarConstrutor(ativo: false)
-                .ConstruirCadastrado();
+                .Build();
 
             #endregion
 
@@ -59,9 +59,9 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Usuarios
             #region Verificação do teste
 
             Assert.Null(resposta);
-            mocker.Verify<IRepositorioDeCodigoDeAutenticacao>(r => r.SalvarAsync(It.IsAny<Guid>(), It.IsAny<string>()), Times.Never);
-            mocker.Verify<IServicoDeEmail>(s => s.Enviar(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()), Times.Never);
-            mocker.Verify<INotificador>(n => n.AddMensagemNaoEncontrado(MensagensValidacaoUsuario.UsuarioNaoEncontrado), Times.Once);
+            mocker.Verify<IAuthCodeRepository>(r => r.SaveAsync(It.IsAny<Guid>(), It.IsAny<string>()), Times.Never);
+            mocker.Verify<IEmailService>(s => s.Send(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()), Times.Never);
+            mocker.Verify<INotificador>(n => n.AddMensagemNaoEncontrado(UserValidationMessages.UserNotFound), Times.Once);
 
             #endregion
         }

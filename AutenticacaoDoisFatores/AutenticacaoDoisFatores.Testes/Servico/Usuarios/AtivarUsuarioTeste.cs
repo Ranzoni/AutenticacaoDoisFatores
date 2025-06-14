@@ -24,11 +24,11 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Usuarios
 
             var usuarioCadastradoTeste = ConstrutorDeUsuariosTeste
                 .RetornarConstrutor(id: idUsuario, ativo: false)
-                .ConstruirCadastrado();
+                .Build();
 
             var servico = _mocker.CreateInstance<AtivarUsuario>();
 
-            _mocker.GetMock<IRepositorioDeUsuarios>().Setup(r => r.BuscarUnicoAsync(idUsuario)).ReturnsAsync(usuarioCadastradoTeste);
+            _mocker.GetMock<IUserRepository>().Setup(r => r.GetByIdAsync(idUsuario)).ReturnsAsync(usuarioCadastradoTeste);
 
             #endregion
 
@@ -37,8 +37,8 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Usuarios
             #region Verificação do teste
 
             Assert.Equal(ativar, usuarioCadastradoTeste.Ativo);
-            _mocker.Verify<IRepositorioDeUsuarios>(r => r.Editar(usuarioCadastradoTeste), Times.Once);
-            _mocker.Verify<IRepositorioDeUsuarios>(r => r.SalvarAlteracoesAsync(), Times.Once);
+            _mocker.Verify<IUserRepository>(r => r.Editar(usuarioCadastradoTeste), Times.Once);
+            _mocker.Verify<IUserRepository>(r => r.SaveChangesAsync(), Times.Once);
 
             #endregion
         }
@@ -60,9 +60,9 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Usuarios
 
             #region Verificação do teste
 
-            _mocker.Verify<IRepositorioDeUsuarios>(r => r.Editar(It.IsAny<Usuario>()), Times.Never);
-            _mocker.Verify<IRepositorioDeUsuarios>(r => r.SalvarAlteracoesAsync(), Times.Never);
-            _mocker.Verify<INotificador>(n => n.AddMensagemNaoEncontrado(MensagensValidacaoUsuario.UsuarioNaoEncontrado), Times.Once);
+            _mocker.Verify<IUserRepository>(r => r.Update(It.IsAny<User>()), Times.Never);
+            _mocker.Verify<IUserRepository>(r => r.SaveChangesAsync(), Times.Never);
+            _mocker.Verify<INotificador>(n => n.AddMensagemNaoEncontrado(UserValidationMessages.UserNotFound), Times.Once);
 
             #endregion
         }
@@ -78,11 +78,11 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Usuarios
 
             var usuarioCadastradoTeste = ConstrutorDeUsuariosTeste
                 .RetornarConstrutor(id: idUsuario, ativo: true, ehAdm: true)
-                .ConstruirCadastrado();
+                .Build();
 
             var servico = _mocker.CreateInstance<AtivarUsuario>();
 
-            _mocker.GetMock<IRepositorioDeUsuarios>().Setup(r => r.BuscarUnicoAsync(idUsuario)).ReturnsAsync(usuarioCadastradoTeste);
+            _mocker.GetMock<IUserRepository>().Setup(r => r.GetByIdAsync(idUsuario)).ReturnsAsync(usuarioCadastradoTeste);
 
             #endregion
 
@@ -90,9 +90,9 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Usuarios
 
             #region Verificação do teste
 
-            _mocker.Verify<IRepositorioDeUsuarios>(r => r.Editar(It.IsAny<Usuario>()), Times.Never);
-            _mocker.Verify<IRepositorioDeUsuarios>(r => r.SalvarAlteracoesAsync(), Times.Never);
-            _mocker.Verify<INotificador>(n => n.AddMensagemNaoEncontrado(MensagensValidacaoUsuario.UsuarioNaoEncontrado), Times.Once);
+            _mocker.Verify<IUserRepository>(r => r.Update(It.IsAny<User>()), Times.Never);
+            _mocker.Verify<IUserRepository>(r => r.SaveChangesAsync(), Times.Never);
+            _mocker.Verify<INotificador>(n => n.AddMensagemNaoEncontrado(UserValidationMessages.UserNotFound), Times.Once);
 
             #endregion
         }

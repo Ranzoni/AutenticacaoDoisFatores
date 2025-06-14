@@ -30,7 +30,7 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Usuarios
                 .RetornarConstrutorDeNovo(nome: nome, nomeUsuario: nomeUsuario, email: email, celular: celular)
                 .Construir();
 
-            _mocker.CreateInstance<DominioDeUsuarios>();
+            _mocker.CreateInstance<UserDomain>();
 
             var servico = _mocker.CreateInstance<CriarUsuario>();
 
@@ -47,8 +47,8 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Usuarios
             Assert.False(usuarioCadastrado.Ativo);
             Assert.Equal(celular, usuarioCadastrado.Celular);
 
-            _mocker.Verify<IRepositorioDeUsuarios>(r => r.Adicionar(It.IsAny<Usuario>()), Times.Once);
-            _mocker.Verify<IRepositorioDeUsuarios>(r => r.SalvarAlteracoesAsync(), Times.Once);
+            _mocker.Verify<IUserRepository>(r => r.Add(It.IsAny<User>()), Times.Once);
+            _mocker.Verify<IUserRepository>(r => r.SaveChangesAsync(), Times.Once);
 
             #endregion
         }
@@ -66,7 +66,7 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Usuarios
                 .RetornarConstrutorDeNovo(nome: nomeInvalido)
                 .Construir();
 
-            _mocker.CreateInstance<DominioDeUsuarios>();
+            _mocker.CreateInstance<UserDomain>();
 
             _mocker.GetMock<INotificador>().Setup(n => n.ExisteMensagem()).Returns(true);
 
@@ -79,9 +79,9 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Usuarios
             #region Verificação do teste
 
             Assert.Null(usuarioCadastrado);
-            _mocker.Verify<IRepositorioDeUsuarios>(r => r.Adicionar(It.IsAny<Usuario>()), Times.Never);
-            _mocker.Verify<IRepositorioDeUsuarios>(r => r.SalvarAlteracoesAsync(), Times.Never);
-            _mocker.Verify<INotificador>(n => n.AddMensagem(MensagensValidacaoUsuario.NomeInvalido), Times.Once);
+            _mocker.Verify<IUserRepository>(r => r.Add(It.IsAny<User>()), Times.Never);
+            _mocker.Verify<IUserRepository>(r => r.SaveChangesAsync(), Times.Never);
+            _mocker.Verify<INotificador>(n => n.AddMensagem(UserValidationMessages.InvalidName), Times.Once);
 
             #endregion
         }
@@ -99,7 +99,7 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Usuarios
                 .RetornarConstrutorDeNovo(nomeUsuario: nomeUsuarioInvalido)
                 .Construir();
 
-            _mocker.CreateInstance<DominioDeUsuarios>();
+            _mocker.CreateInstance<UserDomain>();
 
             _mocker.GetMock<INotificador>().Setup(n => n.ExisteMensagem()).Returns(true);
 
@@ -112,9 +112,9 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Usuarios
             #region Verificação do teste
 
             Assert.Null(usuarioCadastrado);
-            _mocker.Verify<IRepositorioDeUsuarios>(r => r.Adicionar(It.IsAny<Usuario>()), Times.Never);
-            _mocker.Verify<IRepositorioDeUsuarios>(r => r.SalvarAlteracoesAsync(), Times.Never);
-            _mocker.Verify<INotificador>(n => n.AddMensagem(MensagensValidacaoUsuario.NomeUsuarioInvalido), Times.Once);
+            _mocker.Verify<IUserRepository>(r => r.Add(It.IsAny<User>()), Times.Never);
+            _mocker.Verify<IUserRepository>(r => r.SaveChangesAsync(), Times.Never);
+            _mocker.Verify<INotificador>(n => n.AddMensagem(UserValidationMessages.InvalidUsername), Times.Once);
 
             #endregion
         }
@@ -138,7 +138,7 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Usuarios
                 .RetornarConstrutorDeNovo(email: emailInvalido)
                 .Construir();
 
-            _mocker.CreateInstance<DominioDeUsuarios>();
+            _mocker.CreateInstance<UserDomain>();
 
             _mocker.GetMock<INotificador>().Setup(n => n.ExisteMensagem()).Returns(true);
 
@@ -151,9 +151,9 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Usuarios
             #region Verificação do teste
 
             Assert.Null(usuarioCadastrado);
-            _mocker.Verify<IRepositorioDeUsuarios>(r => r.Adicionar(It.IsAny<Usuario>()), Times.Never);
-            _mocker.Verify<IRepositorioDeUsuarios>(r => r.SalvarAlteracoesAsync(), Times.Never);
-            _mocker.Verify<INotificador>(n => n.AddMensagem(MensagensValidacaoUsuario.EmailInvalido), Times.Once);
+            _mocker.Verify<IUserRepository>(r => r.Add(It.IsAny<User>()), Times.Never);
+            _mocker.Verify<IUserRepository>(r => r.SaveChangesAsync(), Times.Never);
+            _mocker.Verify<INotificador>(n => n.AddMensagem(UserValidationMessages.InvalidEmail), Times.Once);
 
             #endregion
         }
@@ -175,7 +175,7 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Usuarios
                 .RetornarConstrutorDeNovo(senha: senhaInvalida)
                 .Construir();
 
-            _mocker.CreateInstance<DominioDeUsuarios>();
+            _mocker.CreateInstance<UserDomain>();
 
             _mocker.GetMock<INotificador>().Setup(n => n.ExisteMensagem()).Returns(true);
 
@@ -188,9 +188,9 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Usuarios
             #region Verificação do teste
 
             Assert.Null(usuarioCadastrado);
-            _mocker.Verify<IRepositorioDeUsuarios>(r => r.Adicionar(It.IsAny<Usuario>()), Times.Never);
-            _mocker.Verify<IRepositorioDeUsuarios>(r => r.SalvarAlteracoesAsync(), Times.Never);
-            _mocker.Verify<INotificador>(n => n.AddMensagem(MensagensValidacaoUsuario.SenhaInvalida), Times.Once);
+            _mocker.Verify<IUserRepository>(r => r.Add(It.IsAny<User>()), Times.Never);
+            _mocker.Verify<IUserRepository>(r => r.SaveChangesAsync(), Times.Never);
+            _mocker.Verify<INotificador>(n => n.AddMensagem(UserValidationMessages.InvalidPassword), Times.Once);
 
             #endregion
         }
@@ -204,8 +204,8 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Usuarios
                 .RetornarConstrutorDeNovo()
                 .Construir();
 
-            _mocker.CreateInstance<DominioDeUsuarios>();
-            _mocker.GetMock<IRepositorioDeUsuarios>().Setup(r => r.ExisteNomeUsuarioAsync(novoUsuario.NomeUsuario, It.IsAny<Guid?>())).ReturnsAsync(true);
+            _mocker.CreateInstance<UserDomain>();
+            _mocker.GetMock<IUserRepository>().Setup(r => r.UsernameExistsAsync(novoUsuario.NomeUsuario, It.IsAny<Guid?>())).ReturnsAsync(true);
             _mocker.GetMock<INotificador>().Setup(n => n.ExisteMensagem()).Returns(true);
 
             var servico = _mocker.CreateInstance<CriarUsuario>();
@@ -217,9 +217,9 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Usuarios
             #region Verificação do teste
 
             Assert.Null(usuarioCadastrado);
-            _mocker.Verify<IRepositorioDeUsuarios>(r => r.Adicionar(It.IsAny<Usuario>()), Times.Never);
-            _mocker.Verify<IRepositorioDeUsuarios>(r => r.SalvarAlteracoesAsync(), Times.Never);
-            _mocker.Verify<INotificador>(n => n.AddMensagem(MensagensValidacaoUsuario.NomeUsuarioJaCadastrado), Times.Once);
+            _mocker.Verify<IUserRepository>(r => r.Add(It.IsAny<User>()), Times.Never);
+            _mocker.Verify<IUserRepository>(r => r.SaveChangesAsync(), Times.Never);
+            _mocker.Verify<INotificador>(n => n.AddMensagem(UserValidationMessages.UsernameAlreadyRegistered), Times.Once);
 
             #endregion
         }
@@ -233,8 +233,8 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Usuarios
                 .RetornarConstrutorDeNovo()
                 .Construir();
 
-            _mocker.CreateInstance<DominioDeUsuarios>();
-            _mocker.GetMock<IRepositorioDeUsuarios>().Setup(r => r.ExisteEmailAsync(novoUsuario.Email, It.IsAny<Guid?>())).ReturnsAsync(true);
+            _mocker.CreateInstance<UserDomain>();
+            _mocker.GetMock<IUserRepository>().Setup(r => r.EmailExistsAsync(novoUsuario.Email, It.IsAny<Guid?>())).ReturnsAsync(true);
             _mocker.GetMock<INotificador>().Setup(n => n.ExisteMensagem()).Returns(true);
 
             var servico = _mocker.CreateInstance<CriarUsuario>();
@@ -246,9 +246,9 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Usuarios
             #region Verificação do teste
 
             Assert.Null(usuarioCadastrado);
-            _mocker.Verify<IRepositorioDeUsuarios>(r => r.Adicionar(It.IsAny<Usuario>()), Times.Never);
-            _mocker.Verify<IRepositorioDeUsuarios>(r => r.SalvarAlteracoesAsync(), Times.Never);
-            _mocker.Verify<INotificador>(n => n.AddMensagem(MensagensValidacaoUsuario.EmailJaCadastrado), Times.Once);
+            _mocker.Verify<IUserRepository>(r => r.Add(It.IsAny<User>()), Times.Never);
+            _mocker.Verify<IUserRepository>(r => r.SaveChangesAsync(), Times.Never);
+            _mocker.Verify<INotificador>(n => n.AddMensagem(UserValidationMessages.EmailAlreadyRegistered), Times.Once);
 
             #endregion
         }

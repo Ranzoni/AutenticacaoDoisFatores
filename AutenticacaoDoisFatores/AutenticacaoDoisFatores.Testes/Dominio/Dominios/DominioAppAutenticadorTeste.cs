@@ -19,17 +19,17 @@ namespace AutenticacaoDoisFatores.Testes.Dominio.Dominios
 
             var mocker = new AutoMocker();
 
-            var dominio = mocker.CreateInstance<AppAutenticador>();
+            var dominio = mocker.CreateInstance<AuthApp>();
 
             var usuario = ConstrutorDeUsuariosTeste
                 .RetornarConstrutor()
-                .ConstruirCadastrado();
+                .Build();
 
             var faker = new Faker();
 
             var qrCode = faker.Commerce.Ean13();
 
-            mocker.GetMock<IServicoDeAutenticador>().Setup(s => s.GerarQrCode(usuario.Email, usuario.ChaveSecreta)).Returns(qrCode);
+            mocker.GetMock<IAuthService>().Setup(s => s.GerarQrCode(usuario.Email, usuario.ChaveSecreta)).Returns(qrCode);
 
             #endregion
 
@@ -39,7 +39,7 @@ namespace AutenticacaoDoisFatores.Testes.Dominio.Dominios
 
             Assert.NotNull(retorno);
             Assert.Equal(qrCode, retorno);
-            mocker.Verify<IServicoDeAutenticador>(s => s.GerarQrCode(usuario.Email, usuario.ChaveSecreta), Times.Once);
+            mocker.Verify<IAuthService>(s => s.GerarQrCode(usuario.Email, usuario.ChaveSecreta), Times.Once);
 
             #endregion
         }
@@ -51,16 +51,16 @@ namespace AutenticacaoDoisFatores.Testes.Dominio.Dominios
 
             var mocker = new AutoMocker();
 
-            var dominio = mocker.CreateInstance<AppAutenticador>();
+            var dominio = mocker.CreateInstance<AuthApp>();
 
             #endregion
 
-            var excecao = Assert.Throws<ExcecoesUsuario>(() => dominio.GerarQrCode(null));
+            var excecao = Assert.Throws<UserException>(() => dominio.GerarQrCode(null));
 
             #region Verificação do teste
 
-            Assert.Equal(MensagensValidacaoUsuario.UsuarioNaoEncontrado.Descricao(), excecao.Message);
-            mocker.Verify<IServicoDeAutenticador>(s => s.GerarQrCode(It.IsAny<string>(), It.IsAny<string>()), Times.Never);
+            Assert.Equal(UserValidationMessages.UserNotFound.Description(), excecao.Message);
+            mocker.Verify<IAuthService>(s => s.GenerateQrCode(It.IsAny<string>(), It.IsAny<string>()), Times.Never);
 
             #endregion
         }
@@ -74,14 +74,14 @@ namespace AutenticacaoDoisFatores.Testes.Dominio.Dominios
 
             var mocker = new AutoMocker();
 
-            var dominio = mocker.CreateInstance<AppAutenticador>();
+            var dominio = mocker.CreateInstance<AuthApp>();
 
             var usuario = ConstrutorDeUsuariosTeste
                 .RetornarConstrutor()
-                .ConstruirCadastrado();
+                .Build();
 
             var codigo = "123456";
-            mocker.GetMock<IServicoDeAutenticador>().Setup(s => s.CodigoEhValido(codigo, usuario.ChaveSecreta)).Returns(valorEsperado);
+            mocker.GetMock<IAuthService>().Setup(s => s.CodigoEhValido(codigo, usuario.ChaveSecreta)).Returns(valorEsperado);
 
             #endregion
 
@@ -90,7 +90,7 @@ namespace AutenticacaoDoisFatores.Testes.Dominio.Dominios
             #region Verificação do teste
 
             Assert.Equal(valorEsperado, retorno);
-            mocker.Verify<IServicoDeAutenticador, bool>(s => s.CodigoEhValido(codigo, usuario.ChaveSecreta), Times.Once);
+            mocker.Verify<IAuthService, bool>(s => s.CodigoEhValido(codigo, usuario.ChaveSecreta), Times.Once);
 
             #endregion
         }
@@ -105,20 +105,20 @@ namespace AutenticacaoDoisFatores.Testes.Dominio.Dominios
 
             var mocker = new AutoMocker();
 
-            var dominio = mocker.CreateInstance<AppAutenticador>();
+            var dominio = mocker.CreateInstance<AuthApp>();
 
             var usuario = ConstrutorDeUsuariosTeste
                 .RetornarConstrutor()
-                .ConstruirCadastrado();
+                .Build();
 
             #endregion
 
-            var excecao = Assert.Throws<ExcecoesAppAutenticador>(() => dominio.CodigoEhValido(codigo, usuario));
+            var excecao = Assert.Throws<AuthAppException>(() => dominio.CodigoEhValido(codigo, usuario));
 
             #region Verificação do teste
 
-            Assert.Equal(MensagensValidacaoAppAutenticacao.CodigoNaoInformado.Descricao(), excecao.Message);
-            mocker.Verify<IServicoDeAutenticador, bool>(s => s.CodigoEhValido(It.IsAny<string>(), It.IsAny<string>()), Times.Never);
+            Assert.Equal(AuthAppValidationMessages.CodeNotInformed.Description(), excecao.Message);
+            mocker.Verify<IAuthService, bool>(s => s.IsValidCode(It.IsAny<string>(), It.IsAny<string>()), Times.Never);
 
             #endregion
         }

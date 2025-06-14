@@ -27,9 +27,9 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Usuarios
 
             var usuarioCadastrado = ConstrutorDeUsuariosTeste
                 .RetornarConstrutor(id: idUsuario, ativo: true, ehAdm: false)
-                .ConstruirCadastrado();
+                .Build();
 
-            mocker.GetMock<IRepositorioDeUsuarios>().Setup(r => r.BuscarUnicoAsync(idUsuario)).ReturnsAsync(usuarioCadastrado);
+            mocker.GetMock<IUserRepository>().Setup(r => r.GetByIdAsync(idUsuario)).ReturnsAsync(usuarioCadastrado);
 
             #endregion
 
@@ -38,8 +38,8 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Usuarios
             #region Verificação do teste
 
             Assert.Equal(novoEmail, usuarioCadastrado.Email);
-            mocker.Verify<IRepositorioDeUsuarios>(r => r.Editar(usuarioCadastrado), Times.Once);
-            mocker.Verify<IRepositorioDeUsuarios>(r => r.SalvarAlteracoesAsync(), Times.Once);
+            mocker.Verify<IUserRepository>(r => r.Editar(usuarioCadastrado), Times.Once);
+            mocker.Verify<IUserRepository>(r => r.SaveChangesAsync(), Times.Once);
 
             #endregion
         }
@@ -66,9 +66,9 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Usuarios
 
             #region Verificação do teste
 
-            mocker.Verify<IRepositorioDeUsuarios>(r => r.Editar(It.IsAny<Usuario>()), Times.Never);
-            mocker.Verify<IRepositorioDeUsuarios>(r => r.SalvarAlteracoesAsync(), Times.Never);
-            mocker.Verify<INotificador>(n => n.AddMensagemNaoEncontrado(MensagensValidacaoUsuario.UsuarioNaoEncontrado), Times.Once);
+            mocker.Verify<IUserRepository>(r => r.Update(It.IsAny<User>()), Times.Never);
+            mocker.Verify<IUserRepository>(r => r.SaveChangesAsync(), Times.Never);
+            mocker.Verify<INotificador>(n => n.AddMensagemNaoEncontrado(UserValidationMessages.UserNotFound), Times.Once);
 
             #endregion
         }
@@ -88,9 +88,9 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Usuarios
 
             var usuarioCadastrado = ConstrutorDeUsuariosTeste
                 .RetornarConstrutor(id: idUsuario, ativo: false, ehAdm: false)
-                .ConstruirCadastrado();
+                .Build();
 
-            mocker.GetMock<IRepositorioDeUsuarios>().Setup(r => r.BuscarUnicoAsync(idUsuario)).ReturnsAsync(usuarioCadastrado);
+            mocker.GetMock<IUserRepository>().Setup(r => r.GetByIdAsync(idUsuario)).ReturnsAsync(usuarioCadastrado);
             mocker.GetMock<INotificador>().Setup(n => n.ExisteMensagem()).Returns(true);
 
             #endregion
@@ -100,9 +100,9 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Usuarios
             #region Verificação do teste
 
             Assert.NotEqual(novoEmail, usuarioCadastrado.Email);
-            mocker.Verify<IRepositorioDeUsuarios>(r => r.Editar(It.IsAny<Usuario>()), Times.Never);
-            mocker.Verify<IRepositorioDeUsuarios>(r => r.SalvarAlteracoesAsync(), Times.Never);
-            mocker.Verify<INotificador>(n => n.AddMensagemNaoEncontrado(MensagensValidacaoUsuario.UsuarioNaoEncontrado), Times.Once);
+            mocker.Verify<IUserRepository>(r => r.Update(It.IsAny<User>()), Times.Never);
+            mocker.Verify<IUserRepository>(r => r.SaveChangesAsync(), Times.Never);
+            mocker.Verify<INotificador>(n => n.AddMensagemNaoEncontrado(UserValidationMessages.UserNotFound), Times.Once);
 
             #endregion
         }
@@ -122,9 +122,9 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Usuarios
 
             var usuarioCadastrado = ConstrutorDeUsuariosTeste
                 .RetornarConstrutor(id: idUsuario, ativo: true, ehAdm: true)
-                .ConstruirCadastrado();
+                .Build();
 
-            mocker.GetMock<IRepositorioDeUsuarios>().Setup(r => r.BuscarUnicoAsync(idUsuario)).ReturnsAsync(usuarioCadastrado);
+            mocker.GetMock<IUserRepository>().Setup(r => r.GetByIdAsync(idUsuario)).ReturnsAsync(usuarioCadastrado);
             mocker.GetMock<INotificador>().Setup(n => n.ExisteMensagem()).Returns(true);
 
             #endregion
@@ -134,9 +134,9 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Usuarios
             #region Verificação do teste
 
             Assert.NotEqual(novoEmail, usuarioCadastrado.Email);
-            mocker.Verify<IRepositorioDeUsuarios>(r => r.Editar(It.IsAny<Usuario>()), Times.Never);
-            mocker.Verify<IRepositorioDeUsuarios>(r => r.SalvarAlteracoesAsync(), Times.Never);
-            mocker.Verify<INotificador>(n => n.AddMensagemNaoEncontrado(MensagensValidacaoUsuario.UsuarioNaoEncontrado), Times.Once);
+            mocker.Verify<IUserRepository>(r => r.Update(It.IsAny<User>()), Times.Never);
+            mocker.Verify<IUserRepository>(r => r.SaveChangesAsync(), Times.Never);
+            mocker.Verify<INotificador>(n => n.AddMensagemNaoEncontrado(UserValidationMessages.UserNotFound), Times.Once);
 
             #endregion
         }
@@ -165,9 +165,9 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Usuarios
 
             var usuarioCadastrado = ConstrutorDeUsuariosTeste
                 .RetornarConstrutor(id: idUsuario, ativo: true, ehAdm: false)
-                .ConstruirCadastrado();
+                .Build();
 
-            mocker.GetMock<IRepositorioDeUsuarios>().Setup(r => r.BuscarUnicoAsync(idUsuario)).ReturnsAsync(usuarioCadastrado);
+            mocker.GetMock<IUserRepository>().Setup(r => r.GetByIdAsync(idUsuario)).ReturnsAsync(usuarioCadastrado);
             mocker.GetMock<INotificador>().Setup(n => n.ExisteMensagem()).Returns(true);
 
             #endregion
@@ -177,9 +177,9 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Usuarios
             #region Verificação do teste
 
             Assert.NotEqual(emailInvalido, usuarioCadastrado.Email);
-            mocker.Verify<IRepositorioDeUsuarios>(r => r.Editar(It.IsAny<Usuario>()), Times.Never);
-            mocker.Verify<IRepositorioDeUsuarios>(r => r.SalvarAlteracoesAsync(), Times.Never);
-            mocker.Verify<INotificador>(n => n.AddMensagem(MensagensValidacaoUsuario.EmailInvalido), Times.Once);
+            mocker.Verify<IUserRepository>(r => r.Update(It.IsAny<User>()), Times.Never);
+            mocker.Verify<IUserRepository>(r => r.SaveChangesAsync(), Times.Never);
+            mocker.Verify<INotificador>(n => n.AddMensagem(UserValidationMessages.InvalidEmail), Times.Once);
 
             #endregion
         }
@@ -199,10 +199,10 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Usuarios
 
             var usuarioCadastrado = ConstrutorDeUsuariosTeste
                 .RetornarConstrutor(id: idUsuario, ativo: true, ehAdm: false)
-                .ConstruirCadastrado();
+                .Build();
 
-            mocker.GetMock<IRepositorioDeUsuarios>().Setup(r => r.BuscarUnicoAsync(idUsuario)).ReturnsAsync(usuarioCadastrado);
-            mocker.GetMock<IRepositorioDeUsuarios>().Setup(r => r.ExisteEmailAsync(novoEmail, It.IsAny<Guid?>())).ReturnsAsync(true);
+            mocker.GetMock<IUserRepository>().Setup(r => r.GetByIdAsync(idUsuario)).ReturnsAsync(usuarioCadastrado);
+            mocker.GetMock<IUserRepository>().Setup(r => r.EmailExistsAsync(novoEmail, It.IsAny<Guid?>())).ReturnsAsync(true);
             mocker.GetMock<INotificador>().Setup(n => n.ExisteMensagem()).Returns(true);
 
             #endregion
@@ -212,9 +212,9 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Usuarios
             #region Verificação do teste
 
             Assert.NotEqual(novoEmail, usuarioCadastrado.Email);
-            mocker.Verify<IRepositorioDeUsuarios>(r => r.Editar(It.IsAny<Usuario>()), Times.Never);
-            mocker.Verify<IRepositorioDeUsuarios>(r => r.SalvarAlteracoesAsync(), Times.Never);
-            mocker.Verify<INotificador>(n => n.AddMensagem(MensagensValidacaoUsuario.EmailJaCadastrado), Times.Once);
+            mocker.Verify<IUserRepository>(r => r.Update(It.IsAny<User>()), Times.Never);
+            mocker.Verify<IUserRepository>(r => r.SaveChangesAsync(), Times.Never);
+            mocker.Verify<INotificador>(n => n.AddMensagem(UserValidationMessages.EmailAlreadyRegistered), Times.Once);
 
             #endregion
         }
