@@ -65,21 +65,21 @@ namespace AutenticacaoDoisFatores
 
         internal static void AddServicos(this IServiceCollection servicos)
         {
-            servicos.AddTransient<IServicoDeEmail, ServicoDeEmail>();
-            servicos.AddTransient<IServicoDeAutenticador, ServicoDeAutenticador>();
+            servicos.AddTransient<IServicoDeEmail, EmailService>();
+            servicos.AddTransient<IServicoDeAutenticador, AuthService>();
         }
 
         internal static void AddRepositorios(this IServiceCollection servicos)
         {
-            servicos.AddTransient<IRepositorioDeClientes, RepositorioDeClientes>();
-            servicos.AddTransient<IRepositorioDeUsuarios, RepositorioDeUsuarios>();
-            servicos.AddTransient<IRepositorioDePermissoes, RepositorioDePermissoes>();
-            servicos.AddTransient<IRepositorioDeCodigoDeAutenticacao, RepositorioDeCodigoDeAutenticacao>();
+            servicos.AddTransient<IRepositorioDeClientes, ClientRepository>();
+            servicos.AddTransient<IRepositorioDeUsuarios, UserRepository>();
+            servicos.AddTransient<IRepositorioDePermissoes, PermissionRepository>();
+            servicos.AddTransient<IRepositorioDeCodigoDeAutenticacao, AuthCodeRepository>();
         }
 
         internal static void AddContextos(this IServiceCollection servicos)
         {
-            servicos.AddScoped<IMigrador>(provider =>
+            servicos.AddScoped<IMigration>(provider =>
             {
                 var stringDeConexao = Environment.GetEnvironmentVariable("ADF_CONEXAO_BANCO");
                 if (stringDeConexao is null || stringDeConexao.EstaVazio())
@@ -93,7 +93,7 @@ namespace AutenticacaoDoisFatores
                 return provider.RetornarContextoCliente();
             });
 
-            ContextoPermissoes.AplicarConfiguracoes();
+            PermissionsContext.ApplyConfigurations();
 
             servicos.AddScoped(provider =>
             {
@@ -106,7 +106,7 @@ namespace AutenticacaoDoisFatores
             });
         }
 
-        private static ContextoCliente RetornarContextoCliente(this IServiceProvider serviceProvider)
+        private static ClientContext RetornarContextoCliente(this IServiceProvider serviceProvider)
         {
             var stringDeConexao = Environment.GetEnvironmentVariable("ADF_CONEXAO_BANCO");
             if (stringDeConexao is null || stringDeConexao.EstaVazio())
@@ -116,10 +116,10 @@ namespace AutenticacaoDoisFatores
             var httpContext = httpContextAccessor.HttpContext;
 
             var nomeDominio = httpContext?.Request.Headers["Dominio"].ToString() ?? "public";
-            return new ContextoCliente(stringDeConexao, nomeDominio);
+            return new ClientContext(stringDeConexao, nomeDominio);
         }
 
-        private static ContextoPermissoes RetornarContextoPermissoes(this IServiceProvider serviceProvider)
+        private static PermissionsContext RetornarContextoPermissoes(this IServiceProvider serviceProvider)
         {
             var stringDeConexao = Environment.GetEnvironmentVariable("ADF_PERMISSOES_CONEXAO_BANCO");
             if (stringDeConexao is null || stringDeConexao.EstaVazio())
@@ -129,10 +129,10 @@ namespace AutenticacaoDoisFatores
             var httpContext = httpContextAccessor.HttpContext;
 
             var nomeDominio = httpContext?.Request.Headers["Dominio"].ToString() ?? "public";
-            return new ContextoPermissoes(stringDeConexao, nomeDominio);
+            return new PermissionsContext(stringDeConexao, nomeDominio);
         }
 
-        private static ContextoDeCodigoDeAutenticacao RetornarContextoDeCodigoDeAutenticacao(this IServiceProvider serviceProvider)
+        private static AuthCodeContext RetornarContextoDeCodigoDeAutenticacao(this IServiceProvider serviceProvider)
         {
             var stringDeConexao = Environment.GetEnvironmentVariable("ADF_COD_AUTENTICACAO_CONEXAO_BANCO");
             if (stringDeConexao is null || stringDeConexao.EstaVazio())
@@ -148,7 +148,7 @@ namespace AutenticacaoDoisFatores
             var httpContext = httpContextAccessor.HttpContext;
 
             var nomeDominio = httpContext?.Request.Headers["Dominio"].ToString() ?? "public";
-            return new ContextoDeCodigoDeAutenticacao(host, porta, usuario, senha, nomeDominio);
+            return new AuthCodeContext(host, porta, usuario, senha, nomeDominio);
         }
 
         private static GerarQrCodeAppAutenticacao RetornarGerarQrCodeAppAutenticacao(this IServiceProvider serviceProvider)

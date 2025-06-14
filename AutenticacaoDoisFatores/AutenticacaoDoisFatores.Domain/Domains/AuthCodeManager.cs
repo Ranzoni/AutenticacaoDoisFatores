@@ -18,7 +18,7 @@ namespace AutenticacaoDoisFatores.Domain.Domains
 
         public async Task<string?> GetCodeAsync(Guid userId)
         {
-            return await _repository.GetCodeAsync(userId);
+            return await _repository.GetCodeByUserIdAsync(userId);
         }
     }
 }

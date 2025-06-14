@@ -3,9 +3,9 @@ using AutenticacaoDoisFatores.Domain.Repositories;
 
 namespace AutenticacaoDoisFatores.Domain.Domains
 {
-    public class PermissionsDomain(IPermissionsRepository repository)
+    public class PermissionsDomain(IPermissionRepository repository)
     {
-        private readonly IPermissionsRepository _repository = repository;
+        private readonly IPermissionRepository _repository = repository;
 
         public async Task AddAsync(Guid userId, IEnumerable<PermissionType> permissionsToInclude)
         {

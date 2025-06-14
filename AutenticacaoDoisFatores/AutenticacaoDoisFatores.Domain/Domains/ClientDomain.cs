@@ -27,7 +27,7 @@ namespace AutenticacaoDoisFatores.Domain.Domains
             var client = await _repository.GetByIdAsync(clientId)
                 ?? throw new ClientException(ClientValidationMessages.ClientNotFound);
 
-            await _repository.NewDomain(client.DomainName);
+            await _repository.NewDomainAsync(client.DomainName);
         }
 
         public async Task<Client> UpdateAsync(Client client)

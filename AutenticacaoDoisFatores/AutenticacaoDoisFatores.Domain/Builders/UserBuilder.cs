@@ -7,7 +7,7 @@ namespace AutenticacaoDoisFatores.Domain.Builders
     {
         private Guid _id;
         private string _name = "";
-        private string _userName = "";
+        private string _username = "";
         private string _email = "";
         private string _password = "";
         private long? _phone;
@@ -33,9 +33,9 @@ namespace AutenticacaoDoisFatores.Domain.Builders
             return this;
         }
 
-        public UserBuilder WithUserName(string userName)
+        public UserBuilder WithUsername(string username)
         {
-            _userName = userName;
+            _username = username;
 
             return this;
         }
@@ -115,7 +115,7 @@ namespace AutenticacaoDoisFatores.Domain.Builders
             var user = new User
             (
                 name: _name,
-                username: _userName,
+                username: _username,
                 email: _email,
                 password: _password,
                 phone: _phone,
@@ -131,7 +131,7 @@ namespace AutenticacaoDoisFatores.Domain.Builders
             (
                 id: _id,
                 name: _name,
-                username: _userName,
+                username: _username,
                 email: _email,
                 password: _password,
                 phone: _phone,

@@ -14,5 +14,6 @@ namespace AutenticacaoDoisFatores.Domain.Repositories
         Task<User?> GetByEmailAsync(string email);
         void Add(User user, string domainName);
         Task<bool> IsAdminAsync(Guid id);
+        Task<User?> GetByIdAsync(Guid id, string domainName);
     }
 }

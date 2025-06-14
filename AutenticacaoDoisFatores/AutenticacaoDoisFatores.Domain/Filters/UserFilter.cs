@@ -3,7 +3,7 @@
     public class UserFilter
     (
         string? name = null,
-        string? userName = null,
+        string? username = null,
         string? email = null,
         long? phone = null,
         bool? active = null,
@@ -19,7 +19,7 @@
     ) : AuditedEntityFilter(createdFrom, createdUntil, updatedFrom, updatedUntil, page, quantity)
     {
         public string? Name { get; } = name;
-        public string? UserName { get; } = userName;
+        public string? Username { get; } = username;
         public string? Email { get; } = email;
         public long? Phone { get; } = phone;
         public bool? Active { get; } = active;

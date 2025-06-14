@@ -36,7 +36,7 @@ var dataSourceBuilder = new NpgsqlDataSourceBuilder(stringDeConexao);
 dataSourceBuilder.EnableDynamicJson();
 var dataSource = dataSourceBuilder.Build();
 
-builder.Services.AddDbContext<ContextoPadrao>(opt =>
+builder.Services.AddDbContext<BaseContext>(opt =>
     opt.UseNpgsql(dataSource)
 );
 
@@ -85,7 +85,7 @@ builder.Services.AddAuthentication(opt =>
                 if (stringDeConexao is null || stringDeConexao.EstaVazio())
                     throw new ApplicationException("A string de conexão com o banco de dados não foi encontrada");
 
-                var contextoCliente = new ContextoCliente(stringDeConexao, nomeDominio);
+                var contextoCliente = new ClientContext(stringDeConexao, nomeDominio);
                 var repositorioUsuarios = new RepositorioDeUsuarios(contextoCliente);
                 if (repositorioUsuarios is not null)
                 {
@@ -133,11 +133,11 @@ var app = builder.Build();
 
 using (var scope = app.Services.CreateScope())
 {
-    var db = scope.ServiceProvider.GetRequiredService<ContextoPadrao>();
+    var db = scope.ServiceProvider.GetRequiredService<BaseContext>();
     await db.Database.MigrateAsync();
 
-    var migrador = scope.ServiceProvider.GetRequiredService<IMigrador>();
-    await migrador.AplicarMigracoesAsync();
+    var migrador = scope.ServiceProvider.GetRequiredService<IMigration>();
+    await migrador.ApplyMigrationsAsync();
 }
 
 // Configure the HTTP request pipeline.
