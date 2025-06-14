@@ -1,0 +1,1 @@
+ALTER TABLE "Users" ADD "SecretKey" VARCHAR(256) NOT NULL;

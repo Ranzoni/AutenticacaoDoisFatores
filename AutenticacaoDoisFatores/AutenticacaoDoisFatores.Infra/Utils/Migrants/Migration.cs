@@ -6,7 +6,7 @@ namespace AutenticacaoDoisFatores.Infra.Utils.Migrants
     public abstract class Migration(string connectionString)
     {
         private readonly string _connectionString = connectionString;
-        private static readonly string _migrationScriptFolder = "Controle";
+        private static readonly string _migrationScriptFolder = "Control";
 
         protected async Task ExecuteScriptsAsync(string scriptsFolder)
         {
@@ -42,7 +42,7 @@ namespace AutenticacaoDoisFatores.Infra.Utils.Migrants
 
         private static string[] GetScriptsFilePath(params string[] paths)
         {
-            var folderPath = Path.Combine(Directory.GetCurrentDirectory(), "Arquivos", "Scripts");
+            var folderPath = Path.Combine(Directory.GetCurrentDirectory(), "Files", "Scripts");
             foreach (var path in paths)
                 folderPath = Path.Combine(folderPath, path);
 

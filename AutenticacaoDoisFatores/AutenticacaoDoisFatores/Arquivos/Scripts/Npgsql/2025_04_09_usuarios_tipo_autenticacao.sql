@@ -1,1 +1,0 @@
-ALTER TABLE "Usuarios" ADD "TipoDeAutenticacao" SMALLINT NULL;
