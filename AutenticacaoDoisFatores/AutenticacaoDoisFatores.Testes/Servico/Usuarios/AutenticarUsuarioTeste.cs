@@ -32,10 +32,10 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Usuarios
                 .RetornarConstrutor(ativo: true, senha: senhaCriptografada)
                 .Build();
 
-            var servico = _mocker.CreateInstance<AutenticarUsuario>();
-            var retornarUsuarioAutenticado = _mocker.CreateInstance<AutenticadorUsuarioPadrao>();
+            var servico = _mocker.CreateInstance<AuthenticateUser>();
+            var retornarUsuarioAutenticado = _mocker.CreateInstance<BaseUserAuthenticator>();
             _mocker.GetMock<IUserRepository>().Setup(r => r.BuscarPorNomeUsuarioAsync(usuarioParaTeste.NomeUsuario)).ReturnsAsync(usuarioParaTeste);
-            _mocker.GetMock<IServiceProvider>().Setup(s => s.GetService(typeof(AutenticadorUsuarioPadrao))).Returns(retornarUsuarioAutenticado);
+            _mocker.GetMock<IServiceProvider>().Setup(s => s.GetService(typeof(BaseUserAuthenticator))).Returns(retornarUsuarioAutenticado);
 
             var dadosAutenticacao = new DadosAutenticacao(
                 nomeUsuarioOuEmail: usuarioParaTeste.NomeUsuario,
@@ -47,11 +47,11 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Usuarios
 
             #region Verificação do teste
 
-            var usuarioResposta = (UsuarioAutenticado?)resposta;
+            var usuarioResposta = (AuthenticatedUser?)resposta;
             Assert.NotNull(usuarioResposta);
-            Assert.Equal(usuarioParaTeste.Nome, usuarioResposta.Usuario.Nome);
-            Assert.Equal(usuarioParaTeste.NomeUsuario, usuarioResposta.Usuario.NomeUsuario);
-            Assert.Equal(usuarioParaTeste.Email, usuarioResposta.Usuario.Email);
+            Assert.Equal(usuarioParaTeste.Nome, usuarioResposta.User.Name);
+            Assert.Equal(usuarioParaTeste.NomeUsuario, usuarioResposta.User.Username);
+            Assert.Equal(usuarioParaTeste.Email, usuarioResposta.User.Email);
             Assert.False(usuarioResposta.Token.IsNullOrEmptyOrWhiteSpaces());
 
             #endregion
@@ -69,10 +69,10 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Usuarios
                 .RetornarConstrutor(ativo: true, senha: senhaCriptografada)
                 .Build();
 
-            var servico = _mocker.CreateInstance<AutenticarUsuario>();
-            var retornarUsuarioAutenticado = _mocker.CreateInstance<AutenticadorUsuarioPadrao>();
+            var servico = _mocker.CreateInstance<AuthenticateUser>();
+            var retornarUsuarioAutenticado = _mocker.CreateInstance<BaseUserAuthenticator>();
             _mocker.GetMock<IUserRepository>().Setup(r => r.BuscarPorEmailAsync(usuarioParaTeste.Email)).ReturnsAsync(usuarioParaTeste);
-            _mocker.GetMock<IServiceProvider>().Setup(s => s.GetService(typeof(AutenticadorUsuarioPadrao))).Returns(retornarUsuarioAutenticado);
+            _mocker.GetMock<IServiceProvider>().Setup(s => s.GetService(typeof(BaseUserAuthenticator))).Returns(retornarUsuarioAutenticado);
 
             var dadosAutenticacao = new DadosAutenticacao(
                 nomeUsuarioOuEmail: usuarioParaTeste.Email,
@@ -84,11 +84,11 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Usuarios
 
             #region Verificação do teste
 
-            var usuarioResposta = (UsuarioAutenticado?)resposta;
+            var usuarioResposta = (AuthenticatedUser?)resposta;
             Assert.NotNull(usuarioResposta);
-            Assert.Equal(usuarioParaTeste.Nome, usuarioResposta.Usuario.Nome);
-            Assert.Equal(usuarioParaTeste.NomeUsuario, usuarioResposta.Usuario.NomeUsuario);
-            Assert.Equal(usuarioParaTeste.Email, usuarioResposta.Usuario.Email);
+            Assert.Equal(usuarioParaTeste.Nome, usuarioResposta.User.Name);
+            Assert.Equal(usuarioParaTeste.NomeUsuario, usuarioResposta.User.Username);
+            Assert.Equal(usuarioParaTeste.Email, usuarioResposta.User.Email);
             Assert.False(usuarioResposta.Token.IsNullOrEmptyOrWhiteSpaces());
 
             #endregion
@@ -102,11 +102,11 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Usuarios
         {
             #region Preparação do teste
 
-            var servico = _mocker.CreateInstance<AutenticarUsuario>();
+            var servico = _mocker.CreateInstance<AuthenticateUser>();
 
-            var dadosAutenticacao = new DadosAutenticacao(
-                nomeUsuarioOuEmail: nomeUsuarioOuEmailNaoPreenchido,
-                senha: "teste.de_senh4@@");
+            var dadosAutenticacao = new AuthData(
+                usernameOrEmail: nomeUsuarioOuEmailNaoPreenchido,
+                password: "teste.de_senh4@@");
 
             #endregion
 
@@ -125,11 +125,11 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Usuarios
         {
             #region Preparação do teste
 
-            var servico = _mocker.CreateInstance<AutenticarUsuario>();
+            var servico = _mocker.CreateInstance<AuthenticateUser>();
 
-            var dadosAutenticacao = new DadosAutenticacao(
-                nomeUsuarioOuEmail: _faker.Person.UserName,
-                senha: "teste.de_senh4@@");
+            var dadosAutenticacao = new AuthData(
+                usernameOrEmail: _faker.Person.UserName,
+                password: "teste.de_senh4@@");
 
             #endregion
 
@@ -148,11 +148,11 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Usuarios
         {
             #region Preparação do teste
 
-            var servico = _mocker.CreateInstance<AutenticarUsuario>();
+            var servico = _mocker.CreateInstance<AuthenticateUser>();
 
-            var dadosAutenticacao = new DadosAutenticacao(
-                nomeUsuarioOuEmail: _faker.Person.Email,
-                senha: "teste.de_senh4@@");
+            var dadosAutenticacao = new AuthData(
+                usernameOrEmail: _faker.Person.Email,
+                password: "teste.de_senh4@@");
 
             #endregion
 
@@ -177,7 +177,7 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Usuarios
                 .RetornarConstrutor(id: idUsuario, ativo: false)
                 .Build();
 
-            var servico = _mocker.CreateInstance<AutenticarUsuario>();
+            var servico = _mocker.CreateInstance<AuthenticateUser>();
 
             _mocker.GetMock<IUserRepository>().Setup(r => r.BuscarPorNomeUsuarioAsync(usuarioParaTeste.NomeUsuario)).ReturnsAsync(usuarioParaTeste);
 
@@ -206,7 +206,7 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Usuarios
                 .RetornarConstrutor(ativo: false)
                 .Build();
 
-            var servico = _mocker.CreateInstance<AutenticarUsuario>();
+            var servico = _mocker.CreateInstance<AuthenticateUser>();
 
             _mocker.GetMock<IUserRepository>().Setup(r => r.BuscarPorEmailAsync(usuarioParaTeste.Email)).ReturnsAsync(usuarioParaTeste);
 
@@ -237,7 +237,7 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Usuarios
                 .RetornarConstrutor(id: idUsuario, ativo: true, senha: _faker.Random.AlphaNumeric(30))
                 .Build();
 
-            var servico = _mocker.CreateInstance<AutenticarUsuario>();
+            var servico = _mocker.CreateInstance<AuthenticateUser>();
 
             _mocker.GetMock<IUserRepository>().Setup(r => r.BuscarPorNomeUsuarioAsync(usuarioParaTeste.NomeUsuario)).ReturnsAsync(usuarioParaTeste);
 
@@ -268,7 +268,7 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Usuarios
                 .RetornarConstrutor(id: idUsuario, ativo: true, senha: _faker.Random.AlphaNumeric(30))
                 .Build();
 
-            var servico = _mocker.CreateInstance<AutenticarUsuario>();
+            var servico = _mocker.CreateInstance<AuthenticateUser>();
 
             _mocker.GetMock<IUserRepository>().Setup(r => r.BuscarPorEmailAsync(usuarioParaTeste.Email)).ReturnsAsync(usuarioParaTeste);
 
@@ -301,12 +301,12 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Usuarios
                 .RetornarConstrutor(ativo: true, senha: senhaCriptografada, tipoDeAutenticacao: AuthType.Email)
                 .Build();
 
-            var servico = _mocker.CreateInstance<AutenticarUsuario>();
-            var enviarCodigoAutenticacaoUsuario = _mocker.CreateInstance<AutenticadorUsuarioEmDoisFatores>();
-            var enviarCodAutenticacaoUsuarioPorEmail = _mocker.CreateInstance<AutenticadorUsuarioEmDoisFatoresPorEmail>();
+            var servico = _mocker.CreateInstance<AuthenticateUser>();
+            var enviarCodigoAutenticacaoUsuario = _mocker.CreateInstance<UserTwoFactorAuthentication>();
+            var enviarCodAutenticacaoUsuarioPorEmail = _mocker.CreateInstance<UserTwoFactorAuthByEmail>();
             _mocker.GetMock<IUserRepository>().Setup(r => r.BuscarPorEmailAsync(usuarioParaTeste.Email)).ReturnsAsync(usuarioParaTeste);
-            _mocker.GetMock<IServiceProvider>().Setup(s => s.GetService(typeof(AutenticadorUsuarioEmDoisFatores))).Returns(enviarCodigoAutenticacaoUsuario);
-            _mocker.GetMock<IServiceProvider>().Setup(s => s.GetService(typeof(AutenticadorUsuarioEmDoisFatoresPorEmail))).Returns(enviarCodAutenticacaoUsuarioPorEmail);
+            _mocker.GetMock<IServiceProvider>().Setup(s => s.GetService(typeof(UserTwoFactorAuthentication))).Returns(enviarCodigoAutenticacaoUsuario);
+            _mocker.GetMock<IServiceProvider>().Setup(s => s.GetService(typeof(UserTwoFactorAuthByEmail))).Returns(enviarCodAutenticacaoUsuarioPorEmail);
 
             var dadosAutenticacao = new DadosAutenticacao(
                 nomeUsuarioOuEmail: usuarioParaTeste.Email,
@@ -318,7 +318,7 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Usuarios
 
             #region Verificação do teste
 
-            var usuarioResposta = (RespostaAutenticacaoDoisFatores?)resposta;
+            var usuarioResposta = (TwoFactorAuthResponse?)resposta;
             Assert.NotNull(usuarioResposta);
             Assert.NotEmpty(usuarioResposta.Token);
 

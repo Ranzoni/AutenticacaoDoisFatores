@@ -26,7 +26,7 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Usuarios
                 .RetornarConstrutor(id: idUsuario, senha: senhaAtual, ativo: true)
                 .Build();
 
-            var servico = _mocker.CreateInstance<AlterarSenhaUsuario>();
+            var servico = _mocker.CreateInstance<ChangeUserPassword>();
 
             _mocker.GetMock<IUserRepository>().Setup(r => r.GetByIdAsync(idUsuario)).ReturnsAsync(usuario);
 
@@ -59,7 +59,7 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Usuarios
 
             var idUsuario = Guid.NewGuid();
 
-            var servico = _mocker.CreateInstance<AlterarSenhaUsuario>();
+            var servico = _mocker.CreateInstance<ChangeUserPassword>();
 
             #endregion
 
@@ -82,7 +82,7 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Usuarios
             var idUsuario = Guid.NewGuid();
             var novaSenha = "Teste.De_N0v@!!Senha";
 
-            var servico = _mocker.CreateInstance<AlterarSenhaUsuario>();
+            var servico = _mocker.CreateInstance<ChangeUserPassword>();
 
             #endregion
 
@@ -110,7 +110,7 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Usuarios
                 .RetornarConstrutor(id: idUsuario, senha: senhaAtual, ativo: false)
                 .Build();
 
-            var servico = _mocker.CreateInstance<AlterarSenhaUsuario>();
+            var servico = _mocker.CreateInstance<ChangeUserPassword>();
 
             _mocker.GetMock<IUserRepository>().Setup(r => r.GetByIdAsync(idUsuario)).ReturnsAsync(usuario);
 
@@ -140,7 +140,7 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Usuarios
                 .RetornarConstrutor(id: idUsuario, senha: senhaAtual, ativo: true, ehAdm: true)
                 .Build();
 
-            var servico = _mocker.CreateInstance<AlterarSenhaUsuario>();
+            var servico = _mocker.CreateInstance<ChangeUserPassword>();
 
             _mocker.GetMock<IUserRepository>().Setup(r => r.GetByIdAsync(idUsuario)).ReturnsAsync(usuario);
 

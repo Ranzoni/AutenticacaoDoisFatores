@@ -22,7 +22,7 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Clientes
 
             _mocker.GetMock<IClientRepository>().Setup(r => r.BuscarUnicoAsync(cliente.Id)).ReturnsAsync(cliente);
 
-            var servico = _mocker.CreateInstance<AtivarCliente>();
+            var servico = _mocker.CreateInstance<ActivateClient>();
 
             #endregion
 
@@ -46,11 +46,11 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Clientes
 
             _mocker.GetMock<INotificador>().Setup(n => n.ExisteMensagem()).Returns(true);
 
-            var servico = _mocker.CreateInstance<AtivarCliente>();
+            var servico = _mocker.CreateInstance<ActivateClient>();
 
             #endregion
 
-            await servico.AtivarAsync(idInexistente);
+            await servico.ActivateAsync(idInexistente);
 
             #region Verificação do teste
 
@@ -71,7 +71,7 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Clientes
             _mocker.GetMock<IClientRepository>().Setup(r => r.BuscarUnicoAsync(cliente.Id)).ReturnsAsync(cliente);
             _mocker.GetMock<INotificador>().Setup(n => n.ExisteMensagem()).Returns(true);
 
-            var servico = _mocker.CreateInstance<AtivarCliente>();
+            var servico = _mocker.CreateInstance<ActivateClient>();
 
             #endregion
 

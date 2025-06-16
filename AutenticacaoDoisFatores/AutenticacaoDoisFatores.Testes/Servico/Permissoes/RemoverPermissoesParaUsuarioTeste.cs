@@ -18,7 +18,7 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Permissoes
         {
             #region Preparação do teste
 
-            var servico = _mocker.CreateInstance<RemoverPermissoesParaUsuario>();
+            var servico = _mocker.CreateInstance<RemoveUserPermission>();
 
             var idUsuario = Guid.NewGuid();
             var usuario = ConstrutorDeUsuariosTeste
@@ -56,7 +56,7 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Permissoes
         {
             #region Preparação do teste
 
-            var servico = _mocker.CreateInstance<RemoverPermissoesParaUsuario>();
+            var servico = _mocker.CreateInstance<RemoveUserPermission>();
 
             var idUsuario = Guid.NewGuid();
             var usuario = ConstrutorDeUsuariosTeste
@@ -87,7 +87,7 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Permissoes
         {
             #region Preparação do teste
 
-            var servico = _mocker.CreateInstance<RemoverPermissoesParaUsuario>();
+            var servico = _mocker.CreateInstance<RemoveUserPermission>();
 
             var idUsuario = Guid.NewGuid();
             var usuario = ConstrutorDeUsuariosTeste
@@ -118,7 +118,7 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Permissoes
         {
             #region Preparação do teste
 
-            var servico = _mocker.CreateInstance<RemoverPermissoesParaUsuario>();
+            var servico = _mocker.CreateInstance<RemoveUserPermission>();
 
             var idUsuario = Guid.NewGuid();
             var permissoesParaExcluir = new List<PermissionType>()

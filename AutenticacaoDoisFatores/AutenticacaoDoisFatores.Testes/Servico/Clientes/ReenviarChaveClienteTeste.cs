@@ -29,11 +29,11 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Clientes
 
             _mock.GetMock<IClientRepository>().Setup(r => r.GetByEmailAsync(emailParaTeste)).ReturnsAsync(cliente);
 
-            var servico = _mock.CreateInstance<ReenviarChaveCliente>();
+            var servico = _mock.CreateInstance<ResendClientKey>();
 
             #endregion
 
-            await servico.ReenviarAsync(emailParaTeste, urlParaTeste);
+            await servico.ResendAsync(emailParaTeste, urlParaTeste);
 
             #region Verificação do teste
 
@@ -51,11 +51,11 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Clientes
 
             var emailParaTeste = _faker.Person.Email;
             var urlParaTeste = _faker.Internet.UrlRootedPath();
-            var servico = _mock.CreateInstance<ReenviarChaveCliente>();
+            var servico = _mock.CreateInstance<ResendClientKey>();
 
             #endregion
 
-            await servico.ReenviarAsync(emailParaTeste, urlParaTeste);
+            await servico.ResendAsync(emailParaTeste, urlParaTeste);
 
             #region Verificação do teste
 
@@ -81,11 +81,11 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Clientes
             _mock.GetMock<IClientRepository>().Setup(r => r.GetByEmailAsync(emailParaTeste)).ReturnsAsync(cliente);
             _mock.GetMock<INotificador>().Setup(n => n.ExisteMensagem()).Returns(true);
 
-            var servico = _mock.CreateInstance<ReenviarChaveCliente>();
+            var servico = _mock.CreateInstance<ResendClientKey>();
 
             #endregion
 
-            await servico.ReenviarAsync(emailParaTeste, urlParaTeste);
+            await servico.ResendAsync(emailParaTeste, urlParaTeste);
 
             #region Verificação do teste
 

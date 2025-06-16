@@ -18,7 +18,7 @@ namespace AutenticacaoDoisFatores.Controllers
 
         [HttpPost]
         [AllowAnonymous]
-        public async Task<ActionResult<ClienteCadastrado?>> CriarAsync([FromServices] CriarCliente criarCliente, NovoCliente novoCliente)
+        public async Task<ActionResult<RegisteredClient?>> CriarAsync([FromServices] CreateClient criarCliente, NewClient novoCliente)
         {
             try
             {
@@ -37,12 +37,12 @@ namespace AutenticacaoDoisFatores.Controllers
 
         [HttpPut("confirmar-cadastro")]
         [Authorize(Policy = "ConfirmacaoDeCliente")]
-        public async Task<ActionResult> ConfirmarCadastroAsync([FromServices] AtivarCliente ativarCliente)
+        public async Task<ActionResult> ConfirmarCadastroAsync([FromServices] ActivateClient ativarCliente)
         {
             try
             {
                 var token = Token(HttpContext.Request);
-                var idCliente = Seguranca.RetornarIdDoToken(token);
+                var idCliente = Security.GetIdFromToken(token);
 
                 await ativarCliente.AtivarAsync(idCliente);
 
@@ -56,14 +56,14 @@ namespace AutenticacaoDoisFatores.Controllers
 
         [HttpPut("email/{email}/reenviar-chave")]
         [AllowAnonymous]
-        public async Task<ActionResult> ReenviarAsync([FromServices] ReenviarChaveCliente renviarChaveCliente, string email)
+        public async Task<ActionResult> ReenviarAsync([FromServices] ResendClientKey renviarChaveCliente, string email)
         {
             try
             {
                 var urlBase = UrlDaApi(HttpContext);
                 var url = $"{urlBase}/{_caminhoPaginaConfirmarCadastro}";
 
-                await renviarChaveCliente.ReenviarAsync(email, url);
+                await renviarChaveCliente.ResendAsync(email, url);
 
                 return Sucesso("A nova chave de acesso foi enviada para o e-mail com sucesso.");
             }
@@ -75,14 +75,14 @@ namespace AutenticacaoDoisFatores.Controllers
 
         [HttpPost("email/{email}/enviar-confirmacao-geracao-nova-chave")]
         [AllowAnonymous]
-        public async Task<ActionResult> EnviarConfirmacaoGeracaoNovaChaveAsync([FromServices] EnviarConfirmacaoNovaChaveCliente renviarChaveCliente, string email)
+        public async Task<ActionResult> EnviarConfirmacaoGeracaoNovaChaveAsync([FromServices] SendConfirmationOfNewClientKey renviarChaveCliente, string email)
         {
             try
             {
                 var urlBase = UrlDaApi(HttpContext);
                 var url = $"{urlBase}/{_caminhoPaginaConfirmarNovaChave}";
 
-                await renviarChaveCliente.EnviarAsync(email, url);
+                await renviarChaveCliente.SendAsync(email, url);
 
                 return Sucesso("O e-mail foi enviado com sucesso.");
             }
@@ -94,12 +94,12 @@ namespace AutenticacaoDoisFatores.Controllers
 
         [HttpPut("gerar-nova-chave")]
         [Authorize(Policy = "GeracaoNovaChaveCliente")]
-        public async Task<ActionResult> GerarNovaChaveAcessoAsync([FromServices] GerarNovaChaveAcessoCliente gerarNovaChaveAcessoCliente)
+        public async Task<ActionResult> GerarNovaChaveAcessoAsync([FromServices] GenerateClientAccessKey gerarNovaChaveAcessoCliente)
         {
             try
             {
                 var token = Token(HttpContext.Request);
-                var idCliente = Seguranca.RetornarIdDoToken(token);
+                var idCliente = Security.GetIdFromToken(token);
 
                 await gerarNovaChaveAcessoCliente.GerarNovaChaveAsync(idCliente);
 
@@ -113,14 +113,14 @@ namespace AutenticacaoDoisFatores.Controllers
 
         [HttpGet("{id}")]
         [AllowAnonymous]
-        public async Task<ActionResult<ClienteCadastrado?>> BuscarUnicoAsync([FromServices] BuscarClientes buscarClientes, Guid id)
+        public async Task<ActionResult<RegisteredClient?>> BuscarUnicoAsync([FromServices] SearchClients buscarClientes, Guid id)
         {
             try
             {
                 if (!ChaveExclusivaEstaValida(HttpContext.Request))
                     return Unauthorized();
 
-                var resposta = await buscarClientes.BuscarUnicoAsync(id);
+                var resposta = await buscarClientes.GetByIdAsync(id);
 
                 return Sucesso(resposta);
             }
@@ -132,7 +132,7 @@ namespace AutenticacaoDoisFatores.Controllers
 
         [HttpGet]
         [AllowAnonymous]
-        public async Task<ActionResult<IEnumerable<ClienteCadastrado>>> BuscarVariosAsync([FromServices] BuscarClientes buscarClientes, [FromQuery] FiltrosParaBuscarClientes filtros)
+        public async Task<ActionResult<IEnumerable<RegisteredClient>>> BuscarVariosAsync([FromServices] SearchClients buscarClientes, [FromQuery] SearchClientsFilter filtros)
         {
             try
             {

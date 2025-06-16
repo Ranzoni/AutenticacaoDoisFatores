@@ -22,35 +22,35 @@ namespace AutenticacaoDoisFatores
 
         internal static void AddCasosDeUso(this IServiceCollection servicos)
         {
-            servicos.AddTransient<CriarCliente>();
-            servicos.AddTransient<AtivarCliente>();
-            servicos.AddTransient<ReenviarChaveCliente>();
-            servicos.AddTransient<EnviarConfirmacaoNovaChaveCliente>();
-            servicos.AddTransient<GerarNovaChaveAcessoCliente>();
-            servicos.AddTransient<CriarUsuario>();
-            servicos.AddTransient<AtivarUsuario>();
-            servicos.AddTransient<AutenticarUsuario>();
-            servicos.AddTransient<AutenticarUsuarioPorCodigo>();
-            servicos.AddTransient<AutenticadorUsuarioPadrao>();
-            servicos.AddTransient<AutenticadorUsuarioEmDoisFatores>();
-            servicos.AddTransient<AutenticadorUsuarioEmDoisFatoresPorEmail>();
-            servicos.AddTransient<AutenticadorUsuarioEmDoisFatoresPorApp>();
+            servicos.AddTransient<CreateClient>();
+            servicos.AddTransient<ActivateClient>();
+            servicos.AddTransient<ResendClientKey>();
+            servicos.AddTransient<SendConfirmationOfNewClientKey>();
+            servicos.AddTransient<GenerateClientAccessKey>();
+            servicos.AddTransient<RegisterUser>();
+            servicos.AddTransient<ActivateUser>();
+            servicos.AddTransient<AuthenticateUser>();
+            servicos.AddTransient<UserAuthenticationByCode>();
+            servicos.AddTransient<BaseUserAuthenticator>();
+            servicos.AddTransient<UserTwoFactorAuthentication>();
+            servicos.AddTransient<UserTwoFactorAuthByEmail>();
+            servicos.AddTransient<UserTwoFactorAuthByApp>();
 
             servicos.AddTransient(provider =>
             {
                 return provider.RetornarGerarQrCodeAppAutenticacao();
             });
 
-            servicos.AddTransient<AlterarSenhaUsuario>();
-            servicos.AddTransient<IncluirPermissoesParaUsuario>();
-            servicos.AddTransient<RetornarPermissoes>();
-            servicos.AddTransient<RemoverPermissoesParaUsuario>();
-            servicos.AddTransient<ExcluirUsuario>();
-            servicos.AddTransient<AlterarUsuario>();
-            servicos.AddTransient<BuscarClientes>();
-            servicos.AddTransient<BuscarUsuarios>();
-            servicos.AddTransient<EnviarEmailParaUsuario>();
-            servicos.AddTransient<AlterarEmailUsuario>();
+            servicos.AddTransient<ChangeUserPassword>();
+            servicos.AddTransient<AddUserPermission>();
+            servicos.AddTransient<GetPermissions>();
+            servicos.AddTransient<RemoveUserPermission>();
+            servicos.AddTransient<RemoveUser>();
+            servicos.AddTransient<UpdateUser>();
+            servicos.AddTransient<SearchClients>();
+            servicos.AddTransient<SearchUsers>();
+            servicos.AddTransient<SendEmailToUser>();
+            servicos.AddTransient<ChangeUserEmail>();
         }
 
         internal static void AddDominios(this IServiceCollection servicos)
@@ -151,7 +151,7 @@ namespace AutenticacaoDoisFatores
             return new AuthCodeContext(host, porta, usuario, senha, nomeDominio);
         }
 
-        private static GerarQrCodeAppAutenticacao RetornarGerarQrCodeAppAutenticacao(this IServiceProvider serviceProvider)
+        private static GenerateAuthAppQrCode RetornarGerarQrCodeAppAutenticacao(this IServiceProvider serviceProvider)
         {
             var dominioAppAutenticador = serviceProvider.GetRequiredService<AppAutenticador>();
             var dominioDeUsuarios = serviceProvider.GetRequiredService<DominioDeUsuarios>();

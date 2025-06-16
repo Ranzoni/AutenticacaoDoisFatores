@@ -19,7 +19,7 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Clientes
         {
             #region Preparação do teste
 
-            var servico = _mocker.CreateInstance<GerarNovaChaveAcessoCliente>();
+            var servico = _mocker.CreateInstance<GenerateClientAccessKey>();
             var idClienteParaTeste = Guid.NewGuid();
             var cliente = ConstrutorDeClientesTeste
                 .RetornarConstrutor(id: idClienteParaTeste, ativo: true)
@@ -29,7 +29,7 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Clientes
 
             #endregion
 
-            await servico.GerarNovaChaveAsync(idClienteParaTeste);
+            await servico.GenerateAsync(idClienteParaTeste);
 
             #region Verificação do teste
 
@@ -45,12 +45,12 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Clientes
         {
             #region Preparação do teste
 
-            var servico = _mocker.CreateInstance<GerarNovaChaveAcessoCliente>();
+            var servico = _mocker.CreateInstance<GenerateClientAccessKey>();
             var idClienteParaTeste = Guid.NewGuid();
 
             #endregion
 
-            await servico.GerarNovaChaveAsync(idClienteParaTeste);
+            await servico.GenerateAsync(idClienteParaTeste);
 
             #region Verificação do teste
 
@@ -67,7 +67,7 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Clientes
         {
             #region Preparação do teste
 
-            var servico = _mocker.CreateInstance<GerarNovaChaveAcessoCliente>();
+            var servico = _mocker.CreateInstance<GenerateClientAccessKey>();
             var idClienteParaTeste = Guid.NewGuid();
             var cliente = ConstrutorDeClientesTeste
                 .RetornarConstrutor(id: idClienteParaTeste, ativo: false)
@@ -78,7 +78,7 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Clientes
 
             #endregion
 
-            await servico.GerarNovaChaveAsync(idClienteParaTeste);
+            await servico.GenerateAsync(idClienteParaTeste);
 
             #region Verificação do teste
 

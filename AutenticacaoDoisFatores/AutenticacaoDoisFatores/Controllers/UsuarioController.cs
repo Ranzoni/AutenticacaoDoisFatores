@@ -16,7 +16,7 @@ namespace AutenticacaoDoisFatores.Controllers
     {
         [HttpPost]
         [Authorize(Policy = "CriacaoDeUsuario")]
-        public async Task<ActionResult<UsuarioCadastrado?>> CriarAsync([FromServices] CriarUsuario criarUsuario, NovoUsuario novoUsuario)
+        public async Task<ActionResult<RegisteredUser?>> CriarAsync([FromServices] RegisterUser criarUsuario, NewUser novoUsuario)
         {
             try
             {
@@ -32,7 +32,7 @@ namespace AutenticacaoDoisFatores.Controllers
 
         [HttpPut("{idUsuario}/ativar")]
         [Authorize(Policy = "AtivacaoDeUsuario")]
-        public async Task<ActionResult<UsuarioCadastrado?>> AtivarAsync([FromServices] AtivarUsuario ativarUsuario, Guid idUsuario)
+        public async Task<ActionResult<RegisteredUser?>> AtivarAsync([FromServices] ActivateUser ativarUsuario, Guid idUsuario)
         {
             try
             {
@@ -48,7 +48,7 @@ namespace AutenticacaoDoisFatores.Controllers
 
         [HttpPut("{idUsuario}/desativar")]
         [Authorize(Policy = "DesativacaoDeUsuario")]
-        public async Task<ActionResult<UsuarioCadastrado?>> DesativarAsync([FromServices] AtivarUsuario ativarUsuario, Guid idUsuario)
+        public async Task<ActionResult<RegisteredUser?>> DesativarAsync([FromServices] ActivateUser ativarUsuario, Guid idUsuario)
         {
             try
             {
@@ -64,7 +64,7 @@ namespace AutenticacaoDoisFatores.Controllers
 
         [HttpPost("autenticar")]
         [AllowAnonymous]
-        public async Task<ActionResult<object?>> AutenticarAsync([FromServices] AutenticarUsuario autenticarUsuario, DadosAutenticacao dadosAutenticacao)
+        public async Task<ActionResult<object?>> AutenticarAsync([FromServices] AuthenticateUser autenticarUsuario, AuthData dadosAutenticacao)
         {
             try
             {
@@ -80,14 +80,14 @@ namespace AutenticacaoDoisFatores.Controllers
 
         [HttpPost("autenticar/dois-fatores")]
         [Authorize(Policy = "CodAutenticaoPorEmail")]
-        public async Task<ActionResult<UsuarioAutenticado?>> AutenticarAsync([FromServices] AutenticarUsuarioPorCodigo autenticarUsuario, CodigoAuntenticacaoUsuario codigoAuntenticacaoUsuario)
+        public async Task<ActionResult<AuthenticatedUser?>> AutenticarAsync([FromServices] UserAuthenticationByCode autenticarUsuario, AuthCodeUser codigoAuntenticacaoUsuario)
         {
             try
             {
                 var token = Token(HttpContext.Request);
-                var idUsuario = Seguranca.RetornarIdDoToken(token);
+                var idUsuario = Security.GetIdFromToken(token);
 
-                var retorno = await autenticarUsuario.ExecutarAsync(idUsuario, codigoAuntenticacaoUsuario.Codigo);
+                var retorno = await autenticarUsuario.ExecutarAsync(idUsuario, codigoAuntenticacaoUsuario.Code);
                 return Sucesso(retorno);
             }
             catch (Exception e)
@@ -98,11 +98,11 @@ namespace AutenticacaoDoisFatores.Controllers
 
         [HttpPut("{idUsuario}/alterar-senha")]
         [Authorize(Policy = "TrocarSenhaDeUsuario")]
-        public async Task<ActionResult> GerarNovaSenhaAsync([FromServices] AlterarSenhaUsuario gerarNovaSenhaUsuario, Guid idUsuario, TrocarSenhaUsuario trocarSenhaUsuario)
+        public async Task<ActionResult> GerarNovaSenhaAsync([FromServices] ChangeUserPassword gerarNovaSenhaUsuario, Guid idUsuario, UserPasswordChange trocarSenhaUsuario)
         {
             try
             {
-                await gerarNovaSenhaUsuario.ExecutarAsync(idUsuario, trocarSenhaUsuario.NovaSenha);
+                await gerarNovaSenhaUsuario.ExecutarAsync(idUsuario, trocarSenhaUsuario.NewPassword);
 
                 return Sucesso("A senha foi atualizada com sucesso.");
             }
@@ -113,14 +113,14 @@ namespace AutenticacaoDoisFatores.Controllers
         }
 
         [HttpPut("alterar-senha")]
-        public async Task<ActionResult> GerarNovaSenhaAsync([FromServices] AlterarSenhaUsuario gerarNovaSenhaUsuario, TrocarSenhaUsuario trocarSenhaUsuario)
+        public async Task<ActionResult> GerarNovaSenhaAsync([FromServices] ChangeUserPassword gerarNovaSenhaUsuario, UserPasswordChange trocarSenhaUsuario)
         {
             try
             {
                 var token = Token(HttpContext.Request);
-                var idUsuario = Seguranca.RetornarIdDoToken(token);
+                var idUsuario = Security.GetIdFromToken(token);
 
-                await gerarNovaSenhaUsuario.ExecutarAsync(idUsuario, trocarSenhaUsuario.NovaSenha);
+                await gerarNovaSenhaUsuario.ExecutarAsync(idUsuario, trocarSenhaUsuario.NewPassword);
 
                 return Sucesso("A senha foi atualizada com sucesso.");
             }
@@ -132,11 +132,11 @@ namespace AutenticacaoDoisFatores.Controllers
 
         [HttpDelete("{idUsuario}")]
         [Authorize(Policy = "ExclusaoDeUsuario")]
-        public async Task<ActionResult> ExcluirAsync([FromServices] ExcluirUsuario excluirUsuario, Guid idUsuario)
+        public async Task<ActionResult> ExcluirAsync([FromServices] RemoveUser excluirUsuario, Guid idUsuario)
         {
             try
             {
-                await excluirUsuario.ExecutarAsync(idUsuario);
+                await excluirUsuario.ExecuteAsync(idUsuario);
 
                 return Sucesso("Usuário excluído com sucesso");
             }
@@ -147,12 +147,12 @@ namespace AutenticacaoDoisFatores.Controllers
         }
 
         [HttpPut]
-        public async Task<ActionResult<UsuarioCadastrado?>> AlterarAsync([FromServices] AlterarUsuario alterarUsuario, NovosDadosUsuario novosDadosUsuario)
+        public async Task<ActionResult<RegisteredUser?>> AlterarAsync([FromServices] UpdateUser alterarUsuario, NewUserData novosDadosUsuario)
         {
             try
             {
                 var token = Token(HttpContext.Request);
-                var idUsuario = Seguranca.RetornarIdDoToken(token);
+                var idUsuario = Security.GetIdFromToken(token);
 
                 var retorno = await alterarUsuario.ExecutarAsync(idUsuario, novosDadosUsuario);
 
@@ -166,11 +166,11 @@ namespace AutenticacaoDoisFatores.Controllers
 
         [HttpGet("{id}")]
         [Authorize(Policy = "VisualizacaoDeUsuarios")]
-        public async Task<ActionResult<UsuarioCadastrado?>> BuscarUnicoAsync([FromServices] BuscarUsuarios buscarUsuarios, Guid id)
+        public async Task<ActionResult<RegisteredUser?>> BuscarUnicoAsync([FromServices] SearchUsers buscarUsuarios, Guid id)
         {
             try
             {
-                var resposta = await buscarUsuarios.BuscarUnicoAsync(id);
+                var resposta = await buscarUsuarios.GetByIdAsync(id);
 
                 return Sucesso(resposta);
             }
@@ -182,7 +182,7 @@ namespace AutenticacaoDoisFatores.Controllers
 
         [HttpGet]
         [Authorize(Policy = "VisualizacaoDeUsuarios")]
-        public async Task<ActionResult<IEnumerable<UsuarioCadastrado>>> BuscarVariosAsync([FromServices] BuscarUsuarios buscarUsuarios, [FromQuery] FiltrosParaBuscarUsuario filtros)
+        public async Task<ActionResult<IEnumerable<RegisteredUser>>> BuscarVariosAsync([FromServices] SearchUsers buscarUsuarios, [FromQuery] SearchUserFilters filtros)
         {
             try
             {
@@ -197,12 +197,12 @@ namespace AutenticacaoDoisFatores.Controllers
         }
 
         [HttpGet("dados")]
-        public async Task<ActionResult<UsuarioCadastrado?>> RetornarDadosAsync([FromServices] BuscarUsuarios buscarUsuarios)
+        public async Task<ActionResult<RegisteredUser?>> RetornarDadosAsync([FromServices] SearchUsers buscarUsuarios)
         {
             try
             {
                 var token = Token(HttpContext.Request);
-                var id = Seguranca.RetornarIdDoToken(token);
+                var id = Security.GetIdFromToken(token);
 
                 var resposta = await buscarUsuarios.BuscarUnicoAsync(id);
 
@@ -216,7 +216,7 @@ namespace AutenticacaoDoisFatores.Controllers
 
         [HttpPut("{idUsuario}/trocar-email")]
         [Authorize(Policy = "TrocarEmailDeUsuario")]
-        public async Task<ActionResult> AlterarEmailAsync([FromServices] AlterarEmailUsuario alterarEmailUsuario, Guid idUsuario, TrocarEmailUsuario trocarEmailUsuario)
+        public async Task<ActionResult> AlterarEmailAsync([FromServices] ChangeUserEmail alterarEmailUsuario, Guid idUsuario, UserEmailChange trocarEmailUsuario)
         {
             try
             {
@@ -231,12 +231,12 @@ namespace AutenticacaoDoisFatores.Controllers
         }
 
         [HttpPut("trocar-email")]
-        public async Task<ActionResult> AlterarEmailAsync([FromServices] AlterarEmailUsuario alterarEmailUsuario, TrocarEmailUsuario trocarEmailUsuario)
+        public async Task<ActionResult> AlterarEmailAsync([FromServices] ChangeUserEmail alterarEmailUsuario, UserEmailChange trocarEmailUsuario)
         {
             try
             {
                 var token = Token(HttpContext.Request);
-                var idUsuario = Seguranca.RetornarIdDoToken(token);
+                var idUsuario = Security.GetIdFromToken(token);
 
                 await alterarEmailUsuario.ExecutarAsync(idUsuario, trocarEmailUsuario);
 
@@ -249,12 +249,12 @@ namespace AutenticacaoDoisFatores.Controllers
         }
 
         [HttpPost("gerar-qr-code")]
-        public async Task<ActionResult> GerarQrCodeAppAutenticacaoAsync([FromServices] GerarQrCodeAppAutenticacao gerarQrCodeAppAutenticacao)
+        public async Task<ActionResult> GerarQrCodeAppAutenticacaoAsync([FromServices] GenerateAuthAppQrCode gerarQrCodeAppAutenticacao)
         {
             try
             {
                 var token = Token(HttpContext.Request);
-                var id = Seguranca.RetornarIdDoToken(token);
+                var id = Security.GetIdFromToken(token);
 
                 await gerarQrCodeAppAutenticacao.ExecutarAsync(id);
 
@@ -267,7 +267,7 @@ namespace AutenticacaoDoisFatores.Controllers
         }
 
         [HttpPost("{idUsuario}/enviar-email")]
-        public async Task<ActionResult> EnviarEmailParaUsuarioAsync([FromServices] EnviarEmailParaUsuario enviarEmailAtivacao, Guid idUsuario, EnvioEmailParaUsuario envioEmailAtivacaoUsuario)
+        public async Task<ActionResult> EnviarEmailParaUsuarioAsync([FromServices] SendEmailToUser enviarEmailAtivacao, Guid idUsuario, EmailSenderUser envioEmailAtivacaoUsuario)
         {
             try
             {

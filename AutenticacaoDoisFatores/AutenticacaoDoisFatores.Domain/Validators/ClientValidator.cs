@@ -8,30 +8,30 @@ namespace AutenticacaoDoisFatores.Domain.Validators
     {
         internal static void Validate(this Client client)
         {
-            if (!NameIsValid(client.Name))
+            if (!IsNameValid(client.Name))
                 ClientException.InvalidName();
 
-            if (!EmailIsValid(client.Email))
+            if (!IsEmailValid(client.Email))
                 ClientException.InvalidEmail();
 
-            if (!DomainNameIsValid(client.DomainName))
+            if (!IsDomainNameValid(client.DomainName))
                 ClientException.InvalidDomainName();
 
-            if (!AccesKeyIsValid(client.AccessKey))
+            if (!IsAccesKeyValid(client.AccessKey))
                 ClientException.InvalidAccessKey();
         }
 
-        public static bool NameIsValid(string name)
+        public static bool IsNameValid(string name)
         {
             return !name.IsNullOrEmptyOrWhiteSpaces() && name.Length >= 3 && name.Length <= 50;
         }
 
-        public static bool EmailIsValid(string email)
+        public static bool IsEmailValid(string email)
         {
             return !email.IsNullOrEmptyOrWhiteSpaces() && email.IsValidEmail() && email.Length <= 256;
         }
 
-        public static bool DomainNameIsValid(string domainName)
+        public static bool IsDomainNameValid(string domainName)
         {
             return !domainName.IsNullOrEmptyOrWhiteSpaces()
                 && domainName.Length >= 3
@@ -40,7 +40,7 @@ namespace AutenticacaoDoisFatores.Domain.Validators
                 && !domainName.Contains(' ');
         }
 
-        public static bool AccesKeyIsValid(string accessKey)
+        public static bool IsAccesKeyValid(string accessKey)
         {
             return !accessKey.IsNullOrEmptyOrWhiteSpaces()
                 && accessKey.Length >= 3

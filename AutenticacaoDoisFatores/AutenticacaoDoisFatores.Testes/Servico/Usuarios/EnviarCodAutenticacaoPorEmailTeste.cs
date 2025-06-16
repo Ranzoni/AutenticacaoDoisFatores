@@ -19,7 +19,7 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Usuarios
 
             var mocker = new AutoMocker();
 
-            var servico = mocker.CreateInstance<AutenticadorUsuarioEmDoisFatoresPorEmail>();
+            var servico = mocker.CreateInstance<UserTwoFactorAuthByEmail>();
 
             var usuario = ConstrutorDeUsuariosTeste
                 .RetornarConstrutor(ativo: true)
@@ -46,7 +46,7 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Usuarios
 
             var mocker = new AutoMocker();
 
-            var servico = mocker.CreateInstance<AutenticadorUsuarioEmDoisFatoresPorEmail>();
+            var servico = mocker.CreateInstance<UserTwoFactorAuthByEmail>();
 
             var usuario = ConstrutorDeUsuariosTeste
                 .RetornarConstrutor(ativo: false)

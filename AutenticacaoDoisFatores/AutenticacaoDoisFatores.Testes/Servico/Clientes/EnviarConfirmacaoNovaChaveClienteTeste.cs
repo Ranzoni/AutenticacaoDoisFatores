@@ -20,7 +20,7 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Clientes
         {
             #region Preparação do teste
 
-            var servico = _mocker.CreateInstance<EnviarConfirmacaoNovaChaveCliente>();
+            var servico = _mocker.CreateInstance<SendConfirmationOfNewClientKey>();
             var emailParaTeste = _faker.Person.Email;
             var urlParaTeste = _faker.Internet.UrlWithPath();
             var cliente = ConstrutorDeClientesTeste
@@ -31,7 +31,7 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Clientes
 
             #endregion
 
-            await servico.EnviarAsync(emailParaTeste, urlParaTeste);
+            await servico.SendAsync(emailParaTeste, urlParaTeste);
 
             #region Verificação do teste
 
@@ -45,7 +45,7 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Clientes
         {
             #region Preparação do teste
 
-            var servico = _mocker.CreateInstance<EnviarConfirmacaoNovaChaveCliente>();
+            var servico = _mocker.CreateInstance<SendConfirmationOfNewClientKey>();
             var emailParaTeste = _faker.Person.Email;
             var urlParaTeste = _faker.Internet.UrlWithPath();
 
@@ -53,7 +53,7 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Clientes
 
             #endregion
 
-            await servico.EnviarAsync(emailParaTeste, urlParaTeste);
+            await servico.SendAsync(emailParaTeste, urlParaTeste);
 
             #region Verificação do teste
 
@@ -68,7 +68,7 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Clientes
         {
             #region Preparação do teste
 
-            var servico = _mocker.CreateInstance<EnviarConfirmacaoNovaChaveCliente>();
+            var servico = _mocker.CreateInstance<SendConfirmationOfNewClientKey>();
             var emailParaTeste = _faker.Person.Email;
             var urlParaTeste = _faker.Internet.UrlWithPath();
             var cliente = ConstrutorDeClientesTeste
@@ -80,7 +80,7 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Clientes
 
             #endregion
 
-            await servico.EnviarAsync(emailParaTeste, urlParaTeste);
+            await servico.SendAsync(emailParaTeste, urlParaTeste);
 
             #region Verificação do teste
 

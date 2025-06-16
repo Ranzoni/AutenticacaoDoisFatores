@@ -21,7 +21,7 @@ namespace AutenticacaoDoisFatores.Testes.Dominio.Dominios
             var dominio = mocker.CreateInstance<AuthCodeManager>();
 
             var idUsuario = Guid.NewGuid();
-            var codigoAutenticacao = Seguranca.GerarCodigoAutenticacao();
+            var codigoAutenticacao = Security.GenerateAuthCode();
 
             #endregion
 
@@ -70,7 +70,7 @@ namespace AutenticacaoDoisFatores.Testes.Dominio.Dominios
             var dominio = mocker.CreateInstance<AuthCodeManager>();
 
             var idUsuario = Guid.NewGuid();
-            var codigoAutenticacao = Seguranca.GerarCodigoAutenticacao();
+            var codigoAutenticacao = Security.GenerateAuthCode();
 
             mocker.GetMock<IAuthCodeRepository>().Setup(r => r.GetByCodeAsync(idUsuario)).ReturnsAsync(codigoAutenticacao);
 

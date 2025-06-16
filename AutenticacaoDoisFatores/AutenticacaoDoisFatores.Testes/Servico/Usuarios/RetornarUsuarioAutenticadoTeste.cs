@@ -19,7 +19,7 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Usuarios
 
             var mocker = new AutoMocker();
 
-            var servico = mocker.CreateInstance<AutenticadorUsuarioPadrao>();
+            var servico = mocker.CreateInstance<BaseUserAuthenticator>();
 
             var usuario = ConstrutorDeUsuariosTeste
                 .RetornarConstrutor(ativo: true)
@@ -32,8 +32,8 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Usuarios
             #region Verificação do teste
 
             Assert.NotNull(resposta);
-            Assert.IsType<UsuarioAutenticado>(resposta);
-            Assert.NotEmpty((resposta as UsuarioAutenticado)!.Token);
+            Assert.IsType<AuthenticatedUser>(resposta);
+            Assert.NotEmpty((resposta as AuthenticatedUser)!.Token);
             mocker.Verify<IUserRepository>(r => r.Editar(usuario), Times.Once);
             mocker.Verify<IUserRepository>(r => r.SaveChangesAsync(), Times.Once);
 
@@ -47,7 +47,7 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Usuarios
 
             var mocker = new AutoMocker();
 
-            var servico = mocker.CreateInstance<AutenticadorUsuarioPadrao>();
+            var servico = mocker.CreateInstance<BaseUserAuthenticator>();
 
             var usuario = ConstrutorDeUsuariosTeste
                 .RetornarConstrutor(ativo: false)

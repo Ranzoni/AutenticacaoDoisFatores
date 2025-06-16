@@ -24,15 +24,15 @@ namespace AutenticacaoDoisFatores.Testes.Compartilhados
             return construtor;
         }
 
-        internal static ConstrutorDeNovoCliente RetornarConstrutorDeNovo(string? nome = null, string? email = null, string? nomeDominio = null, string? senhaAdm = null)
+        internal static NewClientBuilder RetornarConstrutorDeNovo(string? nome = null, string? email = null, string? nomeDominio = null, string? senhaAdm = null)
         {
             var faker = new Faker();
 
-            return new ConstrutorDeNovoCliente()
-                .ComNome(nome ?? faker.Company.CompanyName())
-                .ComEmail(email ?? faker.Internet.Email())
-                .ComNomeDominio(nomeDominio ?? "dominio_cliente")
-                .ComSenhaAdm(senhaAdm ?? "T3ste.de.Senh@");
+            return new NewClientBuilder()
+                .WithName(nome ?? faker.Company.CompanyName())
+                .WithEmail(email ?? faker.Internet.Email())
+                .WithDomainName(nomeDominio ?? "dominio_cliente")
+                .WithAdminPassword(senhaAdm ?? "T3ste.de.Senh@");
         }
     }
 }

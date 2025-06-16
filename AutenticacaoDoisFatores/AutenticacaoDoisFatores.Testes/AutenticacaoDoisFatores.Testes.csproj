@@ -24,7 +24,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\AutenticacaoDoisFatores.Dominio\AutenticacaoDoisFatores.Domain.csproj" />
-    <ProjectReference Include="..\AutenticacaoDoisFatores.Servico\AutenticacaoDoisFatores.Servico.csproj" />
+    <ProjectReference Include="..\AutenticacaoDoisFatores.Servico\AutenticacaoDoisFatores.Service.csproj" />
   </ItemGroup>
 
   <ItemGroup>

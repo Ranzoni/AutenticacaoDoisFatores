@@ -21,10 +21,10 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Usuarios
 
             var mocker = new AutoMocker();
 
-            var servico = mocker.CreateInstance<AutenticarUsuarioPorCodigo>();
+            var servico = mocker.CreateInstance<UserAuthenticationByCode>();
 
             var idUsuario = Guid.NewGuid();
-            var codigo = Seguranca.GerarCodigoAutenticacao();
+            var codigo = Security.GenerateAuthCode();
             var codigoCriptografado = Encrypt.EncryptWithSha512(codigo);
 
             var usuario = ConstrutorDeUsuariosTeste
@@ -54,10 +54,10 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Usuarios
 
             var mocker = new AutoMocker();
 
-            var servico = mocker.CreateInstance<AutenticarUsuarioPorCodigo>();
+            var servico = mocker.CreateInstance<UserAuthenticationByCode>();
 
             var idUsuario = Guid.NewGuid();
-            var codigo = Seguranca.GerarCodigoAutenticacao();
+            var codigo = Security.GenerateAuthCode();
             var codigoCriptografado = Encrypt.EncryptWithSha512(codigo);
 
             var usuario = ConstrutorDeUsuariosTeste
@@ -87,10 +87,10 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Usuarios
 
             var mocker = new AutoMocker();
 
-            var servico = mocker.CreateInstance<AutenticarUsuarioPorCodigo>();
+            var servico = mocker.CreateInstance<UserAuthenticationByCode>();
 
             var idUsuario = Guid.NewGuid();
-            var codigo = Seguranca.GerarCodigoAutenticacao();
+            var codigo = Security.GenerateAuthCode();
 
             #endregion
 
@@ -111,10 +111,10 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Usuarios
 
             var mocker = new AutoMocker();
 
-            var servico = mocker.CreateInstance<AutenticarUsuarioPorCodigo>();
+            var servico = mocker.CreateInstance<UserAuthenticationByCode>();
 
             var idUsuario = Guid.NewGuid();
-            var codigo = Seguranca.GerarCodigoAutenticacao();
+            var codigo = Security.GenerateAuthCode();
             var codigoCriptografado = Encrypt.EncryptWithSha512(codigo);
 
             var usuario = ConstrutorDeUsuariosTeste
@@ -143,10 +143,10 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Usuarios
 
             var mocker = new AutoMocker();
 
-            var servico = mocker.CreateInstance<AutenticarUsuarioPorCodigo>();
+            var servico = mocker.CreateInstance<UserAuthenticationByCode>();
 
             var idUsuario = Guid.NewGuid();
-            var codigo = Seguranca.GerarCodigoAutenticacao();
+            var codigo = Security.GenerateAuthCode();
 
             var usuario = ConstrutorDeUsuariosTeste
                 .RetornarConstrutor(ativo: true, id: idUsuario)
@@ -173,10 +173,10 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Usuarios
 
             var mocker = new AutoMocker();
 
-            var servico = mocker.CreateInstance<AutenticarUsuarioPorCodigo>();
+            var servico = mocker.CreateInstance<UserAuthenticationByCode>();
 
             var idUsuario = Guid.NewGuid();
-            var codigo = Seguranca.GerarCodigoAutenticacao();
+            var codigo = Security.GenerateAuthCode();
             var codigoCriptografado = Encrypt.EncryptWithSha512(codigo);
 
             var usuario = ConstrutorDeUsuariosTeste
@@ -205,10 +205,10 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Usuarios
 
             var mocker = new AutoMocker();
 
-            var servico = mocker.CreateInstance<AutenticarUsuarioPorCodigo>();
+            var servico = mocker.CreateInstance<UserAuthenticationByCode>();
 
             var idUsuario = Guid.NewGuid();
-            var codigo = Seguranca.GerarCodigoAutenticacao();
+            var codigo = Security.GenerateAuthCode();
             var codigoCriptografado = Encrypt.EncryptWithSha512(codigo);
 
             var usuario = ConstrutorDeUsuariosTeste

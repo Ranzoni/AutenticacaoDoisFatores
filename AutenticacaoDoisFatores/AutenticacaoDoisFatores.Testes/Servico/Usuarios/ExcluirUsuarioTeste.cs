@@ -23,12 +23,12 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Usuarios
                 .RetornarConstrutor(id: idUsuario)
                 .Build();
 
-            var servico = mocker.CreateInstance<ExcluirUsuario>();
+            var servico = mocker.CreateInstance<RemoveUser>();
             mocker.GetMock<IUserRepository>().Setup(r => r.GetByIdAsync(idUsuario)).ReturnsAsync(usuario);
 
             #endregion
 
-            await servico.ExecutarAsync(idUsuario);
+            await servico.ExecuteAsync(idUsuario);
 
             #region Verificação do teste
 
@@ -47,11 +47,11 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Usuarios
 
             var idUsuario = Guid.NewGuid();
 
-            var servico = mocker.CreateInstance<ExcluirUsuario>();
+            var servico = mocker.CreateInstance<RemoveUser>();
 
             #endregion
 
-            await servico.ExecutarAsync(idUsuario);
+            await servico.ExecuteAsync(idUsuario);
 
             #region Verificação do teste
 
@@ -74,12 +74,12 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Usuarios
                 .RetornarConstrutor(id: idUsuario, ehAdm: true)
                 .Build();
 
-            var servico = mocker.CreateInstance<ExcluirUsuario>();
+            var servico = mocker.CreateInstance<RemoveUser>();
             mocker.GetMock<IUserRepository>().Setup(r => r.GetByIdAsync(idUsuario)).ReturnsAsync(usuario);
 
             #endregion
 
-            await servico.ExecutarAsync(idUsuario);
+            await servico.ExecuteAsync(idUsuario);
 
             #region Verificação do teste
 

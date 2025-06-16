@@ -28,11 +28,11 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Usuarios
 
             var novoUsuario = ConstrutorDeUsuariosTeste
                 .RetornarConstrutorDeNovo(nome: nome, nomeUsuario: nomeUsuario, email: email, celular: celular)
-                .Construir();
+                .Build();
 
             _mocker.CreateInstance<UserDomain>();
 
-            var servico = _mocker.CreateInstance<CriarUsuario>();
+            var servico = _mocker.CreateInstance<RegisterUser>();
 
             #endregion
 
@@ -64,13 +64,13 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Usuarios
 
             var novoUsuario = ConstrutorDeUsuariosTeste
                 .RetornarConstrutorDeNovo(nome: nomeInvalido)
-                .Construir();
+                .Build();
 
             _mocker.CreateInstance<UserDomain>();
 
             _mocker.GetMock<INotificador>().Setup(n => n.ExisteMensagem()).Returns(true);
 
-            var servico = _mocker.CreateInstance<CriarUsuario>();
+            var servico = _mocker.CreateInstance<RegisterUser>();
 
             #endregion
 
@@ -97,13 +97,13 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Usuarios
 
             var novoUsuario = ConstrutorDeUsuariosTeste
                 .RetornarConstrutorDeNovo(nomeUsuario: nomeUsuarioInvalido)
-                .Construir();
+                .Build();
 
             _mocker.CreateInstance<UserDomain>();
 
             _mocker.GetMock<INotificador>().Setup(n => n.ExisteMensagem()).Returns(true);
 
-            var servico = _mocker.CreateInstance<CriarUsuario>();
+            var servico = _mocker.CreateInstance<RegisterUser>();
 
             #endregion
 
@@ -136,13 +136,13 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Usuarios
             
             var novoUsuario = ConstrutorDeUsuariosTeste
                 .RetornarConstrutorDeNovo(email: emailInvalido)
-                .Construir();
+                .Build();
 
             _mocker.CreateInstance<UserDomain>();
 
             _mocker.GetMock<INotificador>().Setup(n => n.ExisteMensagem()).Returns(true);
 
-            var servico = _mocker.CreateInstance<CriarUsuario>();
+            var servico = _mocker.CreateInstance<RegisterUser>();
 
             #endregion
 
@@ -173,13 +173,13 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Usuarios
 
             var novoUsuario = ConstrutorDeUsuariosTeste
                 .RetornarConstrutorDeNovo(senha: senhaInvalida)
-                .Construir();
+                .Build();
 
             _mocker.CreateInstance<UserDomain>();
 
             _mocker.GetMock<INotificador>().Setup(n => n.ExisteMensagem()).Returns(true);
 
-            var servico = _mocker.CreateInstance<CriarUsuario>();
+            var servico = _mocker.CreateInstance<RegisterUser>();
 
             #endregion
 
@@ -202,13 +202,13 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Usuarios
 
             var novoUsuario = ConstrutorDeUsuariosTeste
                 .RetornarConstrutorDeNovo()
-                .Construir();
+                .Build();
 
             _mocker.CreateInstance<UserDomain>();
             _mocker.GetMock<IUserRepository>().Setup(r => r.UsernameExistsAsync(novoUsuario.NomeUsuario, It.IsAny<Guid?>())).ReturnsAsync(true);
             _mocker.GetMock<INotificador>().Setup(n => n.ExisteMensagem()).Returns(true);
 
-            var servico = _mocker.CreateInstance<CriarUsuario>();
+            var servico = _mocker.CreateInstance<RegisterUser>();
 
             #endregion
 
@@ -231,13 +231,13 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Usuarios
 
             var novoUsuario = ConstrutorDeUsuariosTeste
                 .RetornarConstrutorDeNovo()
-                .Construir();
+                .Build();
 
             _mocker.CreateInstance<UserDomain>();
             _mocker.GetMock<IUserRepository>().Setup(r => r.EmailExistsAsync(novoUsuario.Email, It.IsAny<Guid?>())).ReturnsAsync(true);
             _mocker.GetMock<INotificador>().Setup(n => n.ExisteMensagem()).Returns(true);
 
-            var servico = _mocker.CreateInstance<CriarUsuario>();
+            var servico = _mocker.CreateInstance<RegisterUser>();
 
             #endregion
 

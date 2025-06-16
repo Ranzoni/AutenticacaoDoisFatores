@@ -3,6 +3,6 @@
     public enum AuthType
     {
         Email,
-        AppAutenticador
+        AuthApp
     }
 }

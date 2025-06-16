@@ -19,7 +19,7 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Usuarios
 
             var mocker = new AutoMocker();
 
-            var servico = mocker.CreateInstance<EnviarEmailParaUsuario>();
+            var servico = mocker.CreateInstance<SendEmailToUser>();
 
             var faker = new Faker();
 
@@ -31,7 +31,7 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Usuarios
 
             var envioEmailParaUsuario = ConstrutorDeEnvioEmailParaUsuarioTeste
                 .RetornarConstrutor()
-                .Construir();
+                .Build();
 
             mocker.GetMock<IUserRepository>().Setup(r => r.GetByIdAsync(idUsuario)).ReturnsAsync(usuario);
 
@@ -53,7 +53,7 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Usuarios
 
             var mocker = new AutoMocker();
 
-            var servico = mocker.CreateInstance<EnviarEmailParaUsuario>();
+            var servico = mocker.CreateInstance<SendEmailToUser>();
 
             var faker = new Faker();
 
@@ -61,7 +61,7 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Usuarios
 
             var envioEmailParaUsuario = ConstrutorDeEnvioEmailParaUsuarioTeste
                 .RetornarConstrutor()
-                .Construir();
+                .Build();
 
             #endregion
 
@@ -82,7 +82,7 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Usuarios
 
             var mocker = new AutoMocker();
 
-            var servico = mocker.CreateInstance<EnviarEmailParaUsuario>();
+            var servico = mocker.CreateInstance<SendEmailToUser>();
 
             var faker = new Faker();
 
@@ -90,7 +90,7 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Usuarios
 
             var envioEmailParaUsuario = ConstrutorDeEnvioEmailParaUsuarioTeste
                 .RetornarConstrutor()
-                .Construir();
+                .Build();
 
             var usuario = ConstrutorDeUsuariosTeste
                 .RetornarConstrutor(id: idUsuario, ehAdm: true)

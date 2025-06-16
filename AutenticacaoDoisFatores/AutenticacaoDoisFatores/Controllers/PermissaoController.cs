@@ -14,11 +14,11 @@ namespace AutenticacaoDoisFatores.Controllers
     public class PermissaoController(INotificador _notificador, int? _statusCodeNotificador = null) : ControladorBase(_notificador, _statusCodeNotificador)
     {
         [HttpGet]
-        public ActionResult<IEnumerable<PermissaoDisponivel>> RetornarTodas()
+        public ActionResult<IEnumerable<AvaiblePermiission>> RetornarTodas()
         {
             try
             {
-                var permissoes = Servico.CasosDeUso.Permissoes.RetornarPermissoes.RetornarTodas();
+                var permissoes = Servico.CasosDeUso.Permissoes.GetPermissions.GetAll();
 
                 return Sucesso(permissoes);
             }
@@ -29,7 +29,7 @@ namespace AutenticacaoDoisFatores.Controllers
         }
 
         [HttpPost("usuario/{idUsuario}")]
-        public async Task<ActionResult> IncluirParaUsuarioAsync([FromServices] IncluirPermissoesParaUsuario incluirPermissoesParaUsuario, Guid idUsuario, IEnumerable<TipoDePermissao> permissoes)
+        public async Task<ActionResult> IncluirParaUsuarioAsync([FromServices] AddUserPermission incluirPermissoesParaUsuario, Guid idUsuario, IEnumerable<TipoDePermissao> permissoes)
         {
             try
             {
@@ -44,11 +44,11 @@ namespace AutenticacaoDoisFatores.Controllers
         }
 
         [HttpGet("usuario/{idUsuario}")]
-        public async Task<ActionResult<IEnumerable<PermissaoDisponivel>>> RetornarPorUsuarioAsync([FromServices] RetornarPermissoes retornarPermissoes, Guid idUsuario)
+        public async Task<ActionResult<IEnumerable<AvaiblePermiission>>> RetornarPorUsuarioAsync([FromServices] GetPermissions retornarPermissoes, Guid idUsuario)
         {
             try
             {
-                var retorno = await retornarPermissoes.RetornarPorUsuarioAsync(idUsuario);
+                var retorno = await retornarPermissoes.GetByUserIdAsync(idUsuario);
 
                 return Sucesso(retorno);
             }
@@ -59,7 +59,7 @@ namespace AutenticacaoDoisFatores.Controllers
         }
 
         [HttpDelete("usuario/{idUsuario}")]
-        public async Task<ActionResult> RemoverParaUsuarioAsync([FromServices] RemoverPermissoesParaUsuario removerPermissoesParaUsuario, Guid idUsuario, IEnumerable<TipoDePermissao> permissoes)
+        public async Task<ActionResult> RemoverParaUsuarioAsync([FromServices] RemoveUserPermission removerPermissoesParaUsuario, Guid idUsuario, IEnumerable<TipoDePermissao> permissoes)
         {
             try
             {

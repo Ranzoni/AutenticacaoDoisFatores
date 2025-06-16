@@ -44,26 +44,26 @@ namespace AutenticacaoDoisFatores.Testes.Compartilhados
                 .WithSecretKey(chaveSecreta ?? "01234567890123456789");
         }
 
-        internal static ConstrutorDeNovoUsuario RetornarConstrutorDeNovo(string? nome = null, string? nomeUsuario = null, string? email = null, string? senha = null, long? celular = null)
+        internal static NewUserBuilder RetornarConstrutorDeNovo(string? nome = null, string? nomeUsuario = null, string? email = null, string? senha = null, long? celular = null)
         {
             var faker = new Faker();
 
-            return new ConstrutorDeNovoUsuario()
-                .ComNome(nome ?? faker.Person.FullName)
-                .ComNomeUsuario(nomeUsuario ?? "teste_user_2010234")
-                .ComEmail(email ?? faker.Person.Email)
-                .ComSenha(senha ?? "T3ste.de.Senh@")
-                .ComCelular(celular);
+            return new NewUserBuilder()
+                .WithName(nome ?? faker.Person.FullName)
+                .ComUsername(nomeUsuario ?? "teste_user_2010234")
+                .WithEmail(email ?? faker.Person.Email)
+                .WithPassword(senha ?? "T3ste.de.Senh@")
+                .WithPhone(celular);
         }
 
-        internal static ConstrutorDeNovosDadosUsuario RetornarConstrutorDeNovosDados(string? nome = null, string? nomeUsuario = null, long? celular = null)
+        internal static NewUserDataBuilder RetornarConstrutorDeNovosDados(string? nome = null, string? nomeUsuario = null, long? celular = null)
         {
             var faker = new Faker();
 
-            return new ConstrutorDeNovosDadosUsuario()
-                .ComNome(nome ?? faker.Person.FullName)
-                .ComNomeUsuario(nomeUsuario ?? "teste_user_2010234")
-                .ComCelular(celular);
+            return new NewUserDataBuilder()
+                .WithName(nome ?? faker.Person.FullName)
+                .WithUsername(nomeUsuario ?? "teste_user_2010234")
+                .WithPhone(celular);
         }
     }
 }

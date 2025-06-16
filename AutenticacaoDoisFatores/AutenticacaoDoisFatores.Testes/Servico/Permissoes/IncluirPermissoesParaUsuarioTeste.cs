@@ -27,7 +27,7 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Permissoes
                 .RetornarConstrutor(id: idUsuario, ativo: true)
                 .Build();
 
-            var servico = _mocker.CreateInstance<IncluirPermissoesParaUsuario>();
+            var servico = _mocker.CreateInstance<AddUserPermission>();
 
             _mocker.GetMock<IUserRepository>().Setup(r => r.GetByIdAsync(idUsuario)).ReturnsAsync(usuario);
 
@@ -46,7 +46,7 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Permissoes
             var idUsuario = Guid.NewGuid();
             var permissoesParaIncluir = _faker.Random.EnumValues<PermissionType>();
 
-            var servico = _mocker.CreateInstance<IncluirPermissoesParaUsuario>();
+            var servico = _mocker.CreateInstance<AddUserPermission>();
 
             #endregion
 
@@ -73,7 +73,7 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Permissoes
                 .RetornarConstrutor(id: idUsuario, ativo: false)
                 .Build();
 
-            var servico = _mocker.CreateInstance<IncluirPermissoesParaUsuario>();
+            var servico = _mocker.CreateInstance<AddUserPermission>();
 
             _mocker.GetMock<IUserRepository>().Setup(r => r.GetByIdAsync(idUsuario)).ReturnsAsync(usuario);
 
@@ -102,7 +102,7 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Permissoes
                 .RetornarConstrutor(id: idUsuario, ativo: true, ehAdm: true)
                 .Build();
 
-            var servico = _mocker.CreateInstance<IncluirPermissoesParaUsuario>();
+            var servico = _mocker.CreateInstance<AddUserPermission>();
 
             _mocker.GetMock<IUserRepository>().Setup(r => r.GetByIdAsync(idUsuario)).ReturnsAsync(usuario);
 

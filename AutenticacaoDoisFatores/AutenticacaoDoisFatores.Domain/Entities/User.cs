@@ -108,7 +108,7 @@ namespace AutenticacaoDoisFatores.Domain.Entities
             this.Validate();
         }
 
-        public void UpdateLastAcess()
+        public void UpdateLastAccess()
         {
             var newDate = DateTime.Now;
 

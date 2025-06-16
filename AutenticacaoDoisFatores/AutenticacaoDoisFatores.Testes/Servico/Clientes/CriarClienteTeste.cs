@@ -25,7 +25,7 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Clientes
             #region Preparação do teste
 
             var construtorDeDto = ConstrutorDeClientesTeste.RetornarConstrutorDeNovo();
-            var novoCliente = construtorDeDto.Construir();
+            var novoCliente = construtorDeDto.Build();
             var construtorDeCliente = ConstrutorDeClientesTeste
                 .RetornarConstrutor
                 (
@@ -44,7 +44,7 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Clientes
             var chaveAutenticacaoParaTeste = _faker.Random.AlphaNumeric(40);
             Environment.SetEnvironmentVariable("ADF_CHAVE_AUTENTICACAO", chaveAutenticacaoParaTeste);
 
-            var servico = _mocker.CreateInstance<CriarCliente>();
+            var servico = _mocker.CreateInstance<CreateClient>();
 
             #endregion Preparação do teste
 
@@ -79,7 +79,7 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Clientes
             #region Preparação do teste
 
             var construtorDeDto = ConstrutorDeClientesTeste.RetornarConstrutorDeNovo();
-            var novoCliente = construtorDeDto.Construir();
+            var novoCliente = construtorDeDto.Build();
 
             #endregion Preparação do teste
 
@@ -104,14 +104,14 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Clientes
             #region Preparação do teste
 
             var construtor = ConstrutorDeClientesTeste.RetornarConstrutorDeNovo(nome: nomeInvalido);
-            var novoCliente = construtor.Construir();
+            var novoCliente = construtor.Build();
 
             _mocker.CreateInstance<ClientDomain>();
             _mocker.GetMock<INotificador>().Setup(n => n.ExisteMensagem()).Returns(true);
 
             var linkConfirmacaoCadastroParaTeste = _faker.Internet.UrlWithPath();
 
-            var servico = _mocker.CreateInstance<CriarCliente>();
+            var servico = _mocker.CreateInstance<CreateClient>();
 
             #endregion Preparação do teste
 
@@ -137,14 +137,14 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Clientes
             #region Preparação do teste
 
             var construtor = ConstrutorDeClientesTeste.RetornarConstrutorDeNovo(email: emailInvalido);
-            var novoCliente = construtor.Construir();
+            var novoCliente = construtor.Build();
 
             _mocker.CreateInstance<ClientDomain>();
             _mocker.GetMock<INotificador>().Setup(n => n.ExisteMensagem()).Returns(true);
 
             var linkConfirmacaoCadastroParaTeste = _faker.Internet.UrlWithPath();
 
-            var servico = _mocker.CreateInstance<CriarCliente>();
+            var servico = _mocker.CreateInstance<CreateClient>();
 
             #endregion Preparação do teste
 
@@ -175,14 +175,14 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Clientes
             #region Preparação do teste
 
             var construtor = ConstrutorDeClientesTeste.RetornarConstrutorDeNovo(nomeDominio: nomeDominioInvalido);
-            var novoCliente = construtor.Construir();
+            var novoCliente = construtor.Build();
 
             _mocker.CreateInstance<ClientDomain>();
             _mocker.GetMock<INotificador>().Setup(n => n.ExisteMensagem()).Returns(true);
 
             var linkConfirmacaoCadastroParaTeste = _faker.Internet.UrlWithPath();
 
-            var servico = _mocker.CreateInstance<CriarCliente>();
+            var servico = _mocker.CreateInstance<CreateClient>();
 
             #endregion Preparação do teste
 
@@ -212,14 +212,14 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Clientes
             #region Preparação do teste
 
             var construtor = ConstrutorDeClientesTeste.RetornarConstrutorDeNovo(senhaAdm: senha);
-            var novoCliente = construtor.Construir();
+            var novoCliente = construtor.Build();
 
             _mocker.CreateInstance<ClientDomain>();
             _mocker.GetMock<INotificador>().Setup(n => n.ExisteMensagem()).Returns(true);
 
             var linkConfirmacaoCadastroParaTeste = _faker.Internet.UrlWithPath();
 
-            var servico = _mocker.CreateInstance<CriarCliente>();
+            var servico = _mocker.CreateInstance<CreateClient>();
 
             #endregion Preparação do teste
 
@@ -243,7 +243,7 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Clientes
             var emailJaCadastrado = _faker.Internet.Email();
 
             var construtor = ConstrutorDeClientesTeste.RetornarConstrutorDeNovo(email: emailJaCadastrado);
-            var novoCliente = construtor.Construir();
+            var novoCliente = construtor.Build();
 
             _mocker.CreateInstance<ClientDomain>();
             _mocker.GetMock<IClientRepository>().Setup(r => r.EmailExistsAsync(emailJaCadastrado)).ReturnsAsync(true);
@@ -251,7 +251,7 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Clientes
 
             var linkConfirmacaoCadastroParaTeste = _faker.Internet.UrlWithPath();
 
-            var servico = _mocker.CreateInstance<CriarCliente>();
+            var servico = _mocker.CreateInstance<CreateClient>();
 
             #endregion Preparação do teste
 
@@ -275,7 +275,7 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Clientes
             var nomeDominioJaCadastrado = _faker.Internet.DomainWord();
 
             var construtor = ConstrutorDeClientesTeste.RetornarConstrutorDeNovo(nomeDominio: nomeDominioJaCadastrado);
-            var novoCliente = construtor.Construir();
+            var novoCliente = construtor.Build();
 
             _mocker.CreateInstance<ClientDomain>();
             _mocker.GetMock<IClientRepository>().Setup(r => r.DomainExistsAsync(nomeDominioJaCadastrado)).ReturnsAsync(true);
@@ -283,7 +283,7 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Clientes
 
             var linkConfirmacaoCadastroParaTeste = _faker.Internet.UrlWithPath();
 
-            var servico = _mocker.CreateInstance<CriarCliente>();
+            var servico = _mocker.CreateInstance<CreateClient>();
 
             #endregion Preparação do teste
 
@@ -307,15 +307,15 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Clientes
             #region Preparação do teste
 
             var construtor = ConstrutorDeClientesTeste.RetornarConstrutorDeNovo();
-            var novoCliente = construtor.Construir();
+            var novoCliente = construtor.Build();
 
             _mocker.CreateInstance<ClientDomain>();
 
-            var servico = _mocker.CreateInstance<CriarCliente>();
+            var servico = _mocker.CreateInstance<CreateClient>();
 
             #endregion Preparação do teste
 
-            var excecao = await Assert.ThrowsAsync<ExcecoesCriacaoCliente>(() => servico.ExecutarAsync(novoCliente, linkConfirmacaoCadastroVazio));
+            var excecao = await Assert.ThrowsAsync<ClientRegisterException>(() => servico.ExecutarAsync(novoCliente, linkConfirmacaoCadastroVazio));
 
             #region Verificação do teste
 

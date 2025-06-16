@@ -21,7 +21,7 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Permissoes
 
             #endregion
 
-            var retorno = RetornarPermissoes.RetornarTodas();
+            var retorno = GetPermissions.GetAll();
 
             #region Verificação do teste
 
@@ -31,8 +31,8 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Permissoes
                 var permissaoEsperada = permissoesEsperadas.ToArray()[i];
                 var itemDoRetorno = retorno.ToArray()[i];
 
-                Assert.Equal(permissaoEsperada.Nome, itemDoRetorno.Nome);
-                Assert.Equal(permissaoEsperada.Valor, itemDoRetorno.Valor);
+                Assert.Equal(permissaoEsperada.Nome, itemDoRetorno.Name);
+                Assert.Equal(permissaoEsperada.Valor, itemDoRetorno.Value);
             }
 
             #endregion
@@ -51,13 +51,13 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Permissoes
             var permissoesEsperadas = permissoesUsuario
                 .Select(tipo => new PermissaoDisponivel(tipo.Description() ?? "", tipo));
 
-            var servico = mocker.CreateInstance<RetornarPermissoes>();
+            var servico = mocker.CreateInstance<GetPermissions>();
 
             mocker.GetMock<IPermissionsRepository>().Setup(r => r.GetByUserIdAsync(idUsuario)).ReturnsAsync(permissoesUsuario);
 
             #endregion
 
-            var retorno = await servico.RetornarPorUsuarioAsync(idUsuario);
+            var retorno = await servico.GetByUserIdAsync(idUsuario);
 
             #region Verificação do teste
 
@@ -68,8 +68,8 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Permissoes
                 var permissaoEsperada = permissoesEsperadas.ToArray()[i];
                 var itemDoRetorno = retorno.ToArray()[i];
 
-                Assert.Equal(permissaoEsperada.Nome, itemDoRetorno.Nome);
-                Assert.Equal(permissaoEsperada.Valor, itemDoRetorno.Valor);
+                Assert.Equal(permissaoEsperada.Nome, itemDoRetorno.Name);
+                Assert.Equal(permissaoEsperada.Valor, itemDoRetorno.Value);
             }
 
             #endregion
@@ -86,13 +86,13 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Permissoes
             var permissoesEsperadas = Enum.GetValues<PermissionType>()
                 .Select(tipo => new PermissaoDisponivel(tipo.Description() ?? "", tipo));
 
-            var servico = mocker.CreateInstance<RetornarPermissoes>();
+            var servico = mocker.CreateInstance<GetPermissions>();
 
             mocker.GetMock<IUserRepository>().Setup(r => r.IsAdminAsync(idUsuario)).ReturnsAsync(true);
 
             #endregion
 
-            var retorno = await servico.RetornarPorUsuarioAsync(idUsuario);
+            var retorno = await servico.GetByUserIdAsync(idUsuario);
 
             #region Verificação do teste
 
@@ -103,8 +103,8 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Permissoes
                 var permissaoEsperada = permissoesEsperadas.ToArray()[i];
                 var itemDoRetorno = retorno.ToArray()[i];
 
-                Assert.Equal(permissaoEsperada.Nome, itemDoRetorno.Nome);
-                Assert.Equal(permissaoEsperada.Valor, itemDoRetorno.Valor);
+                Assert.Equal(permissaoEsperada.Nome, itemDoRetorno.Name);
+                Assert.Equal(permissaoEsperada.Valor, itemDoRetorno.Value);
             }
 
             #endregion

@@ -8,51 +8,51 @@ namespace AutenticacaoDoisFatores.Domain.Validators
     {
         internal static void Validate(this User user)
         {
-            if (!NameIsValid(user.Name))
+            if (!IsNameValid(user.Name))
                 UserException.InvalidName();
 
-            if (!UsernameIsValid(user.Username))
+            if (!IsUsernameValid(user.Username))
                 UserException.InvalidUsername();
 
-            if (!EmailIsValid(user.Email))
+            if (!IsEmailValid(user.Email))
                 UserException.InvalidEmail();
 
-            if (!PasswordIsValid(user.Password))
+            if (!IsPasswordValid(user.Password))
                 UserException.InvalidPassword();
 
-            if (!PhoneIsValid(user.Phone))
+            if (!IsPhoneValid(user.Phone))
                 UserException.InvalidPhone();
 
-            if (!SecretKeyIsValid(user.SecretKey))
+            if (!IsSecretKeyValid(user.SecretKey))
                 UserException.InvalidSecretKey();
         }
 
-        public static bool NameIsValid(string name)
+        public static bool IsNameValid(string name)
         {
             return !name.IsNullOrEmptyOrWhiteSpaces() && name.Length >= 3 && name.Length <= 50;
         }
 
-        public static bool UsernameIsValid(string username)
+        public static bool IsUsernameValid(string username)
         {
             return !username.IsNullOrEmptyOrWhiteSpaces() && username.Length >= 5 && username.Length <= 20;
         }
 
-        public static bool EmailIsValid(string email)
+        public static bool IsEmailValid(string email)
         {
             return !email.IsNullOrEmptyOrWhiteSpaces() && email.IsValidEmail() && email.Length <= 256;
         }
 
-        public static bool PasswordIsValid(string password)
+        public static bool IsPasswordValid(string password)
         {
             return !password.IsNullOrEmptyOrWhiteSpaces() && password.Length <= 256;
         }
 
-        public static bool PhoneIsValid(long? phone)
+        public static bool IsPhoneValid(long? phone)
         {
             return phone is null || phone > 99999;
         }
 
-        public static bool SecretKeyIsValid(string secretKey)
+        public static bool IsSecretKeyValid(string secretKey)
         {
             return !secretKey.IsNullOrEmptyOrWhiteSpaces() && secretKey.Length == 20;
         }

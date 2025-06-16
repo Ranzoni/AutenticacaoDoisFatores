@@ -26,7 +26,7 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Usuarios
                 .RetornarConstrutor(id: idUsuario, ativo: false)
                 .Build();
 
-            var servico = _mocker.CreateInstance<AtivarUsuario>();
+            var servico = _mocker.CreateInstance<ActivateUser>();
 
             _mocker.GetMock<IUserRepository>().Setup(r => r.GetByIdAsync(idUsuario)).ReturnsAsync(usuarioCadastradoTeste);
 
@@ -52,7 +52,7 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Usuarios
 
             var idUsuario = Guid.NewGuid();
 
-            var servico = _mocker.CreateInstance<AtivarUsuario>();
+            var servico = _mocker.CreateInstance<ActivateUser>();
 
             #endregion
 
@@ -80,7 +80,7 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Usuarios
                 .RetornarConstrutor(id: idUsuario, ativo: true, ehAdm: true)
                 .Build();
 
-            var servico = _mocker.CreateInstance<AtivarUsuario>();
+            var servico = _mocker.CreateInstance<ActivateUser>();
 
             _mocker.GetMock<IUserRepository>().Setup(r => r.GetByIdAsync(idUsuario)).ReturnsAsync(usuarioCadastradoTeste);
 

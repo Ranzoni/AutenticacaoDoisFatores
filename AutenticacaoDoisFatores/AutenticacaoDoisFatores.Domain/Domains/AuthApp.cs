@@ -17,7 +17,7 @@ namespace AutenticacaoDoisFatores.Domain.Domains
             return _service.GenerateQrCode(user!.Email, user!.SecretKey);
         }
 
-        public bool CodeIsValid(string code, User user)
+        public bool IsCodeValid(string code, User user)
         {
             if (code.IsNullOrEmptyOrWhiteSpaces())
                 AuthAppException.CodeNotInformed();

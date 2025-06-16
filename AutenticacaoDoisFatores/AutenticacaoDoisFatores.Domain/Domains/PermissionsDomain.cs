@@ -22,7 +22,7 @@ namespace AutenticacaoDoisFatores.Domain.Domains
 
         public async Task RemoverAsync(Guid userId, IEnumerable<PermissionType> permissionsToRemove)
         {
-            var currentPermissions = await GetByIdAsync(userId) ?? [];
+            var currentPermissions = await GetByUserIdAsync(userId) ?? [];
             if (!currentPermissions.Any())
                 return;
 
@@ -31,7 +31,7 @@ namespace AutenticacaoDoisFatores.Domain.Domains
             await _repository.UpdateAsync(userId, updatedPermissions);
         }
 
-        public async Task<IEnumerable<PermissionType>> GetByIdAsync(Guid userId)
+        public async Task<IEnumerable<PermissionType>> GetByUserIdAsync(Guid userId)
         {
             return await _repository.GetByUserIdAsync(userId);
         }

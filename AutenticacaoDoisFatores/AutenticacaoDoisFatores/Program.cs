@@ -44,7 +44,7 @@ AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 
 builder.Services.AddAuthorization();
 
-var chaveJwt = Seguranca.ChaveDeAutenticacao();
+var chaveJwt = Security.AuthKey();
 
 builder.Services.AddAuthentication(opt =>
 {
@@ -61,9 +61,9 @@ builder.Services.AddAuthentication(opt =>
         IssuerSigningKey = new SymmetricSecurityKey(chaveJwt),
         
         ValidateIssuer = true,
-        ValidIssuer = Seguranca.RetornarEmissor(),
+        ValidIssuer = Security.GetIssuer(),
         ValidateAudience = true,
-        ValidAudience = Seguranca.RetornarDestinatario(),
+        ValidAudience = Security.GetAudience(),
         ValidateLifetime = true
     };
 
@@ -89,7 +89,7 @@ builder.Services.AddAuthentication(opt =>
                 var repositorioUsuarios = new RepositorioDeUsuarios(contextoCliente);
                 if (repositorioUsuarios is not null)
                 {
-                    var idUsuario = Seguranca.RetornarIdDoToken(token);
+                    var idUsuario = Security.GetIdFromToken(token);
                     var usuario = await repositorioUsuarios.BuscarUsuarioPorDominioAsync(idUsuario, nomeDominio);
                     if (usuario is null || !usuario.Ativo)
                     {
@@ -103,17 +103,17 @@ builder.Services.AddAuthentication(opt =>
 });
 
 builder.Services.AddAuthorizationBuilder()
-    .AddPolicy("ConfirmacaoDeCliente", policy => policy.RequireRole(Seguranca.RegraConfirmacaoDeCliente))
-    .AddPolicy("GeracaoNovaChaveCliente", policy => policy.RequireRole(Seguranca.RegraGeracaoNovaChaveCliente))
-    .AddPolicy("CriacaoDeUsuario", policy => policy.RequireRole(Seguranca.RegraCriacaoDeUsuario))
-    .AddPolicy("AtivacaoDeUsuario", policy => policy.RequireRole(Seguranca.RegraAtivacaoUsuario))
-    .AddPolicy("DesativacaoDeUsuario", policy => policy.RequireRole(Seguranca.RegraDesativacaoUsuario))
-    .AddPolicy("TrocarSenhaDeUsuario", policy => policy.RequireRole(Seguranca.RegraTrocarSenhaUsuario))
-    .AddPolicy("DefinirPermissoes", policy => policy.RequireRole(Seguranca.RegraDefinirPermissoes))
-    .AddPolicy("ExclusaoDeUsuario", policy => policy.RequireRole(Seguranca.RegraExclusaoDeUsuario))
-    .AddPolicy("VisualizacaoDeUsuarios", policy => policy.RequireRole(Seguranca.RegraVisualizacaoDeUsuarios))
-    .AddPolicy("TrocarEmailDeUsuario", policy => policy.RequireRole(Seguranca.RegraTrocarEmailDeUsuario))
-    .AddPolicy("CodAutenticaoPorEmail", policy => policy.RequireRole(Seguranca.RegraCodAutenticaoPorEmail));
+    .AddPolicy("ConfirmacaoDeCliente", policy => policy.RequireRole(Security.ClientConfirmationRole))
+    .AddPolicy("GeracaoNovaChaveCliente", policy => policy.RequireRole(Security.NewClientKeyGenerationRole))
+    .AddPolicy("CriacaoDeUsuario", policy => policy.RequireRole(Security.CreateUserRole))
+    .AddPolicy("AtivacaoDeUsuario", policy => policy.RequireRole(Security.AcivateUserRole))
+    .AddPolicy("DesativacaoDeUsuario", policy => policy.RequireRole(Security.InactivateUserRole))
+    .AddPolicy("TrocarSenhaDeUsuario", policy => policy.RequireRole(Security.ChangeUserPasswordRole))
+    .AddPolicy("DefinirPermissoes", policy => policy.RequireRole(Security.SetPermissionsRole))
+    .AddPolicy("ExclusaoDeUsuario", policy => policy.RequireRole(Security.RemoveUserRole))
+    .AddPolicy("VisualizacaoDeUsuarios", policy => policy.RequireRole(Security.ViewUsersRole))
+    .AddPolicy("TrocarEmailDeUsuario", policy => policy.RequireRole(Security.ChangeUserEmailRole))
+    .AddPolicy("CodAutenticaoPorEmail", policy => policy.RequireRole(Security.AuthCodeEmailSenderRole));
 
 builder.Services.AddHttpContextAccessor();
 

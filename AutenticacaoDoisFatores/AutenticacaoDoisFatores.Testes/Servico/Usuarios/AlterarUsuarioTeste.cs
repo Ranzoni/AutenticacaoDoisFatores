@@ -23,7 +23,7 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Usuarios
 
             mocker.CreateInstance<UserDomain>();
 
-            var servico = mocker.CreateInstance<AlterarUsuario>();
+            var servico = mocker.CreateInstance<UpdateUser>();
 
             var idUsuario = Guid.NewGuid();
 
@@ -39,7 +39,7 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Usuarios
 
             var novosDados = ConstrutorDeUsuariosTeste
                 .RetornarConstrutorDeNovosDados(nome: novoNome, nomeUsuario: novoNomeUsuario, celular: novoCelular)
-                .Construir();
+                .Build();
 
             #endregion
 
@@ -66,13 +66,13 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Usuarios
             var mocker = new AutoMocker();
             var faker = new Faker();
 
-            var servico = mocker.CreateInstance<AlterarUsuario>();
+            var servico = mocker.CreateInstance<UpdateUser>();
 
             var idUsuario = Guid.NewGuid();
 
             var novosDados = ConstrutorDeUsuariosTeste
                 .RetornarConstrutorDeNovosDados()
-                .Construir();
+                .Build();
 
             mocker.GetMock<INotificador>().Setup(n => n.ExisteMensagem()).Returns(true);
 
@@ -99,7 +99,7 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Usuarios
             var mocker = new AutoMocker();
             var faker = new Faker();
 
-            var servico = mocker.CreateInstance<AlterarUsuario>();
+            var servico = mocker.CreateInstance<UpdateUser>();
 
             var idUsuario = Guid.NewGuid();
 
@@ -115,7 +115,7 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Usuarios
 
             var novosDados = ConstrutorDeUsuariosTeste
                 .RetornarConstrutorDeNovosDados(nome: novoNome, nomeUsuario: novoNomeUsuario, celular: novoCelular)
-                .Construir();
+                .Build();
 
             mocker.GetMock<INotificador>().Setup(n => n.ExisteMensagem()).Returns(true);
 
@@ -145,7 +145,7 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Usuarios
             var mocker = new AutoMocker();
             var faker = new Faker();
 
-            var servico = mocker.CreateInstance<AlterarUsuario>();
+            var servico = mocker.CreateInstance<UpdateUser>();
 
             var idUsuario = Guid.NewGuid();
 
@@ -161,7 +161,7 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Usuarios
 
             var novosDados = ConstrutorDeUsuariosTeste
                 .RetornarConstrutorDeNovosDados(nome: novoNome, nomeUsuario: novoNomeUsuario, celular: novoCelular)
-                .Construir();
+                .Build();
 
             mocker.GetMock<INotificador>().Setup(n => n.ExisteMensagem()).Returns(true);
 
@@ -195,7 +195,7 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Usuarios
             var mocker = new AutoMocker();
             var faker = new Faker();
 
-            var servico = mocker.CreateInstance<AlterarUsuario>();
+            var servico = mocker.CreateInstance<UpdateUser>();
 
             var idUsuario = Guid.NewGuid();
 
@@ -209,7 +209,7 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Usuarios
 
             var novosDados = ConstrutorDeUsuariosTeste
                 .RetornarConstrutorDeNovosDados(nome: nomeInvalido, nomeUsuario: novoNomeUsuario)
-                .Construir();
+                .Build();
 
             mocker.GetMock<INotificador>().Setup(n => n.ExisteMensagem()).Returns(true);
 
@@ -242,7 +242,7 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Usuarios
             var mocker = new AutoMocker();
             var faker = new Faker();
 
-            var servico = mocker.CreateInstance<AlterarUsuario>();
+            var servico = mocker.CreateInstance<UpdateUser>();
 
             var idUsuario = Guid.NewGuid();
 
@@ -256,7 +256,7 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Usuarios
 
             var novosDados = ConstrutorDeUsuariosTeste
                 .RetornarConstrutorDeNovosDados(nome: novoNome, nomeUsuario: nomeUsuarioInvalido)
-                .Construir();
+                .Build();
 
             mocker.GetMock<INotificador>().Setup(n => n.ExisteMensagem()).Returns(true);
 
@@ -288,7 +288,7 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Usuarios
             var mocker = new AutoMocker();
             var faker = new Faker();
 
-            var servico = mocker.CreateInstance<AlterarUsuario>();
+            var servico = mocker.CreateInstance<UpdateUser>();
 
             var idUsuario = Guid.NewGuid();
 
@@ -303,7 +303,7 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Usuarios
 
             var novosDados = ConstrutorDeUsuariosTeste
                 .RetornarConstrutorDeNovosDados(nome: novoNome, nomeUsuario: novoNomeUsuario, celular: novoCelular)
-                .Construir();
+                .Build();
 
             mocker.GetMock<INotificador>().Setup(n => n.ExisteMensagem()).Returns(true);
 
@@ -339,14 +339,14 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Usuarios
                 .RetornarConstrutor(id: idUsuario, nome: "Fulano de Tal", nomeUsuario: "user_test_12345", ativo: true)
                 .Build();
 
-            var servico = mocker.CreateInstance<AlterarUsuario>();
+            var servico = mocker.CreateInstance<UpdateUser>();
 
             var novoNome = faker.Person.FullName;
             var novoNomeUsuario = "user_test_54321";
 
             var novosDados = ConstrutorDeUsuariosTeste
                 .RetornarConstrutorDeNovosDados(nome: novoNome, nomeUsuario: novoNomeUsuario)
-                .Construir();
+                .Build();
 
             mocker.GetMock<IUserRepository>().Setup(r => r.UsernameExistsAsync(novoNomeUsuario, idUsuario)).ReturnsAsync(true);
             mocker.GetMock<IUserRepository>().Setup(r => r.GetByIdAsync(idUsuario)).ReturnsAsync(usuarioParaAlterar);

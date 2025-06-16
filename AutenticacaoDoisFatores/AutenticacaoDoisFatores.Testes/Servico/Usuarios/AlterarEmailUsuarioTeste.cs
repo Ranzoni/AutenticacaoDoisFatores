@@ -19,11 +19,11 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Usuarios
 
             var mocker = new AutoMocker();
 
-            var servico = mocker.CreateInstance<AlterarEmailUsuario>();
+            var servico = mocker.CreateInstance<ChangeUserEmail>();
 
             var idUsuario = Guid.NewGuid();
             var novoEmail = "teste@novoemail.com";
-            var trocarEmailUsuario = new TrocarEmailUsuario(novoEmail);
+            var trocarEmailUsuario = new UserEmailChange(novoEmail);
 
             var usuarioCadastrado = ConstrutorDeUsuariosTeste
                 .RetornarConstrutor(id: idUsuario, ativo: true, ehAdm: false)
@@ -51,12 +51,12 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Usuarios
 
             var mocker = new AutoMocker();
 
-            var servico = mocker.CreateInstance<AlterarEmailUsuario>();
+            var servico = mocker.CreateInstance<ChangeUserEmail>();
 
             var idUsuario = Guid.NewGuid();
             var novoEmail = "teste@novoemail.com";
 
-            var trocarEmailUsuario = new TrocarEmailUsuario(novoEmail);
+            var trocarEmailUsuario = new UserEmailChange(novoEmail);
 
             mocker.GetMock<INotificador>().Setup(n => n.ExisteMensagem()).Returns(true);
 
@@ -80,11 +80,11 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Usuarios
 
             var mocker = new AutoMocker();
 
-            var servico = mocker.CreateInstance<AlterarEmailUsuario>();
+            var servico = mocker.CreateInstance<ChangeUserEmail>();
 
             var idUsuario = Guid.NewGuid();
             var novoEmail = "teste@novoemail.com";
-            var trocarEmailUsuario = new TrocarEmailUsuario(novoEmail);
+            var trocarEmailUsuario = new UserEmailChange(novoEmail);
 
             var usuarioCadastrado = ConstrutorDeUsuariosTeste
                 .RetornarConstrutor(id: idUsuario, ativo: false, ehAdm: false)
@@ -114,11 +114,11 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Usuarios
 
             var mocker = new AutoMocker();
 
-            var servico = mocker.CreateInstance<AlterarEmailUsuario>();
+            var servico = mocker.CreateInstance<ChangeUserEmail>();
 
             var idUsuario = Guid.NewGuid();
             var novoEmail = "teste@novoemail.com";
-            var trocarEmailUsuario = new TrocarEmailUsuario(novoEmail);
+            var trocarEmailUsuario = new UserEmailChange(novoEmail);
 
             var usuarioCadastrado = ConstrutorDeUsuariosTeste
                 .RetornarConstrutor(id: idUsuario, ativo: true, ehAdm: true)
@@ -158,10 +158,10 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Usuarios
 
             var mocker = new AutoMocker();
 
-            var servico = mocker.CreateInstance<AlterarEmailUsuario>();
+            var servico = mocker.CreateInstance<ChangeUserEmail>();
 
             var idUsuario = Guid.NewGuid();
-            var trocarEmailUsuario = new TrocarEmailUsuario(emailInvalido);
+            var trocarEmailUsuario = new UserEmailChange(emailInvalido);
 
             var usuarioCadastrado = ConstrutorDeUsuariosTeste
                 .RetornarConstrutor(id: idUsuario, ativo: true, ehAdm: false)
@@ -191,11 +191,11 @@ namespace AutenticacaoDoisFatores.Testes.Servico.Usuarios
 
             var mocker = new AutoMocker();
 
-            var servico = mocker.CreateInstance<AlterarEmailUsuario>();
+            var servico = mocker.CreateInstance<ChangeUserEmail>();
 
             var idUsuario = Guid.NewGuid();
             string novoEmail = "teste@novoemail.com";
-            var trocarEmailUsuario = new TrocarEmailUsuario(novoEmail);
+            var trocarEmailUsuario = new UserEmailChange(novoEmail);
 
             var usuarioCadastrado = ConstrutorDeUsuariosTeste
                 .RetornarConstrutor(id: idUsuario, ativo: true, ehAdm: false)
