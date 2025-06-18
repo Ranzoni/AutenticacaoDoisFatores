@@ -13,8 +13,8 @@ namespace AutenticacaoDoisFatores.Controllers
     [Route("api/client")]
     public class ClientController(INotifier notifier, int? statusCodeNotifier = null) : BaseController(notifier, statusCodeNotifier)
     {
-        private readonly string _registerConfirmationPagePath = "clientes/confirmar-cadastro.html";
-        private readonly string _newKeyConfirmationPagePath = "clientes/confirmar-geracao-nova-chave.html";
+        private readonly string _registerConfirmationPagePath = "clients/register-confirmation.html";
+        private readonly string _newKeyConfirmationPagePath = "clients/new-access-key-confirmation.html";
 
         [HttpPost]
         [AllowAnonymous]

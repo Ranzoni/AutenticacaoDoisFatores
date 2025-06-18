@@ -9,8 +9,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Remove="wwwroot\autenticacao\css\style.css" />
-    <Content Remove="wwwroot\autenticacao\js\gerar-qrcode.js" />
+    <Content Remove="wwwroot\authentication\css\style.css" />
+    <Content Remove="wwwroot\authentication\js\generate-qr-code.js" />
   </ItemGroup>
 
   <ItemGroup>
@@ -30,11 +30,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="wwwroot\autenticacao\css\style.css" />
-    <None Include="wwwroot\autenticacao\js\gerar-qrcode.js" />
-    <None Include="wwwroot\clientes\css\style.css" />
-    <None Include="wwwroot\clientes\confirmar-cadastro.html" />
-    <None Include="wwwroot\clientes\js\confirmar-cadastro.js" />
+    <None Include="wwwroot\authentication\css\style.css" />
+    <None Include="wwwroot\authentication\js\generate-qr-code.js" />
+    <None Include="wwwroot\clients\css\style.css" />
+    <None Include="wwwroot\clients\register-confirmation.html" />
+    <None Include="wwwroot\clients\js\register-confirmation.js" />
   </ItemGroup>
 
 </Project>

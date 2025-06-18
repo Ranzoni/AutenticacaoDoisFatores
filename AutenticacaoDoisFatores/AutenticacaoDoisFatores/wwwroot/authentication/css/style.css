@@ -18,12 +18,12 @@ main {
     padding: 20px 0;
 }
 
-#form-principal p {
+#principal-form p {
     font-size: 18px;
     color: #666666;
 }
 
-#form-principal button {
+#principal-form button {
     text-decoration: none;
     background-color: #1e87f0;
     color: #ffffff;
