@@ -14,7 +14,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Mensageiro.WebApi" Version="1.1.0" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="9.0.4" />
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.4" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.4">
@@ -22,11 +21,12 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.21.0" />
+    <PackageReference Include="TheMessenger.WebApi" Version="1.0.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\AutenticacaoDoisFatores.Infra\AutenticacaoDoisFatores.Infra.csproj" />
-    <ProjectReference Include="..\AutenticacaoDoisFatores.Servico\AutenticacaoDoisFatores.Service.csproj" />
+    <ProjectReference Include="..\AutenticacaoDoisFatores.Service\AutenticacaoDoisFatores.Service.csproj" />
   </ItemGroup>
 
   <ItemGroup>
