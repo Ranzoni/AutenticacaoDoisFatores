@@ -9,7 +9,7 @@ namespace AutenticacaoDoisFatores.Domain.Domains
     {
         private readonly IAuthService _service = service;
 
-        public string? GerarQrCode(User user)
+        public string? GenerateQrCode(User user)
         {
             if (user is null)
                 UserException.UserNotFound();
@@ -22,7 +22,7 @@ namespace AutenticacaoDoisFatores.Domain.Domains
             if (code.IsNullOrEmptyOrWhiteSpaces())
                 AuthAppException.CodeNotInformed();
 
-            return _service.IsValidCode(code, user!.SecretKey);
+            return _service.IsCodeValid(code, user!.SecretKey);
         }
     }
 }

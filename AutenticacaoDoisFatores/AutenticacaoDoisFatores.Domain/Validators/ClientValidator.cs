@@ -17,7 +17,7 @@ namespace AutenticacaoDoisFatores.Domain.Validators
             if (!IsDomainNameValid(client.DomainName))
                 ClientException.InvalidDomainName();
 
-            if (!IsAccesKeyValid(client.AccessKey))
+            if (!IsAccessKeyValid(client.AccessKey))
                 ClientException.InvalidAccessKey();
         }
 
@@ -40,7 +40,7 @@ namespace AutenticacaoDoisFatores.Domain.Validators
                 && !domainName.Contains(' ');
         }
 
-        public static bool IsAccesKeyValid(string accessKey)
+        public static bool IsAccessKeyValid(string accessKey)
         {
             return !accessKey.IsNullOrEmptyOrWhiteSpaces()
                 && accessKey.Length >= 3

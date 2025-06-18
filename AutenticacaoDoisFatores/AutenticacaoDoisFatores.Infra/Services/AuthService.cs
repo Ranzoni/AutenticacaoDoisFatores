@@ -26,7 +26,7 @@ namespace AutenticacaoDoisFatores.Infra.Services
             return $"otpauth://totp/{_app}:{email}?secret={secretKey}&issuer={_app}";
         }
 
-        public bool IsValidCode(string code, string secretKey)
+        public bool IsCodeValid(string code, string secretKey)
         {
             var bytes = Base32Encoding.ToBytes(secretKey);
             var totp = new Totp(bytes);

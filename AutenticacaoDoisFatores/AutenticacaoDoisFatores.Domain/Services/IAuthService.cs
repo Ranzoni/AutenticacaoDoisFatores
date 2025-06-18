@@ -3,6 +3,6 @@
     public interface IAuthService
     {
         string GenerateQrCode(string email, string secretKey);
-        bool IsValidCode(string code, string secretKey);
+        bool IsCodeValid(string code, string secretKey);
     }
 }

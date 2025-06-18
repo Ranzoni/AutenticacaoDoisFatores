@@ -20,7 +20,7 @@ namespace AutenticacaoDoisFatores.Domain.Domains
                 await _repository.AddAsync(userId, permissionsToInclude);
         }
 
-        public async Task RemoverAsync(Guid userId, IEnumerable<PermissionType> permissionsToRemove)
+        public async Task RemoveAsync(Guid userId, IEnumerable<PermissionType> permissionsToRemove)
         {
             var currentPermissions = await GetByUserIdAsync(userId) ?? [];
             if (!currentPermissions.Any())
