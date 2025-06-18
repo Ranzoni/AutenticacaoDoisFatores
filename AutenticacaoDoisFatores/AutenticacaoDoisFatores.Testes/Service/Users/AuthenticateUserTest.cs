@@ -227,7 +227,7 @@ namespace AutenticacaoDoisFatores.Tests.Service.Users
         }
 
         [Fact]
-        internal async Task ShouldNotAuthenticateByUsernameWhenPasswordIncorreta()
+        internal async Task ShouldNotAuthenticateByUsernameWhenPasswordIsIncorrect()
         {
             #region Arrange
 

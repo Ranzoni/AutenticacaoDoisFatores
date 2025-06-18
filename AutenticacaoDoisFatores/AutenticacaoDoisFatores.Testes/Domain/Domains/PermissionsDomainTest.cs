@@ -10,7 +10,7 @@ namespace AutenticacaoDoisFatores.Tests.Domain.Domains
     public class PermissionsDomainTest
     {
         [Fact]
-        internal async Task ShouldAdicionarPermissao()
+        internal async Task ShouldAddPermission()
         {
             #region Arrange
 

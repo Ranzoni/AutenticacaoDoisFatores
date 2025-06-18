@@ -8,7 +8,7 @@ using Bogus;
 using Moq;
 using Moq.AutoMock;
 
-namespace AutenticacaoDoisFatores.Testes.Dominio.Dominios
+namespace AutenticacaoDoisFatores.Tests.Domain.Domains
 {
     public class AuthAppDomainTest
     {

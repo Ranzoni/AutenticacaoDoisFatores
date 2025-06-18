@@ -52,7 +52,7 @@ namespace AutenticacaoDoisFatores.Tests.Service.Users
         }
 
         [Fact]
-        internal async Task ShouldNotAuthenticateByAppParaUserNotRegistered()
+        internal async Task ShouldNotAuthenticateByAppWhenUserNotRegistered()
         {
             #region Arrange
 
@@ -82,7 +82,7 @@ namespace AutenticacaoDoisFatores.Tests.Service.Users
         }
 
         [Fact]
-        internal async Task ShouldNotAuthenticateByAppToUserNotActive()
+        internal async Task ShouldNotAuthenticateByAppWhenUserNotActive()
         {
             #region Arrange
 

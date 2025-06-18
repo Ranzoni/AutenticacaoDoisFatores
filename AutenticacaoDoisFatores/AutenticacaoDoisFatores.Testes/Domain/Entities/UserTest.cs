@@ -408,7 +408,7 @@ namespace AutenticacaoDoisFatores.Tests.Domain.Entities
         }
 
         [Fact]
-        internal void ShouldUpdateAuthTypeEmDoisFatoresParaUsuario()
+        internal void ShouldUpdateAuthTypeToUser()
         {
             #region Arrange
 

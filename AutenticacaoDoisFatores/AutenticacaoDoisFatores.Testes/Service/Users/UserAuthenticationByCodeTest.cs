@@ -137,7 +137,7 @@ namespace AutenticacaoDoisFatores.Tests.Service.Users
         }
 
         [Fact]
-        internal async Task ShouldNotAuthenticateWhenCodNotExists()
+        internal async Task ShouldNotAuthenticateWhenCodeNotExists()
         {
             #region Arrange
 

@@ -9,7 +9,7 @@ using Moq.AutoMock;
 
 namespace AutenticacaoDoisFatores.Tests.Service.Users
 {
-    public class ChangePasswordUsuarioTeste
+    public class ChangePasswordUserTest
     {
         private readonly AutoMocker _mocker = new();
 
