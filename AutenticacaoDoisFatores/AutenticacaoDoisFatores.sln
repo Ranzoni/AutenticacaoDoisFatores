@@ -17,7 +17,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AutenticacaoDoisFatores.Dom
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "5-Tests", "5-Tests", "{C3C7307D-2F5D-4189-A9D4-3958FEBE5CD7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AutenticacaoDoisFatores.Tests", "AutenticacaoDoisFatores.Testes\AutenticacaoDoisFatores.Tests.csproj", "{0BAE11A3-4464-4AB1-BAC9-D7EB7F320B45}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AutenticacaoDoisFatores.Tests", "AutenticacaoDoisFatores.Tests\AutenticacaoDoisFatores.Tests.csproj", "{0BAE11A3-4464-4AB1-BAC9-D7EB7F320B45}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "4-Infra", "4-Infra", "{009E8DA9-5FBF-433F-AC1A-18BC742ACD6F}"
 EndProject
