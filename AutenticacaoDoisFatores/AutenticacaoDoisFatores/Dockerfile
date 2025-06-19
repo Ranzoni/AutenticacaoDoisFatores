@@ -14,8 +14,8 @@ ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
 COPY ["AutenticacaoDoisFatores/AutenticacaoDoisFatores.csproj", "AutenticacaoDoisFatores/"]
 COPY ["AutenticacaoDoisFatores.Infra/AutenticacaoDoisFatores.Infra.csproj", "AutenticacaoDoisFatores.Infra/"]
-COPY ["AutenticacaoDoisFatores.Dominio/AutenticacaoDoisFatores.Dominio.csproj", "AutenticacaoDoisFatores.Dominio/"]
-COPY ["AutenticacaoDoisFatores.Servico/AutenticacaoDoisFatores.Servico.csproj", "AutenticacaoDoisFatores.Servico/"]
+COPY ["AutenticacaoDoisFatores.Domain/AutenticacaoDoisFatores.Domain.csproj", "AutenticacaoDoisFatores.Domain/"]
+COPY ["AutenticacaoDoisFatores.Service/AutenticacaoDoisFatores.Service.csproj", "AutenticacaoDoisFatores.Service/"]
 RUN dotnet restore "./AutenticacaoDoisFatores/AutenticacaoDoisFatores.csproj"
 COPY . .
 WORKDIR "/src/AutenticacaoDoisFatores"
