@@ -45,6 +45,8 @@ namespace AutenticacaoDoisFatores.Tests.Service.Clients
             Environment.SetEnvironmentVariable("ADF_CHAVE_AUTENTICACAO", fakeAuthKey);
             var fakeTokenIssuer = _faker.Random.AlphaNumeric(40);
             Environment.SetEnvironmentVariable("ADF_EMISSOR_TOKEN", fakeTokenIssuer);
+            var fakeTokenAudience = _faker.Random.AlphaNumeric(40);
+            Environment.SetEnvironmentVariable("ADF_DESTINATARIO_TOKEN", fakeTokenAudience);
 
             var service = _mocker.CreateInstance<CreateClient>();
 

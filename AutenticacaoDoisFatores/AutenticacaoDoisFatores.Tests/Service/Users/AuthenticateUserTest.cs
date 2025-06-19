@@ -41,6 +41,11 @@ namespace AutenticacaoDoisFatores.Tests.Service.Users
                 usernameOrEmail: user.Username,
                 password: password);
 
+            var fakeTokenIssuer = _faker.Random.AlphaNumeric(40);
+            Environment.SetEnvironmentVariable("ADF_EMISSOR_TOKEN", fakeTokenIssuer);
+            var fakeTokenAudience = _faker.Random.AlphaNumeric(40);
+            Environment.SetEnvironmentVariable("ADF_DESTINATARIO_TOKEN", fakeTokenAudience);
+
             #endregion
 
             var response = await service.ExecuteAsync(authData);
@@ -80,6 +85,8 @@ namespace AutenticacaoDoisFatores.Tests.Service.Users
 
             var fakeTokenIssuer = _faker.Random.AlphaNumeric(40);
             Environment.SetEnvironmentVariable("ADF_EMISSOR_TOKEN", fakeTokenIssuer);
+            var fakeTokenAudience = _faker.Random.AlphaNumeric(40);
+            Environment.SetEnvironmentVariable("ADF_DESTINATARIO_TOKEN", fakeTokenAudience);
 
             #endregion
 
@@ -317,6 +324,8 @@ namespace AutenticacaoDoisFatores.Tests.Service.Users
 
             var fakeTokenIssuer = _faker.Random.AlphaNumeric(40);
             Environment.SetEnvironmentVariable("ADF_EMISSOR_TOKEN", fakeTokenIssuer);
+            var fakeTokenAudience = _faker.Random.AlphaNumeric(40);
+            Environment.SetEnvironmentVariable("ADF_DESTINATARIO_TOKEN", fakeTokenAudience);
 
             #endregion
 

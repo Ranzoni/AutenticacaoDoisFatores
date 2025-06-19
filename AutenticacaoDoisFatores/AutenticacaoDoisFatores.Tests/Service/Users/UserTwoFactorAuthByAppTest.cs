@@ -26,6 +26,8 @@ namespace AutenticacaoDoisFatores.Tests.Service.Users
             var faker = new Faker();
             var fakeTokenIssuer = faker.Random.AlphaNumeric(40);
             Environment.SetEnvironmentVariable("ADF_EMISSOR_TOKEN", fakeTokenIssuer);
+            var fakeTokenAudience = faker.Random.AlphaNumeric(40);
+            Environment.SetEnvironmentVariable("ADF_DESTINATARIO_TOKEN", fakeTokenAudience);
 
             #endregion
 
