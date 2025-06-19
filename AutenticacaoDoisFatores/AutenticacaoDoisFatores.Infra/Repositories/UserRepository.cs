@@ -20,9 +20,9 @@ namespace AutenticacaoDoisFatores.Infra.Repositories
         {
             var sql = $@"
                 INSERT INTO {_context.DomainName}.""Users""
-                    (""Id"", ""Name"", ""Username"", ""Email"", ""Password"", ""Phone"", ""SecretKey"", ""CreatedAt"")
+                    (""Id"", ""Name"", ""Username"", ""Email"", ""Password"", ""Phone"", ""SecretKey"", ""CreatedAt"", ""LastDataChange"")
                 VALUES
-                    ('{entity.Id}', '{entity.Name}', '{entity.Username}', '{entity.Email}', '{entity.Password}', {(entity.Phone is null ? "NULL" : entity.Phone)}, '{Encrypt.AesEncrypt(entity.SecretKey)}', '{entity.CreatedAt:yyyy-MM-dd HH:mm:ss}');";
+                    ('{entity.Id}', '{entity.Name}', '{entity.Username}', '{entity.Email}', '{entity.Password}', {(entity.Phone is null ? "NULL" : entity.Phone)}, '{Encrypt.AesEncrypt(entity.SecretKey)}', '{entity.CreatedAt:yyyy-MM-dd HH:mm:ss}', '{entity.LastDataChange}');";
 
             _context.BuildCommand(
                 entity: entity,
@@ -35,9 +35,9 @@ namespace AutenticacaoDoisFatores.Infra.Repositories
         {
             var sql = $@"
                 INSERT INTO {domain}.""Users""
-                    (""Id"", ""Name"", ""Username"", ""Email"", ""Password"", ""CreatedAt"", ""Active"", ""IsAdmin"", ""SecretKey"")
+                    (""Id"", ""Name"", ""Username"", ""Email"", ""Password"", ""CreatedAt"", ""Active"", ""IsAdmin"", ""SecretKey"", ""LastDataChange"")
                 VALUES
-                    ('{entity.Id}', '{entity.Name}', '{entity.Username}', '{entity.Email}', '{entity.Password}', '{entity.CreatedAt:yyyy-MM-dd HH:mm:ss}', {entity.Active}, {entity.IsAdmin}, '{Encrypt.AesEncrypt(entity.SecretKey)}');";
+                    ('{entity.Id}', '{entity.Name}', '{entity.Username}', '{entity.Email}', '{entity.Password}', '{entity.CreatedAt:yyyy-MM-dd HH:mm:ss}', {entity.Active}, {entity.IsAdmin}, '{Encrypt.AesEncrypt(entity.SecretKey)}', '{entity.LastDataChange}');";
 
             _context.BuildCommand(
                 entity: entity,
@@ -58,7 +58,8 @@ namespace AutenticacaoDoisFatores.Infra.Repositories
                     ""Password"" = '{entity.Password}',
                     ""Phone"" = {(entity.Phone is null ? "NULL" : entity.Phone)},
                     ""Active"" = {entity.Active},
-                    ""UpdatedAt"" = '{entity.UpdatedAt:yyyy-MM-dd HH:mm:ss}'";
+                    ""UpdatedAt"" = '{entity.UpdatedAt:yyyy-MM-dd HH:mm:ss}',
+                    ""LastDataChange"" = '{entity.LastDataChange}'";
 
             if (entity.AuthType is null)
                 sql += $@",""AuthType"" = NULL";
@@ -302,7 +303,8 @@ namespace AutenticacaoDoisFatores.Infra.Repositories
                 u.""IsAdmin"",
                 u.""AuthType"",
                 u.""Phone"",
-                u.""SecretKey""";
+                u.""SecretKey"",
+                u.""LastDataChange""";
         }
 
         private static User BuildUser(DbDataReader reader)
@@ -316,11 +318,12 @@ namespace AutenticacaoDoisFatores.Infra.Repositories
                 .WithActive(reader.GetBoolean(5))
                 .WithLastAccess(reader.IsDBNull(6) ? null : reader.GetDateTime(6))
                 .WithCreatedAt(reader.GetDateTime(7))
-                .WithLastAccess(reader.IsDBNull(8) ? null : reader.GetDateTime(8))
+                .WithUpdatedAt(reader.IsDBNull(8) ? null : reader.GetDateTime(8))
                 .WithIsAdminFlag(reader.GetBoolean(9))
                 .WithAuthType(reader.IsDBNull(10) ? null : (AuthType)reader.GetInt16(10))
                 .WithPhone(reader.IsDBNull(11) ? null : reader.GetInt64(11))
                 .WithSecretKey(Encrypt.AesDecrypt(reader.GetString(12)))
+                .WithLastDataChange(reader.GetString(13))
                 .Build();
         }
 

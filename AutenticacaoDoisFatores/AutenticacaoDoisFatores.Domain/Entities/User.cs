@@ -17,6 +17,7 @@ namespace AutenticacaoDoisFatores.Domain.Entities
         public bool IsAdmin { get; private set; }
         public AuthType? AuthType { get; private set; }
         public string SecretKey { get; }
+        public string LastDataChange { get; private set; }
 
         public User(string name, string username, string email, string password, long? phone, bool isAdmin = false)
         {
@@ -26,6 +27,7 @@ namespace AutenticacaoDoisFatores.Domain.Entities
             Password = password;
             Phone = phone;
             SecretKey = Secrets.Generate();
+            LastDataChange = CreatedAt.Ticks.ToString();
 
             if (isAdmin)
             {
@@ -36,7 +38,7 @@ namespace AutenticacaoDoisFatores.Domain.Entities
             this.Validate();
         }
 
-        public User(Guid id, string name, string username, string email, string password, long? phone, bool active, DateTime? lastAccess, DateTime createdAt, DateTime? updatedAt, bool isAdmin, AuthType? authType, string secretKey)
+        public User(Guid id, string name, string username, string email, string password, long? phone, bool active, DateTime? lastAccess, DateTime createdAt, DateTime? updatedAt, bool isAdmin, AuthType? authType, string secretKey, string lastDataChange)
             : base(true)
         {
             Id = id;
@@ -52,6 +54,7 @@ namespace AutenticacaoDoisFatores.Domain.Entities
             IsAdmin = isAdmin;
             AuthType = authType;
             SecretKey = secretKey;
+            LastDataChange = lastDataChange;
 
             this.Validate();
         }
@@ -79,6 +82,7 @@ namespace AutenticacaoDoisFatores.Domain.Entities
             RegisterUpdate(nameof(Email), Email, email);
 
             Email = email;
+            LastDataChange = UpdatedAt!.Value.Ticks.ToString();
 
             this.Validate();
         }
@@ -95,6 +99,7 @@ namespace AutenticacaoDoisFatores.Domain.Entities
             RegisterUpdate(nameof(Password), Password, password);
 
             Password = password;
+            LastDataChange = UpdatedAt!.Value.Ticks.ToString();
 
             this.Validate();
         }
