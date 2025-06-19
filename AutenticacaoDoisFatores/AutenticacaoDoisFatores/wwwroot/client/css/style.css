@@ -23,6 +23,10 @@ main {
     color: #666666;
 }
 
+#principal-form {
+    justify-items: center;
+}
+
 #principal-form button {
     text-decoration: none;
     background-color: #1e87f0;
@@ -31,6 +35,16 @@ main {
     border-radius: 5px;
     font-size: 16px;
     cursor: pointer;
+}
+
+label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+input {
+    display: block;
+    margin-bottom: 15px;
 }
 
 footer {
