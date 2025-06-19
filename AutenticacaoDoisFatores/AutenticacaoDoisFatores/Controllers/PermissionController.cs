@@ -44,7 +44,7 @@ namespace AutenticacaoDoisFatores.Controllers
             }
         }
 
-        [HttpGet("usuario/{userId}")]
+        [HttpGet("user/{userId}")]
         public async Task<ActionResult<IEnumerable<AvaiblePermission>>> GetByUserIdAsync([FromServices] GetPermissions getPermissions, Guid userId)
         {
             try

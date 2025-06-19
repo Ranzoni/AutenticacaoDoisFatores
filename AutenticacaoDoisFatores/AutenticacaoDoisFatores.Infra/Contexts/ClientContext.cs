@@ -109,6 +109,8 @@ namespace AutenticacaoDoisFatores.Infra.Contexts
 
     public partial class ClientContext
     {
+        private static readonly string _tableName = "__AdfMigrations";
+
         public static async Task<IEnumerable<string>> GetAllDomainsNamesAsync(string connectionString)
         {
             using var connection = new NpgsqlConnection(connectionString);
@@ -166,9 +168,9 @@ namespace AutenticacaoDoisFatores.Infra.Contexts
                 SELECT
                     COUNT(1) > 0
                 FROM
-                    {domainName}.""__MigracoesAdf"" m
+                    {domainName}.""{_tableName}"" m
                 WHERE
-                    LOWER(m.""NomeArquivo"") = '{fileName.ToLower()}'";
+                    LOWER(m.""FileName"") = '{fileName.ToLower()}'";
 
             using var comando = new NpgsqlCommand(sql, conexao);
             var resultado = await comando.ExecuteScalarAsync();
@@ -182,7 +184,7 @@ namespace AutenticacaoDoisFatores.Infra.Contexts
             connection.Open();
 
             var sql = $@"
-                INSERT INTO {domainName}.""__MigrationsAdf""
+                INSERT INTO {domainName}.""{_tableName}""
                     (""FileName"", ""ExecutedAt"")
                 VALUES
                     ('{fileName}', NOW())";

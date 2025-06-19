@@ -27,13 +27,13 @@ namespace AutenticacaoDoisFatores.Shared
 
         private static bool ContextShouldBeIgnored(HttpContext context)
         {
-            if (context.Request.Path.StartsWithSegments("/api/cliente"))
+            if (context.Request.Path.StartsWithSegments("/api/client"))
                 return true;
 
-            if (context.Request.Path.StartsWithSegments("/clientes"))
+            if (context.Request.Path.StartsWithSegments("/client"))
                 return true;
 
-            if (context.Request.Path.StartsWithSegments("/autenticacao"))
+            if (context.Request.Path.StartsWithSegments("/authentication"))
                 return true;
 
             return false;

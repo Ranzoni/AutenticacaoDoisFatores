@@ -46,7 +46,7 @@ namespace AutenticacaoDoisFatores.Controllers
             }
         }
 
-        [HttpPut("{id}/inactivate")]
+        [HttpPut("{id}/inactive")]
         [Authorize(Policy = nameof(Security.InactivateUserRole))]
         public async Task<ActionResult<RegisteredUser?>> InactivateAsync([FromServices] ActivateUser activateUser, Guid id)
         {

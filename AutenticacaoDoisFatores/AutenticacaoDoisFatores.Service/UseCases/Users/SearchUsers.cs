@@ -11,7 +11,10 @@ namespace AutenticacaoDoisFatores.Service.UseCases.Users
         public async Task<RegisteredUser?> GetByIdAsync(Guid id)
         {
             var user = await _domain.GetByIdAsync(id);
-            return (RegisteredUser?)user!;
+            if (user is null)
+                return null;
+
+            return (RegisteredUser?)user;
         }
 
         public async Task<IEnumerable<RegisteredUser>> GetAllAsync(SearchUserFilters filterToSearch)

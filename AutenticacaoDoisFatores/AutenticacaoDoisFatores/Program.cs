@@ -1,15 +1,16 @@
 using AutenticacaoDoisFatores;
 using AutenticacaoDoisFatores.Domain.Shared;
-using AutenticacaoDoisFatores.Infra.Utils.Migrants;
 using AutenticacaoDoisFatores.Infra.Contexts;
+using AutenticacaoDoisFatores.Infra.Repositories;
+using AutenticacaoDoisFatores.Infra.Utils.Migrants;
 using AutenticacaoDoisFatores.Service.Shared;
+using AutenticacaoDoisFatores.Shared;
 using Messenger.WebApi;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Npgsql;
-using AutenticacaoDoisFatores.Infra.Repositories;
-using AutenticacaoDoisFatores.Shared;
+using System.Security.Claims;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -71,6 +72,10 @@ builder.Services.AddAuthentication(opt =>
     {
         OnTokenValidated = async (TokenValidatedContext context) =>
         {
+            var role = context.Principal.FindFirstValue(ClaimTypes.Role);
+            if (string.IsNullOrEmpty(role) || !role.Equals(Security.AuthenticatedUser))
+                return;
+
             var domainName = context.Request.Headers["Dominio"].ToString();
             if (domainName.IsNullOrEmptyOrWhiteSpaces())
             {

@@ -18,7 +18,7 @@ namespace AutenticacaoDoisFatores
 {
     internal static class DependencyInjection
     {
-        private static readonly string _pathToGenerateQrCode = "autenticacao/gerar-qr-code.html";
+        private static readonly string _pathToGenerateQrCode = "authentication/generate-qr-code.html";
 
         internal static void AddUseCases(this IServiceCollection serviceCollection)
         {

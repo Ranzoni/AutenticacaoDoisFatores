@@ -97,6 +97,14 @@ namespace AutenticacaoDoisFatores.Service.Shared
             { PermissionType.ChangeUserEmail, _changeUserEmail },
         };
 
+        public static string AuthenticatedUser
+        {
+            get
+            {
+                return _authenticatedUser;
+            }
+        }
+
         public static string ClientConfirmationRole
         {
             get

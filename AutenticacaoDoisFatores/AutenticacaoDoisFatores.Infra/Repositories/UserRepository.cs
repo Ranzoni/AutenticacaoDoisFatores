@@ -66,7 +66,7 @@ namespace AutenticacaoDoisFatores.Infra.Repositories
                 sql += $@",""AuthType"" = {(int)entity.AuthType}";
 
             if (entity.LastAccess is not null)
-                sql += $@",""LastAcess"" = '{entity.LastAccess:yyyy-MM-dd HH:mm:ss}'";
+                sql += $@",""LastAccess"" = '{entity.LastAccess:yyyy-MM-dd HH:mm:ss}'";
 
             sql += $@" WHERE
                 ""Id"" = '{entity.Id}';";
@@ -248,10 +248,10 @@ namespace AutenticacaoDoisFatores.Infra.Repositories
                 query = AddQueryCondition(query, $@"u.""Active"" = {filter.Active}");
 
             if (filter.LastAccessFrom.HasValue)
-                query = AddQueryCondition(query, $@"u.""LastAcess""::DATE >= '%{filter.LastAccessFrom:yyyy-MM-dd}%'");
+                query = AddQueryCondition(query, $@"u.""LastAccess""::DATE >= '%{filter.LastAccessFrom:yyyy-MM-dd}%'");
 
             if (filter.LastAccessUntil.HasValue)
-                query = AddQueryCondition(query, $@"(u.""LastAcess"" IS NULL OR u.""LastAcess""::DATE <= '%{filter.LastAccessUntil:yyyy-MM-dd}%')");
+                query = AddQueryCondition(query, $@"(u.""LastAccess"" IS NULL OR u.""LastAccess""::DATE <= '%{filter.LastAccessUntil:yyyy-MM-dd}%')");
 
             if (filter.CreatedFrom.HasValue)
                 query = AddQueryCondition(query, $@"u.""DataCadastro""::DATE >= '{filter.CreatedFrom:yyyy-MM-dd}'");
@@ -296,7 +296,7 @@ namespace AutenticacaoDoisFatores.Infra.Repositories
                 u.""Email"",
                 u.""Password"",
                 u.""Active"",
-                u.""LastAcess"",
+                u.""LastAccess"",
                 u.""CreatedAt"",
                 u.""UpdatedAt"",
                 u.""IsAdmin"",

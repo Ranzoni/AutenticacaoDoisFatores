@@ -6,7 +6,8 @@
     const params = new URLSearchParams(document.location.search);
     const token = params.get("token");
 
-    const baseUrl = `${window.location.protocol}//${window.location.hostname}/api`;
+    const port = window.location.port ? `:${window.location.port}` : '';
+    const baseUrl = `${window.location.protocol}//${window.location.hostname}${port}/api`;
 
     fetch(`${baseUrl}/client/confirm-register`, {
         method: 'PUT',
