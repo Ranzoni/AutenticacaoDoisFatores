@@ -10,7 +10,7 @@
     const baseUrl = `${window.location.protocol}//${window.location.hostname}${port}/api`;
 
     const clientName = document.getElementById('client-name').value;
-    const domainName = removeSpecialCharacters(clientName);
+    const domainName = removeSpecialCharacters(clientName).;
     const email = document.getElementById('client-email').value;
     const adminPassword = document.getElementById('client-password').value;
 
@@ -58,7 +58,7 @@
 });
 
 function removeSpecialCharacters(str) {
-    return str.replace(/[^a-z0-9]/g, '');
+    return str.replace(/[^a-zA-Z0-9]/g, '').toLowerCase();
 }
 
 function showSuccessMessage() {

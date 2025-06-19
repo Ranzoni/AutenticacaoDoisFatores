@@ -6,6 +6,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security;
 using System.Security.Claims;
 using System.Text;
+using AutenticacaoDoisFatores.Domain.Entities;
 
 namespace AutenticacaoDoisFatores.Service.Shared
 {
@@ -84,6 +85,7 @@ namespace AutenticacaoDoisFatores.Service.Shared
         private static readonly string _viewUsers = "viewUsers";
         private static readonly string _changeUserEmail = "changeUserEmail";
         private static readonly string _authCodeEmailSender = "authCodeEmailSender";
+        private static readonly string _lastDataChange = "lastDataChange";
 
         private static readonly Dictionary<PermissionType, string> _permissionsRoles = new()
         {
@@ -193,23 +195,32 @@ namespace AutenticacaoDoisFatores.Service.Shared
             }
         }
 
+        public static string LastDataChange
+        {
+            get
+            {
+                return _lastDataChange;
+            }
+        }
+
         #endregion
 
-        public static string GenerateUserAuthToken(Guid userId, IEnumerable<PermissionType>? permissions)
+        public static string GenerateUserAuthToken(User user, IEnumerable<PermissionType>? permissions)
         {
-            var cliams = new List<Claim>()
+            var claims = new List<Claim>()
             {
-                new(type: _entityIdentifierClaim, userId.ToString()),
-                new(type: _securityClaim, _authenticatedUser)
+                new(type: _entityIdentifierClaim, user.Id.ToString()),
+                new(type: _securityClaim, _authenticatedUser),
+                new(type: _lastDataChange, user.LastDataChange.ToString() ?? "")
             };
 
             foreach (var permission in permissions ?? [])
             {
                 var permissionClaim = _permissionsRoles[permission];
-                cliams.Add(new(type: _securityClaim, permissionClaim));
+                claims.Add(new(type: _securityClaim, permissionClaim));
             }
 
-            return GenerateToken(cliams);
+            return GenerateToken(claims);
         }
 
         public static string GenerateClientConfirmationToken(Guid clientId)

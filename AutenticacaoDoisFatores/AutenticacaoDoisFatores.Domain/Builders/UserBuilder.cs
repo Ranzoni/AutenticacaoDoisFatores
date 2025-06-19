@@ -18,6 +18,7 @@ namespace AutenticacaoDoisFatores.Domain.Builders
         private DateTime? _updatedAt;
         private AuthType? _authType;
         private string _secretKey = "01234567890123456789";
+        private string _lastDataChange = DateTime.Now.Ticks.ToString();
 
         public UserBuilder WithId(Guid id)
         {
@@ -110,6 +111,13 @@ namespace AutenticacaoDoisFatores.Domain.Builders
             return this;
         }
 
+        public UserBuilder WithLastDataChange(string lastDataChange)
+        {
+            _lastDataChange = lastDataChange;
+
+            return this;
+        }
+
         public User BuildNew()
         {
             var user = new User
@@ -141,7 +149,8 @@ namespace AutenticacaoDoisFatores.Domain.Builders
                 updatedAt: _updatedAt,
                 isAdmin: _isAdmin,
                 authType: _authType,
-                secretKey: _secretKey
+                secretKey: _secretKey,
+                lastDataChange: _lastDataChange
             );
 
             return user;

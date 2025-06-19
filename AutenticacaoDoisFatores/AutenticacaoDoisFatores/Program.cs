@@ -72,9 +72,10 @@ builder.Services.AddAuthentication(opt =>
     {
         OnTokenValidated = async (TokenValidatedContext context) =>
         {
-            var role = context.Principal.FindFirstValue(ClaimTypes.Role);
+            var role = context.Principal?.FindFirstValue(ClaimTypes.Role);
             if (string.IsNullOrEmpty(role) || !role.Equals(Security.AuthenticatedUser))
                 return;
+
 
             var domainName = context.Request.Headers["Dominio"].ToString();
             if (domainName.IsNullOrEmptyOrWhiteSpaces())
@@ -99,6 +100,14 @@ builder.Services.AddAuthentication(opt =>
                     if (user is null || !user.Active)
                     {
                         context.Fail("Usuário não encontrado");
+                        return;
+                    }
+
+                    var tokenLastDataChange = context.Principal?.Claims.First(c => c.Type.Equals(Security.LastDataChange)).Value;
+                    if (tokenLastDataChange is not null && !tokenLastDataChange.IsNullOrEmptyOrWhiteSpaces())
+                    {
+                        if (!user.LastDataChange.Equals(tokenLastDataChange))
+                            context.Fail("Invalid token: User password was changed.");
                         return;
                     }
                 }

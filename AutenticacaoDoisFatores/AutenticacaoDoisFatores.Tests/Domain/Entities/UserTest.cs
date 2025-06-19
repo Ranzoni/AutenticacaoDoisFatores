@@ -39,6 +39,8 @@ namespace AutenticacaoDoisFatores.Tests.Domain.Entities
             Assert.Equal(email, user.Email);
             Assert.Equal(password, user.Password);
             Assert.Equal(phone, user.Phone);
+            Assert.Null(user.LastAccess);
+            Assert.NotEmpty(user.LastDataChange);
 
             #endregion
         }
@@ -232,6 +234,7 @@ namespace AutenticacaoDoisFatores.Tests.Domain.Entities
 
             Assert.Equal(newEmail, user.Email);
             Assert.NotNull(user.UpdatedAt);
+            Assert.NotEmpty(user.LastDataChange);
 
             #endregion
         }
@@ -311,6 +314,7 @@ namespace AutenticacaoDoisFatores.Tests.Domain.Entities
 
             Assert.Equal(newPassword, user.Password);
             Assert.NotNull(user.UpdatedAt);
+            Assert.NotEmpty(user.LastDataChange);
 
             #endregion
         }
