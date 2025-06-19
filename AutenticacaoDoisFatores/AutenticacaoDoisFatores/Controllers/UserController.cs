@@ -265,20 +265,5 @@ namespace AutenticacaoDoisFatores.Controllers
                 return BadRequest(e.Message);
             }
         }
-
-        [HttpPost("{id}/send-email")]
-        public async Task<ActionResult> SendEmailToUserAsync([FromServices] SendEmailToUser sendEmailToUser, Guid id, EmailSenderUser emailSenderUser)
-        {
-            try
-            {
-                await sendEmailToUser.ExecuteAsync(id, emailSenderUser);
-
-                return Success("O e-mail foi enviado com sucesso!");
-            }
-            catch (Exception e)
-            {
-                return BadRequest(e.Message);
-            }
-        }
     }
 }

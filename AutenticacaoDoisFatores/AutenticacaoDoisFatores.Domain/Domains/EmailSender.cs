@@ -9,20 +9,6 @@ namespace AutenticacaoDoisFatores.Domain.Domains
     {
         private readonly IEmailService _service = service;
 
-        public void SendCustomizedEmailToUser(string to, string subject, string message, string html)
-        {
-            if (to.IsNullOrEmptyOrWhiteSpaces() || !to.IsValidEmail())
-                EmailException.InvalidDestinationEmail();
-
-            var emailMessage = GenerateEmailMessage
-                (
-                    message: message,
-                    details: html
-                );
-
-            _service.Send(to: to, subject: subject, message: emailMessage);
-        }
-
         public void SendTwoFactorAuthQrCode(string to, string linkToQrCodeGeneration, string qrCode)
         {
             var subject = EmailMessages.TwoFactorAuthCodeSubject.Description() ?? "";

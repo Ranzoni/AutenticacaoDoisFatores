@@ -49,7 +49,6 @@ namespace AutenticacaoDoisFatores
             serviceCollection.AddTransient<UpdateUser>();
             serviceCollection.AddTransient<SearchClients>();
             serviceCollection.AddTransient<SearchUsers>();
-            serviceCollection.AddTransient<SendEmailToUser>();
             serviceCollection.AddTransient<ChangeUserEmail>();
         }
 
