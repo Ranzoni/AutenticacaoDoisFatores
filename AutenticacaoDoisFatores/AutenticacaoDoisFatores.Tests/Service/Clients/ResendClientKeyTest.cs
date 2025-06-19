@@ -29,6 +29,9 @@ namespace AutenticacaoDoisFatores.Tests.Service.Clients
 
             _mock.GetMock<IClientRepository>().Setup(r => r.GetByEmailAsync(fakeEmail)).ReturnsAsync(client);
 
+            var fakeTokenIssuer = _faker.Random.AlphaNumeric(40);
+            Environment.SetEnvironmentVariable("ADF_EMISSOR_TOKEN", fakeTokenIssuer);
+
             var service = _mock.CreateInstance<ResendClientKey>();
 
             #endregion

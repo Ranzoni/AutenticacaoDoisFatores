@@ -1,14 +1,15 @@
-﻿using AutenticacaoDoisFatores.Domain.Shared.Messages;
-using AutenticacaoDoisFatores.Domain.Shared.Users;
-using AutenticacaoDoisFatores.Domain.Domains;
+﻿using AutenticacaoDoisFatores.Domain.Domains;
 using AutenticacaoDoisFatores.Domain.Repositories;
-using AutenticacaoDoisFatores.Service.UseCases.Users;
+using AutenticacaoDoisFatores.Domain.Services;
+using AutenticacaoDoisFatores.Domain.Shared.Messages;
+using AutenticacaoDoisFatores.Domain.Shared.Users;
 using AutenticacaoDoisFatores.Service.Shared;
+using AutenticacaoDoisFatores.Service.UseCases.Users;
 using AutenticacaoDoisFatores.Tests.Shared;
+using Bogus;
 using Messenger;
 using Moq;
 using Moq.AutoMock;
-using AutenticacaoDoisFatores.Domain.Services;
 
 namespace AutenticacaoDoisFatores.Tests.Service.Users
 {
@@ -33,6 +34,10 @@ namespace AutenticacaoDoisFatores.Tests.Service.Users
 
             mocker.GetMock<IUserRepository>().Setup(r => r.GetByIdAsync(userId)).ReturnsAsync(user);
             mocker.GetMock<IAuthCodeRepository>().Setup(r => r.GetCodeByUserIdAsync(userId)).ReturnsAsync(encryptedAuthCode);
+
+            var faker = new Faker();
+            var fakeTokenIssuer = faker.Random.AlphaNumeric(40);
+            Environment.SetEnvironmentVariable("ADF_EMISSOR_TOKEN", fakeTokenIssuer);
 
             #endregion
 
@@ -66,6 +71,10 @@ namespace AutenticacaoDoisFatores.Tests.Service.Users
 
             mocker.GetMock<IUserRepository>().Setup(r => r.GetByIdAsync(userId)).ReturnsAsync(user);
             mocker.GetMock<IAuthService>().Setup(s => s.IsCodeValid(authCode, user.SecretKey)).Returns(true);
+
+            var faker = new Faker();
+            var fakeTokenIssuer = faker.Random.AlphaNumeric(40);
+            Environment.SetEnvironmentVariable("ADF_EMISSOR_TOKEN", fakeTokenIssuer);
 
             #endregion
 

@@ -78,6 +78,9 @@ namespace AutenticacaoDoisFatores.Tests.Service.Users
                 usernameOrEmail: user.Email,
                 password: password);
 
+            var fakeTokenIssuer = _faker.Random.AlphaNumeric(40);
+            Environment.SetEnvironmentVariable("ADF_EMISSOR_TOKEN", fakeTokenIssuer);
+
             #endregion
 
             var response = await service.ExecuteAsync(authData);
@@ -311,6 +314,9 @@ namespace AutenticacaoDoisFatores.Tests.Service.Users
             var authData = new AuthData(
                 usernameOrEmail: user.Email,
                 password: password);
+
+            var fakeTokenIssuer = _faker.Random.AlphaNumeric(40);
+            Environment.SetEnvironmentVariable("ADF_EMISSOR_TOKEN", fakeTokenIssuer);
 
             #endregion
 

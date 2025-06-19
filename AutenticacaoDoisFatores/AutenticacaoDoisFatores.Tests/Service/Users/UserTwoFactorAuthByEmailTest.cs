@@ -1,9 +1,10 @@
-﻿using AutenticacaoDoisFatores.Domain.Shared;
-using AutenticacaoDoisFatores.Domain.Shared.Messages;
-using AutenticacaoDoisFatores.Domain.Repositories;
+﻿using AutenticacaoDoisFatores.Domain.Repositories;
 using AutenticacaoDoisFatores.Domain.Services;
+using AutenticacaoDoisFatores.Domain.Shared;
+using AutenticacaoDoisFatores.Domain.Shared.Messages;
 using AutenticacaoDoisFatores.Service.UseCases.Users.Authenticators.TwoFactorAuths;
 using AutenticacaoDoisFatores.Tests.Shared;
+using Bogus;
 using Messenger;
 using Moq;
 using Moq.AutoMock;
@@ -24,6 +25,10 @@ namespace AutenticacaoDoisFatores.Tests.Service.Users
             var user = UserBuilderTest
                 .GetBuilder(active: true)
                 .Build();
+
+            var faker = new Faker();
+            var fakeTokenIssuer = faker.Random.AlphaNumeric(40);
+            Environment.SetEnvironmentVariable("ADF_EMISSOR_TOKEN", fakeTokenIssuer);
 
             #endregion
 
