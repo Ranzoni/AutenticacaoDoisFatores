@@ -9,12 +9,18 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Remove="wwwroot\autenticacao\css\style.css" />
-    <Content Remove="wwwroot\autenticacao\js\gerar-qrcode.js" />
+    <Compile Remove="wwwroot\clients\**" />
+    <Content Remove="wwwroot\clients\**" />
+    <EmbeddedResource Remove="wwwroot\clients\**" />
+    <None Remove="wwwroot\clients\**" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Mensageiro.WebApi" Version="1.1.0" />
+    <Content Remove="wwwroot\authentication\css\style.css" />
+    <Content Remove="wwwroot\authentication\js\generate-qr-code.js" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="9.0.4" />
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.4" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.4">
@@ -22,19 +28,17 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.21.0" />
+    <PackageReference Include="TheMessenger.WebApi" Version="1.0.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\AutenticacaoDoisFatores.Infra\AutenticacaoDoisFatores.Infra.csproj" />
-    <ProjectReference Include="..\AutenticacaoDoisFatores.Servico\AutenticacaoDoisFatores.Servico.csproj" />
+    <ProjectReference Include="..\AutenticacaoDoisFatores.Service\AutenticacaoDoisFatores.Service.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="wwwroot\autenticacao\css\style.css" />
-    <None Include="wwwroot\autenticacao\js\gerar-qrcode.js" />
-    <None Include="wwwroot\clientes\css\style.css" />
-    <None Include="wwwroot\clientes\confirmar-cadastro.html" />
-    <None Include="wwwroot\clientes\js\confirmar-cadastro.js" />
+    <None Include="wwwroot\authentication\css\style.css" />
+    <None Include="wwwroot\authentication\js\generate-qr-code.js" />
   </ItemGroup>
 
 </Project>

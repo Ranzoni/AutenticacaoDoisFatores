@@ -1,0 +1,1 @@
+ALTER TABLE "Audits" ADD "EntityId" uuid NOT NULL;
