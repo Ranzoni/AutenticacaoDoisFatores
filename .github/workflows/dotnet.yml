@@ -21,8 +21,8 @@ jobs:
       with:
         dotnet-version: 9.0.x
     - name: Restore dependencies
-      run: dotnet restore ./AutenticacaoDoisFatores.sln
+      run: dotnet restore ./AutenticacaoDoisFatores/AutenticacaoDoisFatores.sln
     - name: Build
-      run: dotnet build --no-restore ./AutenticacaoDoisFatores.sln
+      run: dotnet build --no-restore ./AutenticacaoDoisFatores/AutenticacaoDoisFatores.sln
     - name: Test
-      run: dotnet test --no-build --verbosity normal ./AutenticacaoDoisFatores.sln
+      run: dotnet test --no-build --verbosity normal ./AutenticacaoDoisFatores/AutenticacaoDoisFatores.sln
