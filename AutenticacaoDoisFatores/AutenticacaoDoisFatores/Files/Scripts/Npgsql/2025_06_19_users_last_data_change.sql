@@ -1,0 +1,1 @@
+ALTER TABLE "Users" ADD "LastDataChange" VARCHAR(256) NOT NULL;

@@ -20,7 +20,7 @@ namespace AutenticacaoDoisFatores.Service.UseCases.Users.Authenticators
                 return null;
 
             var userPermissions = await GetUserPermissionsAsync(user);
-            var token = Security.GenerateUserAuthToken(user.Id, userPermissions);
+            var token = Security.GenerateUserAuthToken(user, userPermissions);
 
             user.UpdateLastAccess();
             await _dominio.UpdateAsync(user);
