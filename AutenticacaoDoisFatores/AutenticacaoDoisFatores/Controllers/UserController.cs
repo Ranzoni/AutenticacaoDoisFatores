@@ -214,22 +214,6 @@ namespace AutenticacaoDoisFatores.Controllers
             }
         }
 
-        [HttpPut("{id}/change-email")]
-        [Authorize(Policy = nameof(Security.ChangeUserEmailRole))]
-        public async Task<ActionResult> AlterarEmailAsync([FromServices] ChangeUserEmail changeUserEmail, Guid id, UserEmailChange userEmailChange)
-        {
-            try
-            {
-                await changeUserEmail.ExecuteAsync(id, userEmailChange);
-
-                return Success("O e-mail foi alterado com sucesso.");
-            }
-            catch (Exception e)
-            {
-                return BadRequest(e.Message);
-            }
-        }
-
         [HttpPut("change-email")]
         public async Task<ActionResult> ChangeEmailAsync([FromServices] ChangeUserEmail changeUserEmail, UserEmailChange userEmailChange)
         {

@@ -17,8 +17,6 @@ namespace AutenticacaoDoisFatores.Domain.Shared.Permissions
         [Description("Excluir usuário")]
         RemoveUser,
         [Description("Visualizar os usuários")]
-        ViewUsers,
-        [Description("Trocar o e-mail de um usuário")]
-        ChangeUserEmail
+        ViewUsers
     }
 }

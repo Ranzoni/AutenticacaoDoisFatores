@@ -83,7 +83,6 @@ namespace AutenticacaoDoisFatores.Service.Shared
         private static readonly string _setPermissions = "setPermissions";
         private static readonly string _removeUser = "removeUser";
         private static readonly string _viewUsers = "viewUsers";
-        private static readonly string _changeUserEmail = "changeUserEmail";
         private static readonly string _authCodeEmailSender = "authCodeEmailSender";
         private static readonly string _lastDataChange = "lastDataChange";
 
@@ -96,7 +95,6 @@ namespace AutenticacaoDoisFatores.Service.Shared
             { PermissionType.SetPermissions, _setPermissions },
             { PermissionType.RemoveUser, _removeUser },
             { PermissionType.ViewUsers, _viewUsers },
-            { PermissionType.ChangeUserEmail, _changeUserEmail },
         };
 
         public static string AuthenticatedUser
@@ -176,14 +174,6 @@ namespace AutenticacaoDoisFatores.Service.Shared
             get
             {
                 return _viewUsers;
-            }
-        }
-
-        public static string ChangeUserEmailRole
-        {
-            get
-            {
-                return _changeUserEmail;
             }
         }
 
