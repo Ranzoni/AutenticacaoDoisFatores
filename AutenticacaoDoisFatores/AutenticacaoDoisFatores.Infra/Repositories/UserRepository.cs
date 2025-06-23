@@ -244,6 +244,9 @@ namespace AutenticacaoDoisFatores.Infra.Repositories
             if (!filter.Username!.IsNullOrEmptyOrWhiteSpaces())
                 query = AddQueryCondition(query, $@"LOWER(u.""Username"") like '%{filter.Username!.ToLower()}%'");
 
+            if (!filter.Email!.IsNullOrEmptyOrWhiteSpaces())
+                query = AddQueryCondition(query, $@"LOWER(u.""Email"") like '%{filter.Email!.ToLower()}%'");
+
             if (filter.Active.HasValue)
                 query = AddQueryCondition(query, $@"u.""Active"" = {filter.Active}");
 

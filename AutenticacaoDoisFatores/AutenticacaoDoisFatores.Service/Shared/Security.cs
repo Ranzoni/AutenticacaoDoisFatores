@@ -270,9 +270,8 @@ namespace AutenticacaoDoisFatores.Service.Shared
     {
         public static Guid GetIdFromToken(string token)
         {
-            var tokenHandler = new JwtSecurityTokenHandler();
-            var tokenCLiams = ReadToken(token);
-            var identifierClaim = tokenCLiams.FirstOrDefault(perfil => perfil.Type.Equals(_entityIdentifierClaim));
+            var tokenClaims = ReadToken(token);
+            var identifierClaim = tokenClaims.FirstOrDefault(perfil => perfil.Type.Equals(_entityIdentifierClaim));
             if (identifierClaim is null)
                 return Guid.Empty;
 
