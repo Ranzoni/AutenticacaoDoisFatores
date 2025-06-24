@@ -4,7 +4,7 @@ namespace AutenticacaoDoisFatores.Domain.Shared
 {
     internal static class Secrets
     {
-        private const string AvaibleCharacters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+        private const string AvaibleCharacters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ234567";
 
         internal static string Generate(int size = 20)
         {
