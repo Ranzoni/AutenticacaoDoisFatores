@@ -45,7 +45,13 @@ namespace AutenticacaoDoisFatores.Service.UseCases.Users
             if (user.AuthType.Equals(AuthType.AuthApp))
                 return ValidateCodeByApp(code, user);
             else
-                return await ValidateCodeWithSavedAsync(user.Id, code);
+            {
+                var isValid = await ValidateCodeWithSavedAsync(user.Id, code);
+                if (isValid)
+                    await _authCodeManager.RemoveCodeAsync(user.Id);
+
+                return isValid;
+            }
         }
 
         private bool ValidateCodeByApp(string code, User user)

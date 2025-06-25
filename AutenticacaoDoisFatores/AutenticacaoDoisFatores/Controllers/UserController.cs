@@ -1,8 +1,9 @@
-﻿using AutenticacaoDoisFatores.Shared;
+﻿using AutenticacaoDoisFatores.Domain.Entities;
+using AutenticacaoDoisFatores.Service.Dtos.Users;
+using AutenticacaoDoisFatores.Service.Shared;
 using AutenticacaoDoisFatores.Service.UseCases.Users;
 using AutenticacaoDoisFatores.Service.UseCases.Users.Authenticators;
-using AutenticacaoDoisFatores.Service.Shared;
-using AutenticacaoDoisFatores.Service.Dtos.Users;
+using AutenticacaoDoisFatores.Shared;
 using Messenger;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -262,6 +263,22 @@ namespace AutenticacaoDoisFatores.Controllers
             try
             {
                 await generateAuthAppQrCode.ExecuteAsync(userId);
+
+                return Success("O QrCode foi gerado com sucesso e enviado ao e-mail do usuário.");
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
+        [HttpPost("{userId}/resend-auth-code")]
+        [Authorize(Roles = Security.AuthenticatedUserRoleValue, Policy = nameof(Security.ResendAuthCodeToUserRole))]
+        public async Task<ActionResult> ResendAuthCode([FromServices] ResendAuthCode resendAuthCode, Guid userId)
+        {
+            try
+            {
+                await resendAuthCode.ResendAsync(userId);
 
                 return Success("O QrCode foi gerado com sucesso e enviado ao e-mail do usuário.");
             }

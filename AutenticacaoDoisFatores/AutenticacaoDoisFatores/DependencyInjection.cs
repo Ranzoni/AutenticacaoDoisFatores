@@ -50,6 +50,7 @@ namespace AutenticacaoDoisFatores
             serviceCollection.AddTransient<SearchClients>();
             serviceCollection.AddTransient<SearchUsers>();
             serviceCollection.AddTransient<ChangeUserEmail>();
+            serviceCollection.AddTransient<ResendAuthCode>();
         }
 
         internal static void AddDomains(this IServiceCollection serviceCollection)

@@ -27,6 +27,12 @@ namespace AutenticacaoDoisFatores.Infra.Contexts
             await db.StringSetAsync(DomainKey(key), value, TimeSpan.FromMinutes(5));
         }
 
+        public async Task RemoveAsync(string key)
+        {
+            var db = _connection.GetDatabase();
+            await db.KeyDeleteAsync(DomainKey(key));
+        }
+
         public async Task<string> GetByKeyAsync(string key)
         {
             var db = _connection.GetDatabase();

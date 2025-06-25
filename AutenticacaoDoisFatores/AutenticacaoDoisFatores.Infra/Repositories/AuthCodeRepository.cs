@@ -21,5 +21,10 @@ namespace AutenticacaoDoisFatores.Infra.Repositories
         {
             return $"userid_{userId}";
         }
+
+        public async Task RemoveAsync(Guid userId)
+        {
+            await _context.RemoveAsync(UserIdKey(userId));
+        }
     }
 }

@@ -52,6 +52,7 @@ namespace AutenticacaoDoisFatores.Tests.Service.Users
             Assert.NotNull(response);
             Assert.NotEmpty(response.Token);
             Assert.NotNull(user.LastAccess);
+            mocker.Verify<IAuthCodeRepository>(r => r.RemoveAsync(user.Id), Times.Once);
 
             #endregion
         }

@@ -10,9 +10,9 @@ using AutenticacaoDoisFatores.Domain.Validators;
 
 namespace AutenticacaoDoisFatores.Service.UseCases.Users
 {
-    public class AuthenticateUser(INotifier notificador, UserDomain domain, IServiceProvider serviceProvider)
+    public class AuthenticateUser(INotifier notifier, UserDomain domain, IServiceProvider serviceProvider)
     {
-        private readonly INotifier _notifier = notificador;
+        private readonly INotifier _notifier = notifier;
         private readonly UserDomain _domain = domain;
         private readonly IServiceProvider _serviceProvider = serviceProvider;
 
@@ -22,10 +22,10 @@ namespace AutenticacaoDoisFatores.Service.UseCases.Users
                 return null;
 
             var user = await GetUserAsync(authData);
-            if (!AutenticacaoEhValida(user, authData.Password))
+            if (!IsAuthenticationValid(user, authData.Password))
                 return null;
 
-            var authenticator = RetornarTipoDeAutenticador(user!);
+            var authenticator = GetAuthType(user!);
             return await authenticator.ExecuteAsync(user!);
         }
 
@@ -50,7 +50,7 @@ namespace AutenticacaoDoisFatores.Service.UseCases.Users
                 return await _domain.GetByUsernameAsync(authData.UsernameOrEmail);
         }
 
-        private bool AutenticacaoEhValida(User? user, string password)
+        private bool IsAuthenticationValid(User? user, string password)
         {
             if (user is null || !user.Active)
             {
@@ -58,8 +58,8 @@ namespace AutenticacaoDoisFatores.Service.UseCases.Users
                 return false;
             }
 
-            var senhaCriptografada = Encrypt.EncryptWithSha512(password);
-            if (!user.Password.Equals(senhaCriptografada))
+            var encryptedPassword = Encrypt.EncryptWithSha512(password);
+            if (!user.Password.Equals(encryptedPassword))
             {
                 _notifier.AddUnauthorizedMessage(UserValidationMessages.Unauthorized);
                 return false;
@@ -68,7 +68,7 @@ namespace AutenticacaoDoisFatores.Service.UseCases.Users
             return true;
         }
 
-        private IAuthType RetornarTipoDeAutenticador(User user)
+        private IAuthType GetAuthType(User user)
         {
             if (user.AnyAuthTypeConfigured())
                 return _serviceProvider.GetRequiredService<UserTwoFactorAuthentication>();

@@ -16,6 +16,11 @@ namespace AutenticacaoDoisFatores.Domain.Domains
             await _repository.SaveAsync(userId, code);
         }
 
+        public async Task RemoveCodeAsync(Guid userId)
+        {
+            await _repository.RemoveAsync(userId);
+        }
+
         public async Task<string?> GetCodeAsync(Guid userId)
         {
             return await _repository.GetCodeByUserIdAsync(userId);

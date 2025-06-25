@@ -19,6 +19,8 @@ namespace AutenticacaoDoisFatores.Domain.Shared.Permissions
         [Description("Visualizar os usuários")]
         ViewUsers,
         [Description("Enviar o QR Code ao usuário")]
-        SendQrCodeToUser
+        SendQrCodeToUser,
+        [Description("Reenviar o código de autenticação ao usuário")]
+        ResendAuthCodeToUser,
     }
 }

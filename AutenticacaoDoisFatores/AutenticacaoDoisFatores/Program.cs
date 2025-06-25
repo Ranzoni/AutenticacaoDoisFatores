@@ -126,6 +126,7 @@ builder.Services.AddAuthorizationBuilder()
     .AddPolicy(nameof(Security.RemoveUserRole), policy => policy.RequireRole(Security.RemoveUserRole))
     .AddPolicy(nameof(Security.ViewUsersRole), policy => policy.RequireRole(Security.ViewUsersRole))
     .AddPolicy(nameof(Security.SendQrCodeToUserRole), policy => policy.RequireRole(Security.SendQrCodeToUserRole))
+    .AddPolicy(nameof(Security.ResendAuthCodeToUserRole), policy => policy.RequireRole(Security.ResendAuthCodeToUserRole))
     .AddPolicy(nameof(Security.AuthCodeEmailSenderRole), policy => policy.RequireRole(Security.AuthCodeEmailSenderRole));
 
 builder.Services.AddHttpContextAccessor();

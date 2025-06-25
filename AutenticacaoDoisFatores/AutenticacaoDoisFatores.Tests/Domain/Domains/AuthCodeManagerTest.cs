@@ -109,5 +109,27 @@ namespace AutenticacaoDoisFatores.Tests.Domain.Domains
 
             #endregion
         }
+
+        [Fact]
+        internal async Task ShouldRemoveCode()
+        {
+            #region Arrange
+
+            var mocker = new AutoMocker();
+
+            var domain = mocker.CreateInstance<AuthCodeManager>();
+
+            var userId = Guid.NewGuid();
+
+            #endregion
+
+            await domain.RemoveCodeAsync(userId);
+
+            #region Assert
+
+            mocker.Verify<IAuthCodeRepository>(r => r.RemoveAsync(userId), Times.Once);
+
+            #endregion
+        }
     }
 }
