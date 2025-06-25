@@ -73,9 +73,12 @@ namespace AutenticacaoDoisFatores.Service.Shared
 
         #region Security roles
 
+        public const string AuthenticatedUserRoleValue = "authenticatedUser";
+        public const string AuthCodeEmailSenderRoleValue = "authCodeEmailSender";
+
         private static readonly string _clientConfirmation = "clientConfirmation";
         private static readonly string _newClientKeyGeneration = "newClientKeyGeneration";
-        private static readonly string _authenticatedUser = "authenticatedUser";
+        private static readonly string _authenticatedUser = AuthenticatedUserRoleValue;
         private static readonly string _createUser = "createUser";
         private static readonly string _activateUser = "activateUser";
         private static readonly string _inactivateUser = "inactivateUser";
@@ -83,7 +86,7 @@ namespace AutenticacaoDoisFatores.Service.Shared
         private static readonly string _setPermissions = "setPermissions";
         private static readonly string _removeUser = "removeUser";
         private static readonly string _viewUsers = "viewUsers";
-        private static readonly string _authCodeEmailSender = "authCodeEmailSender";
+        private static readonly string _authCodeEmailSender = AuthCodeEmailSenderRoleValue;
         private static readonly string _lastDataChange = "lastDataChange";
 
         private static readonly Dictionary<PermissionType, string> _permissionsRoles = new()

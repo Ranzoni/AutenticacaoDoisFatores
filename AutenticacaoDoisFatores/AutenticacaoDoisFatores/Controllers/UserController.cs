@@ -10,12 +10,12 @@ using Microsoft.AspNetCore.Mvc;
 namespace AutenticacaoDoisFatores.Controllers
 {
     [ApiController]
-    [Authorize(Policy = nameof(Security.AuthenticatedUser))]
+    [Authorize]
     [Route("api/user")]
     public class UserController(INotifier notifier, int? statusCodeNotifier = null) : BaseController(notifier, statusCodeNotifier)
     {
         [HttpPost]
-        [Authorize(Policy = nameof(Security.CreateUserRole))]
+        [Authorize(Roles = Security.AuthenticatedUserRoleValue, Policy = nameof(Security.CreateUserRole))]
         public async Task<ActionResult<RegisteredUser?>> RegisterAsync([FromServices] RegisterUser registerUser, NewUser newUser)
         {
             try
@@ -31,7 +31,7 @@ namespace AutenticacaoDoisFatores.Controllers
         }
 
         [HttpPut("{id}/active")]
-        [Authorize(Policy = nameof(Security.AcivateUserRole))]
+        [Authorize(Roles = Security.AuthenticatedUserRoleValue, Policy = nameof(Security.AcivateUserRole))]
         public async Task<ActionResult<RegisteredUser?>> ActivateAsync([FromServices] ActivateUser activateUser, Guid id)
         {
             try
@@ -47,7 +47,7 @@ namespace AutenticacaoDoisFatores.Controllers
         }
 
         [HttpPut("{id}/inactive")]
-        [Authorize(Policy = nameof(Security.InactivateUserRole))]
+        [Authorize(Roles = Security.AuthenticatedUserRoleValue, Policy = nameof(Security.InactivateUserRole))]
         public async Task<ActionResult<RegisteredUser?>> InactivateAsync([FromServices] ActivateUser activateUser, Guid id)
         {
             try
@@ -79,7 +79,7 @@ namespace AutenticacaoDoisFatores.Controllers
         }
 
         [HttpPost("authenticate/two-factor")]
-        [Authorize(Policy = nameof(Security.AuthCodeEmailSenderRole))]
+        [Authorize(Roles = Security.AuthCodeEmailSenderRoleValue, Policy = nameof(Security.AuthCodeEmailSenderRole))]
         public async Task<ActionResult<AuthenticatedUser?>> AuthenticateAsync([FromServices] UserAuthenticationByCode userAuthenticationByCode, AuthCodeUser authCodeUser)
         {
             try
@@ -97,7 +97,7 @@ namespace AutenticacaoDoisFatores.Controllers
         }
 
         [HttpPut("{id}/change-password")]
-        [Authorize(Policy = nameof(Security.ChangeUserPasswordRole))]
+        [Authorize(Roles = Security.AuthenticatedUserRoleValue, Policy = nameof(Security.ChangeUserPasswordRole))]
         public async Task<ActionResult> GenerateNewPasswordAsync([FromServices] ChangeUserPassword changeUserPassword, Guid id, UserPasswordChange userPasswordChange)
         {
             try
@@ -113,6 +113,7 @@ namespace AutenticacaoDoisFatores.Controllers
         }
 
         [HttpPut("change-password")]
+        [Authorize(Roles = Security.AuthenticatedUserRoleValue)]
         public async Task<ActionResult> GenerateNewPasswordAsync([FromServices] ChangeUserPassword changeUserPassword, UserPasswordChange userPasswordChange)
         {
             try
@@ -131,7 +132,7 @@ namespace AutenticacaoDoisFatores.Controllers
         }
 
         [HttpDelete("{id}")]
-        [Authorize(Policy = nameof(Security.RemoveUserRole))]
+        [Authorize(Roles = Security.AuthenticatedUserRoleValue, Policy = nameof(Security.RemoveUserRole))]
         public async Task<ActionResult> RemoveAsync([FromServices] RemoveUser removeUser, Guid id)
         {
             try
@@ -147,6 +148,7 @@ namespace AutenticacaoDoisFatores.Controllers
         }
 
         [HttpPut]
+        [Authorize(Roles = Security.AuthenticatedUserRoleValue)]
         public async Task<ActionResult<RegisteredUser?>> UpdateAsync([FromServices] UpdateUser updateUser, NewUserData newUserData)
         {
             try
@@ -165,7 +167,7 @@ namespace AutenticacaoDoisFatores.Controllers
         }
 
         [HttpGet("{id}")]
-        [Authorize(Policy = nameof(Security.ViewUsersRole))]
+        [Authorize(Roles = Security.AuthenticatedUserRoleValue, Policy = nameof(Security.ViewUsersRole))]
         public async Task<ActionResult<RegisteredUser?>> GetByIdAsync([FromServices] SearchUsers searchUsers, Guid id)
         {
             try
@@ -181,7 +183,7 @@ namespace AutenticacaoDoisFatores.Controllers
         }
 
         [HttpGet]
-        [Authorize(Policy = nameof(Security.ViewUsersRole))]
+        [Authorize(Roles = Security.AuthenticatedUserRoleValue, Policy = nameof(Security.ViewUsersRole))]
         public async Task<ActionResult<IEnumerable<RegisteredUser>>> GetAllAsync([FromServices] SearchUsers searchUsers, [FromQuery] SearchUserFilters filter)
         {
             try
@@ -197,6 +199,7 @@ namespace AutenticacaoDoisFatores.Controllers
         }
 
         [HttpGet("data")]
+        [Authorize(Roles = Security.AuthenticatedUserRoleValue)]
         public async Task<ActionResult<RegisteredUser?>> GetDataAsync([FromServices] SearchUsers searchUsers)
         {
             try
@@ -215,6 +218,7 @@ namespace AutenticacaoDoisFatores.Controllers
         }
 
         [HttpPut("change-email")]
+        [Authorize(Roles = Security.AuthenticatedUserRoleValue)]
         public async Task<ActionResult> ChangeEmailAsync([FromServices] ChangeUserEmail changeUserEmail, UserEmailChange userEmailChange)
         {
             try
@@ -233,6 +237,7 @@ namespace AutenticacaoDoisFatores.Controllers
         }
 
         [HttpPost("generate-qr-code")]
+        [Authorize(Roles = Security.AuthenticatedUserRoleValue)]
         public async Task<ActionResult> GenerateTwoFactorAuthQrCodeAsync([FromServices] GenerateAuthAppQrCode generateAuthAppQrCode)
         {
             try

@@ -125,8 +125,7 @@ builder.Services.AddAuthorizationBuilder()
     .AddPolicy(nameof(Security.SetPermissionsRole), policy => policy.RequireRole(Security.SetPermissionsRole))
     .AddPolicy(nameof(Security.RemoveUserRole), policy => policy.RequireRole(Security.RemoveUserRole))
     .AddPolicy(nameof(Security.ViewUsersRole), policy => policy.RequireRole(Security.ViewUsersRole))
-    .AddPolicy(nameof(Security.AuthCodeEmailSenderRole), policy => policy.RequireRole(Security.AuthCodeEmailSenderRole))
-    .AddPolicy(nameof(Security.AuthenticatedUser), policy => policy.RequireRole(Security.AuthenticatedUser));
+    .AddPolicy(nameof(Security.AuthCodeEmailSenderRole), policy => policy.RequireRole(Security.AuthCodeEmailSenderRole));
 
 builder.Services.AddHttpContextAccessor();
 
