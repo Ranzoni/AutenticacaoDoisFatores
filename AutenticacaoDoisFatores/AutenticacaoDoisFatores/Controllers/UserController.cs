@@ -254,5 +254,21 @@ namespace AutenticacaoDoisFatores.Controllers
                 return BadRequest(e.Message);
             }
         }
+
+        [HttpPost("{userId}/send-qr-code")]
+        [Authorize(Roles = Security.AuthenticatedUserRoleValue, Policy = nameof(Security.SendQrCodeToUserRole))]
+        public async Task<ActionResult> SendTwoFactorAuthQrCodeAsync([FromServices] GenerateAuthAppQrCode generateAuthAppQrCode, Guid userId)
+        {
+            try
+            {
+                await generateAuthAppQrCode.ExecuteAsync(userId);
+
+                return Success("O QrCode foi gerado com sucesso e enviado ao e-mail do usuário.");
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
     }
 }

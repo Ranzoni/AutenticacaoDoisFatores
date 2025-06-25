@@ -17,6 +17,8 @@ namespace AutenticacaoDoisFatores.Domain.Shared.Permissions
         [Description("Excluir usuário")]
         RemoveUser,
         [Description("Visualizar os usuários")]
-        ViewUsers
+        ViewUsers,
+        [Description("Enviar o QR Code ao usuário")]
+        SendQrCodeToUser
     }
 }

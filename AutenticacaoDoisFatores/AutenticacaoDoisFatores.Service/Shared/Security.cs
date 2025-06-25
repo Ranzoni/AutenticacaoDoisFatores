@@ -86,6 +86,7 @@ namespace AutenticacaoDoisFatores.Service.Shared
         private static readonly string _setPermissions = "setPermissions";
         private static readonly string _removeUser = "removeUser";
         private static readonly string _viewUsers = "viewUsers";
+        private static readonly string _sendQrCodeToUser = "sendQrCodeToUser";
         private static readonly string _authCodeEmailSender = AuthCodeEmailSenderRoleValue;
         private static readonly string _lastDataChange = "lastDataChange";
 
@@ -98,6 +99,7 @@ namespace AutenticacaoDoisFatores.Service.Shared
             { PermissionType.SetPermissions, _setPermissions },
             { PermissionType.RemoveUser, _removeUser },
             { PermissionType.ViewUsers, _viewUsers },
+            { PermissionType.SendQrCodeToUser, _sendQrCodeToUser }
         };
 
         public static string AuthenticatedUser
@@ -177,6 +179,14 @@ namespace AutenticacaoDoisFatores.Service.Shared
             get
             {
                 return _viewUsers;
+            }
+        }
+
+        public static string SendQrCodeToUserRole
+        {
+            get
+            {
+                return _sendQrCodeToUser;
             }
         }
 
