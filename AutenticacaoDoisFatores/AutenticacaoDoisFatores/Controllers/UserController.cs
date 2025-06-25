@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace AutenticacaoDoisFatores.Controllers
 {
     [ApiController]
-    [Authorize]
+    [Authorize(Policy = nameof(Security.AuthenticatedUser))]
     [Route("api/user")]
     public class UserController(INotifier notifier, int? statusCodeNotifier = null) : BaseController(notifier, statusCodeNotifier)
     {

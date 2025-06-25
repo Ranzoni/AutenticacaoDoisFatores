@@ -76,7 +76,6 @@ builder.Services.AddAuthentication(opt =>
             if (string.IsNullOrEmpty(role) || !role.Equals(Security.AuthenticatedUser))
                 return;
 
-
             var domainName = context.Request.Headers["Dominio"].ToString();
             if (domainName.IsNullOrEmptyOrWhiteSpaces())
             {
@@ -126,7 +125,8 @@ builder.Services.AddAuthorizationBuilder()
     .AddPolicy(nameof(Security.SetPermissionsRole), policy => policy.RequireRole(Security.SetPermissionsRole))
     .AddPolicy(nameof(Security.RemoveUserRole), policy => policy.RequireRole(Security.RemoveUserRole))
     .AddPolicy(nameof(Security.ViewUsersRole), policy => policy.RequireRole(Security.ViewUsersRole))
-    .AddPolicy(nameof(Security.AuthCodeEmailSenderRole), policy => policy.RequireRole(Security.AuthCodeEmailSenderRole));
+    .AddPolicy(nameof(Security.AuthCodeEmailSenderRole), policy => policy.RequireRole(Security.AuthCodeEmailSenderRole))
+    .AddPolicy(nameof(Security.AuthenticatedUser), policy => policy.RequireRole(Security.AuthenticatedUser));
 
 builder.Services.AddHttpContextAccessor();
 
