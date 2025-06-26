@@ -158,6 +158,9 @@ using (var scope = app.Services.CreateScope())
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
+    app.UseSwaggerUI(options =>
+        options.SwaggerEndpoint("/openapi/v1.json", "Autenticação em Dois Fatores - API")
+    );
 }
 
 app.UseCors(CORS_POLICY_ALLOW_ALL);

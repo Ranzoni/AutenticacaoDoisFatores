@@ -36,6 +36,12 @@ namespace AutenticacaoDoisFatores.Shared
             if (context.Request.Path.StartsWithSegments("/authentication"))
                 return true;
 
+            if (context.Request.Path.StartsWithSegments("/openapi"))
+                return true;
+
+            if (context.Request.Path.StartsWithSegments("/swagger"))
+                return true;
+
             return false;
         }
 
