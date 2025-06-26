@@ -1,0 +1,1 @@
+ALTER TABLE "Audits" ADD "Date" timestamp NOT NULL DEFAULT CURRENT_DATE;

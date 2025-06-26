@@ -1,0 +1,35 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Geração de QR Code para Autenticação</title>
+
+    <link rel="stylesheet" href="css/style.css" />
+    <script type="text/javascript" src="js/jquery.min.js"></script>
+    <script type="text/javascript" src="js/qrcode.js"></script>
+</head>
+<body>
+
+    <div id='container'>
+
+        <main>
+            <form id='principal-form'>
+
+                <p id="message">Escaneie o QR Code</p>
+
+                <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                    <g id="qrcode" />
+                </svg>
+
+            </form>
+        </main>
+
+        <footer>
+            <p>© 2025 Autenticação em Dois Fatores. Todos os direitos reservados.</p>
+        </footer>
+
+    </div>
+
+    <script src="js/generate-qr-code.js"></script>
+</body>
+</html>

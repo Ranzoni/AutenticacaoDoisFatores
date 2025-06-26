@@ -1,0 +1,45 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Criar um Ambiente</title>
+
+    <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+    <div id='container'>
+
+        <main>
+            <form id='principal-form'>
+                <h2>Crie o seu ambiente:</h2>
+
+                <label for="client-name">Nome do seu ambiente</label>
+                <input type="text" id="client-name" />
+
+                <label for="client-email">Seu e-mail</label>
+                <input type="text" id="client-email" />
+
+                <label for="client-password">Informe a senha do usuário administrador</label>
+                <input type="password" id="client-password" />
+
+                <h4>Atenção: O nome de usuário do administrador será 'Administrador' e o e-mail será o informado acima</h4>
+
+                <button id='btn-register-confirm' type='submit'>
+                    Cadastrar!
+                </button>
+
+                <p id="message"></p>
+
+            </form>
+        </main>
+
+        <footer>
+            <p>© 2025 Autenticação em Dois Fatores. Todos os direitos reservados.</p>
+        </footer>
+
+    </div>
+
+    <script src="js/create-client.js"></script>
+</body>
+</html>
